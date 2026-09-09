@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -18,10 +18,13 @@ const log = createLogger('Auth');
 type Mode = 'sign-in' | 'sign-up';
 type SignupRole = 'learner' | 'parent';
 
-export default function AuthPage() {
+function AuthPageContent() {
   const { t } = useI18n();
   const router = useRouter();
-  const [mode, setMode] = useState<Mode>('sign-in');
+  const searchParams = useSearchParams();
+  const [mode, setMode] = useState<Mode>(() =>
+    searchParams.get('mode') === 'sign-up' ? 'sign-up' : 'sign-in',
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -172,5 +175,13 @@ export default function AuthPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <AuthPageContent />
+    </Suspense>
   );
 }

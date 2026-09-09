@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "تسجيل الدخول",
     "signUpTitle": "إنشاء حساب",
+    "signUpCta": "إنشاء حساب",
     "emailLabel": "البريد الإلكتروني",
     "passwordLabel": "كلمة المرور",
     "displayNameLabel": "الاسم المعروض",

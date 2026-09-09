@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "サインイン",
     "signUpTitle": "アカウントを作成",
+    "signUpCta": "新規登録",
     "emailLabel": "メールアドレス",
     "passwordLabel": "パスワード",
     "displayNameLabel": "表示名",

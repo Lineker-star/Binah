@@ -2015,6 +2015,7 @@
   "auth": {
     "signInTitle": "登入",
     "signUpTitle": "建立帳戶",
+    "signUpCta": "註冊",
     "emailLabel": "電子郵件",
     "passwordLabel": "密碼",
     "displayNameLabel": "顯示名稱",

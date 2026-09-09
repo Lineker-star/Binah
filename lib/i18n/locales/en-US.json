@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "Sign in",
     "signUpTitle": "Create an account",
+    "signUpCta": "Sign up",
     "emailLabel": "Email",
     "passwordLabel": "Password",
     "displayNameLabel": "Display name",

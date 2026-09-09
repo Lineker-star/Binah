@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "Вход",
     "signUpTitle": "Создать аккаунт",
+    "signUpCta": "Регистрация",
     "emailLabel": "Электронная почта",
     "passwordLabel": "Пароль",
     "displayNameLabel": "Отображаемое имя",

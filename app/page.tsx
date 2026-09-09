@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowUp,
@@ -16,6 +17,9 @@ import {
   Sparkles,
   Loader2,
   GraduationCap,
+  User as UserIcon,
+  TrendingUp,
+  LogOut,
 } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -23,6 +27,7 @@ import { createLogger } from '@/lib/logger';
 import { Textarea as UITextarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { SettingsDialog } from '@/components/settings';
+import type { SettingsSection } from '@/lib/types/settings';
 import { GenerationToolbar } from '@/components/generation/generation-toolbar';
 import { AgentBar } from '@/components/agent/agent-bar';
 import { useTheme } from '@/lib/hooks/use-theme';
@@ -129,33 +134,63 @@ function HomePage() {
   useEffect(() => {
     if (workbenchEntryEnabled) router.prefetch('/workspace');
   }, [router, workbenchEntryEnabled]);
-  // A signed-in parent account has no use for the course-creation homepage —
-  // send them straight to their read-only dashboard. Anonymous visitors and
-  // learners are unaffected (no signed-in user, or a non-parent role, is a
-  // no-op here), so this never delays or alters the common path.
+  // Real Supabase auth/profile state, kept live via onAuthStateChange so the
+  // GreetingBar pill (and the guest sign-in/up CTAs) update immediately after
+  // a sign-in, sign-up, or log-out — not just after a full page reload.
+  const [authUser, setAuthUser] = useState<{ id: string; email: string | null } | null>(null);
+  const [authProfile, setAuthProfile] = useState<{
+    displayName: string | null;
+    avatarUrl: string | null;
+  } | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   useEffect(() => {
+    const supabase = createClient();
     let cancelled = false;
-    createClient()
-      .from('profiles')
-      .select('role')
-      .single()
-      .then(
-        ({ data }) => {
-          if (!cancelled && data?.role === 'parent') router.replace('/parent');
-        },
-        () => {
-          // No session, or the query failed — stay on the homepage.
-        },
-      );
+
+    const applySession = async (userId: string | undefined, email: string | null | undefined) => {
+      if (!userId) {
+        if (!cancelled) {
+          setAuthUser(null);
+          setAuthProfile(null);
+          setAuthLoading(false);
+        }
+        return;
+      }
+      if (!cancelled) setAuthUser({ id: userId, email: email ?? null });
+      const { data } = await supabase
+        .from('profiles')
+        .select('display_name, avatar_url, role')
+        .eq('id', userId)
+        .maybeSingle();
+      if (cancelled) return;
+      setAuthProfile(data ? { displayName: data.display_name, avatarUrl: data.avatar_url } : null);
+      setAuthLoading(false);
+      // A signed-in parent account has no use for the course-creation
+      // homepage — send them straight to their read-only dashboard.
+      if (data?.role === 'parent') router.replace('/parent');
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      void applySession(session?.user?.id, session?.user?.email);
+    });
+
     return () => {
       cancelled = true;
+      subscription.unsubscribe();
     };
   }, [router]);
+  const handleLogOut = () => {
+    void createClient().auth.signOut();
+  };
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsSection, setSettingsSection] = useState<
-    import('@/lib/types/settings').SettingsSection | undefined
-  >(undefined);
+  const [settingsSection, setSettingsSection] = useState<SettingsSection | undefined>(undefined);
+  const openSettingsSection = (section: SettingsSection) => {
+    setSettingsSection(section);
+    setSettingsOpen(true);
+  };
 
   // Draft cache for requirement text
   const { cachedValue: cachedRequirement, updateCache: updateRequirementCache } =
@@ -613,7 +648,34 @@ function HomePage() {
           >
             {/* ── Greeting + Profile + Agents ── */}
             <div className="relative z-20 flex items-start justify-between">
-              <GreetingBar />
+              <div className="flex items-center">
+                <GreetingBar
+                  authLoading={authLoading}
+                  authUser={authUser}
+                  authProfile={authProfile}
+                  onOpenSettings={openSettingsSection}
+                  onLogOut={handleLogOut}
+                />
+                {/* Always-visible sign-in/up entry point for guests — not
+                    buried behind the pill's dropdown, per the discoverability
+                    fix (the pill alone wasn't a reachable enough affordance). */}
+                {!authLoading && !authUser && (
+                  <div className="flex items-center gap-1.5 pt-3.5">
+                    <Link
+                      href="/auth?mode=sign-in"
+                      className="text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1.5 rounded-full hover:bg-muted/60"
+                    >
+                      {t('settings.signInLink')}
+                    </Link>
+                    <Link
+                      href="/auth?mode=sign-up"
+                      className="text-[12px] font-medium text-white bg-violet-600 hover:bg-violet-700 transition-colors px-3 py-1.5 rounded-full"
+                    >
+                      {t('auth.signUpCta')}
+                    </Link>
+                  </div>
+                )}
+              </div>
               <div className="pr-3 pt-3.5 shrink-0">
                 <AgentBar />
               </div>
@@ -779,8 +841,25 @@ function HomePage() {
 }
 
 // ─── Greeting Bar — avatar + "Hi, Name", click to edit in-place ────
-function GreetingBar() {
+interface GreetingBarProps {
+  authLoading: boolean;
+  authUser: { id: string; email: string | null } | null;
+  authProfile: { displayName: string | null; avatarUrl: string | null } | null;
+  onOpenSettings: (section: SettingsSection) => void;
+  onLogOut: () => void;
+}
+
+function GreetingBar({
+  authLoading,
+  authUser,
+  authProfile,
+  onOpenSettings,
+  onLogOut,
+}: GreetingBarProps) {
   const { t } = useI18n();
+  // Guest-mode local store — the fallback used ONLY for display when there's
+  // no Supabase session. A signed-in pill always reflects the real profiles
+  // row below, never this store, so it never drifts from actual auth state.
   const avatar = useUserProfileStore((s) => s.avatar);
   const nickname = useUserProfileStore((s) => s.nickname);
   const bio = useUserProfileStore((s) => s.bio);
@@ -795,7 +874,11 @@ function GreetingBar() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const displayName = nickname || t('profile.defaultNickname');
+  const signedIn = !authLoading && !!authUser;
+  const displayName = signedIn
+    ? authProfile?.displayName || authUser?.email || t('profile.defaultNickname')
+    : nickname || t('profile.defaultNickname');
+  const displayAvatar = signedIn ? authProfile?.avatarUrl || avatar : avatar;
 
   // Click-outside to collapse
   useEffect(() => {
@@ -832,11 +915,13 @@ function GreetingBar() {
         >
           <div className="shrink-0 relative">
             <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-border/30 group-hover:ring-violet-400/60 dark:group-hover:ring-violet-400/40 transition-all duration-300">
-              <img src={avatar} alt="" className="size-full object-cover" />
+              <img src={displayAvatar} alt="" className="size-full object-cover" />
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
-              <Pencil className="size-[7px] text-muted-foreground/70" />
-            </div>
+            {!signedIn && (
+              <div className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
+                <Pencil className="size-[7px] text-muted-foreground/70" />
+              </div>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <Tooltip>
@@ -849,7 +934,7 @@ function GreetingBar() {
                 </span>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={4}>
-                {t('profile.editTooltip')}
+                {signedIn ? t('settings.profile.nav') : t('profile.editTooltip')}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -867,121 +952,173 @@ function GreetingBar() {
             className="absolute left-4 top-3.5 z-50 w-64"
           >
             <div className="rounded-2xl bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_8px_-2px_rgba(0,0,0,0.3)] px-2.5 py-2">
-              {/* ── Row: avatar + name ── */}
-              <div
-                className="flex items-center gap-2.5 cursor-pointer transition-all duration-200"
-                onClick={() => {
-                  setOpen(false);
-                  setEditingName(false);
-                  setAvatarPickerOpen(false);
-                }}
-              >
-                {/* Avatar */}
-                <div
-                  className="shrink-0 relative cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setAvatarPickerOpen(!avatarPickerOpen);
-                  }}
-                >
-                  <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 transition-all duration-300">
-                    <img src={avatar} alt="" className="size-full object-cover" />
-                  </div>
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/60 flex items-center justify-center"
-                  >
-                    <ChevronDown
-                      className={cn(
-                        'size-2 text-muted-foreground/70 transition-transform duration-200',
-                        avatarPickerOpen && 'rotate-180',
-                      )}
-                    />
-                  </motion.div>
-                </div>
-
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  {editingName ? (
-                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                      <input
-                        ref={nameInputRef}
-                        value={nameDraft}
-                        onChange={(e) => setNameDraft(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') commitName();
-                          if (e.key === 'Escape') {
-                            setEditingName(false);
-                          }
-                        }}
-                        onBlur={commitName}
-                        maxLength={20}
-                        placeholder={t('profile.defaultNickname')}
-                        className="flex-1 min-w-0 h-6 bg-transparent border-b border-border/80 text-[13px] font-semibold text-foreground outline-none placeholder:text-muted-foreground/40"
-                      />
-                      <button
-                        onClick={commitName}
-                        className="shrink-0 size-5 rounded flex items-center justify-center text-violet-500 hover:bg-violet-100 dark:hover:bg-violet-900/30"
-                      >
-                        <Check className="size-3" />
-                      </button>
+              {signedIn ? (
+                <div className="flex flex-col gap-0.5">
+                  {/* ── Row: avatar + name (read-only — edit via Profile) ── */}
+                  <div className="flex items-center gap-2.5 px-1 pb-2">
+                    <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 shrink-0">
+                      <img src={displayAvatar} alt="" className="size-full object-cover" />
                     </div>
-                  ) : (
-                    <span
+                    <span className="text-[13px] font-semibold text-foreground/85 truncate">
+                      {displayName}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      onOpenSettings('profile');
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                  >
+                    <UserIcon className="size-3.5 text-muted-foreground" />
+                    {t('settings.profile.nav')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      onOpenSettings('progress');
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                  >
+                    <TrendingUp className="size-3.5 text-muted-foreground" />
+                    {t('settings.progress.nav')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      onLogOut();
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left"
+                  >
+                    <LogOut className="size-3.5" />
+                    {t('settings.signOut')}
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* ── Row: avatar + name ── */}
+                  <div
+                    className="flex items-center gap-2.5 cursor-pointer transition-all duration-200"
+                    onClick={() => {
+                      setOpen(false);
+                      setEditingName(false);
+                      setAvatarPickerOpen(false);
+                    }}
+                  >
+                    {/* Avatar */}
+                    <div
+                      className="shrink-0 relative cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        startEditName();
+                        setAvatarPickerOpen(!avatarPickerOpen);
                       }}
-                      className="group/name inline-flex items-center gap-1 cursor-pointer"
                     >
-                      <span className="text-[13px] font-semibold text-foreground/85 group-hover/name:text-foreground transition-colors">
-                        {displayName}
-                      </span>
-                      <Pencil className="size-2.5 text-muted-foreground/30 opacity-0 group-hover/name:opacity-100 transition-opacity" />
-                    </span>
-                  )}
-                </div>
-
-                {/* Collapse arrow */}
-                <motion.div
-                  initial={{ opacity: 0, y: -2 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="shrink-0 size-6 rounded-full flex items-center justify-center hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
-                >
-                  <ChevronUp className="size-3.5 text-muted-foreground/50" />
-                </motion.div>
-              </div>
-
-              {/* ── Expandable content ── */}
-              <div className="pt-2" onClick={(e) => e.stopPropagation()}>
-                {/* Avatar picker */}
-                <AnimatePresence>
-                  {avatarPickerOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.15, ease: 'easeInOut' }}
-                      className="overflow-hidden"
-                    >
-                      <div className="p-1 pb-2.5">
-                        <AvatarPicker value={avatar} onChange={setAvatar} />
+                      <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 transition-all duration-300">
+                        <img src={avatar} alt="" className="size-full object-cover" />
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/60 flex items-center justify-center"
+                      >
+                        <ChevronDown
+                          className={cn(
+                            'size-2 text-muted-foreground/70 transition-transform duration-200',
+                            avatarPickerOpen && 'rotate-180',
+                          )}
+                        />
+                      </motion.div>
+                    </div>
 
-                {/* Bio */}
-                <UITextarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  placeholder={t('profile.bioPlaceholder')}
-                  maxLength={200}
-                  rows={2}
-                  className="resize-none border-border/40 bg-transparent min-h-[72px] !text-[13px] !leading-relaxed placeholder:!text-[11px] placeholder:!leading-relaxed focus-visible:ring-1 focus-visible:ring-border/60"
-                />
-              </div>
+                    {/* Text */}
+                    <div className="flex-1 min-w-0">
+                      {editingName ? (
+                        <div
+                          className="flex items-center gap-1.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <input
+                            ref={nameInputRef}
+                            value={nameDraft}
+                            onChange={(e) => setNameDraft(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') commitName();
+                              if (e.key === 'Escape') {
+                                setEditingName(false);
+                              }
+                            }}
+                            onBlur={commitName}
+                            maxLength={20}
+                            placeholder={t('profile.defaultNickname')}
+                            className="flex-1 min-w-0 h-6 bg-transparent border-b border-border/80 text-[13px] font-semibold text-foreground outline-none placeholder:text-muted-foreground/40"
+                          />
+                          <button
+                            onClick={commitName}
+                            className="shrink-0 size-5 rounded flex items-center justify-center text-violet-500 hover:bg-violet-100 dark:hover:bg-violet-900/30"
+                          >
+                            <Check className="size-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <span
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startEditName();
+                          }}
+                          className="group/name inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <span className="text-[13px] font-semibold text-foreground/85 group-hover/name:text-foreground transition-colors">
+                            {displayName}
+                          </span>
+                          <Pencil className="size-2.5 text-muted-foreground/30 opacity-0 group-hover/name:opacity-100 transition-opacity" />
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Collapse arrow */}
+                    <motion.div
+                      initial={{ opacity: 0, y: -2 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="shrink-0 size-6 rounded-full flex items-center justify-center hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
+                    >
+                      <ChevronUp className="size-3.5 text-muted-foreground/50" />
+                    </motion.div>
+                  </div>
+
+                  {/* ── Expandable content ── */}
+                  <div className="pt-2" onClick={(e) => e.stopPropagation()}>
+                    {/* Avatar picker */}
+                    <AnimatePresence>
+                      {avatarPickerOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.15, ease: 'easeInOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-1 pb-2.5">
+                            <AvatarPicker value={avatar} onChange={setAvatar} />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Bio */}
+                    <UITextarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder={t('profile.bioPlaceholder')}
+                      maxLength={200}
+                      rows={2}
+                      className="resize-none border-border/40 bg-transparent min-h-[72px] !text-[13px] !leading-relaxed placeholder:!text-[11px] placeholder:!leading-relaxed focus-visible:ring-1 focus-visible:ring-border/60"
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
         )}

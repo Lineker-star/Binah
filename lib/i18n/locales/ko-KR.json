@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "로그인",
     "signUpTitle": "계정 만들기",
+    "signUpCta": "가입하기",
     "emailLabel": "이메일",
     "passwordLabel": "비밀번호",
     "displayNameLabel": "표시 이름",

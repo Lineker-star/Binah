@@ -2030,6 +2030,7 @@
   "auth": {
     "signInTitle": "Đăng nhập",
     "signUpTitle": "Tạo tài khoản",
+    "signUpCta": "Đăng ký",
     "emailLabel": "Email",
     "passwordLabel": "Mật khẩu",
     "displayNameLabel": "Tên hiển thị",
