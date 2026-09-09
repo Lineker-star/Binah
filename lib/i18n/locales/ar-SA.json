@@ -1218,6 +1218,8 @@
     },
     "close": "إغلاق",
     "save": "حفظ",
+    "signInLink": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
     "providers": "LLM",
     "addProviderDescription": "أضف مزوّدي نماذج مخصصين لتوسيع نماذج الذكاء الاصطناعي المتاحة",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "الصورة كبيرة جدًا — يرجى اختيار صورة أقل من 5 ميغابايت",
     "invalidFileType": "يرجى اختيار ملف صورة",
     "editTooltip": "انقر لتعديل الملف الشخصي"
+  },
+  "auth": {
+    "signInTitle": "تسجيل الدخول",
+    "signUpTitle": "إنشاء حساب",
+    "emailLabel": "البريد الإلكتروني",
+    "passwordLabel": "كلمة المرور",
+    "displayNameLabel": "الاسم المعروض",
+    "displayNamePlaceholder": "اسمك",
+    "roleLabel": "أنا…",
+    "roleLearner": "متعلم",
+    "roleParent": "ولي أمر أو معلم خصوصي",
+    "signInAction": "تسجيل الدخول",
+    "signUpAction": "إنشاء حساب",
+    "switchToSignUp": "ليس لديك حساب؟ أنشئ واحدًا",
+    "switchToSignIn": "لديك حساب بالفعل؟ سجّل الدخول",
+    "checkEmail": "تحقق من بريدك الإلكتروني لتأكيد حسابك، ثم سجّل الدخول.",
+    "signInFailed": "فشل تسجيل الدخول. تحقق من بريدك الإلكتروني وكلمة المرور.",
+    "signUpFailed": "فشل إنشاء الحساب. حاول مرة أخرى.",
+    "backToHome": "العودة إلى الصفحة الرئيسية"
+  },
+  "parent": {
+    "dashboardTitle": "أبناؤك",
+    "subtitle": "عرض للقراءة فقط لتقدّم أبنائك المرتبطين.",
+    "noChildren": "لا يوجد أبناء مرتبطون بعد. اطلب من المسؤول ربط حساب طفلك بحسابك.",
+    "unnamed": "(بدون اسم)",
+    "sessionsLabel": "الجلسات الأخيرة",
+    "noSessions": "لا توجد جلسات بعد."
   },
   "media": {
     "imageCapability": "توليد الصور",

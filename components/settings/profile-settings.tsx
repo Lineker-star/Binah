@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Loader2, User as UserIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { createClient } from '@/lib/supabase/client';
 import {
   Select,
   SelectContent,
@@ -121,6 +123,9 @@ export function ProfileSettings() {
       <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-sm text-muted-foreground">
         <UserIcon className="h-6 w-6" />
         {t('settings.profile.notSignedIn')}
+        <Link href="/auth" className="text-violet-600 dark:text-violet-400 hover:underline">
+          {t('settings.signInLink')}
+        </Link>
       </div>
     );
   }
@@ -181,7 +186,18 @@ export function ProfileSettings() {
         )}
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => {
+            void createClient()
+              .auth.signOut()
+              .then(() => setProfile(null));
+          }}
+        >
+          {t('settings.signOut')}
+        </Button>
         <Button size="sm" onClick={handleSave} disabled={saving}>
           {saving && <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />}
           {t('settings.save')}

@@ -1218,6 +1218,8 @@
     },
     "close": "Close",
     "save": "Save",
+    "signInLink": "Sign in",
+    "signOut": "Sign out",
     "providers": "LLM",
     "addProviderDescription": "Add custom model providers to extend available AI models",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "Image too large — please choose one under 5 MB",
     "invalidFileType": "Please select an image file",
     "editTooltip": "Click to edit profile"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signUpTitle": "Create an account",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "displayNameLabel": "Display name",
+    "displayNamePlaceholder": "Your name",
+    "roleLabel": "I am a…",
+    "roleLearner": "Learner",
+    "roleParent": "Parent or tutor",
+    "signInAction": "Sign in",
+    "signUpAction": "Create account",
+    "switchToSignUp": "Need an account? Sign up",
+    "switchToSignIn": "Already have an account? Sign in",
+    "checkEmail": "Check your email to confirm your account, then sign in.",
+    "signInFailed": "Sign in failed. Check your email and password.",
+    "signUpFailed": "Sign up failed. Please try again.",
+    "backToHome": "Back to home"
+  },
+  "parent": {
+    "dashboardTitle": "Your children",
+    "subtitle": "A read-only view of your linked children's progress.",
+    "noChildren": "No linked children yet. Ask an admin to link your child's account to yours.",
+    "unnamed": "(no name)",
+    "sessionsLabel": "Recent sessions",
+    "noSessions": "No sessions yet."
   },
   "media": {
     "imageCapability": "Image Generation",

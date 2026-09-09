@@ -1218,6 +1218,8 @@
     },
     "close": "Fermer",
     "save": "Enregistrer",
+    "signInLink": "Se connecter",
+    "signOut": "Se déconnecter",
     "providers": "LLM",
     "addProviderDescription": "Ajoutez des fournisseurs de modèles personnalisés pour étendre la liste des modèles d’IA disponibles",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "Image trop volumineuse, veuillez en choisir une de moins de 5 Mo",
     "invalidFileType": "Veuillez sélectionner un fichier image",
     "editTooltip": "Cliquez pour modifier votre profil"
+  },
+  "auth": {
+    "signInTitle": "Se connecter",
+    "signUpTitle": "Créer un compte",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Mot de passe",
+    "displayNameLabel": "Nom affiché",
+    "displayNamePlaceholder": "Votre nom",
+    "roleLabel": "Je suis…",
+    "roleLearner": "Apprenant(e)",
+    "roleParent": "Parent ou tuteur",
+    "signInAction": "Se connecter",
+    "signUpAction": "Créer le compte",
+    "switchToSignUp": "Pas de compte ? Inscrivez-vous",
+    "switchToSignIn": "Déjà un compte ? Connectez-vous",
+    "checkEmail": "Consultez votre e-mail pour confirmer votre compte, puis connectez-vous.",
+    "signInFailed": "Échec de la connexion. Vérifiez votre e-mail et votre mot de passe.",
+    "signUpFailed": "Échec de la création du compte. Veuillez réessayer.",
+    "backToHome": "Retour à l'accueil"
+  },
+  "parent": {
+    "dashboardTitle": "Vos enfants",
+    "subtitle": "Une vue en lecture seule de la progression de vos enfants liés.",
+    "noChildren": "Aucun enfant lié pour le moment. Demandez à un administrateur de lier le compte de votre enfant au vôtre.",
+    "unnamed": "(sans nom)",
+    "sessionsLabel": "Sessions récentes",
+    "noSessions": "Aucune session pour le moment."
   },
   "media": {
     "imageCapability": "Génération d’images",

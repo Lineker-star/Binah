@@ -1218,6 +1218,8 @@
     },
     "close": "Đóng",
     "save": "Lưu",
+    "signInLink": "Đăng nhập",
+    "signOut": "Đăng xuất",
     "providers": "Model ngôn ngữ",
     "addProviderDescription": "Thêm nhà cung cấp model riêng để mở rộng danh sách model AI",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "Ảnh quá lớn — vui lòng chọn ảnh dưới 5 MB",
     "invalidFileType": "Vui lòng chọn một tệp ảnh",
     "editTooltip": "Bấm để sửa trang cá nhân"
+  },
+  "auth": {
+    "signInTitle": "Đăng nhập",
+    "signUpTitle": "Tạo tài khoản",
+    "emailLabel": "Email",
+    "passwordLabel": "Mật khẩu",
+    "displayNameLabel": "Tên hiển thị",
+    "displayNamePlaceholder": "Tên của bạn",
+    "roleLabel": "Tôi là…",
+    "roleLearner": "Người học",
+    "roleParent": "Phụ huynh hoặc gia sư",
+    "signInAction": "Đăng nhập",
+    "signUpAction": "Tạo tài khoản",
+    "switchToSignUp": "Chưa có tài khoản? Đăng ký",
+    "switchToSignIn": "Đã có tài khoản? Đăng nhập",
+    "checkEmail": "Kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.",
+    "signInFailed": "Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu.",
+    "signUpFailed": "Tạo tài khoản thất bại. Vui lòng thử lại.",
+    "backToHome": "Về trang chủ"
+  },
+  "parent": {
+    "dashboardTitle": "Con của bạn",
+    "subtitle": "Chế độ xem chỉ đọc về tiến độ của các con đã liên kết.",
+    "noChildren": "Chưa có con nào được liên kết. Hãy nhờ quản trị viên liên kết tài khoản của con bạn với tài khoản của bạn.",
+    "unnamed": "(chưa có tên)",
+    "sessionsLabel": "Phiên học gần đây",
+    "noSessions": "Chưa có phiên học nào."
   },
   "media": {
     "imageCapability": "Tạo ảnh",

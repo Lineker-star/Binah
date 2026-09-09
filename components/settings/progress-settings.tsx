@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Loader2, TrendingUp, CheckCircle2, Flame, Clock, Award } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { fetchOwnMetrics, type LearningMetrics } from '@/lib/supabase/learning-metrics';
@@ -72,6 +73,9 @@ export function ProgressSettings() {
       <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-sm text-muted-foreground">
         <TrendingUp className="h-6 w-6" />
         {t('settings.progress.notSignedIn')}
+        <Link href="/auth" className="text-violet-600 dark:text-violet-400 hover:underline">
+          {t('settings.signInLink')}
+        </Link>
       </div>
     );
   }

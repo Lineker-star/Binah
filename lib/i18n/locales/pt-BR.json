@@ -1218,6 +1218,8 @@
     },
     "close": "Fechar",
     "save": "Salvar",
+    "signInLink": "Entrar",
+    "signOut": "Sair",
     "providers": "LLM",
     "addProviderDescription": "Adicione provedores de modelo personalizados para ampliar os modelos de IA disponíveis",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "Imagem muito grande — escolha uma com menos de 5 MB",
     "invalidFileType": "Selecione um arquivo de imagem",
     "editTooltip": "Clique para editar o perfil"
+  },
+  "auth": {
+    "signInTitle": "Entrar",
+    "signUpTitle": "Criar uma conta",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "displayNameLabel": "Nome de exibição",
+    "displayNamePlaceholder": "Seu nome",
+    "roleLabel": "Eu sou…",
+    "roleLearner": "Estudante",
+    "roleParent": "Responsável ou tutor",
+    "signInAction": "Entrar",
+    "signUpAction": "Criar conta",
+    "switchToSignUp": "Não tem conta? Cadastre-se",
+    "switchToSignIn": "Já tem conta? Entrar",
+    "checkEmail": "Verifique seu e-mail para confirmar sua conta e depois entre.",
+    "signInFailed": "Falha ao entrar. Verifique seu e-mail e senha.",
+    "signUpFailed": "Falha ao criar a conta. Tente novamente.",
+    "backToHome": "Voltar ao início"
+  },
+  "parent": {
+    "dashboardTitle": "Seus filhos",
+    "subtitle": "Uma visão somente leitura do progresso dos filhos vinculados.",
+    "noChildren": "Nenhum filho vinculado ainda. Peça a um administrador para vincular a conta do seu filho à sua.",
+    "unnamed": "(sem nome)",
+    "sessionsLabel": "Sessões recentes",
+    "noSessions": "Nenhuma sessão ainda."
   },
   "media": {
     "imageCapability": "Geração de Imagens",

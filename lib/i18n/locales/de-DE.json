@@ -1218,6 +1218,8 @@
     },
     "close": "Schließen",
     "save": "Speichern",
+    "signInLink": "Anmelden",
+    "signOut": "Abmelden",
     "providers": "LLM",
     "addProviderDescription": "Benutzerdefinierte Modellanbieter hinzufügen, um die verfügbaren KI-Modelle zu erweitern",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "Das Bild ist zu groß – wähle bitte eines unter 5 MB",
     "invalidFileType": "Bitte wähle eine Bilddatei aus",
     "editTooltip": "Zum Bearbeiten des Profils klicken"
+  },
+  "auth": {
+    "signInTitle": "Anmelden",
+    "signUpTitle": "Konto erstellen",
+    "emailLabel": "E-Mail",
+    "passwordLabel": "Passwort",
+    "displayNameLabel": "Anzeigename",
+    "displayNamePlaceholder": "Dein Name",
+    "roleLabel": "Ich bin…",
+    "roleLearner": "Lernende(r)",
+    "roleParent": "Elternteil oder Tutor",
+    "signInAction": "Anmelden",
+    "signUpAction": "Konto erstellen",
+    "switchToSignUp": "Noch kein Konto? Registrieren",
+    "switchToSignIn": "Bereits ein Konto? Anmelden",
+    "checkEmail": "Bestätige dein Konto per E-Mail und melde dich anschließend an.",
+    "signInFailed": "Anmeldung fehlgeschlagen. Überprüfe E-Mail und Passwort.",
+    "signUpFailed": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
+    "backToHome": "Zurück zur Startseite"
+  },
+  "parent": {
+    "dashboardTitle": "Deine Kinder",
+    "subtitle": "Eine schreibgeschützte Ansicht des Fortschritts deiner verknüpften Kinder.",
+    "noChildren": "Noch keine verknüpften Kinder. Bitte einen Administrator, das Konto deines Kindes mit deinem zu verknüpfen.",
+    "unnamed": "(kein Name)",
+    "sessionsLabel": "Letzte Sitzungen",
+    "noSessions": "Noch keine Sitzungen."
   },
   "media": {
     "imageCapability": "Bildgenerierung",

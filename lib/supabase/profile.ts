@@ -7,6 +7,7 @@ export type UserRole = (typeof USER_ROLES)[number];
 export interface Profile {
   id: string;
   role: UserRole;
+  email: string | null;
   display_name: string | null;
   avatar_url: string | null;
   locale: string;

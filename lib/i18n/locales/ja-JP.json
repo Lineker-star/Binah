@@ -1218,6 +1218,8 @@
     },
     "close": "閉じる",
     "save": "保存",
+    "signInLink": "サインイン",
+    "signOut": "サインアウト",
     "providers": "LLM",
     "addProviderDescription": "カスタムモデルプロバイダーを追加して利用可能なAIモデルを拡張",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "画像が大きすぎます。5MB以下のファイルを選択してください",
     "invalidFileType": "画像ファイルを選択してください",
     "editTooltip": "クリックしてプロフィールを編集"
+  },
+  "auth": {
+    "signInTitle": "サインイン",
+    "signUpTitle": "アカウントを作成",
+    "emailLabel": "メールアドレス",
+    "passwordLabel": "パスワード",
+    "displayNameLabel": "表示名",
+    "displayNamePlaceholder": "お名前",
+    "roleLabel": "あなたは…",
+    "roleLearner": "学習者",
+    "roleParent": "保護者・チューター",
+    "signInAction": "サインイン",
+    "signUpAction": "アカウントを作成",
+    "switchToSignUp": "アカウントをお持ちでないですか？新規登録",
+    "switchToSignIn": "すでにアカウントをお持ちですか？サインイン",
+    "checkEmail": "メールを確認してアカウントを確認し、その後サインインしてください。",
+    "signInFailed": "サインインに失敗しました。メールアドレスとパスワードをご確認ください。",
+    "signUpFailed": "アカウントの作成に失敗しました。もう一度お試しください。",
+    "backToHome": "ホームに戻る"
+  },
+  "parent": {
+    "dashboardTitle": "お子さま",
+    "subtitle": "連携しているお子さまの進捗状況を閲覧できます（読み取り専用）。",
+    "noChildren": "まだ連携されているお子さまがいません。管理者にお子さまのアカウントとの連携を依頼してください。",
+    "unnamed": "（名前なし）",
+    "sessionsLabel": "最近のセッション",
+    "noSessions": "セッションはまだありません。"
   },
   "media": {
     "imageCapability": "画像生成",

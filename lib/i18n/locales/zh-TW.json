@@ -1203,6 +1203,8 @@
     },
     "close": "關閉",
     "save": "儲存",
+    "signInLink": "登入",
+    "signOut": "登出",
     "providers": "語言模型",
     "addProviderDescription": "新增自訂模型供應商以擴充可用的AI模型",
     "providerNames": {
@@ -2009,6 +2011,33 @@
     "fileTooLarge": "圖片過大，請選擇小於 5MB 的圖片",
     "invalidFileType": "請選擇圖片檔案",
     "editTooltip": "點擊編輯個人資料"
+  },
+  "auth": {
+    "signInTitle": "登入",
+    "signUpTitle": "建立帳戶",
+    "emailLabel": "電子郵件",
+    "passwordLabel": "密碼",
+    "displayNameLabel": "顯示名稱",
+    "displayNamePlaceholder": "您的姓名",
+    "roleLabel": "我是…",
+    "roleLearner": "學習者",
+    "roleParent": "家長或家教",
+    "signInAction": "登入",
+    "signUpAction": "建立帳戶",
+    "switchToSignUp": "還沒有帳戶？註冊",
+    "switchToSignIn": "已經有帳戶？登入",
+    "checkEmail": "請查看您的電子郵件以確認帳戶，然後登入。",
+    "signInFailed": "登入失敗，請檢查您的電子郵件和密碼。",
+    "signUpFailed": "建立帳戶失敗，請再試一次。",
+    "backToHome": "返回首頁"
+  },
+  "parent": {
+    "dashboardTitle": "您的孩子",
+    "subtitle": "唯讀檢視已連結孩子的學習進度。",
+    "noChildren": "尚未連結任何孩子。請管理員將您孩子的帳戶與您的帳戶連結。",
+    "unnamed": "（未命名）",
+    "sessionsLabel": "近期學習記錄",
+    "noSessions": "尚無學習記錄。"
   },
   "media": {
     "imageCapability": "圖像生成",

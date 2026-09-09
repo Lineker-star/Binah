@@ -1218,6 +1218,8 @@
     },
     "close": "Cerrar",
     "save": "Guardar",
+    "signInLink": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
     "providers": "LLM",
     "addProviderDescription": "Agrega proveedores de modelos personalizados para ampliar los modelos de IA disponibles",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "La imagen es demasiado grande; elige una de menos de 5 MB",
     "invalidFileType": "Selecciona un archivo de imagen",
     "editTooltip": "Haz clic para editar tu perfil"
+  },
+  "auth": {
+    "signInTitle": "Iniciar sesión",
+    "signUpTitle": "Crear una cuenta",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "displayNameLabel": "Nombre para mostrar",
+    "displayNamePlaceholder": "Tu nombre",
+    "roleLabel": "Soy…",
+    "roleLearner": "Estudiante",
+    "roleParent": "Padre, madre o tutor",
+    "signInAction": "Iniciar sesión",
+    "signUpAction": "Crear cuenta",
+    "switchToSignUp": "¿No tienes cuenta? Regístrate",
+    "switchToSignIn": "¿Ya tienes cuenta? Inicia sesión",
+    "checkEmail": "Revisa tu correo para confirmar tu cuenta y luego inicia sesión.",
+    "signInFailed": "No se pudo iniciar sesión. Verifica tu correo y contraseña.",
+    "signUpFailed": "No se pudo crear la cuenta. Inténtalo de nuevo.",
+    "backToHome": "Volver al inicio"
+  },
+  "parent": {
+    "dashboardTitle": "Tus hijos",
+    "subtitle": "Una vista de solo lectura del progreso de tus hijos vinculados.",
+    "noChildren": "Aún no hay hijos vinculados. Pide a un administrador que vincule la cuenta de tu hijo con la tuya.",
+    "unnamed": "(sin nombre)",
+    "sessionsLabel": "Sesiones recientes",
+    "noSessions": "Aún no hay sesiones."
   },
   "media": {
     "imageCapability": "Generación de imágenes",

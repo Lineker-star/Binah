@@ -1218,6 +1218,8 @@
     },
     "close": "关闭",
     "save": "保存",
+    "signInLink": "登录",
+    "signOut": "退出登录",
     "providers": "语言模型",
     "addProviderDescription": "添加自定义模型提供方以扩展可用的AI模型",
     "providerNames": {
@@ -2024,6 +2026,33 @@
     "fileTooLarge": "图片过大，请选择小于 5MB 的图片",
     "invalidFileType": "请选择图片文件",
     "editTooltip": "点击编辑个人资料"
+  },
+  "auth": {
+    "signInTitle": "登录",
+    "signUpTitle": "创建账户",
+    "emailLabel": "邮箱",
+    "passwordLabel": "密码",
+    "displayNameLabel": "显示名称",
+    "displayNamePlaceholder": "你的名字",
+    "roleLabel": "我是…",
+    "roleLearner": "学习者",
+    "roleParent": "家长或辅导老师",
+    "signInAction": "登录",
+    "signUpAction": "创建账户",
+    "switchToSignUp": "没有账户？注册",
+    "switchToSignIn": "已有账户？登录",
+    "checkEmail": "请查收邮件以确认账户，然后登录。",
+    "signInFailed": "登录失败，请检查邮箱和密码。",
+    "signUpFailed": "创建账户失败，请重试。",
+    "backToHome": "返回首页"
+  },
+  "parent": {
+    "dashboardTitle": "您的孩子",
+    "subtitle": "只读查看已关联孩子的学习进度。",
+    "noChildren": "尚未关联任何孩子。请联系管理员将您孩子的账户与您的账户关联。",
+    "unnamed": "（未命名）",
+    "sessionsLabel": "最近的学习记录",
+    "noSessions": "暂无学习记录。"
   },
   "media": {
     "imageCapability": "图像生成",

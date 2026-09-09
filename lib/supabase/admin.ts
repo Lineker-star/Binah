@@ -147,3 +147,77 @@ export async function changeUserRole(
   });
   if (auditError) throw auditError;
 }
+
+/** A parent's linked child, as shown on the parent's admin detail page. */
+export interface AdminLinkedChild {
+  id: string;
+  display_name: string | null;
+  email: string | null;
+}
+
+/** The children currently linked to a parent account, for the admin detail view. */
+export async function fetchLinkedChildrenForParent(parentId: string): Promise<AdminLinkedChild[]> {
+  const supabase = createClient();
+  const { data: links, error: linksError } = await supabase
+    .from('parent_child_links')
+    .select('child_id')
+    .eq('parent_id', parentId);
+  if (linksError) throw linksError;
+
+  const childIds = (links ?? []).map((l) => l.child_id as string);
+  if (childIds.length === 0) return [];
+
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, display_name, email')
+    .in('id', childIds);
+  if (profilesError) throw profilesError;
+  return (profiles ?? []) as AdminLinkedChild[];
+}
+
+/**
+ * Link a parent account to a learner account by the learner's email —
+ * the admin-manual half of the parent/child flow (the alternative,
+ * child-side invite/approval flow is not built in this pass).
+ *
+ * Looks the child up by email rather than id because the admin panel's
+ * learner list doesn't expose ids to click-to-select in a form input, and
+ * email is the one human-enterable identifier every account has. Only a
+ * `role: 'learner'` account can be linked as a child — linking two parents,
+ * or a parent to an admin, isn't a case the schema or the parent dashboard
+ * has any handling for.
+ *
+ * A pre-check for an existing identical link avoids duplicate rows:
+ * `parent_child_links` has no unique constraint, and RLS only cares whether
+ * a matching row exists (not how many), so a duplicate wouldn't be a
+ * security issue — but it would render as a duplicate child card.
+ */
+export async function linkParentToChild(parentId: string, childEmail: string): Promise<void> {
+  const supabase = createClient();
+  const normalizedEmail = childEmail.trim().toLowerCase();
+  if (!normalizedEmail) throw new Error('Enter the child’s email.');
+
+  const { data: child, error: childError } = await supabase
+    .from('profiles')
+    .select('id, role')
+    .eq('email', normalizedEmail)
+    .maybeSingle();
+  if (childError) throw childError;
+  if (!child) throw new Error('No account found with that email.');
+  if (child.role !== 'learner') throw new Error('That account is not a learner account.');
+  if (child.id === parentId) throw new Error('An account cannot be linked to itself.');
+
+  const { data: existing, error: existingError } = await supabase
+    .from('parent_child_links')
+    .select('id')
+    .eq('parent_id', parentId)
+    .eq('child_id', child.id)
+    .maybeSingle();
+  if (existingError) throw existingError;
+  if (existing) return;
+
+  const { error: insertError } = await supabase
+    .from('parent_child_links')
+    .insert({ parent_id: parentId, child_id: child.id });
+  if (insertError) throw insertError;
+}

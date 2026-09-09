@@ -42,6 +42,7 @@ import { hasUsableLLMProvider } from '@/lib/store/settings-validation';
 import { useUserProfileStore } from '@/lib/store/user-profile';
 import { AvatarPicker } from '@/components/avatar-picker';
 import { RecentSessions } from '@/components/discovery/recent-sessions';
+import { createClient } from '@/lib/supabase/client';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
@@ -127,6 +128,28 @@ function HomePage() {
   useEffect(() => {
     if (workbenchEntryEnabled) router.prefetch('/workspace');
   }, [router, workbenchEntryEnabled]);
+  // A signed-in parent account has no use for the course-creation homepage —
+  // send them straight to their read-only dashboard. Anonymous visitors and
+  // learners are unaffected (no signed-in user, or a non-parent role, is a
+  // no-op here), so this never delays or alters the common path.
+  useEffect(() => {
+    let cancelled = false;
+    createClient()
+      .from('profiles')
+      .select('role')
+      .single()
+      .then(
+        ({ data }) => {
+          if (!cancelled && data?.role === 'parent') router.replace('/parent');
+        },
+        () => {
+          // No session, or the query failed — stay on the homepage.
+        },
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState<
