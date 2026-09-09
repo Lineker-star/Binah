@@ -53,6 +53,7 @@ import type {
 } from '@/lib/types/generation';
 import { AgentRevealModal } from '@/components/agent/agent-reveal-modal';
 import { createLogger } from '@/lib/logger';
+import { createLearningSession } from '@/lib/supabase/learning-session';
 import {
   type GenerationSessionState,
   ALL_STEPS,
@@ -542,6 +543,20 @@ function GenerationPreviewContent() {
         interactiveMode: !!currentSession.requirements.interactiveMode,
         taskEngineMode: currentSession.taskEngineMode === true,
       };
+
+      // Start the learner's tracked session for this course. Title/topic come
+      // straight from what they typed, not the (not-yet-known) AI-generated
+      // course title. Fire-and-forget: no signed-in Supabase user yet means
+      // `createLearningSession` resolves to null, and generation must keep
+      // working exactly as it does today for an anonymous/local-only visitor
+      // — this never gates or blocks the generation flow either way.
+      void createLearningSession({
+        stageId,
+        title: stage.name,
+        topic: currentSession.requirements.requirement,
+      }).catch((err) => {
+        log.warn('Failed to create learning session (ignored):', err);
+      });
 
       // ── Generate outlines first (infers languageDirective) ──
       let outlines = currentSession.sceneOutlines;

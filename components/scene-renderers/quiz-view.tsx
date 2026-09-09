@@ -30,6 +30,8 @@ import {
   QuizRetryProgressedError,
   type QuizAttemptWriter,
 } from '@/lib/quiz/runtime';
+import { recordAssessment } from '@/lib/supabase/assessments';
+import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import {
   createQuizViewLifetime,
   isQuizRuntimeReady,
@@ -836,12 +838,32 @@ export function QuizView({ questions, sceneId, stageId }: QuizViewProps) {
       if (cancelled) return;
       setResults(ordered);
       setPhase('reviewing');
+
+      // Record the assessment. Fire-and-forget: no signed-in Supabase user
+      // (or a locally-imported/untracked course) resolves to a no-op inside
+      // recordAssessment — grading and review must work exactly the same
+      // either way. Feedback is assembled from short-answer aiComments only;
+      // choice questions have no per-question comment and there's no single
+      // coherent "quiz feedback" string produced anywhere upstream.
+      const earned = ordered.reduce((sum, r) => sum + r.earned, 0);
+      const comments = ordered.map((r) => r.aiComment).filter((c): c is string => !!c?.trim());
+      void recordAssessment({
+        assessmentType: 'quiz',
+        sessionId: getLearningSession(stageId)?.id ?? null,
+        sceneId,
+        score: earned,
+        maxScore: totalPoints,
+        feedback: comments.length > 0 ? comments.join(' ') : null,
+        evaluatedBy: 'system',
+      }).catch((err) => {
+        log.warn('Failed to record quiz assessment (ignored):', err);
+      });
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [phase, questions, answers, locale, sceneId, stageId, attemptId, runtimeWriter]);
+  }, [phase, questions, answers, locale, sceneId, stageId, attemptId, runtimeWriter, totalPoints]);
 
   const handleRetry = useCallback(async () => {
     if (!attemptId || retrying) return;

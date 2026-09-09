@@ -2,6 +2,8 @@ import type { ProviderId, ModelInfo, ProviderType } from '@/lib/types/provider';
 
 export type SettingsSection =
   | 'general'
+  | 'profile'
+  | 'progress'
   | 'token-plan'
   | 'providers'
   | 'agents'

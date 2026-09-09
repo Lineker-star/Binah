@@ -29,6 +29,8 @@ import {
   Plus,
   CreditCard,
   Sparkles,
+  User,
+  TrendingUp,
 } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -58,6 +60,8 @@ import { WebSearchSettings } from './web-search-settings';
 import { WEB_SEARCH_PROVIDERS, getWebSearchProviderDisplayName } from '@/lib/web-search/constants';
 import type { WebSearchProviderId } from '@/lib/web-search/types';
 import { GeneralSettings } from './general-settings';
+import { ProfileSettings } from './profile-settings';
+import { ProgressSettings } from './progress-settings';
 import { SkillSettings } from './skill-settings';
 import { TokenPlanSettings } from './token-plan-settings';
 import { ModelEditDialog } from './model-edit-dialog';
@@ -553,6 +557,10 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
     switch (activeSection) {
       case 'general':
         return <h2 className="text-lg font-semibold">{t('settings.systemSettings')}</h2>;
+      case 'profile':
+        return <h2 className="text-lg font-semibold">{t('settings.profile.title')}</h2>;
+      case 'progress':
+        return <h2 className="text-lg font-semibold">{t('settings.progress.title')}</h2>;
       case 'skills':
         return (
           <>
@@ -868,6 +876,32 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               <Settings className="h-4 w-4 shrink-0" />
               <span className="truncate">{t('settings.systemSettings')}</span>
             </button>
+
+            <button
+              onClick={() => setActiveSection('profile')}
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                activeSection === 'profile'
+                  ? 'bg-primary/10 text-primary font-medium'
+                  : 'hover:bg-muted',
+              )}
+            >
+              <User className="h-4 w-4 shrink-0" />
+              <span className="truncate">{t('settings.profile.nav')}</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSection('progress')}
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                activeSection === 'progress'
+                  ? 'bg-primary/10 text-primary font-medium'
+                  : 'hover:bg-muted',
+              )}
+            >
+              <TrendingUp className="h-4 w-4 shrink-0" />
+              <span className="truncate">{t('settings.progress.nav')}</span>
+            </button>
           </div>
 
           {/* Sidebar resize handle */}
@@ -1076,6 +1110,10 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-5">
               {activeSection === 'general' && <GeneralSettings />}
+
+              {activeSection === 'profile' && <ProfileSettings />}
+
+              {activeSection === 'progress' && <ProgressSettings />}
 
               {activeSection === 'skills' && <SkillSettings />}
 

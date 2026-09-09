@@ -12,6 +12,9 @@ import {
 } from 'react';
 import { useStageStore } from '@/lib/store';
 import { PENDING_SCENE_ID } from '@/lib/store/stage';
+import { getLearningSession, noteLearningSession } from '@/lib/classroom/learning-session-signal';
+import { endSession } from '@/lib/supabase/learning-session';
+import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -76,6 +79,8 @@ type ElementReferenceSendSnapshot = Pick<
   DraftSlideElementReference,
   'reference' | 'selectionVersion'
 >;
+
+const log = createLogger('PlaybackChromeRoot');
 
 /**
  * Imperative handle exposed via `ref` so the parent (`Stage`) can tear
@@ -1176,6 +1181,27 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
       generationComplete ||
       (outlines.length > 0 && scenes.length === outlines.length && generatingOutlines.length === 0);
     const canAdvanceToPendingSlot = hasNextPending || isCourseComplete;
+
+    // Auto-end the learner's open session as `completed` the moment they
+    // actually reach the completion page (isPendingScene + no scene there +
+    // isCourseComplete — the same condition that renders
+    // ClassroomCompletePageConnected). Guarded by a ref so it fires once per
+    // mount even though the condition stays true on every re-render after.
+    // A no-op when there's no open session for this stage (anonymous
+    // visitor, or a locally-imported course that was never tracked).
+    const sessionEndedRef = useRef(false);
+    useEffect(() => {
+      if (sessionEndedRef.current) return;
+      if (!(isPendingScene && !currentScene && isCourseComplete)) return;
+      const stageId = stage?.id;
+      if (!stageId) return;
+      const session = getLearningSession(stageId);
+      if (!session || session.status === 'completed' || session.status === 'abandoned') return;
+      sessionEndedRef.current = true;
+      void endSession(session.id, { completed: true })
+        .then((updated) => noteLearningSession(stageId, updated))
+        .catch((err) => log.warn('Failed to auto-complete learning session (ignored):', err));
+    }, [isPendingScene, currentScene, isCourseComplete, stage?.id]);
 
     // previous scene (gated)
     const handlePreviousScene = useCallback(() => {

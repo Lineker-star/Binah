@@ -17,6 +17,8 @@ import { generateMediaForOutlines } from '@/lib/media/media-orchestrator';
 import { useAgentRegistry } from '@/lib/orchestration/registry/store';
 import { fetchStageMeta } from '@/lib/classroom/stage-meta-client';
 import { noteStageOwnership } from '@/lib/classroom/stage-ownership-signal';
+import { noteLearningSession } from '@/lib/classroom/learning-session-signal';
+import { findSessionForStage } from '@/lib/supabase/learning-session';
 import {
   applyClassroomStageAndScenes,
   defaultClassroomLoadDeps,
@@ -81,6 +83,17 @@ export default function ClassroomDetailPage() {
       // its defaults so its answer wins, and fire it without blocking the
       // render that already happened.
       if (isEffectCurrent()) {
+        // Resolve the learner's open session for this stage (if any) so
+        // auto-completion and scene-progress tracking have it without
+        // threading a session id through navigation. Anonymous visitors and
+        // locally-imported courses with no tracked session both resolve to
+        // null — a no-op for everything downstream, same as stage-meta above.
+        void findSessionForStage(classroomId)
+          .then((session) => {
+            if (isEffectCurrent()) noteLearningSession(classroomId, session);
+          })
+          .catch(() => noteLearningSession(classroomId, null));
+
         void fetchStageMeta(classroomId)
           .then((result) => {
             if (!isEffectCurrent()) return;

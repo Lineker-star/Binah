@@ -43,15 +43,46 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import type { PBLProjectV2 } from '@/lib/pbl/v2/types';
+import type { PBLProjectV2, PBLEvaluation } from '@/lib/pbl/v2/types';
 import type { PBLSSEEvent } from '@/lib/pbl/v2/api/sse';
 import { trackSubmissionScore } from '@/lib/pbl/v2/operations/runtime/dynamic-signals';
 import { normalizeProjectRuntime } from '@/lib/pbl/v2/operations/kernel/progress';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
 import { createLogger } from '@/lib/logger';
 import { applyInstructorEvent } from './apply-instructor-event';
+import { useMediaStageId } from '@/lib/contexts/media-stage-context';
+import { getLearningSession } from '@/lib/classroom/learning-session-signal';
+import { recordAssessment } from '@/lib/supabase/assessments';
 
 const log = createLogger('PBL v2 InstructorStream');
+
+/**
+ * PBL evaluations carry a score in one of three incompatible shapes
+ * depending on `kind` — a 0-100 `score` (task evals), a 0-5 `stars` rating
+ * (milestone/final), or per-act achieved/partial/missed `actGoals`
+ * (scenario finals only, no number at all). Rescale whichever is present
+ * onto assessments' single score/max_score pair rather than picking one
+ * shape and dropping the other evaluations' data.
+ */
+function scoreFromEvaluation(evaluation: PBLEvaluation): {
+  score: number | null;
+  maxScore: number | null;
+} {
+  if (typeof evaluation.score === 'number') return { score: evaluation.score, maxScore: 100 };
+  if (typeof evaluation.stars === 'number') return { score: evaluation.stars, maxScore: 5 };
+  if (evaluation.actGoals && evaluation.actGoals.length > 0) {
+    let achieved = 0;
+    let total = 0;
+    for (const act of evaluation.actGoals) {
+      for (const goal of act.goals) {
+        total += 1;
+        if (goal.status === 'achieved') achieved += 1;
+      }
+    }
+    if (total > 0) return { score: Math.round((achieved / total) * 100), maxScore: 100 };
+  }
+  return { score: null, maxScore: null };
+}
 
 interface RunOptions {
   endpoint: '/api/pbl/v2/instructor' | '/api/pbl/v2/open-task' | '/api/pbl/v2/simulator';
@@ -113,6 +144,38 @@ export function useInstructorStream(
   const [streamCommittedOutput, setStreamCommittedOutput] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [simPhase, setSimPhase] = useState<SimPhase>(null);
+  // Read from context rather than threaded as a prop: this hook is called
+  // from PBLV2Chat, whose own Props never carry stageId/sceneId today.
+  // MediaStageProvider is already mounted at the classroom root for every
+  // rendering path this hook runs under.
+  const stageId = useMediaStageId();
+  const recordPblEvaluation = useCallback(
+    (evaluation: PBLEvaluation) => {
+      if (!stageId) return;
+      const { score, maxScore } = scoreFromEvaluation(evaluation);
+      void recordAssessment({
+        assessmentType: 'pbl',
+        sessionId: getLearningSession(stageId)?.id ?? null,
+        // No PBL-scene id is threaded this deep yet (see scoreFromEvaluation's
+        // neighboring comment) — assessments.scene_id is nullable and nothing
+        // reads it today, so this is a deliberate, flagged gap, not a bug.
+        sceneId: null,
+        score,
+        maxScore,
+        feedback: evaluation.feedback || null,
+        strengths: evaluation.strengths,
+        areasToImprove: evaluation.improvements,
+        // Neither "system" (undersells this is a real LLM judgment call) nor
+        // "ai_classmate" (a different feature — simulated peer roleplay,
+        // see ai_classmate_interactions) fits: this is a dedicated Evaluator
+        // agent, distinct from both.
+        evaluatedBy: 'ai_evaluator',
+      }).catch((err) => {
+        log.warn('Failed to record PBL assessment (ignored):', err);
+      });
+    },
+    [stageId],
+  );
   const projectRef = useRef<PBLProjectV2>(project);
   projectRef.current = project;
   // Synchronous re-entrancy lock. `streaming` is React state and only updates
@@ -200,6 +263,7 @@ export function useInstructorStream(
             if (newest && newest.kind === 'task' && typeof newest.score === 'number') {
               trackSubmissionScore(workingProject, newest.score);
             }
+            if (newest) recordPblEvaluation(newest);
           }
         }
 
@@ -222,6 +286,8 @@ export function useInstructorStream(
                 if (patch.kind === 'evaluation') setStreamCommittedOutput(true);
               },
             });
+            const newest = workingProject.evaluations[workingProject.evaluations.length - 1];
+            if (newest) recordPblEvaluation(newest);
           }
         }
 
@@ -240,6 +306,8 @@ export function useInstructorStream(
               if (patch.kind === 'evaluation') setStreamCommittedOutput(true);
             },
           });
+          const newest = workingProject.evaluations[workingProject.evaluations.length - 1];
+          if (newest) recordPblEvaluation(newest);
         }
       } catch (e) {
         ok = false;
@@ -258,7 +326,7 @@ export function useInstructorStream(
 
       return { ok, project: workingProject };
     },
-    [streaming, onProjectChange, onStreamingChange],
+    [streaming, onProjectChange, onStreamingChange, recordPblEvaluation],
   );
 
   const clearError = useCallback(() => setError(null), []);
