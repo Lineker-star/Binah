@@ -33,6 +33,17 @@ function AuthPageContent() {
   const [checkEmail, setCheckEmail] = useState(false);
 
   const routeByRole = async () => {
+    // A returnTo takes priority over the default role-based landing spot —
+    // it captures the specific action the visitor was blocked on (e.g. the
+    // homepage's "Enter Classroom" gate), which is more correct than always
+    // bouncing a parent account to /parent regardless of what they came here
+    // to do. Only accept a same-origin relative path — never an absolute or
+    // protocol-relative URL — since this value is fully client-controlled.
+    const returnTo = searchParams.get('returnTo');
+    if (returnTo && returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+      router.push(returnTo);
+      return;
+    }
     const supabase = createClient();
     const { data } = await supabase.from('profiles').select('role').single();
     router.push(data?.role === 'parent' ? '/parent' : '/');

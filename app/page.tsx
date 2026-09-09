@@ -338,6 +338,16 @@ function HomePage() {
   };
 
   const handleGenerate = async () => {
+    // learning_sessions RLS requires auth.uid() = learner_id — an anonymous
+    // request cannot create a session row at all. Rather than let generation
+    // proceed untracked (createLearningSession previously no-op'd silently
+    // for signed-out visitors), gate the action itself: send them to sign in
+    // first, then automatically resume this exact action on return (see the
+    // `resume=1` effect below) instead of dropping them on a bare login page.
+    if (!authLoading && !authUser) {
+      router.push(`/auth?mode=sign-up&returnTo=${encodeURIComponent('/?resume=1')}`);
+      return;
+    }
     // No model/provider guard here: generation is gated by `canGenerate`
     // (requires a usable provider), and under the #580 invariant a usable
     // provider always has a concrete model. State A (no usable provider)
@@ -453,6 +463,27 @@ function HomePage() {
   };
 
   const canGenerate = !!form.requirement.trim() && hasUsableProvider;
+
+  // Completes the action a signed-out visitor was blocked on above: after
+  // /auth sends them back to `/?resume=1`, re-fire Enter Classroom once
+  // they're actually signed in and their draft requirement has rehydrated
+  // (form.requirement is restored from the requirementDraft cache in a
+  // separate effect, so canGenerate may only flip true a render or two
+  // after mount — this effect re-checks on every relevant dependency change
+  // rather than a one-shot check that could fire too early).
+  const resumeIntentRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    if (resumeIntentRef.current === null) {
+      resumeIntentRef.current = new URLSearchParams(window.location.search).get('resume') === '1';
+      if (resumeIntentRef.current) router.replace('/');
+    }
+    if (!resumeIntentRef.current) return;
+    if (authLoading || !authUser) return;
+    if (!canGenerate || preparingGenerate) return;
+    resumeIntentRef.current = false;
+    void handleGenerate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authLoading, authUser, canGenerate, preparingGenerate, router]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
