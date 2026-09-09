@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Sesiones recientes",
     "noSessions": "Aún no hay sesiones."
   },
+  "skillTracks": {
+    "navLabel": "Rutas de habilidades",
+    "pageTitle": "Rutas de habilidades",
+    "subtitle": "Rutas de aprendizaje estructuradas creadas por tu escuela u organización.",
+    "categoryAll": "Todas",
+    "empty": "Aún no hay rutas de habilidades disponibles.",
+    "enrollAction": "Inscribirse",
+    "startAction": "Iniciar una sesión",
+    "enrolledBadge": "Inscrito",
+    "enrollFailed": "No se pudo inscribir. Inténtalo de nuevo.",
+    "signInToEnroll": "Inicia sesión para inscribirte en esta ruta."
+  },
   "media": {
     "imageCapability": "Generación de imágenes",
     "imageHint": "Genera imágenes en las diapositivas",

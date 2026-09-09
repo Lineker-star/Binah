@@ -2054,6 +2054,18 @@
     "sessionsLabel": "الجلسات الأخيرة",
     "noSessions": "لا توجد جلسات بعد."
   },
+  "skillTracks": {
+    "navLabel": "مسارات المهارات",
+    "pageTitle": "مسارات المهارات",
+    "subtitle": "مسارات تعليمية منظمة أعدّتها مدرستك أو مؤسستك.",
+    "categoryAll": "الكل",
+    "empty": "لا توجد مسارات مهارات متاحة بعد.",
+    "enrollAction": "التسجيل",
+    "startAction": "بدء جلسة",
+    "enrolledBadge": "مسجَّل",
+    "enrollFailed": "فشل التسجيل. حاول مرة أخرى.",
+    "signInToEnroll": "سجّل الدخول للتسجيل في هذا المسار."
+  },
   "media": {
     "imageCapability": "توليد الصور",
     "imageHint": "توليد صور في الشرائح",

@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Letzte Sitzungen",
     "noSessions": "Noch keine Sitzungen."
   },
+  "skillTracks": {
+    "navLabel": "Skill-Tracks",
+    "pageTitle": "Skill-Tracks",
+    "subtitle": "Strukturierte Lernpfade, kuratiert von deiner Schule oder Organisation.",
+    "categoryAll": "Alle",
+    "empty": "Noch keine Skill-Tracks verfügbar.",
+    "enrollAction": "Einschreiben",
+    "startAction": "Sitzung starten",
+    "enrolledBadge": "Eingeschrieben",
+    "enrollFailed": "Einschreibung fehlgeschlagen. Bitte versuche es erneut.",
+    "signInToEnroll": "Melde dich an, um dich für diesen Track einzuschreiben."
+  },
   "media": {
     "imageCapability": "Bildgenerierung",
     "imageHint": "Bilder für Folien generieren",

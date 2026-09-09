@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Sessões recentes",
     "noSessions": "Nenhuma sessão ainda."
   },
+  "skillTracks": {
+    "navLabel": "Trilhas de habilidades",
+    "pageTitle": "Trilhas de habilidades",
+    "subtitle": "Trilhas de aprendizagem estruturadas, organizadas pela sua escola ou instituição.",
+    "categoryAll": "Todas",
+    "empty": "Ainda não há trilhas de habilidades disponíveis.",
+    "enrollAction": "Inscrever-se",
+    "startAction": "Iniciar uma sessão",
+    "enrolledBadge": "Inscrito",
+    "enrollFailed": "Falha ao se inscrever. Tente novamente.",
+    "signInToEnroll": "Entre para se inscrever nesta trilha."
+  },
   "media": {
     "imageCapability": "Geração de Imagens",
     "imageHint": "Gerar imagens nos slides",

@@ -554,6 +554,7 @@ function GenerationPreviewContent() {
         stageId,
         title: stage.name,
         topic: currentSession.requirements.requirement,
+        skillTrackId: currentSession.skillTrackId ?? null,
       }).catch((err) => {
         log.warn('Failed to create learning session (ignored):', err);
       });

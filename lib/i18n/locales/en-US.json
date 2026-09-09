@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Recent sessions",
     "noSessions": "No sessions yet."
   },
+  "skillTracks": {
+    "navLabel": "Skill Tracks",
+    "pageTitle": "Skill Tracks",
+    "subtitle": "Structured learning paths curated by your school or organization.",
+    "categoryAll": "All",
+    "empty": "No skill tracks are available yet.",
+    "enrollAction": "Enroll",
+    "startAction": "Start a session",
+    "enrolledBadge": "Enrolled",
+    "enrollFailed": "Failed to enroll. Please try again.",
+    "signInToEnroll": "Sign in to enroll in this track."
+  },
   "media": {
     "imageCapability": "Image Generation",
     "imageHint": "Generate images in slides",

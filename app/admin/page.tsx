@@ -40,10 +40,20 @@ export default function AdminLearnerListPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="text-lg font-semibold text-foreground">Admin — Accounts</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        All learner, parent, and admin accounts. Click a row for sessions and assessments.
-      </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-lg font-semibold text-foreground">Admin — Accounts</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            All learner, parent, and admin accounts. Click a row for sessions and assessments.
+          </p>
+        </div>
+        <Link
+          href="/admin/skill-tracks"
+          className="shrink-0 text-sm text-violet-600 dark:text-violet-400 hover:underline"
+        >
+          Skill Tracks →
+        </Link>
+      </div>
 
       {loading && (
         <div className="mt-10 flex items-center justify-center gap-2 text-sm text-muted-foreground">

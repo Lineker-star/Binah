@@ -2039,6 +2039,18 @@
     "sessionsLabel": "近期學習記錄",
     "noSessions": "尚無學習記錄。"
   },
+  "skillTracks": {
+    "navLabel": "技能路徑",
+    "pageTitle": "技能路徑",
+    "subtitle": "由您的學校或機構規劃的結構化學習路徑。",
+    "categoryAll": "全部",
+    "empty": "目前尚無可用的技能路徑。",
+    "enrollAction": "報名",
+    "startAction": "開始學習",
+    "enrolledBadge": "已報名",
+    "enrollFailed": "報名失敗，請再試一次。",
+    "signInToEnroll": "請登入以報名此路徑。"
+  },
   "media": {
     "imageCapability": "圖像生成",
     "imageHint": "教材中生成配圖",

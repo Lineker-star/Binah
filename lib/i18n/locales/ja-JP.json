@@ -2054,6 +2054,18 @@
     "sessionsLabel": "最近のセッション",
     "noSessions": "セッションはまだありません。"
   },
+  "skillTracks": {
+    "navLabel": "スキルトラック",
+    "pageTitle": "スキルトラック",
+    "subtitle": "学校や組織が用意した体系的な学習パスです。",
+    "categoryAll": "すべて",
+    "empty": "利用可能なスキルトラックはまだありません。",
+    "enrollAction": "登録する",
+    "startAction": "セッションを開始",
+    "enrolledBadge": "登録済み",
+    "enrollFailed": "登録に失敗しました。もう一度お試しください。",
+    "signInToEnroll": "このトラックに登録するにはサインインしてください。"
+  },
   "media": {
     "imageCapability": "画像生成",
     "imageHint": "スライドに画像を生成",

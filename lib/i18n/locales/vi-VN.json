@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Phiên học gần đây",
     "noSessions": "Chưa có phiên học nào."
   },
+  "skillTracks": {
+    "navLabel": "Lộ trình kỹ năng",
+    "pageTitle": "Lộ trình kỹ năng",
+    "subtitle": "Các lộ trình học tập có cấu trúc do trường hoặc tổ chức của bạn xây dựng.",
+    "categoryAll": "Tất cả",
+    "empty": "Chưa có lộ trình kỹ năng nào.",
+    "enrollAction": "Đăng ký",
+    "startAction": "Bắt đầu phiên học",
+    "enrolledBadge": "Đã đăng ký",
+    "enrollFailed": "Đăng ký thất bại. Vui lòng thử lại.",
+    "signInToEnroll": "Đăng nhập để đăng ký lộ trình này."
+  },
   "media": {
     "imageCapability": "Tạo ảnh",
     "imageHint": "Tạo ảnh trong slide",

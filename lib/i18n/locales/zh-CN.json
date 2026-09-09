@@ -2054,6 +2054,18 @@
     "sessionsLabel": "最近的学习记录",
     "noSessions": "暂无学习记录。"
   },
+  "skillTracks": {
+    "navLabel": "技能路径",
+    "pageTitle": "技能路径",
+    "subtitle": "由您的学校或机构精心设计的结构化学习路径。",
+    "categoryAll": "全部",
+    "empty": "暂无可用的技能路径。",
+    "enrollAction": "报名",
+    "startAction": "开始学习",
+    "enrolledBadge": "已报名",
+    "enrollFailed": "报名失败，请重试。",
+    "signInToEnroll": "请登录以报名此路径。"
+  },
   "media": {
     "imageCapability": "图像生成",
     "imageHint": "课件中生成配图",

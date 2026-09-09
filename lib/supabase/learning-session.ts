@@ -35,6 +35,10 @@ export async function createLearningSession(input: {
   stageId: string;
   title: string;
   topic?: string;
+  /** Set when this session was started from within a skill track (see
+   *  `/skill-tracks`), so the track's aggregate progress can later be
+   *  rolled up from its tagged sessions. `null` for ad-hoc generation. */
+  skillTrackId?: string | null;
 }): Promise<LearningSession | null> {
   const supabase = createClient();
   const {
@@ -49,6 +53,7 @@ export async function createLearningSession(input: {
       stage_id: input.stageId,
       title: input.title,
       topic: input.topic ?? null,
+      skill_track_id: input.skillTrackId ?? null,
     })
     .select('*')
     .single();

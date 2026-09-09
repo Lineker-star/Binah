@@ -2054,6 +2054,18 @@
     "sessionsLabel": "최근 세션",
     "noSessions": "아직 세션이 없습니다."
   },
+  "skillTracks": {
+    "navLabel": "스킬 트랙",
+    "pageTitle": "스킬 트랙",
+    "subtitle": "학교나 기관에서 구성한 체계적인 학습 경로입니다.",
+    "categoryAll": "전체",
+    "empty": "아직 이용 가능한 스킬 트랙이 없습니다.",
+    "enrollAction": "등록하기",
+    "startAction": "세션 시작",
+    "enrolledBadge": "등록됨",
+    "enrollFailed": "등록에 실패했습니다. 다시 시도해 주세요.",
+    "signInToEnroll": "이 트랙에 등록하려면 로그인하세요."
+  },
   "media": {
     "imageCapability": "이미지 생성",
     "imageHint": "슬라이드에 이미지를 생성합니다",

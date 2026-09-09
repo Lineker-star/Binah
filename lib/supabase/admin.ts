@@ -1,8 +1,10 @@
+import { nanoid } from 'nanoid';
 import { createClient } from './client';
 import type { Profile, UserRole } from './profile';
 import type { LearningSession } from './learning-session';
 import type { LearningMetrics } from './learning-metrics';
 import type { AssessmentType } from './assessments';
+import type { SkillTrack } from './skill-tracks';
 
 /** One row in the admin learner list — a profile with its metrics rolled in. */
 export interface AdminLearnerListItem {
@@ -220,4 +222,82 @@ export async function linkParentToChild(parentId: string, childEmail: string): P
     .from('parent_child_links')
     .insert({ parent_id: parentId, child_id: child.id });
   if (insertError) throw insertError;
+}
+
+/** Editable fields for a skill track's create/edit form. */
+export interface SkillTrackAdminInput {
+  title: string;
+  description: string;
+  category: string;
+  locale: string;
+  isPublished: boolean;
+}
+
+/** `slug` is unique and NOT NULL but isn't a field the admin form exposes —
+ *  derive one from the title and disambiguate with a short suffix rather
+ *  than making the admin pick one. Nothing in the app looks tracks up by
+ *  slug yet, so stability across edits isn't a concern. */
+function slugifyTitle(title: string): string {
+  const base = title
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${base || 'track'}-${nanoid(6)}`;
+}
+
+/** Every skill track (published or not), for the admin management list. */
+export async function fetchAllSkillTracksAdmin(): Promise<SkillTrack[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('skill_tracks')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as SkillTrack[];
+}
+
+export async function createSkillTrack(input: SkillTrackAdminInput): Promise<SkillTrack> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not signed in');
+
+  const { data, error } = await supabase
+    .from('skill_tracks')
+    .insert({
+      slug: slugifyTitle(input.title),
+      title: input.title,
+      description: input.description || null,
+      category: input.category || null,
+      locale: input.locale,
+      is_published: input.isPublished,
+      created_by: user.id,
+    })
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data as SkillTrack;
+}
+
+export async function updateSkillTrack(
+  id: string,
+  input: SkillTrackAdminInput,
+): Promise<SkillTrack> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('skill_tracks')
+    .update({
+      title: input.title,
+      description: input.description || null,
+      category: input.category || null,
+      locale: input.locale,
+      is_published: input.isPublished,
+    })
+    .eq('id', id)
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data as SkillTrack;
 }

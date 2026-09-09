@@ -2054,6 +2054,18 @@
     "sessionsLabel": "Sessions récentes",
     "noSessions": "Aucune session pour le moment."
   },
+  "skillTracks": {
+    "navLabel": "Parcours de compétences",
+    "pageTitle": "Parcours de compétences",
+    "subtitle": "Des parcours d'apprentissage structurés proposés par votre école ou organisation.",
+    "categoryAll": "Tous",
+    "empty": "Aucun parcours de compétences disponible pour le moment.",
+    "enrollAction": "S'inscrire",
+    "startAction": "Démarrer une session",
+    "enrolledBadge": "Inscrit",
+    "enrollFailed": "Échec de l'inscription. Veuillez réessayer.",
+    "signInToEnroll": "Connectez-vous pour vous inscrire à ce parcours."
+  },
   "media": {
     "imageCapability": "Génération d’images",
     "imageHint": "Générer des images dans les diapositives",

@@ -40,6 +40,9 @@ export interface GenerationSessionState {
   courseTitle?: string;
   // Server-effective vocational mode from the outline generation done event.
   taskEngineMode?: boolean;
+  // Set when generation was launched from a skill track's "Start a session"
+  // action, so the resulting learning_sessions row can be tagged accordingly.
+  skillTrackId?: string;
 }
 
 export type GenerationStep = {
