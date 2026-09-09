@@ -21,7 +21,8 @@
 import type { LanguageModel } from 'ai';
 import type { StatelessChatRequest, StatelessEvent, ParsedAction } from '@/lib/types/chat';
 import type { ThinkingConfig } from '@/lib/types/provider';
-import type { WhiteboardActionRecord } from './types';
+import type { WhiteboardActionRecord, CollaborationSignal } from './types';
+import { COLLABORATION_SIGNALS } from './types';
 import { createOrchestrationGraph, buildInitialState } from './director-graph';
 import { parse as parsePartialJson, Allow } from 'partial-json';
 import { jsonrepair } from 'jsonrepair';
@@ -74,6 +75,21 @@ export interface ParseResult {
   isDone: boolean;
   /** Ordered sequence recording original interleaving of text and action segments */
   ordered: Array<{ type: 'text'; index: number } | { type: 'action'; index: number }>;
+  /**
+   * Parallel to `textChunks` (same index) — the self-reported `intent` field
+   * on that text item, when the model included a valid one. `undefined` for
+   * an omitted/invalid value, or for a trailing partial-preview chunk pushed
+   * before the item's `intent` field (which follows `content` in the schema)
+   * has streamed in yet.
+   */
+  textIntents: Array<CollaborationSignal | undefined>;
+}
+
+/** Validates a model-supplied `intent` value; never throws on garbage input. */
+function normalizeIntent(raw: unknown): CollaborationSignal | undefined {
+  return typeof raw === 'string' && (COLLABORATION_SIGNALS as readonly string[]).includes(raw)
+    ? (raw as CollaborationSignal)
+    : undefined;
 }
 
 /**
@@ -89,6 +105,7 @@ function emitItem(
     const content = (item.content as string) || '';
     if (content) {
       result.textChunks.push(content);
+      result.textIntents.push(normalizeIntent(item.intent));
       // Use per-call array index (not cumulative segment index) so that
       // director-graph can read result.textChunks[entry.index] correctly.
       result.ordered.push({
@@ -139,6 +156,7 @@ export function parseStructuredChunk(chunk: string, state: ParserState): ParseRe
     actions: [],
     isDone: false,
     ordered: [],
+    textIntents: [],
   };
 
   if (state.isDone) {
@@ -213,6 +231,7 @@ export function parseStructuredChunk(chunk: string, state: ParserState): ParseRe
       const remaining = content.slice(state.lastPartialTextLength);
       if (remaining) {
         result.textChunks.push(remaining);
+        result.textIntents.push(normalizeIntent(item.intent));
         // Only push ordered entry when there is actual content to emit
         result.ordered.push({
           type: 'text',
@@ -238,6 +257,10 @@ export function parseStructuredChunk(chunk: string, state: ParserState): ParseRe
       const content = lastItem.content || '';
       if (content.length > state.lastPartialTextLength) {
         result.textChunks.push(content.slice(state.lastPartialTextLength));
+        // No `ordered` entry for a partial-preview chunk (see comment below),
+        // so nothing ever reads textIntents at this index — pushed anyway to
+        // keep the two arrays' raw lengths in lockstep for any future reader.
+        result.textIntents.push(undefined);
         state.lastPartialTextLength = content.length;
       }
     }
@@ -330,6 +353,7 @@ export function finalizeParser(state: ParserState): ParseResult {
     actions: [],
     isDone: true,
     ordered: [],
+    textIntents: [],
   };
 
   if (state.isDone) {
@@ -345,6 +369,10 @@ export function finalizeParser(state: ParserState): ParseResult {
   const pushText = (value: string) => {
     if (!value) return;
     result.textChunks.push(value);
+    // No `intent` here — this path only runs when the model's structured
+    // output was malformed or absent, recovering plain text with no typed
+    // fields to read from.
+    result.textIntents.push(undefined);
     result.ordered.push({ type: 'text', index: result.textChunks.length - 1 });
   };
 
@@ -374,6 +402,7 @@ export function finalizeParser(state: ParserState): ParseResult {
     result.textChunks.push(...finalChunk.textChunks);
     result.actions.push(...finalChunk.actions);
     result.ordered.push(...finalChunk.ordered);
+    result.textIntents.push(...finalChunk.textIntents);
   }
 
   state.isDone = true;
@@ -394,6 +423,8 @@ export async function* statelessGenerate(
   abortSignal: AbortSignal,
   languageModel: LanguageModel,
   thinkingConfig?: ThinkingConfig,
+  /** See `buildInitialState`'s `learnerContext` — resolved server-side by the caller. */
+  learnerContext?: { learnerId: string | null; sessionId: string | null },
 ): AsyncGenerator<StatelessEvent> {
   log.info(
     `[StatelessGenerate] Starting orchestration for agents: ${request.config.agentIds.join(', ')}`,
@@ -404,7 +435,7 @@ export async function* statelessGenerate(
 
   try {
     const graph = createOrchestrationGraph();
-    const initialState = buildInitialState(request, languageModel, thinkingConfig);
+    const initialState = buildInitialState(request, languageModel, thinkingConfig, learnerContext);
 
     const stream = await graph.stream(initialState, {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

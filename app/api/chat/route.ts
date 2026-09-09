@@ -20,7 +20,48 @@ import { apiError } from '@/lib/server/api-response';
 import { createLogger } from '@/lib/logger';
 import { resolveModel } from '@/lib/server/resolve-model';
 import type { ThinkingConfig } from '@/lib/types/provider';
+import { createClient } from '@/lib/supabase/server';
 const log = createLogger('Chat API');
+
+/**
+ * Resolve the signed-in learner and their current tracked session for this
+ * stage, purely for ai_classmate_interactions logging — threaded into the
+ * orchestration graph as `learnerContext` (see buildInitialState). Never
+ * trusts client input for `learnerId`: it comes only from the request's own
+ * Supabase session/cookies. Best-effort: any failure here (no session, no
+ * tracked session for this stage, Supabase unreachable) degrades to `null`s,
+ * which simply skips classmate-interaction logging — it must never break
+ * the actual chat turn.
+ */
+async function resolveLearnerContext(
+  body: StatelessChatRequest,
+): Promise<{ learnerId: string | null; sessionId: string | null }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { learnerId: null, sessionId: null };
+
+    const stageId = body.storeState?.stage?.id;
+    if (!stageId) return { learnerId: user.id, sessionId: null };
+
+    const { data: sessionRow } = await supabase
+      .from('learning_sessions')
+      .select('id')
+      .eq('learner_id', user.id)
+      .eq('stage_id', stageId)
+      .in('status', ['active', 'paused'])
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    return { learnerId: user.id, sessionId: sessionRow?.id ?? null };
+  } catch (err) {
+    log.warn('Failed to resolve learner context for classmate-interaction logging:', err);
+    return { learnerId: null, sessionId: null };
+  }
+}
 
 // Allow streaming responses up to 60 seconds
 export const maxDuration = 60;
@@ -129,6 +170,8 @@ export async function POST(req: NextRequest) {
           enabled: false,
         };
 
+        const learnerContext = await resolveLearnerContext(body);
+
         const generator = statelessGenerate(
           {
             ...body,
@@ -137,6 +180,7 @@ export async function POST(req: NextRequest) {
           signal,
           languageModel,
           thinkingConfig,
+          learnerContext,
         );
 
         for await (const event of generator) {

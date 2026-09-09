@@ -29,6 +29,23 @@ export interface WhiteboardActionRecord {
 }
 
 /**
+ * Self-reported classification of a 'student'-role (AI classmate) turn's
+ * contribution, optionally emitted by the model on its own `type:"text"`
+ * item(s) — see `ai_classmate_interactions.collaboration_signal`. A second
+ * post-hoc classification pass would double the LLM calls per classmate
+ * turn, so this is read directly from the structured output the agent
+ * already produces rather than classified separately.
+ */
+export const COLLABORATION_SIGNALS = [
+  'encouraged',
+  'challenged',
+  'clarified',
+  'celebrated',
+  'other',
+] as const;
+export type CollaborationSignal = (typeof COLLABORATION_SIGNALS)[number];
+
+/**
  * Summary of an agent's turn in the current round.
  */
 export interface AgentTurnSummary {

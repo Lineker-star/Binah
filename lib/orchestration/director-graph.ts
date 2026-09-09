@@ -37,8 +37,9 @@ import { summarizeConversation } from './summarizers/conversation-summary';
 import { convertMessagesToOpenAI } from './summarizers/message-converter';
 import { buildDirectorPrompt, parseDirectorDecision } from './director-prompt';
 import { getEffectiveActions } from './tool-schemas';
-import type { AgentTurnSummary, WhiteboardActionRecord } from './types';
+import type { AgentTurnSummary, WhiteboardActionRecord, CollaborationSignal } from './types';
 import { parseStructuredChunk, createParserState, finalizeParser } from './stateless-generate';
+import { logClassmateInteraction } from '@/lib/supabase/classmate-interactions';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('DirectorGraph');
@@ -60,6 +61,16 @@ const OrchestratorState = Annotation.Root({
   userProfile: Annotation<{ nickname?: string; bio?: string } | null>,
   /** Request-scoped agent configs for generated agents (not in the default registry) */
   agentConfigOverrides: Annotation<Record<string, AgentConfig>>,
+  /**
+   * The signed-in learner and their current tracked session for this stage,
+   * resolved server-side by the API route from the request's Supabase
+   * session/cookies — never client-supplied. Both `null` for an anonymous
+   * visitor or a stage with no tracked session; `ai_classmate_interactions`
+   * logging is skipped whenever either is missing (session_id and
+   * learner_id are both NOT NULL on that table).
+   */
+  learnerId: Annotation<string | null>,
+  sessionId: Annotation<string | null>,
 
   // Mutable (updated by nodes)
   currentAgentId: Annotation<string | null>,
@@ -240,6 +251,8 @@ async function runAgentGeneration(
   contentPreview: string;
   actionCount: number;
   whiteboardActions: WhiteboardActionRecord[];
+  /** First self-reported `intent` seen across this turn's text item(s), if any. */
+  intent: CollaborationSignal | undefined;
 }> {
   const agentConfig = resolveAgent(state, agentId);
   if (!agentConfig) {
@@ -309,6 +322,9 @@ async function runAgentGeneration(
   let fullText = '';
   let actionCount = 0;
   const whiteboardActions: WhiteboardActionRecord[] = [];
+  // First self-reported intent wins — a turn logs as one collaboration_signal
+  // row, and in practice a student-role turn is one short text item anyway.
+  let capturedIntent: CollaborationSignal | undefined;
 
   try {
     for await (const chunk of adapter.streamGenerate(lcMessages, {
@@ -338,6 +354,9 @@ async function runAgentGeneration(
             const text = rawText.replace(/^>+\s?/gm, '');
             if (!text) continue;
             fullText += text;
+            if (capturedIntent === undefined) {
+              capturedIntent = parseResult.textIntents[entry.index];
+            }
             write({
               type: 'text_delta',
               data: { content: text, messageId },
@@ -399,6 +418,9 @@ async function runAgentGeneration(
         const text = rawText.replace(/^>+\s?/gm, '');
         if (!text) continue;
         fullText += text;
+        if (capturedIntent === undefined) {
+          capturedIntent = finalResult.textIntents[entry.index];
+        }
         write({
           type: 'text_delta',
           data: { content: text, messageId },
@@ -425,6 +447,7 @@ async function runAgentGeneration(
     contentPreview: fullText.slice(0, 300),
     actionCount,
     whiteboardActions,
+    intent: capturedIntent,
   };
 }
 
@@ -447,6 +470,28 @@ async function agentGenerateNode(
     log.warn(
       `[AgentGenerate] Agent "${agentConfig?.name || agentId}" produced empty response (no text, no actions)`,
     );
+  }
+
+  // Log this turn as an AI-classmate interaction — 'student' role is the
+  // proxy for "classmate" here (see ai_classmate_interactions); teacher and
+  // assistant turns are general orchestration, not classmate collaboration,
+  // and are never logged to this table. Fire-and-forget: never let logging
+  // delay or fail the turn already being delivered to the learner, but
+  // don't silently swallow a failure either (logClassmateInteraction itself
+  // catches and logs internally, since nothing here awaits its promise).
+  if (
+    agentConfig?.role === 'student' &&
+    state.sessionId &&
+    state.learnerId &&
+    result.contentPreview.trim()
+  ) {
+    void logClassmateInteraction({
+      sessionId: state.sessionId,
+      learnerId: state.learnerId,
+      classmatePersona: agentConfig.name,
+      messageSummary: result.contentPreview,
+      collaborationSignal: result.intent ?? 'other',
+    });
   }
 
   return {
@@ -498,11 +543,18 @@ export function createOrchestrationGraph() {
 /**
  * Build initial state for the orchestration graph from a StatelessChatRequest
  * and a pre-created LanguageModel instance.
+ *
+ * @param learnerContext The signed-in learner and their tracked session for
+ *   this stage, resolved server-side by the calling API route from the
+ *   request's Supabase session — never trust a client-supplied value here.
+ *   Omitted (or either field `null`) for an anonymous visitor or an
+ *   untracked stage; `ai_classmate_interactions` logging is then skipped.
  */
 export function buildInitialState(
   request: StatelessChatRequest,
   languageModel: LanguageModel,
   thinkingConfig?: ThinkingConfig,
+  learnerContext?: { learnerId: string | null; sessionId: string | null },
 ): typeof OrchestratorState.State {
   // Build request-scoped agent config overrides for generated agents.
   // These travel with each request — no server-side persistence needed.
@@ -544,5 +596,7 @@ export function buildInitialState(
     whiteboardLedger: incoming?.whiteboardLedger ?? [],
     shouldEnd: false,
     totalActions: 0,
+    learnerId: learnerContext?.learnerId ?? null,
+    sessionId: learnerContext?.sessionId ?? null,
   };
 }
