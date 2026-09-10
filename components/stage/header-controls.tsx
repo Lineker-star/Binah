@@ -5,6 +5,7 @@ import {
   Archive,
   Download,
   FileDown,
+  FileText,
   Film,
   Loader2,
   Monitor,
@@ -22,6 +23,7 @@ import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { useExportPPTX } from '@/lib/export/use-export-pptx';
 import { useExportClassroom } from '@/lib/export/use-export-classroom';
 import { isScriptExportReady, useExportScript } from '@/lib/export/use-export-script';
+import { useExportLectureNotes } from '@/lib/export/use-export-lecture-notes';
 import { isVideoExportEnabled } from '@/lib/config/feature-flags';
 import { useVideoRenderStore } from '@/lib/store/video-render';
 import { CircularProgress } from '@/components/ui/circular-progress';
@@ -95,6 +97,7 @@ export function HeaderControls({
   const { exporting: isExporting, exportPPTX, exportResourcePack } = useExportPPTX();
   const { exporting: isExportingZip, exportClassroomZip } = useExportClassroom();
   const { exporting: isExportingScript, exportScriptDocx, exportScriptMd } = useExportScript();
+  const { exporting: isExportingLectureNotes, exportLectureNotes } = useExportLectureNotes();
   const videoExportEnabled = isVideoExportEnabled();
   // Video render lives in a global store so its progress ring stays on the
   // export button even after the menu closes / scenes switch mid-render.
@@ -267,21 +270,31 @@ export function HeaderControls({
       <DropdownMenu modal={false} open={exportMenuOpen} onOpenChange={setExportMenuOpen}>
         <DropdownMenuTrigger asChild>
           <button
-            disabled={!canExport || isExporting || isExportingZip || isExportingScript}
+            disabled={
+              !canExport ||
+              isExporting ||
+              isExportingZip ||
+              isExportingScript ||
+              isExportingLectureNotes
+            }
             title={
-              isExporting || isExportingZip || isExportingScript
+              isExporting || isExportingZip || isExportingScript || isExportingLectureNotes
                 ? t('export.exporting')
                 : exportLabel
             }
             className={cn(
               'shrink-0 p-2 rounded-full transition-all',
-              canExport && !isExporting && !isExportingZip && !isExportingScript
+              canExport &&
+                !isExporting &&
+                !isExportingZip &&
+                !isExportingScript &&
+                !isExportingLectureNotes
                 ? 'text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm'
                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50',
             )}
             aria-label={exportLabel}
           >
-            {isExporting || isExportingZip || isExportingScript ? (
+            {isExporting || isExportingZip || isExportingScript || isExportingLectureNotes ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : videoRendering ? (
               // Persistent ring: video render runs in the background; keep it
@@ -371,6 +384,20 @@ export function HeaderControls({
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
+          <DropdownMenuItem
+            disabled={!canExport || isExportingLectureNotes}
+            onSelect={exportLectureNotes}
+            className="cursor-pointer gap-2.5"
+            title={canExport ? undefined : t('export.mediaPending')}
+          >
+            <FileText className="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true" />
+            <div>
+              <div>{t('export.lectureNotes')}</div>
+              <div className="text-[11px] text-gray-400 dark:text-gray-500">
+                {t('export.lectureNotesDesc')}
+              </div>
+            </div>
+          </DropdownMenuItem>
           {videoExportEnabled && (
             <DropdownMenuItem
               disabled={!canExport}

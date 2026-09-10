@@ -28,6 +28,7 @@ import { latexToOmml } from '@/lib/export/latex-to-omml';
 import { createLogger } from '@/lib/logger';
 import { inlineHtmlAssets, createAssetFetcher } from './inline-assets';
 import type { FetchAsset } from './inline-assets';
+import { recordGeneratedArtifact } from '@/lib/artifacts/record-export';
 import { createProxiedFetch } from './proxied-fetch';
 import type { AssetUrlLeaseState } from '@/lib/media/use-asset-url';
 import { resolveStoredBytes } from '@/lib/media/resolve-stored-bytes';
@@ -1356,6 +1357,12 @@ export function useExportPPTX() {
       );
       saveAs(blob, `${fileName}.pptx`);
       toast.success(t('export.exportSuccess'));
+      void recordGeneratedArtifact({
+        blob,
+        fileName: `${fileName}.pptx`,
+        artifactType: 'pptx',
+        stageId: stage?.id,
+      }).catch((err) => log.warn('Failed to record pptx export (ignored):', err));
     });
   }, [
     withExportGuard,
@@ -1405,6 +1412,12 @@ export function useExportPPTX() {
       }
       saveAs(result.blob!, `${fileName}.zip`);
       toast.success(t('export.exportSuccess'));
+      void recordGeneratedArtifact({
+        blob: result.blob!,
+        fileName: `${fileName}.zip`,
+        artifactType: 'resource_pack',
+        stageId: stage?.id,
+      }).catch((err) => log.warn('Failed to record resource pack export (ignored):', err));
       if (result.failedAssetUrls.length > 0) {
         log.warn(
           'Resource Pack: some interactive-scene assets could not be inlined:',

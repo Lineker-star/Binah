@@ -140,6 +140,7 @@ export const LLM_STAGES = [
   'agent-profiles',
   'course-final-assessment',
   'assessment-recommendation',
+  'lecture-notes',
   'quiz-grade',
   'pbl-chat',
   'pbl-v2-runtime',

@@ -105,7 +105,10 @@
     "subtitlesFailed": "Tải phụ đề không thành công",
     "noSlides": "Không có slide nào để xuất",
     "noSlidesSkipped": "Bài học này không có slide — đã bỏ qua PPTX",
-    "nothingToExport": "Không có gì để xuất"
+    "nothingToExport": "Không có gì để xuất",
+    "lectureNotes": "Tạo ghi chú bài giảng",
+    "lectureNotesDesc": "Bản tóm tắt PDF các điểm chính",
+    "noNarration": "Không có lời thuyết minh để tóm tắt"
   },
   "import": {
     "classroom": "Nhập lớp học",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "Không có mục nào khớp với bộ lọc này.",
     "courseStatusPlanning": "Đang lên kế hoạch",
     "courseStatusInProgress": "Đang tiến hành",
-    "courseStatusCompleted": "Đã hoàn thành"
+    "courseStatusCompleted": "Đã hoàn thành",
+    "downloadsHeading": "Tệp đã tải xuống",
+    "downloadAction": "Tải xuống",
+    "downloadFailed": "Không lấy được liên kết tải xuống",
+    "noDownloads": "Chưa có tệp tải xuống nào",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "Gói tài nguyên",
+      "classroom_zip": "ZIP lớp học",
+      "mp4": "Video (MP4)",
+      "lecture_notes_pdf": "Ghi chú bài giảng (PDF)"
+    }
   }
 }

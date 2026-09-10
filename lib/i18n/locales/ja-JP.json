@@ -105,7 +105,10 @@
     "subtitlesFailed": "字幕のダウンロードに失敗しました",
     "noSlides": "エクスポート可能なスライドがありません",
     "noSlidesSkipped": "このコースにスライドがないため、PPTX をスキップしました",
-    "nothingToExport": "エクスポートできるものがありません"
+    "nothingToExport": "エクスポートできるものがありません",
+    "lectureNotes": "講義ノートを生成",
+    "lectureNotesDesc": "要点のPDF要約",
+    "noNarration": "要約するナレーションがありません"
   },
   "import": {
     "classroom": "教室をインポート",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "このフィルターに一致するものはありません。",
     "courseStatusPlanning": "計画中",
     "courseStatusInProgress": "進行中",
-    "courseStatusCompleted": "完了"
+    "courseStatusCompleted": "完了",
+    "downloadsHeading": "ダウンロード",
+    "downloadAction": "ダウンロード",
+    "downloadFailed": "ダウンロードリンクの取得に失敗しました",
+    "noDownloads": "まだダウンロードはありません",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "リソースパック",
+      "classroom_zip": "クラスルームZIP",
+      "mp4": "動画 (MP4)",
+      "lecture_notes_pdf": "講義ノート (PDF)"
+    }
   }
 }

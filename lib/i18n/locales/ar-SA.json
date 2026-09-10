@@ -105,7 +105,10 @@
     "subtitlesFailed": "فشل تنزيل الترجمة",
     "noSlides": "لا توجد شرائح للتصدير",
     "noSlidesSkipped": "لا توجد شرائح في هذه الدورة — تم تخطي PPTX",
-    "nothingToExport": "لا يوجد محتوى للتصدير"
+    "nothingToExport": "لا يوجد محتوى للتصدير",
+    "lectureNotes": "إنشاء ملاحظات المحاضرة",
+    "lectureNotesDesc": "ملخص PDF للنقاط الرئيسية",
+    "noNarration": "لا يوجد نص سردي للتلخيص"
   },
   "import": {
     "classroom": "استيراد فصل",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "لا توجد نتائج تطابق هذا الفلتر.",
     "courseStatusPlanning": "قيد التخطيط",
     "courseStatusInProgress": "قيد التقدم",
-    "courseStatusCompleted": "مكتملة"
+    "courseStatusCompleted": "مكتملة",
+    "downloadsHeading": "التنزيلات",
+    "downloadAction": "تنزيل",
+    "downloadFailed": "تعذّر الحصول على رابط التنزيل",
+    "noDownloads": "لا توجد تنزيلات بعد",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "حزمة الموارد",
+      "classroom_zip": "ملف ZIP للفصل",
+      "mp4": "فيديو (MP4)",
+      "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)"
+    }
   }
 }

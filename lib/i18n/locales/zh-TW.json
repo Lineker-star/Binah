@@ -105,7 +105,10 @@
     "subtitlesFailed": "字幕下載失敗",
     "noSlides": "無可匯出的幻燈片",
     "noSlidesSkipped": "此課程沒有投影片 — 已略過 PPTX",
-    "nothingToExport": "沒有可匯出的內容"
+    "nothingToExport": "沒有可匯出的內容",
+    "lectureNotes": "產生講義筆記",
+    "lectureNotesDesc": "重點的 PDF 摘要",
+    "noNarration": "沒有可供摘要的講解內容"
   },
   "import": {
     "classroom": "匯入課堂",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "沒有符合此篩選條件的內容。",
     "courseStatusPlanning": "規劃中",
     "courseStatusInProgress": "進行中",
-    "courseStatusCompleted": "已完成"
+    "courseStatusCompleted": "已完成",
+    "downloadsHeading": "下載內容",
+    "downloadAction": "下載",
+    "downloadFailed": "取得下載連結失敗",
+    "noDownloads": "尚無下載內容",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "資源包",
+      "classroom_zip": "課堂 ZIP",
+      "mp4": "影片 (MP4)",
+      "lecture_notes_pdf": "講義筆記 (PDF)"
+    }
   }
 }

@@ -105,7 +105,10 @@
     "subtitlesFailed": "자막 다운로드 실패",
     "noSlides": "내보낼 슬라이드가 없습니다",
     "noSlidesSkipped": "이 코스에 슬라이드가 없어 PPTX를 건너뛰었습니다",
-    "nothingToExport": "내보낼 항목이 없습니다"
+    "nothingToExport": "내보낼 항목이 없습니다",
+    "lectureNotes": "강의 노트 생성",
+    "lectureNotesDesc": "핵심 요점 PDF 요약",
+    "noNarration": "요약할 내레이션이 없습니다"
   },
   "import": {
     "classroom": "교실 가져오기",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "이 필터와 일치하는 항목이 없습니다.",
     "courseStatusPlanning": "계획 중",
     "courseStatusInProgress": "진행 중",
-    "courseStatusCompleted": "완료됨"
+    "courseStatusCompleted": "완료됨",
+    "downloadsHeading": "다운로드",
+    "downloadAction": "다운로드",
+    "downloadFailed": "다운로드 링크를 가져오지 못했습니다",
+    "noDownloads": "아직 다운로드가 없습니다",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "리소스 팩",
+      "classroom_zip": "클래스룸 ZIP",
+      "mp4": "동영상 (MP4)",
+      "lecture_notes_pdf": "강의 노트 (PDF)"
+    }
   }
 }

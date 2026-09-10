@@ -105,7 +105,10 @@
     "subtitlesFailed": "Falha ao baixar legendas",
     "noSlides": "Não há slides para exportar",
     "noSlidesSkipped": "Este curso não tem slides — PPTX ignorado",
-    "nothingToExport": "Nada para exportar"
+    "nothingToExport": "Nada para exportar",
+    "lectureNotes": "Gerar notas de aula",
+    "lectureNotesDesc": "Resumo em PDF dos pontos principais",
+    "noNarration": "Nenhuma narração para resumir"
   },
   "import": {
     "classroom": "Importar Sala de Aula",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "Nada corresponde a este filtro.",
     "courseStatusPlanning": "Planejamento",
     "courseStatusInProgress": "Em andamento",
-    "courseStatusCompleted": "Concluído"
+    "courseStatusCompleted": "Concluído",
+    "downloadsHeading": "Downloads",
+    "downloadAction": "Baixar",
+    "downloadFailed": "Falha ao obter o link de download",
+    "noDownloads": "Nenhum download ainda",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "Pacote de recursos",
+      "classroom_zip": "ZIP da sala de aula",
+      "mp4": "Vídeo (MP4)",
+      "lecture_notes_pdf": "Notas de aula (PDF)"
+    }
   }
 }

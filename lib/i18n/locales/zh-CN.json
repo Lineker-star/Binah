@@ -105,7 +105,10 @@
     "subtitlesFailed": "字幕下载失败",
     "noSlides": "无可导出的幻灯片",
     "noSlidesSkipped": "本课程无幻灯片，已跳过 PPTX",
-    "nothingToExport": "没有可导出的内容"
+    "nothingToExport": "没有可导出的内容",
+    "lectureNotes": "生成讲义笔记",
+    "lectureNotesDesc": "要点的 PDF 摘要",
+    "noNarration": "没有可供摘要的讲解内容"
   },
   "import": {
     "classroom": "导入课堂",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "没有符合此筛选条件的内容。",
     "courseStatusPlanning": "规划中",
     "courseStatusInProgress": "进行中",
-    "courseStatusCompleted": "已完成"
+    "courseStatusCompleted": "已完成",
+    "downloadsHeading": "下载内容",
+    "downloadAction": "下载",
+    "downloadFailed": "获取下载链接失败",
+    "noDownloads": "暂无下载内容",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "资源包",
+      "classroom_zip": "课堂 ZIP",
+      "mp4": "视频 (MP4)",
+      "lecture_notes_pdf": "讲义笔记 (PDF)"
+    }
   }
 }

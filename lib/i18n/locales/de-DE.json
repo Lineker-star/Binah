@@ -105,7 +105,10 @@
     "subtitlesFailed": "Untertitel konnten nicht heruntergeladen werden",
     "noSlides": "Keine Folien zum Exportieren",
     "noSlidesSkipped": "Dieser Kurs enthält keine Folien — PPTX wurde übersprungen",
-    "nothingToExport": "Nichts zu exportieren"
+    "nothingToExport": "Nichts zu exportieren",
+    "lectureNotes": "Vorlesungsnotizen erstellen",
+    "lectureNotesDesc": "PDF-Zusammenfassung der wichtigsten Punkte",
+    "noNarration": "Keine Erzählung zum Zusammenfassen"
   },
   "import": {
     "classroom": "Kurs importieren",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "Nichts entspricht diesem Filter.",
     "courseStatusPlanning": "Planung",
     "courseStatusInProgress": "In Bearbeitung",
-    "courseStatusCompleted": "Abgeschlossen"
+    "courseStatusCompleted": "Abgeschlossen",
+    "downloadsHeading": "Downloads",
+    "downloadAction": "Herunterladen",
+    "downloadFailed": "Download-Link konnte nicht abgerufen werden",
+    "noDownloads": "Noch keine Downloads",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "Ressourcenpaket",
+      "classroom_zip": "Klassenzimmer-ZIP",
+      "mp4": "Video (MP4)",
+      "lecture_notes_pdf": "Vorlesungsnotizen (PDF)"
+    }
   }
 }

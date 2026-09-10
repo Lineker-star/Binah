@@ -105,7 +105,10 @@
     "subtitlesFailed": "Не удалось скачать субтитры",
     "noSlides": "Нет слайдов для экспорта",
     "noSlidesSkipped": "В этом курсе нет слайдов — PPTX пропущен",
-    "nothingToExport": "Нет данных для экспорта"
+    "nothingToExport": "Нет данных для экспорта",
+    "lectureNotes": "Создать конспект лекции",
+    "lectureNotesDesc": "PDF-сводка ключевых моментов",
+    "noNarration": "Нет текста для сводки"
   },
   "import": {
     "classroom": "Импорт класса",
@@ -2153,6 +2156,17 @@
     "emptyFiltered": "Ничего не соответствует этому фильтру.",
     "courseStatusPlanning": "Планирование",
     "courseStatusInProgress": "В процессе",
-    "courseStatusCompleted": "Завершён"
+    "courseStatusCompleted": "Завершён",
+    "downloadsHeading": "Загрузки",
+    "downloadAction": "Скачать",
+    "downloadFailed": "Не удалось получить ссылку для скачивания",
+    "noDownloads": "Пока нет загрузок",
+    "artifactType": {
+      "pptx": "PPTX",
+      "resource_pack": "Пакет ресурсов",
+      "classroom_zip": "ZIP-архив класса",
+      "mp4": "Видео (MP4)",
+      "lecture_notes_pdf": "Конспект лекции (PDF)"
+    }
   }
 }

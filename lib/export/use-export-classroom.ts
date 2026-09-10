@@ -37,6 +37,7 @@ import { createProxiedFetch } from './proxied-fetch';
 import type { SceneContent, Scene, Stage } from '@/lib/types/stage';
 import { preparePBLScenesForDocumentPersistence } from '@/lib/pbl/v2/runtime/document-persistence';
 import { accessDocument, type DocumentMigrationDeps } from '@/lib/document-store';
+import { recordGeneratedArtifact } from '@/lib/artifacts/record-export';
 
 export async function inlineSceneContent(
   content: SceneContent,
@@ -269,6 +270,12 @@ export function useExportClassroom() {
       const { zip, fileName, inlineFailures } = await buildClassroomExportZip(stage, scenes);
 
       saveAs(zip, fileName);
+      void recordGeneratedArtifact({
+        blob: zip,
+        fileName,
+        artifactType: 'classroom_zip',
+        stageId: stage.id,
+      }).catch((err) => log.warn('Failed to record classroom zip export (ignored):', err));
 
       if (inlineFailures.length > 0) {
         log.warn('Some interactive-scene assets could not be inlined:', inlineFailures);

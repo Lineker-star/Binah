@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, Play, Trash2 } from 'lucide-react';
+import { ArrowLeft, Download, ExternalLink, Loader2, Play, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -16,6 +16,11 @@ import {
   type SessionStatus,
 } from '@/lib/supabase/learning-session';
 import { listLearnerCourses, removeCourseFromHistory, type Course } from '@/lib/supabase/courses';
+import {
+  getArtifactDownloadUrl,
+  listGeneratedArtifacts,
+  type GeneratedArtifact,
+} from '@/lib/supabase/artifacts';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
@@ -51,6 +56,14 @@ const SESSION_BADGE: Record<SessionStatus, { key: string; className: string }> =
   },
 };
 
+const ARTIFACT_TYPE_KEYS: Record<string, string> = {
+  pptx: 'history.artifactType.pptx',
+  resource_pack: 'history.artifactType.resource_pack',
+  classroom_zip: 'history.artifactType.classroom_zip',
+  mp4: 'history.artifactType.mp4',
+  lecture_notes_pdf: 'history.artifactType.lecture_notes_pdf',
+};
+
 const COURSE_BADGE: Record<Course['status'], { key: string; className: string }> = {
   planning: {
     key: 'history.courseStatusPlanning',
@@ -73,6 +86,12 @@ function isSessionFinished(session: LearningSession): boolean {
   return session.status === 'completed' || session.status === 'abandoned';
 }
 
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 function formatDate(iso: string, locale: string): string {
   try {
     return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso));
@@ -88,20 +107,36 @@ export default function HistoryPage() {
   const [loaded, setLoaded] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [sessions, setSessions] = useState<LearningSession[]>([]);
+  const [artifacts, setArtifacts] = useState<GeneratedArtifact[]>([]);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [removeCourseTarget, setRemoveCourseTarget] = useState<Course | null>(null);
   const [removeSessionTarget, setRemoveSessionTarget] = useState<LearningSession | null>(null);
 
   useEffect(() => {
-    Promise.all([listLearnerCourses(), listLearnerSessions()])
-      .then(([c, s]) => {
+    Promise.all([listLearnerCourses(), listLearnerSessions(), listGeneratedArtifacts()])
+      .then(([c, s, a]) => {
         setCourses(c);
         setSessions(s);
+        setArtifacts(a);
       })
       .catch((err) => log.error('Failed to load learning history:', err))
       .finally(() => setLoaded(true));
   }, []);
+
+  const handleDownload = async (artifact: GeneratedArtifact) => {
+    setDownloadingId(artifact.id);
+    try {
+      const url = await getArtifactDownloadUrl(artifact.id);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      log.error('Failed to get artifact download URL:', err);
+      toast.error(t('history.downloadFailed'));
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const sessionsByCourse = useMemo(() => {
     const map = new Map<string, LearningSession[]>();
@@ -399,6 +434,49 @@ export default function HistoryPage() {
             </section>
           )}
         </div>
+      )}
+
+      {loaded && artifacts.length > 0 && (
+        <section className="mt-10">
+          <h2 className="text-[13px] font-medium text-muted-foreground mb-3">
+            {t('history.downloadsHeading')}
+          </h2>
+          <div className="flex flex-col gap-2">
+            {artifacts.map((artifact) => (
+              <div
+                key={artifact.id}
+                className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/60 px-4 py-2.5"
+              >
+                <div className="min-w-0">
+                  <div className="text-[13px] text-foreground/85 truncate">
+                    {ARTIFACT_TYPE_KEYS[artifact.artifact_type]
+                      ? t(ARTIFACT_TYPE_KEYS[artifact.artifact_type])
+                      : artifact.artifact_type}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    {formatDate(artifact.generated_at, locale)}
+                    {artifact.file_size_bytes != null &&
+                      ` · ${formatFileSize(artifact.file_size_bytes)}`}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDownload(artifact)}
+                  disabled={downloadingId === artifact.id}
+                  className="shrink-0 inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-border/60 text-[12px] text-foreground/80 hover:bg-muted/60 transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  {downloadingId === artifact.id ? (
+                    <Loader2 className="size-3 animate-spin" />
+                  ) : (
+                    <Download className="size-3" />
+                  )}
+                  {t('history.downloadAction')}
+                  <ExternalLink className="size-3 text-muted-foreground" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       <AlertDialog

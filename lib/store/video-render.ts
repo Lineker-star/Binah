@@ -21,6 +21,8 @@ import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
 import { createLogger } from '@/lib/logger';
 import { runPolledTask } from '@/lib/media/polled-task';
+import { useStageStore } from '@/lib/store/stage';
+import { recordGeneratedArtifact } from '@/lib/artifacts/record-export';
 import {
   NoScenesError,
   sanitizeFilename,
@@ -235,6 +237,12 @@ export const useVideoRenderStore = create<VideoRenderState>()((set, get) => ({
       });
 
       saveAs(mp4, filename);
+      void recordGeneratedArtifact({
+        blob: mp4,
+        fileName: filename,
+        artifactType: 'mp4',
+        stageId: useStageStore.getState().stage?.id,
+      }).catch((err) => log.warn('Failed to record mp4 export (ignored):', err));
       set({ status: 'succeeded', percent: 100, etaMs: 0 });
       toast.success(t('export.videoMp4Success'), { id: toastId });
       if (missingCount > 0 || errorCount > 0) {
