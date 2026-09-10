@@ -245,7 +245,8 @@
     "exitFullscreen": "Vollbild beenden",
     "editCourse": "Kurs bearbeiten",
     "doneEditing": "Bearbeitung abschließen",
-    "proModeDisabledHint": "Diese Seite kann nicht bearbeitet werden — öffne eine Kursfolie, um sie im Pro-Modus zu bearbeiten."
+    "proModeDisabledHint": "Diese Seite kann nicht bearbeitet werden — öffne eine Kursfolie, um sie im Pro-Modus zu bearbeiten.",
+    "narrationUnavailable": "Vertonung für diese Szene nicht verfügbar"
   },
   "edit": {
     "proMode": "Pro",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "Abschnitte bereit: {{ready}} / {{total}}",
     "jumpToBlankTitle": "Zu einem Abschnitt ohne Titel springen",
     "analyzingMediaMaterial": "Audio- und Videomaterial wird analysiert",
-    "courseEstimate": "~{{duration}} insgesamt · {{lessons}} Lektionen × {{minutesEach}} Min. je Lektion"
+    "courseEstimate": "~{{duration}} insgesamt · {{lessons}} Lektionen × {{minutesEach}} Min. je Lektion",
+    "narrationUnavailable": "Vertonung für diese Szene nicht verfügbar — wird ohne Ton fortgesetzt."
   },
   "settings": {
     "title": "Einstellungen",

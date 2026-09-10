@@ -245,7 +245,8 @@
     "exitFullscreen": "Quitter le plein écran",
     "editCourse": "Modifier le cours",
     "doneEditing": "Terminer les modifications",
-    "proModeDisabledHint": "L’édition n’est pas disponible sur cette page. Ouvrez une diapositive de cours pour la modifier en mode Pro."
+    "proModeDisabledHint": "L’édition n’est pas disponible sur cette page. Ouvrez une diapositive de cours pour la modifier en mode Pro.",
+    "narrationUnavailable": "Narration indisponible pour cette scène"
   },
   "edit": {
     "proMode": "Pro",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "{{ready}} / {{total}} sections prêtes",
     "jumpToBlankTitle": "Aller à une section dont le titre manque encore",
     "analyzingMediaMaterial": "Analyse de l’audio et de la vidéo",
-    "courseEstimate": "~{{duration}} au total · {{lessons}} leçons × {{minutesEach}} min chacune"
+    "courseEstimate": "~{{duration}} au total · {{lessons}} leçons × {{minutesEach}} min chacune",
+    "narrationUnavailable": "Narration indisponible pour cette scène — poursuite sans audio."
   },
   "settings": {
     "title": "Paramètres",

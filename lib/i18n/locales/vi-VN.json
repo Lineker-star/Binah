@@ -245,7 +245,8 @@
     "exitFullscreen": "Thoát toàn màn hình",
     "editCourse": "Sửa bài học",
     "doneEditing": "Sửa xong",
-    "proModeDisabledHint": "Trang này không sửa được — hãy mở một slide bài học để dùng chế độ Pro."
+    "proModeDisabledHint": "Trang này không sửa được — hãy mở một slide bài học để dùng chế độ Pro.",
+    "narrationUnavailable": "Không có lời thuyết minh cho cảnh này"
   },
   "edit": {
     "proMode": "Pro",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "{{ready}} / {{total}} phần đã xong",
     "jumpToBlankTitle": "Nhảy tới phần còn thiếu tên",
     "analyzingMediaMaterial": "Đang phân tích âm thanh/video",
-    "courseEstimate": "~{{duration}} tổng cộng · {{lessons}} bài học × {{minutesEach}} phút mỗi bài"
+    "courseEstimate": "~{{duration}} tổng cộng · {{lessons}} bài học × {{minutesEach}} phút mỗi bài",
+    "narrationUnavailable": "Không có lời thuyết minh cho cảnh này — tiếp tục không có âm thanh."
   },
   "settings": {
     "title": "Cài đặt",

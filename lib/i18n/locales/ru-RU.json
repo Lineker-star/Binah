@@ -245,7 +245,8 @@
     "exitFullscreen": "Свернуть",
     "editCourse": "Редактировать курс",
     "doneEditing": "Завершить редактирование",
-    "proModeDisabledHint": "Редактирование недоступно на этой странице — откройте слайд курса, чтобы редактировать в Pro-режиме."
+    "proModeDisabledHint": "Редактирование недоступно на этой странице — откройте слайд курса, чтобы редактировать в Pro-режиме.",
+    "narrationUnavailable": "Озвучка для этой сцены недоступна"
   },
   "edit": {
     "proMode": "Pro",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "Готово разделов: {{ready}} / {{total}}",
     "jumpToBlankTitle": "Перейти к разделу без заголовка",
     "analyzingMediaMaterial": "Анализ аудио/видео",
-    "courseEstimate": "~{{duration}} всего · {{lessons}} уроков × {{minutesEach}} мин. каждый"
+    "courseEstimate": "~{{duration}} всего · {{lessons}} уроков × {{minutesEach}} мин. каждый",
+    "narrationUnavailable": "Озвучка для этой сцены недоступна — продолжаем без звука."
   },
   "settings": {
     "title": "Настройки",

@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle2, Sparkles, AlertCircle, AlertTriangle, ArrowLeft, Bot } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -1084,7 +1085,17 @@ function GenerationPreviewContent() {
           signal,
           FOREGROUND_SCENE_RETRY_OPTIONS,
         );
-        if (!ttsResult.success) throw new Error(t('generation.speechFailed'));
+        // Narration is a nice-to-have, not a hard requirement for the lesson
+        // to be usable — a TTS hiccup (rate limit, provider down, bad key)
+        // no longer aborts the whole generation. The scene completes without
+        // audio, flagged for a non-blocking "narration unavailable" note.
+        if (!ttsResult.success) {
+          log.warn('Narration generation failed for the first scene (continuing without audio):', {
+            error: ttsResult.error,
+          });
+          toast.warning(t('generation.narrationUnavailable'));
+          useStageStore.getState().markNarrationUnavailable(firstScene.id);
+        }
       }
 
       // Add scene to store and navigate

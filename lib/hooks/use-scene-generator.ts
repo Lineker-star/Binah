@@ -832,7 +832,10 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
             const scene = actionsResult.scene;
             const settings = useSettingsStore.getState();
 
-            // TTS generation — failure means the whole scene fails
+            // TTS generation — a failure here no longer fails the scene.
+            // Narration is a nice-to-have: the scene still completes and is
+            // usable without audio, flagged for a non-blocking "narration
+            // unavailable" note instead of pausing the whole queue.
             if (
               settings.ttsEnabled &&
               settings.ttsProviderId !== 'browser-native-tts' &&
@@ -847,15 +850,18 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
                 signal,
               );
               if (!ttsResult.success) {
+                // A genuine abort/stage-switch during the TTS call is still
+                // a real reason to stop — distinct from TTS itself failing.
                 if (abortRef.current || store.getState().generationEpoch !== startEpoch) {
                   pausedByFailureOrAbort = true;
                   break;
                 }
-                store.getState().addFailedOutline(outline);
-                options.onSceneFailed?.(outline, ttsResult.error || 'TTS generation failed');
-                store.getState().setGenerationStatus('paused');
-                pausedByFailureOrAbort = true;
-                break;
+                log.warn('Narration generation failed for a scene (continuing without audio):', {
+                  outlineId: outline.id,
+                  error: ttsResult.error,
+                });
+                toast.warning(getClientTranslation('generation.narrationUnavailable'));
+                store.getState().markNarrationUnavailable(scene.id);
               }
             }
 
@@ -1014,7 +1020,10 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           return;
         }
 
-        // Step 3: TTS
+        // Step 3: TTS — a failure here no longer fails the retry. Narration
+        // is a nice-to-have: the scene still completes and is usable
+        // without audio, flagged for a non-blocking "narration unavailable"
+        // note instead of re-marking the outline as failed.
         const settings = useSettingsStore.getState();
         if (
           settings.ttsEnabled &&
@@ -1030,8 +1039,12 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
             signal,
           );
           if (!ttsResult.success) {
-            store.getState().addFailedOutline(outline);
-            return;
+            log.warn('Narration generation failed for a retried scene (continuing without audio):', {
+              outlineId: outline.id,
+              error: ttsResult.error,
+            });
+            toast.warning(getClientTranslation('generation.narrationUnavailable'));
+            store.getState().markNarrationUnavailable(actionsResult.scene.id);
           }
         }
 

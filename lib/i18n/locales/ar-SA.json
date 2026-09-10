@@ -245,7 +245,8 @@
     "exitFullscreen": "الخروج من ملء الشاشة",
     "editCourse": "تحرير الدورة",
     "doneEditing": "إنهاء التحرير",
-    "proModeDisabledHint": "التحرير غير متاح في هذه الصفحة — افتح شريحة من الدورة للتحرير باستخدام وضع Pro."
+    "proModeDisabledHint": "التحرير غير متاح في هذه الصفحة — افتح شريحة من الدورة للتحرير باستخدام وضع Pro.",
+    "narrationUnavailable": "التعليق الصوتي غير متاح لهذا المشهد"
   },
   "edit": {
     "proMode": "احترافي",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "{{ready}} / {{total}} أقسام جاهزة",
     "jumpToBlankTitle": "الانتقال إلى قسم بحاجة إلى عنوان",
     "analyzingMediaMaterial": "تحليل الصوت/الفيديو",
-    "courseEstimate": "~{{duration}} إجمالاً · {{lessons}} دروس × {{minutesEach}} دقيقة لكل درس"
+    "courseEstimate": "~{{duration}} إجمالاً · {{lessons}} دروس × {{minutesEach}} دقيقة لكل درس",
+    "narrationUnavailable": "التعليق الصوتي غير متاح لهذا المشهد — المتابعة بدون صوت."
   },
   "settings": {
     "title": "الإعدادات",

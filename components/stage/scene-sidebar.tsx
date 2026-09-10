@@ -12,6 +12,7 @@ import {
   AlertCircle,
   RefreshCw,
   Trophy,
+  VolumeX,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SlideThumbnail } from '@/components/slide-renderer/SlideThumbnail';
@@ -46,6 +47,7 @@ export function SceneSidebar({
   const { scenes, currentSceneId, setCurrentSceneId, generatingOutlines, generationStatus } =
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
+  const narrationUnavailableSceneIds = useStageStore.use.narrationUnavailableSceneIds();
   const viewportSize = useCanvasStore.use.viewportSize();
   const viewportRatio = useCanvasStore.use.viewportRatio();
 
@@ -201,6 +203,14 @@ export function SceneSidebar({
 
                 {/* Thumbnail */}
                 <div className="relative aspect-video w-full rounded overflow-hidden bg-gray-100 dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/5">
+                  {narrationUnavailableSceneIds.includes(scene.id) && (
+                    <div
+                      title={t('stage.narrationUnavailable')}
+                      className="absolute right-1 top-1 z-10 flex items-center justify-center rounded-full bg-black/50 p-1 backdrop-blur-sm"
+                    >
+                      <VolumeX className="w-2.5 h-2.5 text-white" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 flex items-center justify-center">
                     {isSlide && slideContent ? (
                       <LazySlideThumbnail

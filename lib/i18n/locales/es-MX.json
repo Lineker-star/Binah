@@ -245,7 +245,8 @@
     "exitFullscreen": "Salir de pantalla completa",
     "editCourse": "Editar curso",
     "doneEditing": "Terminar edición",
-    "proModeDisabledHint": "La edición no está disponible en esta página — abre una diapositiva del curso para editar con el modo Pro."
+    "proModeDisabledHint": "La edición no está disponible en esta página — abre una diapositiva del curso para editar con el modo Pro.",
+    "narrationUnavailable": "Narración no disponible para esta escena"
   },
   "edit": {
     "proMode": "Pro",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "{{ready}} / {{total}} secciones listas",
     "jumpToBlankTitle": "Ir a una sección que aún necesita título",
     "analyzingMediaMaterial": "Analizando audio/video",
-    "courseEstimate": "~{{duration}} en total · {{lessons}} lecciones × {{minutesEach}} min c/u"
+    "courseEstimate": "~{{duration}} en total · {{lessons}} lecciones × {{minutesEach}} min c/u",
+    "narrationUnavailable": "Narración no disponible para esta escena — continuando sin audio."
   },
   "settings": {
     "title": "Configuración",

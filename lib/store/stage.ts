@@ -221,6 +221,7 @@ function clearedStageState(state: Pick<StageState, 'generationEpoch'>) {
     currentGeneratingOrder: -1,
     failedOutlines: [],
     generatingOutlines: [],
+    narrationUnavailableSceneIds: [],
   };
 }
 
@@ -329,6 +330,10 @@ interface StageState {
   generationStatus: 'idle' | 'generating' | 'paused' | 'completed' | 'error';
   currentGeneratingOrder: number;
   failedOutlines: SceneOutline[];
+  // Scenes whose narration (TTS) generation failed — the scene itself still
+  // completes and is usable, just without audio. Transient, like
+  // failedOutlines/generatingOutlines above.
+  narrationUnavailableSceneIds: string[];
 
   // Workbench canvas-freshness projections (Mono #1960 Part 2 port).
   // The workbench stage-freshness sync records the manifest this browser has
@@ -369,6 +374,7 @@ interface StageState {
   addFailedOutline: (outline: SceneOutline) => void;
   clearFailedOutlines: () => void;
   retryFailedOutline: (outlineId: string) => void;
+  markNarrationUnavailable: (sceneId: string) => void;
 
   // Getters
   getCurrentScene: () => Scene | null;
@@ -484,6 +490,7 @@ const useStageStoreBase = create<StageState>()((set, get) => ({
   generationStatus: 'idle' as const,
   currentGeneratingOrder: -1,
   failedOutlines: [],
+  narrationUnavailableSceneIds: [],
   serverManifestByStage: {},
   stageSyncRequest: 0,
 
@@ -798,6 +805,12 @@ const useStageStoreBase = create<StageState>()((set, get) => ({
   },
 
   clearFailedOutlines: () => set({ failedOutlines: [] }),
+
+  markNarrationUnavailable: (sceneId) => {
+    const existed = get().narrationUnavailableSceneIds.includes(sceneId);
+    if (existed) return;
+    set({ narrationUnavailableSceneIds: [...get().narrationUnavailableSceneIds, sceneId] });
+  },
 
   retryFailedOutline: (outlineId) => {
     set({

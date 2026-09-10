@@ -245,7 +245,8 @@
     "exitFullscreen": "全画面表示を終了",
     "editCourse": "コースを編集",
     "doneEditing": "編集を完了",
-    "proModeDisabledHint": "このページでは編集できません。コースのスライドを開くと Pro モードで編集できます。"
+    "proModeDisabledHint": "このページでは編集できません。コースのスライドを開くと Pro モードで編集できます。",
+    "narrationUnavailable": "このシーンのナレーションは利用できません"
   },
   "edit": {
     "proMode": "プロモード",
@@ -1164,7 +1165,8 @@
     "outlinesReadyCount": "{{ready}} / {{total}} セクション準備完了",
     "jumpToBlankTitle": "タイトルが未入力のセクションへ移動",
     "analyzingMediaMaterial": "音声・動画を解析中",
-    "courseEstimate": "合計 約{{duration}} · {{lessons}}レッスン × 各{{minutesEach}}分"
+    "courseEstimate": "合計 約{{duration}} · {{lessons}}レッスン × 各{{minutesEach}}分",
+    "narrationUnavailable": "このシーンのナレーションは利用できません — 音声なしで続行します。"
   },
   "settings": {
     "title": "設定",
