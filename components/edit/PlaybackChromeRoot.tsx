@@ -15,6 +15,7 @@ import { PENDING_SCENE_ID } from '@/lib/store/stage';
 import { getLearningSession, noteLearningSession } from '@/lib/classroom/learning-session-signal';
 import { endSession } from '@/lib/supabase/learning-session';
 import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
+import { generateCourseFinalAssessment } from '@/lib/courses/final-assessment';
 import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -1209,6 +1210,12 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           const course = await fetchCourse(updated.course_id);
           if (course && updated.lesson_number === course.planned_lesson_count) {
             await updateCourseStatus(updated.course_id, 'completed');
+            // Synthesizes one course_final assessment from the per-lesson
+            // quiz scores already recorded — never blocks course completion
+            // itself on this; a failure here just means no course-final row.
+            void generateCourseFinalAssessment(updated.course_id).catch((err) =>
+              log.warn('Failed to generate course-final assessment (ignored):', err),
+            );
           }
         })
         .catch((err) => log.warn('Failed to auto-complete learning session (ignored):', err));
