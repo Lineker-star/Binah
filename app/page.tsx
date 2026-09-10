@@ -102,6 +102,15 @@ function deriveCourseTitle(requirement: string): string {
   return trimmed.length <= 80 ? trimmed : trimmed.slice(0, 80).trim() + '…';
 }
 
+/** Persisted alongside requirementDraft so a resumed Structured Course
+ *  generation (after the signed-out-> /auth -> back redirect) restores the
+ *  learner's actual settings instead of silently falling back to ad-hoc. */
+interface CourseModeDraft {
+  courseMode: boolean;
+  courseLessonCount: number;
+  courseMinutesPerLesson: number;
+}
+
 interface FormState {
   courseMaterials: SelectedCourseMaterial[];
   requirement: string;
@@ -137,6 +146,20 @@ function HomePage() {
   const [swapped] = useState(arrivedByProSwap);
   const [uploadingTextbook, setUploadingTextbook] = useState(false);
   const textbookInputRef = useRef<HTMLInputElement>(null);
+
+  // Same signed-out gate as handleGenerate: learner_id RLS requires a real
+  // session, so send them to sign in first rather than let the upload fail
+  // with a raw 401. Unlike a text requirement, a picked File can't survive
+  // the redirect — "resume" here means reopening the file picker on return
+  // (see the resume=upload-textbook effect below), not re-submitting bytes
+  // that were never captured.
+  const handleUploadTextbookClick = () => {
+    if (!authLoading && !authUser) {
+      router.push(`/auth?mode=sign-up&returnTo=${encodeURIComponent('/?resume=upload-textbook')}`);
+      return;
+    }
+    textbookInputRef.current?.click();
+  };
 
   const handleTextbookFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -245,6 +268,14 @@ function HomePage() {
   const { cachedValue: cachedRequirement, updateCache: updateRequirementCache } =
     useDraftCache<string>({ key: 'requirementDraft' });
 
+  // Draft cache for Structured Course settings — without this, a signed-out
+  // learner who turns on Structured Course, picks a lesson count, then gets
+  // sent through the sign-in redirect above would resume as a plain ad-hoc
+  // generation on return (only the requirement text survives otherwise):
+  // silently the wrong kind of course, not the one they asked for.
+  const { cachedValue: cachedCourseDraft, updateCache: updateCourseDraftCache } =
+    useDraftCache<CourseModeDraft>({ key: 'courseModeDraft' });
+
   // A usable LLM provider exists ⇒ a concrete model is always selected (#580
   // invariant). Gate generation on this single condition (state A vs B)
   // instead of inspecting modelId directly.
@@ -278,6 +309,24 @@ function HomePage() {
     draftRestoredRef.current = true;
     setForm((prev) => (prev.requirement ? prev : { ...prev, requirement: cachedRequirement }));
   }, [cachedRequirement]);
+
+  // Same restore, for Structured Course settings (see courseModeDraft above).
+  const courseDraftRestoredRef = useRef(false);
+  useEffect(() => {
+    if (courseDraftRestoredRef.current) return;
+    if (!cachedCourseDraft) return;
+    courseDraftRestoredRef.current = true;
+    setForm((prev) =>
+      prev.courseMode
+        ? prev
+        : {
+            ...prev,
+            courseMode: cachedCourseDraft.courseMode,
+            courseLessonCount: cachedCourseDraft.courseLessonCount,
+            courseMinutesPerLesson: cachedCourseDraft.courseMinutesPerLesson,
+          },
+    );
+  }, [cachedCourseDraft]);
 
   const [themeOpen, setThemeOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -333,6 +382,15 @@ function HomePage() {
       if (field === 'interactiveMode')
         localStorage.setItem(INTERACTIVE_MODE_STORAGE_KEY, String(value));
       if (field === 'requirement') updateRequirementCache(value as string);
+      if (field === 'courseMode' || field === 'courseLessonCount' || field === 'courseMinutesPerLesson') {
+        updateCourseDraftCache({
+          courseMode: field === 'courseMode' ? (value as boolean) : form.courseMode,
+          courseLessonCount:
+            field === 'courseLessonCount' ? (value as number) : form.courseLessonCount,
+          courseMinutesPerLesson:
+            field === 'courseMinutesPerLesson' ? (value as number) : form.courseMinutesPerLesson,
+        });
+      }
     } catch {
       /* ignore */
     }
@@ -551,6 +609,22 @@ function HomePage() {
     void handleGenerate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, authUser, canGenerate, preparingGenerate, router]);
+
+  // Same pattern, for the "Upload a textbook" gate above: after /auth sends
+  // them back to `/?resume=upload-textbook`, reopen the file picker once
+  // they're actually signed in.
+  const uploadResumeIntentRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    if (uploadResumeIntentRef.current === null) {
+      uploadResumeIntentRef.current =
+        new URLSearchParams(window.location.search).get('resume') === 'upload-textbook';
+      if (uploadResumeIntentRef.current) router.replace('/');
+    }
+    if (!uploadResumeIntentRef.current) return;
+    if (authLoading || !authUser) return;
+    uploadResumeIntentRef.current = false;
+    textbookInputRef.current?.click();
+  }, [authLoading, authUser, router]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -847,7 +921,7 @@ function HomePage() {
                   <button
                     type="button"
                     disabled={uploadingTextbook}
-                    onClick={() => textbookInputRef.current?.click()}
+                    onClick={handleUploadTextbookClick}
                     className="inline-flex h-8 shrink-0 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border border-border/60 bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:bg-muted/60 active:scale-95 disabled:opacity-50"
                   >
                     {uploadingTextbook ? (
