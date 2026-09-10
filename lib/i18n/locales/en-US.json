@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "The Intelligent Classroom",
-    "greetingWithName": "Hi, {{name}}"
+    "greetingWithName": "Hi, {{name}}",
+    "returnNudge": {
+      "resumeSession": "Welcome back! Pick up where you left off in \"{{title}}\".",
+      "weakArea": "Welcome back! You might want to review {{area}}.",
+      "continueAction": "Continue",
+      "viewAction": "View"
+    }
   },
   "toolbar": {
     "pdfParser": "Parser",

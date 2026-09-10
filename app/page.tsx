@@ -51,6 +51,7 @@ import { hasUsableLLMProvider } from '@/lib/store/settings-validation';
 import { useUserProfileStore } from '@/lib/store/user-profile';
 import { AvatarPicker } from '@/components/avatar-picker';
 import { RecentSessions } from '@/components/discovery/recent-sessions';
+import { ReturnNudgeBanner } from '@/components/discovery/return-nudge-banner';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { createCourse } from '@/lib/supabase/courses';
@@ -731,6 +732,11 @@ function HomePage() {
         >
           {t('home.slogan')}
         </motion.p>
+
+        <ReturnNudgeBanner
+          signedIn={!authLoading && !!authUser}
+          onOpenProgress={() => openSettingsSection('progress')}
+        />
 
         {/* ── Unified input area ── */}
         <motion.div

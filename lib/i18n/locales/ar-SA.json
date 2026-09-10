@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "الفصل الدراسي الذكي",
-    "greetingWithName": "مرحبًا، {{name}}"
+    "greetingWithName": "مرحبًا، {{name}}",
+    "returnNudge": {
+      "resumeSession": "مرحبًا بعودتك! تابع من حيث توقفت في \"{{title}}\".",
+      "weakArea": "مرحبًا بعودتك! قد ترغب في مراجعة {{area}}.",
+      "continueAction": "متابعة",
+      "viewAction": "عرض"
+    }
   },
   "toolbar": {
     "pdfParser": "محلل PDF",

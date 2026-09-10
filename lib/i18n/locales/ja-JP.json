@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "インテリジェント教室",
-    "greetingWithName": "こんにちは、{{name}}さん"
+    "greetingWithName": "こんにちは、{{name}}さん",
+    "returnNudge": {
+      "resumeSession": "おかえりなさい！「{{title}}」の続きから再開しましょう。",
+      "weakArea": "おかえりなさい！{{area}}を復習してみませんか。",
+      "continueAction": "続ける",
+      "viewAction": "表示"
+    }
   },
   "toolbar": {
     "pdfParser": "パーサー",

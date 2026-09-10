@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "The Intelligent Classroom",
-    "greetingWithName": "嗨，{{name}}"
+    "greetingWithName": "嗨，{{name}}",
+    "returnNudge": {
+      "resumeSession": "欢迎回来！从\"{{title}}\"中断的地方继续吧。",
+      "weakArea": "欢迎回来！你可能需要复习一下{{area}}。",
+      "continueAction": "继续",
+      "viewAction": "查看"
+    }
   },
   "toolbar": {
     "pdfParser": "解析器",

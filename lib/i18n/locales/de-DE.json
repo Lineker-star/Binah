@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "Das intelligente Klassenzimmer",
-    "greetingWithName": "Hallo, {{name}}"
+    "greetingWithName": "Hallo, {{name}}",
+    "returnNudge": {
+      "resumeSession": "Willkommen zurück! Mach weiter, wo du in „{{title}}\" aufgehört hast.",
+      "weakArea": "Willkommen zurück! Du solltest dir vielleicht {{area}} noch einmal ansehen.",
+      "continueAction": "Fortsetzen",
+      "viewAction": "Ansehen"
+    }
   },
   "toolbar": {
     "pdfParser": "Parser",

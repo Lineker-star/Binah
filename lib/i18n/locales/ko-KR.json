@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "지능형 교실",
-    "greetingWithName": "안녕하세요, {{name}}!"
+    "greetingWithName": "안녕하세요, {{name}}!",
+    "returnNudge": {
+      "resumeSession": "다시 오신 것을 환영합니다! \"{{title}}\"에서 이어서 진행해 보세요.",
+      "weakArea": "다시 오신 것을 환영합니다! {{area}}을(를) 복습해 보는 건 어떨까요.",
+      "continueAction": "계속하기",
+      "viewAction": "보기"
+    }
   },
   "toolbar": {
     "pdfParser": "파서",

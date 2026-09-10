@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "The Intelligent Classroom",
-    "greetingWithName": "Привет, {{name}}"
+    "greetingWithName": "Привет, {{name}}",
+    "returnNudge": {
+      "resumeSession": "С возвращением! Продолжите с того места, где остановились в «{{title}}».",
+      "weakArea": "С возвращением! Возможно, стоит повторить {{area}}.",
+      "continueAction": "Продолжить",
+      "viewAction": "Просмотреть"
+    }
   },
   "toolbar": {
     "pdfParser": "Парсер",

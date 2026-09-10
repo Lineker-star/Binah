@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "El aula inteligente",
-    "greetingWithName": "Hola, {{name}}"
+    "greetingWithName": "Hola, {{name}}",
+    "returnNudge": {
+      "resumeSession": "¡Bienvenido de nuevo! Continúa donde lo dejaste en \"{{title}}\".",
+      "weakArea": "¡Bienvenido de nuevo! Podrías repasar {{area}}.",
+      "continueAction": "Continuar",
+      "viewAction": "Ver"
+    }
   },
   "toolbar": {
     "pdfParser": "Analizador",

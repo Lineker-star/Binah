@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "Lớp học thông minh",
-    "greetingWithName": "Chào {{name}}"
+    "greetingWithName": "Chào {{name}}",
+    "returnNudge": {
+      "resumeSession": "Chào mừng trở lại! Hãy tiếp tục từ nơi bạn đã dừng lại trong \"{{title}}\".",
+      "weakArea": "Chào mừng trở lại! Bạn có thể muốn ôn lại {{area}}.",
+      "continueAction": "Tiếp tục",
+      "viewAction": "Xem"
+    }
   },
   "toolbar": {
     "pdfParser": "Bộ đọc PDF",

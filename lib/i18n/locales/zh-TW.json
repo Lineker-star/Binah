@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "智慧課堂",
-    "greetingWithName": "嗨，{{name}}"
+    "greetingWithName": "嗨，{{name}}",
+    "returnNudge": {
+      "resumeSession": "歡迎回來！從「{{title}}」中斷的地方繼續吧。",
+      "weakArea": "歡迎回來！你可能需要複習一下{{area}}。",
+      "continueAction": "繼續",
+      "viewAction": "查看"
+    }
   },
   "toolbar": {
     "pdfParser": "解析器",

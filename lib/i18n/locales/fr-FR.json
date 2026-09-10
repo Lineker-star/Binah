@@ -11,7 +11,13 @@
   },
   "home": {
     "slogan": "La classe intelligente",
-    "greetingWithName": "Bonjour, {{name}}"
+    "greetingWithName": "Bonjour, {{name}}",
+    "returnNudge": {
+      "resumeSession": "Content de vous revoir ! Reprenez là où vous vous étiez arrêté dans « {{title}} ».",
+      "weakArea": "Content de vous revoir ! Vous devriez peut-être revoir {{area}}.",
+      "continueAction": "Continuer",
+      "viewAction": "Voir"
+    }
   },
   "toolbar": {
     "pdfParser": "Analyseur",
