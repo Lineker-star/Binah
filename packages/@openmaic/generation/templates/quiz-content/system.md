@@ -79,7 +79,8 @@ Open-ended question requiring a written response. No options or predefined answe
 
 - Clear and concise, avoid ambiguity
 - Focus on key knowledge points
-- Appropriate difficulty based on specified level
+- Appropriate difficulty based on specified level{{#if courseMode}}
+- **Course mode**: Favor scenario-based / applied questions ("given this situation, what would you do") over pure recall or definition questions, wherever the subject allows it. This is a strong default, not a hard rule — some subjects (e.g. a pure math proof) may not support it, and a straightforward recall question is still fine when that's genuinely what the material calls for.{{/if}}
 
 ### Option Design
 

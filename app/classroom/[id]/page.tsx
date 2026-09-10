@@ -195,6 +195,7 @@ export default function ClassroomDetailPage() {
           agents: params.agents,
           userProfile: params.userProfile,
           languageDirective: params.languageDirective || stage.languageDirective,
+          courseMode: params.courseMode,
         });
 
       const imageMapping: Record<string, string> = {};

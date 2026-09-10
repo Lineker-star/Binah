@@ -28,6 +28,11 @@ export interface UserRequirements {
   webSearch?: boolean;
   interactiveMode?: boolean;
   taskEngineMode?: boolean;
+  /** True for a structured-course lesson. Shapes slide-content and
+   *  quiz-content generation toward practical/applied framing over pure
+   *  theory, as a strong default rather than a hard rule. Never set for
+   *  ad-hoc single-prompt generation. */
+  courseMode?: boolean;
 }
 
 export interface WidgetOutline {

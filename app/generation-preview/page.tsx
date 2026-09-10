@@ -1075,6 +1075,13 @@ function GenerationPreviewContent() {
           agents,
           userProfile,
           languageDirective,
+          // Only scene 1 was generated above (with the full `requirements`
+          // object, courseMode included). Scenes 2..N resume through this
+          // stored params blob, which never carried `requirements` at all —
+          // so without this, a course-mode lesson's remaining scenes (which
+          // is where the guaranteed trailing quiz scene actually lands)
+          // would silently lose the practical/applied framing.
+          courseMode: currentSession.requirements.courseMode,
         }),
       );
 

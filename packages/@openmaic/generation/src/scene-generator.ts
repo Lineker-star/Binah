@@ -295,9 +295,17 @@ export async function generateSceneContent(
         baselineContent,
         log,
         options.onFailure,
+        userRequirements?.courseMode,
       );
     case 'quiz':
-      return generateQuizContent(outline, aiCall, languageDirective, log, options.onFailure);
+      return generateQuizContent(
+        outline,
+        aiCall,
+        languageDirective,
+        log,
+        options.onFailure,
+        userRequirements?.courseMode,
+      );
     case 'pbl':
       return generatePBLSceneContent(
         outline,
@@ -613,6 +621,7 @@ async function generateSlideContent(
   baselineContent?: GeneratedSlideContent,
   log: GenerationLogger = noopGenerationLogger,
   onFailure?: (failure: SceneContentFailure) => void,
+  courseMode?: boolean,
 ): Promise<GeneratedSlideContent | null> {
   // Build assigned images description for the prompt
   let assignedImagesText = '无可用图片，禁止插入任何 image 元素';
@@ -721,6 +730,7 @@ async function generateSlideContent(
     generatedImageEnabled,
     generatedVideoEnabled,
     mediaElementEnabled,
+    courseMode: courseMode ?? false,
   });
 
   if (!prompts) {
@@ -857,6 +867,7 @@ async function generateQuizContent(
   languageDirective?: string,
   log: GenerationLogger = noopGenerationLogger,
   onFailure?: (failure: SceneContentFailure) => void,
+  courseMode?: boolean,
 ): Promise<GeneratedQuizContent | null> {
   const quizConfig = outline.quizConfig || {
     questionCount: 3,
@@ -872,6 +883,7 @@ async function generateQuizContent(
     difficulty: quizConfig.difficulty,
     questionTypes: quizConfig.questionTypes.join(', '),
     languageDirective: languageDirective || '',
+    courseMode: courseMode ?? false,
   });
 
   if (!prompts) {

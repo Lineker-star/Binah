@@ -612,6 +612,10 @@ export interface GenerationParams {
   agents?: AgentInfo[];
   userProfile?: string;
   languageDirective?: string;
+  /** True for a structured-course lesson (see lib/courses/lessons.ts) —
+   *  threaded through so scenes generated here (2..N; scene 1 goes through
+   *  generation-preview directly) still carry course-mode content framing. */
+  courseMode?: boolean;
 }
 
 export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
@@ -705,6 +709,14 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
       // threading and the pause-on-failure UX. With parallelism off this is exactly
       // the original one-at-a-time loop.
       try {
+        // Reconstructed minimal — this resumed-generation path never carried
+        // the learner's full original UserRequirements (only a few fields
+        // survive into GenerationParams via sessionStorage). `requirement`
+        // itself isn't read by slide/quiz content generation, only
+        // `courseMode` is; an empty string here is a no-op for those.
+        const requirements: UserRequirements | undefined = params.courseMode
+          ? { requirement: '', courseMode: true }
+          : undefined;
         const fetchContent = (outline: SceneOutline) =>
           fetchSceneContent(
             {
@@ -716,6 +728,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
               stageInfo: params.stageInfo,
               agents: params.agents,
               languageDirective: params.languageDirective,
+              requirements,
             },
             signal,
           );
