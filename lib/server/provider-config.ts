@@ -5,6 +5,7 @@
  * Keys never leave the server — only provider IDs and metadata are exposed via API.
  */
 
+import 'server-only';
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
