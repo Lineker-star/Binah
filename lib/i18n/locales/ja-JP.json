@@ -44,7 +44,12 @@
     "ttsPreview": "プレビュー",
     "ttsPreviewing": "再生中...",
     "interactiveModeHint": "インタラクティブ優先モードを有効にして、より実践的なコンテンツを生成",
-    "interactiveModeLabel": "インタラクティブモード"
+    "interactiveModeLabel": "インタラクティブモード",
+    "structuredCourseLabel": "構造化コース",
+    "structuredCourseHint": "1つではなく複数のレッスンに分割します — 次のレッスンは現在のレッスンを終えてから作成されます",
+    "courseLessonCountLabel": "レッスン数",
+    "courseMinutesPerLessonLabel": "分/レッスン",
+    "courseEstimatedTotal": "合計約{{minutes}}分"
   },
   "export": {
     "pptx": "PPTXエクスポート",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "コース完了",
+    "continueToLesson": "レッスン{{number}}へ進む",
+    "courseComplete": "「{{title}}」を修了しました！",
+    "preparingNextLesson": "次のレッスンを準備しています…（あと{{seconds}}秒）",
+    "pauseAutoContinue": "一時停止",
+    "reviewLesson": "このレッスンをもう一度見る",
     "trailLabels": {
       "slide": "ページ",
       "quiz": "クイズ",

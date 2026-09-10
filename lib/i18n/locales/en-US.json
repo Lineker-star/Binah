@@ -44,7 +44,12 @@
     "ttsPreview": "Preview",
     "ttsPreviewing": "Playing...",
     "interactiveModeHint": "Enable interactive-first mode for more hands-on content",
-    "interactiveModeLabel": "Interactive Mode"
+    "interactiveModeLabel": "Interactive Mode",
+    "structuredCourseLabel": "Structured Course",
+    "structuredCourseHint": "Break this into multiple lessons instead of one — the next lesson is built only once you finish the current one",
+    "courseLessonCountLabel": "Lessons",
+    "courseMinutesPerLessonLabel": "Min/lesson",
+    "courseEstimatedTotal": "~{{minutes}} min total"
   },
   "export": {
     "pptx": "Export PPTX",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "Course complete",
+    "continueToLesson": "Continue to Lesson {{number}}",
+    "courseComplete": "You finished \"{{title}}\"!",
+    "preparingNextLesson": "Preparing your next lesson… ({{seconds}}s)",
+    "pauseAutoContinue": "Pause",
+    "reviewLesson": "Review this lesson again",
     "trailLabels": {
       "slide": "pages",
       "quiz": "quizzes",

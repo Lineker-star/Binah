@@ -44,7 +44,12 @@
     "ttsPreview": "试听",
     "ttsPreviewing": "播放中...",
     "interactiveModeHint": "开启深度交互模式，生成更多互动内容",
-    "interactiveModeLabel": "深度交互"
+    "interactiveModeLabel": "深度交互",
+    "structuredCourseLabel": "结构化课程",
+    "structuredCourseHint": "将其拆分为多节课，而不是一节课——下一节课只会在你完成当前课程后生成",
+    "courseLessonCountLabel": "课程数",
+    "courseMinutesPerLessonLabel": "分钟/节",
+    "courseEstimatedTotal": "共约{{minutes}}分钟"
   },
   "export": {
     "pptx": "导出 PPTX",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "课程完成",
+    "continueToLesson": "继续第{{number}}课",
+    "courseComplete": "你已完成「{{title}}」！",
+    "preparingNextLesson": "正在准备下一课…（{{seconds}}秒）",
+    "pauseAutoContinue": "暂停",
+    "reviewLesson": "再次复习本课",
     "trailLabels": {
       "slide": "页",
       "quiz": "小测",

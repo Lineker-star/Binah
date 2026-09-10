@@ -54,6 +54,7 @@ import type {
 import { AgentRevealModal } from '@/components/agent/agent-reveal-modal';
 import { createLogger } from '@/lib/logger';
 import { createLearningSession } from '@/lib/supabase/learning-session';
+import { updateCourseStatus } from '@/lib/supabase/courses';
 import {
   type GenerationSessionState,
   ALL_STEPS,
@@ -555,9 +556,23 @@ function GenerationPreviewContent() {
         title: stage.name,
         topic: currentSession.requirements.requirement,
         skillTrackId: currentSession.skillTrackId ?? null,
-      }).catch((err) => {
-        log.warn('Failed to create learning session (ignored):', err);
-      });
+        courseId: currentSession.courseId ?? null,
+        lessonNumber: currentSession.lessonNumber ?? null,
+      })
+        .then((session) => {
+          // "Update courses.status to 'in_progress' once lesson 1 starts" —
+          // tied to the session actually being created (not course creation
+          // itself), since course creation happens before we know generation
+          // will succeed at all.
+          if (session && currentSession.courseId && currentSession.lessonNumber === 1) {
+            void updateCourseStatus(currentSession.courseId, 'in_progress').catch((err) => {
+              log.warn('Failed to mark course in_progress (ignored):', err);
+            });
+          }
+        })
+        .catch((err) => {
+          log.warn('Failed to create learning session (ignored):', err);
+        });
 
       // ── Generate outlines first (infers languageDirective) ──
       let outlines = currentSession.sceneOutlines;

@@ -32,6 +32,11 @@
     "configureProviderHint": "قم بتكوين مزوّد نماذج واحد على الأقل لتوليد المقررات",
     "interactiveModeHint": "تفعيل وضع التفاعل_first للمحتوى العملي",
     "interactiveModeLabel": "وضع التفاعل",
+    "structuredCourseLabel": "دورة منظمة",
+    "structuredCourseHint": "قسّم هذا إلى عدة دروس بدلاً من درس واحد — يتم إنشاء الدرس التالي فقط بعد إنهاء الدرس الحالي",
+    "courseLessonCountLabel": "الدروس",
+    "courseMinutesPerLessonLabel": "دقيقة/درس",
+    "courseEstimatedTotal": "~{{minutes}} دقيقة إجمالاً",
     "enterClassroom": "دخول الفصل",
     "advancedSettings": "إعدادات متقدمة",
     "thinking": "التفكير",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "اكتملت الدورة",
+    "continueToLesson": "متابعة إلى الدرس {{number}}",
+    "courseComplete": "أنهيت \"{{title}}\"!",
+    "preparingNextLesson": "جارٍ تحضير درسك التالي… ({{seconds}} ث)",
+    "pauseAutoContinue": "إيقاف مؤقت",
+    "reviewLesson": "مراجعة هذا الدرس مرة أخرى",
     "trailLabels": {
       "slide": "صفحات",
       "quiz": "اختبارات",

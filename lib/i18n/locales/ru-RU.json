@@ -44,7 +44,12 @@
     "ttsPreview": "Прослушать",
     "ttsPreviewing": "Воспроизведение...",
     "interactiveModeHint": "Включить интерактивный режим для более практического контента",
-    "interactiveModeLabel": "Интерактивный режим"
+    "interactiveModeLabel": "Интерактивный режим",
+    "structuredCourseLabel": "Структурированный курс",
+    "structuredCourseHint": "Разбейте это на несколько уроков вместо одного — следующий урок создаётся только после завершения текущего",
+    "courseLessonCountLabel": "Уроки",
+    "courseMinutesPerLessonLabel": "Мин/урок",
+    "courseEstimatedTotal": "~{{minutes}} мин всего"
   },
   "export": {
     "pptx": "Экспорт PPTX",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "Курс завершён",
+    "continueToLesson": "Перейти к уроку {{number}}",
+    "courseComplete": "Вы завершили курс «{{title}}»!",
+    "preparingNextLesson": "Готовим следующий урок… ({{seconds}} с)",
+    "pauseAutoContinue": "Пауза",
+    "reviewLesson": "Повторить этот урок",
     "trailLabels": {
       "slide": "страниц",
       "quiz": "тестов",

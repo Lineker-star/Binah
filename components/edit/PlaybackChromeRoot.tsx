@@ -14,6 +14,7 @@ import { useStageStore } from '@/lib/store';
 import { PENDING_SCENE_ID } from '@/lib/store/stage';
 import { getLearningSession, noteLearningSession } from '@/lib/classroom/learning-session-signal';
 import { endSession } from '@/lib/supabase/learning-session';
+import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
 import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -1199,7 +1200,17 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
       if (!session || session.status === 'completed' || session.status === 'abandoned') return;
       sessionEndedRef.current = true;
       void endSession(session.id, { completed: true })
-        .then((updated) => noteLearningSession(stageId, updated))
+        .then(async (updated) => {
+          noteLearningSession(stageId, updated);
+          // "Update courses.status to 'completed' once the final planned
+          // lesson is marked completed" — this lesson's own session just
+          // was, so check whether it was the course's last one.
+          if (!updated.course_id || !updated.lesson_number) return;
+          const course = await fetchCourse(updated.course_id);
+          if (course && updated.lesson_number === course.planned_lesson_count) {
+            await updateCourseStatus(updated.course_id, 'completed');
+          }
+        })
         .catch((err) => log.warn('Failed to auto-complete learning session (ignored):', err));
     }, [isPendingScene, currentScene, isCourseComplete, stage?.id]);
 

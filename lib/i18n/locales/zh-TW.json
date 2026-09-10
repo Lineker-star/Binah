@@ -44,7 +44,12 @@
     "ttsPreview": "試聽",
     "ttsPreviewing": "播放中...",
     "interactiveModeHint": "啟用互動優先模式以獲得更多實作內容",
-    "interactiveModeLabel": "互動模式"
+    "interactiveModeLabel": "互動模式",
+    "structuredCourseLabel": "結構化課程",
+    "structuredCourseHint": "將其拆分為多節課，而不是一節課——下一節課只會在你完成目前課程後生成",
+    "courseLessonCountLabel": "課程數",
+    "courseMinutesPerLessonLabel": "分鐘/節",
+    "courseEstimatedTotal": "共約{{minutes}}分鐘"
   },
   "export": {
     "pptx": "匯出 PPTX",
@@ -2074,6 +2079,11 @@
   },
   "classroomComplete": {
     "title": "課程完成",
+    "continueToLesson": "繼續第{{number}}課",
+    "courseComplete": "你已完成「{{title}}」！",
+    "preparingNextLesson": "正在準備下一課…（{{seconds}}秒）",
+    "pauseAutoContinue": "暫停",
+    "reviewLesson": "再次複習本課",
     "trailLabels": {
       "slide": "頁面",
       "quiz": "測驗",

@@ -20,6 +20,7 @@ import {
   User as UserIcon,
   TrendingUp,
   LogOut,
+  BookOpen,
 } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -49,6 +50,8 @@ import { useUserProfileStore } from '@/lib/store/user-profile';
 import { AvatarPicker } from '@/components/avatar-picker';
 import { RecentSessions } from '@/components/discovery/recent-sessions';
 import { createClient } from '@/lib/supabase/client';
+import { createCourse } from '@/lib/supabase/courses';
+import { buildLessonRequirement } from '@/lib/courses/lessons';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
@@ -81,12 +84,32 @@ const PPTX_IMPORT_ENABLED = isPptxImportEnabled();
 /** The configured runtime probe result, retained across client navigations. */
 let workbenchRuntimeCache: boolean | null = null;
 
+const DEFAULT_COURSE_LESSON_COUNT = 8;
+const DEFAULT_COURSE_MINUTES_PER_LESSON = 15;
+const COURSE_LESSON_COUNT_RANGE = { min: 2, max: 30 };
+const COURSE_MINUTES_PER_LESSON_RANGE = { min: 5, max: 60 };
+
+/** A short course title from the learner's free-text prompt — courses.title
+ *  has no separate input of its own in this pass, so it's derived from the
+ *  same text that also becomes the course's description. */
+function deriveCourseTitle(requirement: string): string {
+  const trimmed = requirement.trim();
+  return trimmed.length <= 80 ? trimmed : trimmed.slice(0, 80).trim() + '…';
+}
+
 interface FormState {
   courseMaterials: SelectedCourseMaterial[];
   requirement: string;
   webSearch: boolean;
   interactiveMode: boolean;
   vocationalTestMode: boolean;
+  /** "Structured Course" mode — an alternative to the default single-prompt
+   *  flow. When on, submitting creates a courses row and generates only
+   *  lesson 1; lessons 2..N are created lazily as the learner advances
+   *  (see lib/courses/lessons.ts). */
+  courseMode: boolean;
+  courseLessonCount: number;
+  courseMinutesPerLesson: number;
 }
 
 const initialFormState: FormState = {
@@ -95,6 +118,9 @@ const initialFormState: FormState = {
   webSearch: false,
   interactiveMode: false,
   vocationalTestMode: false,
+  courseMode: false,
+  courseLessonCount: DEFAULT_COURSE_LESSON_COUNT,
+  courseMinutesPerLesson: DEFAULT_COURSE_MINUTES_PER_LESSON,
 };
 
 function HomePage() {
@@ -385,9 +411,25 @@ function HomePage() {
     // Flip the generating UI state before material bytes are copied locally.
     setPreparingGenerate(true);
     try {
+      // Structured Course mode: create the course plan row before anything
+      // else. Only lesson 1 is generated now — lessons 2..N are created
+      // lazily as the learner advances (see the "Continue to Lesson N+1"
+      // action in classroom-complete.tsx). Blocking (not fire-and-forget):
+      // without a course row, "lesson 1 of a course" has nothing to attach
+      // to, so a failure here should stop generation, not proceed as if
+      // this were ad-hoc — the same try/catch below already surfaces it.
+      const course = form.courseMode
+        ? await createCourse({
+            title: deriveCourseTitle(form.requirement),
+            description: form.requirement,
+            plannedLessonCount: form.courseLessonCount,
+            plannedMinutesPerLesson: form.courseMinutesPerLesson,
+          })
+        : null;
+
       const userProfile = useUserProfileStore.getState();
       const requirements: UserRequirements = {
-        requirement: form.requirement,
+        requirement: course ? buildLessonRequirement(course, 1) : form.requirement,
         userNickname: userProfile.nickname || undefined,
         userBio: userProfile.bio || undefined,
         webSearch: form.webSearch || undefined,
@@ -448,6 +490,7 @@ function HomePage() {
         pdfProviderConfig,
         sceneOutlines: null,
         currentStep: 'generating' as const,
+        ...(course ? { courseId: course.id, lessonNumber: 1 } : {}),
       };
       sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
 
@@ -741,6 +784,31 @@ function HomePage() {
                 />
               </div>
 
+              {/* Structured Course mode toggle — alternative to the default
+                  single-prompt flow: generates lesson 1 now, then lessons
+                  2..N lazily as the learner advances. */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    aria-pressed={form.courseMode}
+                    onClick={() => updateForm('courseMode', !form.courseMode)}
+                    className={cn(
+                      'inline-flex h-8 shrink-0 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition-all active:scale-95',
+                      form.courseMode
+                        ? 'border-violet-400 bg-violet-100 text-violet-900 shadow-sm dark:border-violet-500 dark:bg-violet-900/40 dark:text-violet-200'
+                        : 'border-violet-500/60 bg-transparent text-violet-700 hover:bg-violet-50 dark:border-violet-600 dark:text-violet-300 dark:hover:bg-violet-950/40',
+                    )}
+                  >
+                    <BookOpen className="size-3.5" />
+                    <span>{t('toolbar.structuredCourseLabel')}</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="text-xs">
+                  {t('toolbar.structuredCourseHint')}
+                </TooltipContent>
+              </Tooltip>
+
               {/* Interactive mode toggle */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -790,6 +858,59 @@ function HomePage() {
             </div>
           </div>
         </motion.div>
+
+        {form.courseMode && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-2 flex w-full flex-wrap items-center gap-3 px-1"
+          >
+            <label className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              {t('toolbar.courseLessonCountLabel')}
+              <input
+                type="number"
+                min={COURSE_LESSON_COUNT_RANGE.min}
+                max={COURSE_LESSON_COUNT_RANGE.max}
+                value={form.courseLessonCount}
+                onChange={(e) => {
+                  const n = Math.round(Number(e.target.value));
+                  if (!Number.isFinite(n)) return;
+                  updateForm(
+                    'courseLessonCount',
+                    Math.min(COURSE_LESSON_COUNT_RANGE.max, Math.max(COURSE_LESSON_COUNT_RANGE.min, n)),
+                  );
+                }}
+                className="w-14 rounded-md border border-border/60 bg-background px-1.5 py-0.5 text-[12px] text-foreground"
+              />
+            </label>
+            <label className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              {t('toolbar.courseMinutesPerLessonLabel')}
+              <input
+                type="number"
+                min={COURSE_MINUTES_PER_LESSON_RANGE.min}
+                max={COURSE_MINUTES_PER_LESSON_RANGE.max}
+                value={form.courseMinutesPerLesson}
+                onChange={(e) => {
+                  const n = Math.round(Number(e.target.value));
+                  if (!Number.isFinite(n)) return;
+                  updateForm(
+                    'courseMinutesPerLesson',
+                    Math.min(
+                      COURSE_MINUTES_PER_LESSON_RANGE.max,
+                      Math.max(COURSE_MINUTES_PER_LESSON_RANGE.min, n),
+                    ),
+                  );
+                }}
+                className="w-14 rounded-md border border-border/60 bg-background px-1.5 py-0.5 text-[12px] text-foreground"
+              />
+            </label>
+            <span className="text-[11px] text-muted-foreground/70">
+              {t('toolbar.courseEstimatedTotal', {
+                minutes: form.courseLessonCount * form.courseMinutesPerLesson,
+              })}
+            </span>
+          </motion.div>
+        )}
 
         {showVocationalTestUi && (
           <motion.div

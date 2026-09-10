@@ -12,6 +12,8 @@ export interface LearningSession {
   topic: string | null;
   status: SessionStatus;
   skill_track_id: string | null;
+  course_id: string | null;
+  lesson_number: number | null;
   started_at: string;
   paused_at: string | null;
   resumed_at: string | null;
@@ -39,6 +41,10 @@ export async function createLearningSession(input: {
    *  `/skill-tracks`), so the track's aggregate progress can later be
    *  rolled up from its tagged sessions. `null` for ad-hoc generation. */
   skillTrackId?: string | null;
+  /** Set when this session is one lesson of a structured course (see
+   *  lib/courses/lessons.ts) — both null for ad-hoc/skill-track generation. */
+  courseId?: string | null;
+  lessonNumber?: number | null;
 }): Promise<LearningSession | null> {
   const supabase = createClient();
   const {
@@ -54,6 +60,8 @@ export async function createLearningSession(input: {
       title: input.title,
       topic: input.topic ?? null,
       skill_track_id: input.skillTrackId ?? null,
+      course_id: input.courseId ?? null,
+      lesson_number: input.lessonNumber ?? null,
     })
     .select('*')
     .single();

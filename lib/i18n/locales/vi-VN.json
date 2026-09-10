@@ -44,7 +44,12 @@
     "ttsPreview": "Nghe thử",
     "ttsPreviewing": "Đang phát…",
     "interactiveModeHint": "Bật chế độ ưu tiên tương tác để có nhiều nội dung thực hành hơn",
-    "interactiveModeLabel": "Chế độ tương tác"
+    "interactiveModeLabel": "Chế độ tương tác",
+    "structuredCourseLabel": "Khóa học có cấu trúc",
+    "structuredCourseHint": "Chia nội dung này thành nhiều bài học thay vì một — bài học tiếp theo chỉ được tạo khi bạn hoàn thành bài hiện tại",
+    "courseLessonCountLabel": "Số bài học",
+    "courseMinutesPerLessonLabel": "Phút/bài",
+    "courseEstimatedTotal": "~{{minutes}} phút tổng cộng"
   },
   "export": {
     "pptx": "Xuất PPTX",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "Đã học xong bài",
+    "continueToLesson": "Tiếp tục đến Bài {{number}}",
+    "courseComplete": "Bạn đã hoàn thành \"{{title}}\"!",
+    "preparingNextLesson": "Đang chuẩn bị bài học tiếp theo… ({{seconds}}s)",
+    "pauseAutoContinue": "Tạm dừng",
+    "reviewLesson": "Xem lại bài học này",
     "trailLabels": {
       "slide": "trang",
       "quiz": "câu đố",

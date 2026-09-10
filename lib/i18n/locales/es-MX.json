@@ -44,7 +44,12 @@
     "ttsPreview": "Probar",
     "ttsPreviewing": "Reproduciendo...",
     "interactiveModeHint": "Activa el modo interactivo para obtener contenido más práctico",
-    "interactiveModeLabel": "Modo interactivo"
+    "interactiveModeLabel": "Modo interactivo",
+    "structuredCourseLabel": "Curso estructurado",
+    "structuredCourseHint": "Divide esto en varias lecciones en lugar de una — la siguiente lección se genera solo cuando termines la actual",
+    "courseLessonCountLabel": "Lecciones",
+    "courseMinutesPerLessonLabel": "Min/lección",
+    "courseEstimatedTotal": "~{{minutes}} min en total"
   },
   "export": {
     "pptx": "Exportar PPTX",
@@ -648,6 +653,11 @@
   },
   "classroomComplete": {
     "title": "Curso completado",
+    "continueToLesson": "Continuar a la lección {{number}}",
+    "courseComplete": "¡Terminaste \"{{title}}\"!",
+    "preparingNextLesson": "Preparando tu próxima lección… ({{seconds}}s)",
+    "pauseAutoContinue": "Pausar",
+    "reviewLesson": "Repasar esta lección de nuevo",
     "trailLabels": {
       "slide": "páginas",
       "quiz": "cuestionarios",

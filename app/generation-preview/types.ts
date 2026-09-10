@@ -43,6 +43,11 @@ export interface GenerationSessionState {
   // Set when generation was launched from a skill track's "Start a session"
   // action, so the resulting learning_sessions row can be tagged accordingly.
   skillTrackId?: string;
+  // Set when this generation is one lesson of a structured course (see
+  // lib/courses/lessons.ts), so the resulting learning_sessions row is
+  // tagged with course_id/lesson_number for lazy per-lesson continuation.
+  courseId?: string;
+  lessonNumber?: number;
 }
 
 export type GenerationStep = {

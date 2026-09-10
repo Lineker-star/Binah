@@ -1,8 +1,19 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { animate, motion, MotionConfig, useReducedMotion } from 'motion/react';
-import { FileText, HelpCircle, Gamepad2, Puzzle } from 'lucide-react';
+import {
+  ArrowRight,
+  FileText,
+  HelpCircle,
+  Gamepad2,
+  Loader2,
+  Pause,
+  Puzzle,
+  RotateCcw,
+  Trophy,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { useStageStore } from '@/lib/store';
@@ -14,6 +25,9 @@ import {
   summarizeScenes,
 } from '@/lib/classroom/complete-summary';
 import { loadQuizAttemptState } from '@/lib/quiz/runtime';
+import { getLearningSession } from '@/lib/classroom/learning-session-signal';
+import { fetchCourse, type Course } from '@/lib/supabase/courses';
+import { buildLessonSessionState } from '@/lib/courses/lessons';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ClassroomComplete');
@@ -308,12 +322,162 @@ function QuizRing({ pct, delay = 0 }: { pct: number; delay?: number }) {
   );
 }
 
+/** How long the auto-continue countdown runs before lesson N+1 starts
+ *  generating on its own — long enough to notice and react, short enough
+ *  that doing nothing still "smoothly proceeds" per the intended default. */
+const AUTO_CONTINUE_COUNTDOWN_SECONDS = 6;
+
+/**
+ * Structured-course continuation: only renders when this classroom's
+ * tracked session belongs to a course (see lib/courses/lessons.ts).
+ *
+ * Default behavior is fully automatic — a short visible countdown, then
+ * lesson N+1 starts generating on its own (informed by this lesson's scene
+ * titles) with no click required. The learner can interrupt it two ways:
+ * "Pause" stops the countdown and leaves a manual continue button instead;
+ * "Review this lesson again" rewinds to this lesson's first scene, which
+ * dismisses this completion screen entirely (the parent only renders it
+ * while pending-scene + course-complete holds), naturally cancelling the
+ * countdown along with it. Nothing is pre-generated ahead of the learner
+ * reaching it — the countdown reaching zero IS the trigger.
+ */
+function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scenes: Scene[] }) {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [loaded, setLoaded] = useState<{ course: Course; lessonNumber: number } | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(AUTO_CONTINUE_COUNTDOWN_SECONDS);
+  const [paused, setPaused] = useState(false);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    if (!stageId) return;
+    const session = getLearningSession(stageId);
+    if (!session?.course_id || !session.lesson_number) return;
+    const lessonNumber = session.lesson_number;
+    fetchCourse(session.course_id)
+      .then((course) => {
+        if (course) setLoaded({ course, lessonNumber });
+      })
+      .catch((err) => log.warn('Failed to load course for continuation (ignored):', err));
+  }, [stageId]);
+
+  const isLastLesson =
+    !!loaded &&
+    loaded.course.planned_lesson_count != null &&
+    loaded.lessonNumber >= loaded.course.planned_lesson_count;
+
+  const startNextLesson = useCallback(() => {
+    if (!loaded || startedRef.current) return;
+    startedRef.current = true;
+    const priorLessonTitles = scenes.map((s) => s.title).filter((title): title is string => !!title);
+    const sessionState = buildLessonSessionState(loaded.course, loaded.lessonNumber + 1, priorLessonTitles);
+    sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
+    router.push('/generation-preview');
+  }, [loaded, scenes, router]);
+
+  // The countdown itself — ticks down once a second, then triggers.
+  useEffect(() => {
+    if (!loaded || isLastLesson || paused || startedRef.current) return;
+    if (secondsLeft <= 0) {
+      startNextLesson();
+      return;
+    }
+    const timer = setTimeout(() => setSecondsLeft((s) => s - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [loaded, isLastLesson, paused, secondsLeft, startNextLesson]);
+
+  const handleReviewLesson = () => {
+    if (scenes.length > 0) {
+      useStageStore.getState().setCurrentSceneId(scenes[0].id);
+    }
+  };
+
+  if (!loaded) return null;
+  const { lessonNumber, course } = loaded;
+
+  if (isLastLesson) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.4 }}
+        className="inline-flex items-center gap-2 rounded-full bg-amber-100 dark:bg-amber-900/40 px-4 py-2 text-sm font-semibold text-amber-700 dark:text-amber-300"
+      >
+        <Trophy className="size-4" />
+        {t('classroomComplete.courseComplete', { title: course.title })}
+      </motion.div>
+    );
+  }
+
+  const nextLessonNumber = lessonNumber + 1;
+
+  if (paused) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center gap-2"
+      >
+        <button
+          type="button"
+          onClick={startNextLesson}
+          className="inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition-colors"
+        >
+          <ArrowRight className="size-4" />
+          {t('classroomComplete.continueToLesson', { number: nextLessonNumber })}
+        </button>
+        <button
+          type="button"
+          onClick={handleReviewLesson}
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <RotateCcw className="size-3" />
+          {t('classroomComplete.reviewLesson')}
+        </button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.4 }}
+      className="flex flex-col items-center gap-2.5"
+    >
+      <div className="inline-flex items-center gap-2 rounded-full bg-violet-100 dark:bg-violet-900/40 px-4 py-2 text-sm font-semibold text-violet-700 dark:text-violet-300">
+        <Loader2 className="size-4 animate-spin" />
+        {t('classroomComplete.preparingNextLesson', { seconds: secondsLeft })}
+      </div>
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => setPaused(true)}
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Pause className="size-3" />
+          {t('classroomComplete.pauseAutoContinue')}
+        </button>
+        <button
+          type="button"
+          onClick={handleReviewLesson}
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <RotateCcw className="size-3" />
+          {t('classroomComplete.reviewLesson')}
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 interface ClassroomCompletePageProps {
   readonly scenes: Scene[];
   readonly title: string;
+  readonly stageId?: string | null;
 }
 
-export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePageProps) {
+export function ClassroomCompletePage({ scenes, title, stageId }: ClassroomCompletePageProps) {
   const { t, locale } = useI18n();
   const prefersReducedMotion = useReducedMotion();
 
@@ -517,6 +681,8 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
               </div>
             </motion.div>
           )}
+
+          <CourseContinuation stageId={stageId} scenes={scenes} />
         </div>
       </section>
     </MotionConfig>
@@ -526,5 +692,5 @@ export function ClassroomCompletePage({ scenes, title }: ClassroomCompletePagePr
 export function ClassroomCompletePageConnected() {
   const stage = useStageStore((s) => s.stage);
   const scenes = useStageStore((s) => s.scenes);
-  return <ClassroomCompletePage scenes={scenes} title={stage?.name ?? ''} />;
+  return <ClassroomCompletePage scenes={scenes} title={stage?.name ?? ''} stageId={stage?.id} />;
 }
