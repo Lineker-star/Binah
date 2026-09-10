@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { Loader2, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useI18n } from '@/lib/hooks/use-i18n';
-import { fetchLinkedChildren, type LinkedChild } from '@/lib/supabase/parent';
+import { fetchLinkedChildren, type ChildCourseProgress, type LinkedChild } from '@/lib/supabase/parent';
 import type { SessionStatus } from '@/lib/supabase/learning-session';
+import type { Course } from '@/lib/supabase/courses';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ParentDashboard');
@@ -15,6 +16,23 @@ const STATUS_LABEL_KEY: Record<SessionStatus, string> = {
   paused: 'classroom.session.statusPaused',
   completed: 'classroom.session.statusCompleted',
   abandoned: 'classroom.session.statusAbandoned',
+};
+
+// Same status-badge treatment as the learner's own History view
+// (app/history/page.tsx) — reused verbatim for consistency, not reinvented.
+const COURSE_BADGE: Record<Course['status'], { key: string; className: string }> = {
+  planning: {
+    key: 'history.courseStatusPlanning',
+    className: 'bg-muted text-muted-foreground',
+  },
+  in_progress: {
+    key: 'history.courseStatusInProgress',
+    className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+  },
+  completed: {
+    key: 'history.courseStatusCompleted',
+    className: 'bg-violet-500/10 text-violet-600 dark:text-violet-400',
+  },
 };
 
 export default function ParentDashboardPage() {
@@ -105,6 +123,17 @@ function ChildCard({
         <StatBlock label={t('settings.progress.lastActive')} value={lastActiveDisplay} />
       </div>
 
+      <h3 className="mt-4 text-xs font-medium text-muted-foreground">{t('parent.coursesLabel')}</h3>
+      {child.courses.length === 0 ? (
+        <p className="mt-1 text-sm text-muted-foreground">{t('parent.noCourses')}</p>
+      ) : (
+        <div className="mt-2 flex flex-col gap-2">
+          {child.courses.map((entry) => (
+            <CourseProgressRow key={entry.course.id} entry={entry} t={t} />
+          ))}
+        </div>
+      )}
+
       <h3 className="mt-4 text-xs font-medium text-muted-foreground">{t('parent.sessionsLabel')}</h3>
       {child.recentSessions.length === 0 ? (
         <p className="mt-1 text-sm text-muted-foreground">{t('parent.noSessions')}</p>
@@ -123,6 +152,34 @@ function ChildCard({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function CourseProgressRow({
+  entry,
+  t,
+}: {
+  entry: ChildCourseProgress;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}) {
+  const badge = COURSE_BADGE[entry.course.status];
+  return (
+    <div className="rounded-xl border border-border/60 px-3 py-2 flex items-center justify-between gap-3">
+      <div className="min-w-0">
+        <div className="text-sm font-medium text-foreground truncate">{entry.course.title}</div>
+        <div className="text-xs text-muted-foreground mt-0.5">
+          {t('history.lessonsProgress', {
+            completed: entry.completedLessons,
+            total: entry.totalLessons,
+          })}
+        </div>
+      </div>
+      <span
+        className={`shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full ${badge.className}`}
+      >
+        {t(badge.key)}
+      </span>
     </div>
   );
 }

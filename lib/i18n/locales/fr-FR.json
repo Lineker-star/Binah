@@ -2078,7 +2078,9 @@
     "noChildren": "Aucun enfant lié pour le moment. Demandez à un administrateur de lier le compte de votre enfant au vôtre.",
     "unnamed": "(sans nom)",
     "sessionsLabel": "Sessions récentes",
-    "noSessions": "Aucune session pour le moment."
+    "noSessions": "Aucune session pour le moment.",
+    "coursesLabel": "Cours",
+    "noCourses": "Aucun cours pour le moment."
   },
   "skillTracks": {
     "navLabel": "Parcours de compétences",

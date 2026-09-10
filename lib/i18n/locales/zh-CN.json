@@ -2078,7 +2078,9 @@
     "noChildren": "尚未关联任何孩子。请联系管理员将您孩子的账户与您的账户关联。",
     "unnamed": "（未命名）",
     "sessionsLabel": "最近的学习记录",
-    "noSessions": "暂无学习记录。"
+    "noSessions": "暂无学习记录。",
+    "coursesLabel": "课程",
+    "noCourses": "暂无课程。"
   },
   "skillTracks": {
     "navLabel": "技能路径",

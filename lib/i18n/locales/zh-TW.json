@@ -2055,7 +2055,9 @@
     "noChildren": "尚未連結任何孩子。請管理員將您孩子的帳戶與您的帳戶連結。",
     "unnamed": "（未命名）",
     "sessionsLabel": "近期學習記錄",
-    "noSessions": "尚無學習記錄。"
+    "noSessions": "尚無學習記錄。",
+    "coursesLabel": "課程",
+    "noCourses": "尚無課程。"
   },
   "skillTracks": {
     "navLabel": "技能路徑",

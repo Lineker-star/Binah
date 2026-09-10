@@ -2078,7 +2078,9 @@
     "noChildren": "Nenhum filho vinculado ainda. Peça a um administrador para vincular a conta do seu filho à sua.",
     "unnamed": "(sem nome)",
     "sessionsLabel": "Sessões recentes",
-    "noSessions": "Nenhuma sessão ainda."
+    "noSessions": "Nenhuma sessão ainda.",
+    "coursesLabel": "Cursos",
+    "noCourses": "Ainda não há cursos."
   },
   "skillTracks": {
     "navLabel": "Trilhas de habilidades",

@@ -2078,7 +2078,9 @@
     "noChildren": "아직 연결된 자녀가 없습니다. 관리자에게 자녀 계정 연결을 요청하세요.",
     "unnamed": "(이름 없음)",
     "sessionsLabel": "최근 세션",
-    "noSessions": "아직 세션이 없습니다."
+    "noSessions": "아직 세션이 없습니다.",
+    "coursesLabel": "코스",
+    "noCourses": "아직 코스가 없습니다."
   },
   "skillTracks": {
     "navLabel": "스킬 트랙",

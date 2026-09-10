@@ -2078,7 +2078,9 @@
     "noChildren": "Noch keine verknüpften Kinder. Bitte einen Administrator, das Konto deines Kindes mit deinem zu verknüpfen.",
     "unnamed": "(kein Name)",
     "sessionsLabel": "Letzte Sitzungen",
-    "noSessions": "Noch keine Sitzungen."
+    "noSessions": "Noch keine Sitzungen.",
+    "coursesLabel": "Kurse",
+    "noCourses": "Noch keine Kurse."
   },
   "skillTracks": {
     "navLabel": "Skill-Tracks",
