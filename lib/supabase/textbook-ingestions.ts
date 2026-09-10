@@ -1,4 +1,5 @@
 import { createClient } from './client';
+import { getCurrentTTSConfig } from '@/lib/audio/tts-client-config';
 import type { TextbookChaptersData } from '@/lib/textbook/types';
 
 export type IngestionStatus = 'uploaded' | 'processing' | 'ready' | 'error';
@@ -70,7 +71,6 @@ export interface SignedAudioOverviewTurn {
 
 /** Best-effort: kick off Audio Overview generation using the learner's configured TTS voice. */
 export async function generateAudioOverview(ingestionId: string): Promise<void> {
-  const { getCurrentTTSConfig } = await import('@/lib/audio/tts-providers');
   const ttsConfig = await getCurrentTTSConfig();
   const res = await fetch(`/api/textbook/${ingestionId}/audio-overview`, {
     method: 'POST',
