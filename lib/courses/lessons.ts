@@ -52,7 +52,10 @@ export function buildLessonSessionState(
 ): GenerationSessionState {
   return {
     sessionId: nanoid(),
-    requirements: { requirement: buildLessonRequirement(course, lessonNumber, priorLessonTitles) },
+    requirements: {
+      requirement: buildLessonRequirement(course, lessonNumber, priorLessonTitles),
+      courseMode: true,
+    },
     pdfText: '',
     pdfImages: [],
     imageStorageIds: [],

@@ -29,6 +29,11 @@ export interface OutlinePromptContext {
   videoGenerationEnabled?: boolean;
   researchContext?: string;
   teacherContext?: string;
+  /** True for a structured-course lesson — strengthens the template's quiz
+   *  instruction so a capstone quiz scene is far more likely up front. Does
+   *  NOT itself guarantee one; the caller still applies a code-level
+   *  fallback after generation (see ensureTrailingQuizOutline). */
+  courseMode?: boolean;
 }
 
 export interface OutlineGenerationOptions extends Omit<
@@ -107,6 +112,7 @@ export function buildOutlinePrompt(
     mediaEnabled,
     researchContext: context.researchContext || 'None',
     teacherContext: context.teacherContext || '',
+    courseMode: context.courseMode ?? false,
   });
 
   if (!prompts) {
@@ -230,4 +236,48 @@ export function applyOutlineFallbacks(
     return { ...outline, type: 'slide' };
   }
   return outline;
+}
+
+/** Default number of key points to seed a synthetic capstone quiz from —
+ *  bounded so the quiz-content generation prompt this outline eventually
+ *  feeds stays reasonably sized even for a long, many-scene lesson. */
+const FALLBACK_QUIZ_KEY_POINT_LIMIT = 6;
+
+/**
+ * Guarantee a structured-course lesson ends with a quiz scene.
+ *
+ * The requirements-to-outlines template's `courseMode` rule ASKS the model
+ * for this, but the model's compliance is never guaranteed — this is the
+ * actual guarantee, applied after generation. A no-op when the outlines
+ * already end with a quiz scene; otherwise appends one synthetic capstone
+ * quiz, seeded with key points pooled from the other scenes so the later
+ * quiz-content generation step has real material to write questions from
+ * rather than nothing. Never reorders or removes anything the model
+ * produced — a quiz scene elsewhere in the lesson (mid-lesson formative
+ * check) is left exactly where the model put it.
+ */
+export function ensureTrailingQuizOutline(outlines: SceneOutline[]): SceneOutline[] {
+  if (outlines.length === 0) return outlines;
+  const last = outlines[outlines.length - 1];
+  if (last.type === 'quiz') return outlines;
+
+  const seedKeyPoints = outlines
+    .flatMap((outline) => outline.keyPoints ?? [])
+    .slice(0, FALLBACK_QUIZ_KEY_POINT_LIMIT);
+
+  const fallbackQuiz: SceneOutline = {
+    id: nanoid(),
+    type: 'quiz',
+    title: 'Knowledge Check',
+    description: "Check your understanding of what this lesson covered.",
+    keyPoints: seedKeyPoints,
+    order: outlines.length + 1,
+    quizConfig: {
+      questionCount: 3,
+      difficulty: 'medium',
+      questionTypes: ['single', 'multiple'],
+    },
+  };
+
+  return [...outlines, fallbackQuiz];
 }

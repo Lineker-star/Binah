@@ -383,4 +383,6 @@ Omit `scenarioRoleplay` and `scenarioBrief` entirely for ordinary build-an-artef
 8. Arrange scenes by inferred duration (typically 1-2 scenes per minute). Insert quizzes at appropriate points. Use interactive scenes sparingly (max 1-2 per course).
 9. **Language**: Infer from the user's requirement text and context. Output all scene content in the inferred language.
 10. Regardless of information completeness, always output conforming JSON - do not ask questions or request more information
-11. **No teacher identity on slides**: Scene titles and keyPoints must be neutral and topic-focused. Never include the teacher's name or role (e.g., avoid "Teacher Wang's Tips", "Teacher's Wishes"). Use generic labels like "Tips", "Summary", "Key Takeaways" instead.
+11. **No teacher identity on slides**: Scene titles and keyPoints must be neutral and topic-focused. Never include the teacher's name or role (e.g., avoid "Teacher Wang's Tips", "Teacher's Wishes"). Use generic labels like "Tips", "Summary", "Key Takeaways" instead.{{#if courseMode}}
+12. **Course mode**: This lesson is part of a multi-lesson structured course. The LAST scene in the `scenes` array must be a `quiz` scene that assesses this lesson's content — always include it as the final scene, even if you would not otherwise have added a quiz here.
+{{/if}}

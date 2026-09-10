@@ -105,6 +105,11 @@ export interface UserRequirements {
   webSearch?: boolean; // Enable web search for richer context
   interactiveMode?: boolean; // Enable Interactive Mode for interactive-first generation
   taskEngineMode?: boolean; // Enable vocational task-engine generation path
+  /** True when this generation is one lesson of a structured course (see
+   *  lib/courses/lessons.ts) — strengthens the outline prompt's quiz
+   *  instruction and enables a code-level fallback that guarantees a
+   *  trailing quiz scene. Never set for ad-hoc single-prompt generation. */
+  courseMode?: boolean;
 }
 
 // ==================== Stage 1 Output: Scene Outlines (Simplified) ====================

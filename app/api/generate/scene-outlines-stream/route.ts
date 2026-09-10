@@ -21,6 +21,7 @@ import {
   formatImagePlaceholder,
   buildVisionUserContent,
   buildOutlinePrompt,
+  ensureTrailingQuizOutline,
   uniquifyMediaElementIds,
   formatTeacherPersonaForPrompt,
 } from '@openmaic/generation';
@@ -418,6 +419,7 @@ export async function POST(req: NextRequest) {
     // The standard branch receives the N3 RESOLVED slice (unresolvable vision
     // images removed, mapping naming only resolved ids) so its placeholder
     // text never promises an image this route will not attach.
+    const courseMode = requirements.courseMode === true;
     let prompts: { system: string; user: string } | null = buildOutlinePrompt(requirements, {
       pdfText,
       pdfImages: resolvedPdfImages ?? pdfImages,
@@ -427,6 +429,7 @@ export async function POST(req: NextRequest) {
       videoGenerationEnabled,
       researchContext,
       teacherContext,
+      courseMode,
     });
 
     if (taskEngineMode || interactiveMode) {
@@ -659,6 +662,15 @@ export async function POST(req: NextRequest) {
           }
 
           if (parsedOutlines.length > 0) {
+            // Course-mode guarantee: the template's courseMode rule asks the
+            // model for a trailing quiz scene, but compliance isn't
+            // guaranteed — this is the actual guarantee. No-op if one's
+            // already there. Applied here (not per-outline during streaming)
+            // since it needs the complete, final outline list to know
+            // whether the last scene is really a quiz.
+            if (courseMode) {
+              parsedOutlines = ensureTrailingQuizOutline(parsedOutlines);
+            }
             // Replace sequential gen_img_N/gen_vid_N with globally unique IDs
             const uniquifiedOutlines = uniquifyMediaElementIds(parsedOutlines);
             // Send done event with all outlines

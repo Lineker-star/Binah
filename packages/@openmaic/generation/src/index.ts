@@ -76,6 +76,7 @@ export {
   DEFAULT_LANGUAGE_DIRECTIVE,
   applyOutlineFallbacks,
   buildOutlinePrompt,
+  ensureTrailingQuizOutline,
   generateSceneOutlinesFromRequirements,
   sanitizeProceduralSkillOutline,
 } from './outline-generator.js';

@@ -435,6 +435,7 @@ function HomePage() {
         webSearch: form.webSearch || undefined,
         interactiveMode: form.vocationalTestMode ? true : form.interactiveMode,
         ...(form.vocationalTestMode ? { taskEngineMode: true } : {}),
+        ...(course ? { courseMode: true } : {}),
       };
 
       let documentSources: SessionDocumentSource[] | undefined;
