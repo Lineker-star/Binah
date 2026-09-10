@@ -1,6 +1,22 @@
 import { createClient } from './client';
 import { getCurrentTTSConfig } from '@/lib/audio/tts-client-config';
+import { getCurrentModelConfig } from '@/lib/utils/model-config';
 import type { TextbookChaptersData } from '@/lib/textbook/types';
+
+/** Same x-model/x-api-key/x-base-url/x-provider-type headers every other
+ *  LLM-backed feature sends (course-final assessment, recommendations,
+ *  lecture-notes) — resolveModelFromRequest on the server only ever reads
+ *  these from headers, never from the request body. */
+function modelConfigHeaders(): Record<string, string> {
+  const modelConfig = getCurrentModelConfig();
+  const headers: Record<string, string> = {
+    'x-model': modelConfig.modelString,
+    'x-api-key': modelConfig.apiKey,
+  };
+  if (modelConfig.baseUrl) headers['x-base-url'] = modelConfig.baseUrl;
+  if (modelConfig.providerType) headers['x-provider-type'] = modelConfig.providerType;
+  return headers;
+}
 
 export type IngestionStatus = 'uploaded' | 'processing' | 'ready' | 'error';
 
@@ -22,7 +38,13 @@ export interface TextbookIngestion {
 export async function ingestTextbook(file: File): Promise<string> {
   const form = new FormData();
   form.append('pdf', file);
-  const res = await fetch('/api/textbook/ingest', { method: 'POST', body: form });
+  // No 'Content-Type' header here — the browser must set the multipart
+  // boundary itself for a FormData body.
+  const res = await fetch('/api/textbook/ingest', {
+    method: 'POST',
+    headers: modelConfigHeaders(),
+    body: form,
+  });
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`HTTP ${res.status}: ${text.slice(0, 400)}`);
@@ -74,7 +96,7 @@ export async function generateAudioOverview(ingestionId: string): Promise<void> 
   const ttsConfig = await getCurrentTTSConfig();
   const res = await fetch(`/api/textbook/${ingestionId}/audio-overview`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...modelConfigHeaders() },
     body: JSON.stringify({
       ttsProviderId: ttsConfig.providerId,
       ttsModelId: ttsConfig.modelId,
