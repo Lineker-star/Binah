@@ -54,7 +54,7 @@ import type {
 import { AgentRevealModal } from '@/components/agent/agent-reveal-modal';
 import { createLogger } from '@/lib/logger';
 import { createLearningSession } from '@/lib/supabase/learning-session';
-import { updateCourseStatus } from '@/lib/supabase/courses';
+import { fetchCourse, updateCourseStatus, type Course } from '@/lib/supabase/courses';
 import {
   type GenerationSessionState,
   ALL_STEPS,
@@ -100,6 +100,15 @@ type SceneGenerationFailure = {
   statusCode?: number;
 };
 
+/** "90" -> "1h 30m", "60" -> "1h", "45" -> "45m" — never assumes an even hour split. */
+function formatDuration(totalMinutes: number): string {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  if (hours === 0) return `${minutes}m`;
+  if (minutes === 0) return `${hours}h`;
+  return `${hours}h ${minutes}m`;
+}
+
 function GenerationPreviewContent() {
   const router = useRouter();
   const { t } = useI18n();
@@ -115,6 +124,7 @@ function GenerationPreviewContent() {
 
   const [session, setSession] = useState<GenerationSessionState | null>(null);
   const [sessionLoaded, setSessionLoaded] = useState(false);
+  const [course, setCourse] = useState<Course | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isComplete] = useState(false);
@@ -243,6 +253,22 @@ function GenerationPreviewContent() {
     }
     setSessionLoaded(true);
   }, []);
+
+  // Structured-course plain-language estimate (planned_lesson_count /
+  // planned_minutes_per_lesson / estimated_total_minutes) — ad-hoc and
+  // skill-track sessions have no courseId, so this simply never fires for them.
+  useEffect(() => {
+    if (!session?.courseId) return;
+    let cancelled = false;
+    fetchCourse(session.courseId)
+      .then((c) => {
+        if (!cancelled) setCourse(c);
+      })
+      .catch((err) => log.error('Failed to load course for estimate display (ignored):', err));
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.courseId]);
 
   // Abort all in-flight requests on unmount
   useEffect(() => {
@@ -1464,6 +1490,16 @@ function GenerationPreviewContent() {
                     </p>
                   </motion.div>
                 </AnimatePresence>
+
+                {course?.estimated_total_minutes != null && course.planned_lesson_count != null && (
+                  <p className="text-[13px] text-muted-foreground/80">
+                    {t('generation.courseEstimate', {
+                      duration: formatDuration(course.estimated_total_minutes),
+                      lessons: course.planned_lesson_count,
+                      minutesEach: course.planned_minutes_per_lesson ?? 0,
+                    })}
+                  </p>
+                )}
 
                 {/* Truncation warning indicator */}
                 <AnimatePresence>

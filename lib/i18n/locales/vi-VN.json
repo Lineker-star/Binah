@@ -1163,7 +1163,8 @@
     "webSearchFailed": "Tìm trên web không thành công",
     "outlinesReadyCount": "{{ready}} / {{total}} phần đã xong",
     "jumpToBlankTitle": "Nhảy tới phần còn thiếu tên",
-    "analyzingMediaMaterial": "Đang phân tích âm thanh/video"
+    "analyzingMediaMaterial": "Đang phân tích âm thanh/video",
+    "courseEstimate": "~{{duration}} tổng cộng · {{lessons}} bài học × {{minutesEach}} phút mỗi bài"
   },
   "settings": {
     "title": "Cài đặt",

@@ -1163,7 +1163,8 @@
     "webSearchFailed": "Falha na pesquisa na web",
     "outlinesReadyCount": "{{ready}} / {{total}} seções prontas",
     "jumpToBlankTitle": "Ir para uma seção que ainda precisa de título",
-    "analyzingMediaMaterial": "Analisando áudio/vídeo"
+    "analyzingMediaMaterial": "Analisando áudio/vídeo",
+    "courseEstimate": "~{{duration}} no total · {{lessons}} lições × {{minutesEach}} min cada"
   },
   "settings": {
     "title": "Configurações",

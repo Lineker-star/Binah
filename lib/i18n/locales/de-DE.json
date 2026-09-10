@@ -1163,7 +1163,8 @@
     "webSearchFailed": "Websuche fehlgeschlagen",
     "outlinesReadyCount": "Abschnitte bereit: {{ready}} / {{total}}",
     "jumpToBlankTitle": "Zu einem Abschnitt ohne Titel springen",
-    "analyzingMediaMaterial": "Audio- und Videomaterial wird analysiert"
+    "analyzingMediaMaterial": "Audio- und Videomaterial wird analysiert",
+    "courseEstimate": "~{{duration}} insgesamt · {{lessons}} Lektionen × {{minutesEach}} Min. je Lektion"
   },
   "settings": {
     "title": "Einstellungen",

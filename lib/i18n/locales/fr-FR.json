@@ -1163,7 +1163,8 @@
     "webSearchFailed": "Échec de la recherche web",
     "outlinesReadyCount": "{{ready}} / {{total}} sections prêtes",
     "jumpToBlankTitle": "Aller à une section dont le titre manque encore",
-    "analyzingMediaMaterial": "Analyse de l’audio et de la vidéo"
+    "analyzingMediaMaterial": "Analyse de l’audio et de la vidéo",
+    "courseEstimate": "~{{duration}} au total · {{lessons}} leçons × {{minutesEach}} min chacune"
   },
   "settings": {
     "title": "Paramètres",
