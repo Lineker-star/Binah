@@ -669,7 +669,9 @@
       "high": "Sobresaliente — lo dominaste.",
       "mid": "Buen trabajo — sigue así.",
       "low": "Buen comienzo — repasa e inténtalo de nuevo."
-    }
+    },
+    "recommendationTitle": "Enfoque recomendado",
+    "dismissRecommendation": "Descartar"
   },
   "whiteboard": {
     "title": "Pizarrón interactivo",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Racha actual",
       "streakDays": "{{count}} días",
       "lastActive": "Última actividad",
-      "never": "Nunca"
+      "never": "Nunca",
+      "recommendationsHeading": "Recomendaciones",
+      "dismissRecommendation": "Descartar"
     },
     "tokenPlan": {
       "nav": "Plan de tokens",

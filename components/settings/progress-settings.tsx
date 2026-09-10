@@ -2,9 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Loader2, TrendingUp, CheckCircle2, Flame, Clock, Award } from 'lucide-react';
+import { Loader2, TrendingUp, CheckCircle2, Flame, Clock, Award, X } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { fetchOwnMetrics, type LearningMetrics } from '@/lib/supabase/learning-metrics';
+import {
+  dismissRecommendation,
+  listActiveRecommendations,
+  type Recommendation,
+} from '@/lib/supabase/recommendations';
 import { createClient } from '@/lib/supabase/client';
 import { createLogger } from '@/lib/logger';
 
@@ -35,6 +40,7 @@ export function ProgressSettings() {
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState<LearningMetrics | null>(null);
   const [signedIn, setSignedIn] = useState(true);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -42,11 +48,12 @@ export function ProgressSettings() {
     // "signed in, no row yet" — check the session directly too so those two
     // states get different copy instead of both reading as one generic
     // empty state.
-    Promise.all([createClient().auth.getUser(), fetchOwnMetrics()])
-      .then(([{ data }, m]) => {
+    Promise.all([createClient().auth.getUser(), fetchOwnMetrics(), listActiveRecommendations()])
+      .then(([{ data }, m, recs]) => {
         if (cancelled) return;
         setSignedIn(!!data.user);
         setMetrics(m);
+        setRecommendations(recs);
       })
       .catch((err) => {
         log.error('Failed to load learning metrics:', err);
@@ -58,6 +65,13 @@ export function ProgressSettings() {
       cancelled = true;
     };
   }, []);
+
+  const handleDismissRecommendation = (id: string) => {
+    setRecommendations((prev) => prev.filter((r) => r.id !== id));
+    dismissRecommendation(id).catch((err) =>
+      log.warn('Failed to dismiss recommendation (ignored):', err),
+    );
+  };
 
   if (loading) {
     return (
@@ -129,6 +143,44 @@ export function ProgressSettings() {
           value={lastActiveDisplay}
         />
       </div>
+
+      {recommendations.length > 0 && (
+        <div className="flex flex-col gap-3">
+          <h3 className="text-[13px] font-medium text-muted-foreground">
+            {t('settings.progress.recommendationsHeading')}
+          </h3>
+          {recommendations.map((rec) => (
+            <div
+              key={rec.id}
+              className="rounded-2xl border border-border/60 p-4 flex flex-col gap-2"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-[13px] text-foreground/85">{rec.recommendation_text}</p>
+                <button
+                  type="button"
+                  onClick={() => handleDismissRecommendation(rec.id)}
+                  title={t('settings.progress.dismissRecommendation')}
+                  className="shrink-0 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </div>
+              {rec.suggested_focus_areas && rec.suggested_focus_areas.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {rec.suggested_focus_areas.map((area) => (
+                    <span
+                      key={area}
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

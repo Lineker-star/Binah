@@ -12,7 +12,9 @@ import {
   Pause,
   Puzzle,
   RotateCcw,
+  Sparkles as SparklesIcon,
   Trophy,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -28,6 +30,11 @@ import { loadQuizAttemptState } from '@/lib/quiz/runtime';
 import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import { fetchCourse, type Course } from '@/lib/supabase/courses';
 import { buildLessonSessionState } from '@/lib/courses/lessons';
+import {
+  dismissRecommendation,
+  listActiveRecommendations,
+  type Recommendation,
+} from '@/lib/supabase/recommendations';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ClassroomComplete');
@@ -341,6 +348,81 @@ const AUTO_CONTINUE_COUNTDOWN_SECONDS = 6;
  * countdown along with it. Nothing is pre-generated ahead of the learner
  * reaching it — the countdown reaching zero IS the trigger.
  */
+/**
+ * The course-final recommendation is generated fire-and-forget right after
+ * course completion (see app/api/assessments/course-final/route.ts) — this
+ * does one delayed fetch rather than polling, and simply shows nothing if
+ * it isn't ready yet by then. The reliable, always-current surface for
+ * recommendations (including per-lesson ones) is My Progress.
+ */
+function CourseRecommendationCard({ courseId }: { courseId: string }) {
+  const { t } = useI18n();
+  const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      listActiveRecommendations()
+        .then((recs) => {
+          if (cancelled) return;
+          setRecommendation(recs.find((r) => r.course_id === courseId) ?? null);
+        })
+        .catch((err) => log.warn('Failed to load course recommendation (ignored):', err));
+    }, 4000);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [courseId]);
+
+  if (!recommendation || dismissed) return null;
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    dismissRecommendation(recommendation.id).catch((err) =>
+      log.warn('Failed to dismiss recommendation (ignored):', err),
+    );
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.6 }}
+      className="w-full max-w-md rounded-2xl border border-violet-200/60 dark:border-violet-800/40 bg-violet-50/60 dark:bg-violet-950/20 p-4 flex flex-col gap-2"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-violet-700 dark:text-violet-300">
+          <SparklesIcon className="size-3.5" />
+          {t('classroomComplete.recommendationTitle')}
+        </div>
+        <button
+          type="button"
+          onClick={handleDismiss}
+          title={t('classroomComplete.dismissRecommendation')}
+          className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+        >
+          <X className="size-3.5" />
+        </button>
+      </div>
+      <p className="text-[13px] text-foreground/85">{recommendation.recommendation_text}</p>
+      {recommendation.suggested_focus_areas && recommendation.suggested_focus_areas.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {recommendation.suggested_focus_areas.map((area) => (
+            <span
+              key={area}
+              className="text-[11px] px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300"
+            >
+              {area}
+            </span>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
 function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scenes: Scene[] }) {
   const { t } = useI18n();
   const router = useRouter();
@@ -397,15 +479,18 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
 
   if (isLastLesson) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.4 }}
-        className="inline-flex items-center gap-2 rounded-full bg-amber-100 dark:bg-amber-900/40 px-4 py-2 text-sm font-semibold text-amber-700 dark:text-amber-300"
-      >
-        <Trophy className="size-4" />
-        {t('classroomComplete.courseComplete', { title: course.title })}
-      </motion.div>
+      <div className="flex flex-col items-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4 }}
+          className="inline-flex items-center gap-2 rounded-full bg-amber-100 dark:bg-amber-900/40 px-4 py-2 text-sm font-semibold text-amber-700 dark:text-amber-300"
+        >
+          <Trophy className="size-4" />
+          {t('classroomComplete.courseComplete', { title: course.title })}
+        </motion.div>
+        <CourseRecommendationCard courseId={course.id} />
+      </div>
     );
   }
 

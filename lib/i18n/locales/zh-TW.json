@@ -1865,7 +1865,9 @@
       "currentStreak": "連續學習",
       "streakDays": "{{count}} 天",
       "lastActive": "最近活動",
-      "never": "從未"
+      "never": "從未",
+      "recommendationsHeading": "建議",
+      "dismissRecommendation": "關閉"
     },
     "tokenPlan": {
       "nav": "Token Plan",
@@ -2095,7 +2097,9 @@
       "high": "太棒了，你答對了！",
       "mid": "做得好，繼續保持！",
       "low": "不錯的開始，回顧一下再試一次。"
-    }
+    },
+    "recommendationTitle": "建議重點",
+    "dismissRecommendation": "關閉"
   },
   "proMode": {
     "attach": "添加材料",

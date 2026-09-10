@@ -669,7 +669,9 @@
       "high": "ممتاز — أبدعت!",
       "mid": "عمل جيد — استمر.",
       "low": "بداية جيدة — راجع وحاول مجددًا."
-    }
+    },
+    "recommendationTitle": "التركيز الموصى به",
+    "dismissRecommendation": "إغلاق"
   },
   "whiteboard": {
     "title": "السبورة التفاعلية",
@@ -1885,7 +1887,9 @@
       "currentStreak": "التتابع الحالي",
       "streakDays": "{{count}} أيام",
       "lastActive": "آخر نشاط",
-      "never": "أبدًا"
+      "never": "أبدًا",
+      "recommendationsHeading": "التوصيات",
+      "dismissRecommendation": "إغلاق"
     },
     "tokenPlan": {
       "nav": "Token Plan",

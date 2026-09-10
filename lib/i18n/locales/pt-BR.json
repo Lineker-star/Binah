@@ -669,7 +669,9 @@
       "high": "Excelente — você arrasou!",
       "mid": "Bom trabalho — continue assim.",
       "low": "Um bom começo — revise e tente novamente."
-    }
+    },
+    "recommendationTitle": "Foco recomendado",
+    "dismissRecommendation": "Dispensar"
   },
   "whiteboard": {
     "title": "Quadro Interativo",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Sequência atual",
       "streakDays": "{{count}} dias",
       "lastActive": "Última atividade",
-      "never": "Nunca"
+      "never": "Nunca",
+      "recommendationsHeading": "Recomendações",
+      "dismissRecommendation": "Dispensar"
     },
     "tokenPlan": {
       "nav": "Token Plan",

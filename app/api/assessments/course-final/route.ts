@@ -17,6 +17,7 @@ import { parseJsonResponse } from '@openmaic/generation';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { resolveModelFromRequest } from '@/lib/server/resolve-model';
+import { generateRecommendationForAssessment } from '@/lib/server/recommendations';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
@@ -169,19 +170,23 @@ export async function POST(req: NextRequest) {
     }
 
     const admin = createServiceRoleClient();
-    const { error: insertError } = await admin.from('assessments').insert({
-      learner_id: user.id,
-      course_id: body.courseId,
-      session_id: null,
-      scene_id: null,
-      assessment_type: 'course_final',
-      score: totalScore,
-      max_score: totalMax,
-      feedback: parsed.feedback,
-      strengths: Array.isArray(parsed.strengths) ? parsed.strengths : null,
-      areas_to_improve: Array.isArray(parsed.areasToImprove) ? parsed.areasToImprove : null,
-      evaluated_by: 'ai_evaluator',
-    });
+    const { data: inserted, error: insertError } = await admin
+      .from('assessments')
+      .insert({
+        learner_id: user.id,
+        course_id: body.courseId,
+        session_id: null,
+        scene_id: null,
+        assessment_type: 'course_final',
+        score: totalScore,
+        max_score: totalMax,
+        feedback: parsed.feedback,
+        strengths: Array.isArray(parsed.strengths) ? parsed.strengths : null,
+        areas_to_improve: Array.isArray(parsed.areasToImprove) ? parsed.areasToImprove : null,
+        evaluated_by: 'ai_evaluator',
+      })
+      .select('id')
+      .single();
     if (insertError) throw insertError;
 
     const { error: recomputeError } = await admin.rpc('recompute_learning_metrics', {
@@ -190,6 +195,8 @@ export async function POST(req: NextRequest) {
     if (recomputeError) {
       log.error('Course-final assessment recorded but metrics recompute failed:', recomputeError);
     }
+
+    await generateRecommendationForAssessment(req, inserted.id as string, user.id);
 
     return apiSuccess({ created: true, score: totalScore, maxScore: totalMax });
   } catch (error) {

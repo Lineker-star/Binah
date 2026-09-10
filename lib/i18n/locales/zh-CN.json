@@ -669,7 +669,9 @@
       "high": "太棒了，完美发挥！",
       "mid": "表现不错，继续加油！",
       "low": "万事开头难，回去再练练吧。"
-    }
+    },
+    "recommendationTitle": "建议重点",
+    "dismissRecommendation": "关闭"
   },
   "whiteboard": {
     "title": "互动白板",
@@ -1885,7 +1887,9 @@
       "currentStreak": "连续学习",
       "streakDays": "{{count}} 天",
       "lastActive": "最近活动",
-      "never": "从未"
+      "never": "从未",
+      "recommendationsHeading": "建议",
+      "dismissRecommendation": "关闭"
     },
     "tokenPlan": {
       "nav": "Token Plan",

@@ -669,7 +669,9 @@
       "high": "훌륭합니다 — 완벽하게 해내셨어요!",
       "mid": "잘하셨어요 — 계속 이대로 나아가세요.",
       "low": "좋은 시작입니다 — 복습하고 다시 도전해 보세요."
-    }
+    },
+    "recommendationTitle": "추천 집중 영역",
+    "dismissRecommendation": "닫기"
   },
   "whiteboard": {
     "title": "인터랙티브 화이트보드",
@@ -1885,7 +1887,9 @@
       "currentStreak": "현재 연속 학습",
       "streakDays": "{{count}}일",
       "lastActive": "마지막 활동",
-      "never": "없음"
+      "never": "없음",
+      "recommendationsHeading": "추천",
+      "dismissRecommendation": "닫기"
     },
     "tokenPlan": {
       "nav": "Token Plan",

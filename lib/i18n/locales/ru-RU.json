@@ -669,7 +669,9 @@
       "high": "Отлично — вы справились!",
       "mid": "Хорошая работа — продолжайте.",
       "low": "Неплохое начало — повторите ещё раз."
-    }
+    },
+    "recommendationTitle": "Рекомендуемый фокус",
+    "dismissRecommendation": "Скрыть"
   },
   "whiteboard": {
     "title": "Интерактивная доска",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Текущая серия",
       "streakDays": "{{count}} дн.",
       "lastActive": "Последняя активность",
-      "never": "Никогда"
+      "never": "Никогда",
+      "recommendationsHeading": "Рекомендации",
+      "dismissRecommendation": "Скрыть"
     },
     "tokenPlan": {
       "nav": "Token Plan",

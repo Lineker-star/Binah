@@ -669,7 +669,9 @@
       "high": "Outstanding — you nailed it.",
       "mid": "Solid work — keep it up.",
       "low": "A good start — review and try again."
-    }
+    },
+    "recommendationTitle": "Recommended focus",
+    "dismissRecommendation": "Dismiss"
   },
   "whiteboard": {
     "title": "Interactive Whiteboard",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Current streak",
       "streakDays": "{{count}} days",
       "lastActive": "Last active",
-      "never": "Never"
+      "never": "Never",
+      "recommendationsHeading": "Recommendations",
+      "dismissRecommendation": "Dismiss"
     },
     "tokenPlan": {
       "nav": "Token Plan",

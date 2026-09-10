@@ -669,7 +669,9 @@
       "high": "Remarquable, vous maîtrisez le sujet.",
       "mid": "Du bon travail, continuez ainsi.",
       "low": "Un bon début. Revoyez le cours et retentez."
-    }
+    },
+    "recommendationTitle": "Axe recommandé",
+    "dismissRecommendation": "Ignorer"
   },
   "whiteboard": {
     "title": "Tableau blanc interactif",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Série en cours",
       "streakDays": "{{count}} jours",
       "lastActive": "Dernière activité",
-      "never": "Jamais"
+      "never": "Jamais",
+      "recommendationsHeading": "Recommandations",
+      "dismissRecommendation": "Ignorer"
     },
     "tokenPlan": {
       "nav": "Forfait de jetons",

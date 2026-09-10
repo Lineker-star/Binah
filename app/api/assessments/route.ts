@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
+import { generateRecommendationForAssessment } from '@/lib/server/recommendations';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
@@ -59,20 +60,39 @@ export async function POST(req: NextRequest) {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'evaluatedBy is required');
     }
 
+    // A quiz/pbl session tagged to a course doesn't carry course_id on the
+    // request body — look it up so the recommendation generated below (and
+    // any future course-scoped assessment query) can actually relate back
+    // to the course, the same way course-final's own insert already does.
+    let courseId: string | null = null;
+    if (body.sessionId) {
+      const { data: session } = await supabase
+        .from('learning_sessions')
+        .select('course_id')
+        .eq('id', body.sessionId)
+        .maybeSingle();
+      courseId = (session?.course_id as string | null) ?? null;
+    }
+
     const admin = createServiceRoleClient();
 
-    const { error: insertError } = await admin.from('assessments').insert({
-      learner_id: user.id,
-      session_id: body.sessionId ?? null,
-      scene_id: body.sceneId ?? null,
-      assessment_type: body.assessmentType,
-      score: body.score ?? null,
-      max_score: body.maxScore ?? null,
-      feedback: body.feedback ?? null,
-      strengths: body.strengths ?? null,
-      areas_to_improve: body.areasToImprove ?? null,
-      evaluated_by: body.evaluatedBy,
-    });
+    const { data: inserted, error: insertError } = await admin
+      .from('assessments')
+      .insert({
+        learner_id: user.id,
+        course_id: courseId,
+        session_id: body.sessionId ?? null,
+        scene_id: body.sceneId ?? null,
+        assessment_type: body.assessmentType,
+        score: body.score ?? null,
+        max_score: body.maxScore ?? null,
+        feedback: body.feedback ?? null,
+        strengths: body.strengths ?? null,
+        areas_to_improve: body.areasToImprove ?? null,
+        evaluated_by: body.evaluatedBy,
+      })
+      .select('id')
+      .single();
     if (insertError) throw insertError;
 
     const { error: recomputeError } = await admin.rpc('recompute_learning_metrics', {
@@ -83,6 +103,13 @@ export async function POST(req: NextRequest) {
       // recoverable (the next assessment recomputes it), so this doesn't
       // fail the request — but it must be visible in logs.
       log.error('Assessment recorded but metrics recompute failed:', recomputeError);
+    }
+
+    // PBL evaluation is out of scope for now — only quiz assessments feed
+    // the recommendation flow, per the same scope decision as the
+    // course-final synthesis (quiz-only; PBL may be added later).
+    if (body.assessmentType === 'quiz') {
+      await generateRecommendationForAssessment(req, inserted.id as string, user.id);
     }
 
     return apiSuccess({ recorded: true });

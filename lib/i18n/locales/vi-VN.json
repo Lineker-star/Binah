@@ -669,7 +669,9 @@
       "high": "Xuất sắc — bạn làm rất tốt.",
       "mid": "Khá tốt — cứ giữ đà này.",
       "low": "Khởi đầu ổn — hãy xem lại rồi thử lần nữa."
-    }
+    },
+    "recommendationTitle": "Trọng tâm được đề xuất",
+    "dismissRecommendation": "Bỏ qua"
   },
   "whiteboard": {
     "title": "Bảng tương tác",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Chuỗi ngày học liên tiếp",
       "streakDays": "{{count}} ngày",
       "lastActive": "Hoạt động gần nhất",
-      "never": "Chưa từng"
+      "never": "Chưa từng",
+      "recommendationsHeading": "Đề xuất",
+      "dismissRecommendation": "Bỏ qua"
     },
     "tokenPlan": {
       "nav": "Gói token",

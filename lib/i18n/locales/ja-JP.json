@@ -669,7 +669,9 @@
       "high": "素晴らしい！完璧です。",
       "mid": "いい感じ、その調子。",
       "low": "始まりはこれから。復習しましょう。"
-    }
+    },
+    "recommendationTitle": "おすすめの重点分野",
+    "dismissRecommendation": "閉じる"
   },
   "whiteboard": {
     "title": "インタラクティブホワイトボード",
@@ -1885,7 +1887,9 @@
       "currentStreak": "連続学習日数",
       "streakDays": "{{count}} 日",
       "lastActive": "最終アクティブ",
-      "never": "なし"
+      "never": "なし",
+      "recommendationsHeading": "おすすめ",
+      "dismissRecommendation": "閉じる"
     },
     "tokenPlan": {
       "nav": "Token Plan",

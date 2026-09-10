@@ -669,7 +669,9 @@
       "high": "Hervorragend — das sitzt.",
       "mid": "Starke Leistung — weiter so.",
       "low": "Ein guter Anfang — wiederhole den Stoff und versuche es erneut."
-    }
+    },
+    "recommendationTitle": "Empfohlener Fokus",
+    "dismissRecommendation": "Verwerfen"
   },
   "whiteboard": {
     "title": "Interaktives Whiteboard",
@@ -1885,7 +1887,9 @@
       "currentStreak": "Aktuelle Serie",
       "streakDays": "{{count}} Tage",
       "lastActive": "Zuletzt aktiv",
-      "never": "Nie"
+      "never": "Nie",
+      "recommendationsHeading": "Empfehlungen",
+      "dismissRecommendation": "Verwerfen"
     },
     "tokenPlan": {
       "nav": "Token-Tarif",
