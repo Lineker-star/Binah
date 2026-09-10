@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { animate, motion, MotionConfig, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
+  Award,
   FileText,
   HelpCircle,
   Gamepad2,
@@ -31,6 +32,7 @@ import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import { fetchCourse, type Course } from '@/lib/supabase/courses';
 import { buildChapterLessonSessionState, buildLessonSessionState } from '@/lib/courses/lessons';
 import { fetchIngestion } from '@/lib/supabase/textbook-ingestions';
+import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
 import {
   dismissRecommendation,
   listActiveRecommendations,
@@ -424,6 +426,41 @@ function CourseRecommendationCard({ courseId }: { courseId: string }) {
   );
 }
 
+/**
+ * Certificate generation is fire-and-forget at course completion (see
+ * PlaybackChromeRoot.tsx), so by the time this renders it's usually
+ * already generated — but the download route is idempotent, so clicking
+ * before that finishes just generates it on demand instead of erroring.
+ */
+function CertificateDownloadButton({ courseId }: { courseId: string }) {
+  const { t } = useI18n();
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const url = await getCertificateDownloadUrl(courseId);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      log.error('Failed to download certificate:', err);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleDownload}
+      disabled={downloading}
+      className="inline-flex items-center gap-1.5 rounded-full border border-border/60 px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-muted/60 transition-colors disabled:opacity-50 cursor-pointer"
+    >
+      {downloading ? <Loader2 className="size-4 animate-spin" /> : <Award className="size-4" />}
+      {t('classroomComplete.downloadCertificate')}
+    </button>
+  );
+}
+
 function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scenes: Scene[] }) {
   const { t } = useI18n();
   const router = useRouter();
@@ -531,6 +568,7 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
           <Trophy className="size-4" />
           {t('classroomComplete.courseComplete', { title: course.title })}
         </motion.div>
+        <CertificateDownloadButton courseId={course.id} />
         <CourseRecommendationCard courseId={course.id} />
       </div>
     );

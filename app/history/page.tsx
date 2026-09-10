@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Download, ExternalLink, Loader2, Play, Trash2 } from 'lucide-react';
+import { ArrowLeft, Award, Download, ExternalLink, Loader2, Play, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -16,6 +16,7 @@ import {
   type SessionStatus,
 } from '@/lib/supabase/learning-session';
 import { listLearnerCourses, removeCourseFromHistory, type Course } from '@/lib/supabase/courses';
+import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
 import {
   getArtifactDownloadUrl,
   listGeneratedArtifacts,
@@ -62,6 +63,7 @@ const ARTIFACT_TYPE_KEYS: Record<string, string> = {
   classroom_zip: 'history.artifactType.classroom_zip',
   mp4: 'history.artifactType.mp4',
   lecture_notes_pdf: 'history.artifactType.lecture_notes_pdf',
+  certificate: 'history.artifactType.certificate',
 };
 
 const COURSE_BADGE: Record<Course['status'], { key: string; className: string }> = {
@@ -109,6 +111,7 @@ export default function HistoryPage() {
   const [sessions, setSessions] = useState<LearningSession[]>([]);
   const [artifacts, setArtifacts] = useState<GeneratedArtifact[]>([]);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [downloadingCertificateId, setDownloadingCertificateId] = useState<string | null>(null);
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [removeCourseTarget, setRemoveCourseTarget] = useState<Course | null>(null);
@@ -135,6 +138,19 @@ export default function HistoryPage() {
       toast.error(t('history.downloadFailed'));
     } finally {
       setDownloadingId(null);
+    }
+  };
+
+  const handleDownloadCertificate = async (course: Course) => {
+    setDownloadingCertificateId(course.id);
+    try {
+      const url = await getCertificateDownloadUrl(course.id);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      log.error('Failed to download certificate:', err);
+      toast.error(t('history.downloadFailed'));
+    } finally {
+      setDownloadingCertificateId(null);
     }
   };
 
@@ -307,19 +323,36 @@ export default function HistoryPage() {
                             </span>
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => setRemoveCourseTarget(course)}
-                          disabled={busyId === course.id}
-                          title={t('history.removeFromHistory')}
-                          className="shrink-0 inline-flex items-center justify-center size-8 rounded-lg border border-border/60 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 cursor-pointer"
-                        >
-                          {busyId === course.id ? (
-                            <Loader2 className="size-3.5 animate-spin" />
-                          ) : (
-                            <Trash2 className="size-3.5" />
+                        <div className="shrink-0 flex items-center gap-1.5">
+                          {course.status === 'completed' && (
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadCertificate(course)}
+                              disabled={downloadingCertificateId === course.id}
+                              title={t('history.downloadCertificate')}
+                              className="inline-flex items-center justify-center size-8 rounded-lg border border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors disabled:opacity-50 cursor-pointer"
+                            >
+                              {downloadingCertificateId === course.id ? (
+                                <Loader2 className="size-3.5 animate-spin" />
+                              ) : (
+                                <Award className="size-3.5" />
+                              )}
+                            </button>
                           )}
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() => setRemoveCourseTarget(course)}
+                            disabled={busyId === course.id}
+                            title={t('history.removeFromHistory')}
+                            className="inline-flex items-center justify-center size-8 rounded-lg border border-border/60 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 cursor-pointer"
+                          >
+                            {busyId === course.id ? (
+                              <Loader2 className="size-3.5 animate-spin" />
+                            ) : (
+                              <Trash2 className="size-3.5" />
+                            )}
+                          </button>
+                        </div>
                       </div>
 
                       {lessons.length > 0 && (

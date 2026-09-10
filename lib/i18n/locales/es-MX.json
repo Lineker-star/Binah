@@ -680,7 +680,8 @@
       "low": "Buen comienzo — repasa e inténtalo de nuevo."
     },
     "recommendationTitle": "Enfoque recomendado",
-    "dismissRecommendation": "Descartar"
+    "dismissRecommendation": "Descartar",
+    "downloadCertificate": "Descargar certificado"
   },
   "whiteboard": {
     "title": "Pizarrón interactivo",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Paquete de recursos",
       "classroom_zip": "ZIP del curso",
       "mp4": "Video (MP4)",
-      "lecture_notes_pdf": "Apuntes de clase (PDF)"
-    }
+      "lecture_notes_pdf": "Apuntes de clase (PDF)",
+      "certificate": "Certificado"
+    },
+    "downloadCertificate": "Descargar certificado"
   },
   "textbook": {
     "noChaptersSelected": "Selecciona al menos un capítulo para crear un curso.",

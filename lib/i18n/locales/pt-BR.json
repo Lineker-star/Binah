@@ -680,7 +680,8 @@
       "low": "Um bom começo — revise e tente novamente."
     },
     "recommendationTitle": "Foco recomendado",
-    "dismissRecommendation": "Dispensar"
+    "dismissRecommendation": "Dispensar",
+    "downloadCertificate": "Baixar certificado"
   },
   "whiteboard": {
     "title": "Quadro Interativo",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Pacote de recursos",
       "classroom_zip": "ZIP da sala de aula",
       "mp4": "Vídeo (MP4)",
-      "lecture_notes_pdf": "Notas de aula (PDF)"
-    }
+      "lecture_notes_pdf": "Notas de aula (PDF)",
+      "certificate": "Certificado"
+    },
+    "downloadCertificate": "Baixar certificado"
   },
   "textbook": {
     "noChaptersSelected": "Selecione pelo menos um capítulo para criar um curso.",

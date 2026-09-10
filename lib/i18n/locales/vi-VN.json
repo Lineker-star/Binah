@@ -680,7 +680,8 @@
       "low": "Khởi đầu ổn — hãy xem lại rồi thử lần nữa."
     },
     "recommendationTitle": "Trọng tâm được đề xuất",
-    "dismissRecommendation": "Bỏ qua"
+    "dismissRecommendation": "Bỏ qua",
+    "downloadCertificate": "Tải chứng chỉ"
   },
   "whiteboard": {
     "title": "Bảng tương tác",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Gói tài nguyên",
       "classroom_zip": "ZIP lớp học",
       "mp4": "Video (MP4)",
-      "lecture_notes_pdf": "Ghi chú bài giảng (PDF)"
-    }
+      "lecture_notes_pdf": "Ghi chú bài giảng (PDF)",
+      "certificate": "Chứng chỉ"
+    },
+    "downloadCertificate": "Tải chứng chỉ"
   },
   "textbook": {
     "noChaptersSelected": "Chọn ít nhất một chương để tạo khóa học.",

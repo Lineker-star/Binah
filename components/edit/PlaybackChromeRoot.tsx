@@ -16,6 +16,7 @@ import { getLearningSession, noteLearningSession } from '@/lib/classroom/learnin
 import { endSession } from '@/lib/supabase/learning-session';
 import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
 import { generateCourseFinalAssessment } from '@/lib/courses/final-assessment';
+import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
 import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -1215,6 +1216,13 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             // itself on this; a failure here just means no course-final row.
             void generateCourseFinalAssessment(updated.course_id).catch((err) =>
               log.warn('Failed to generate course-final assessment (ignored):', err),
+            );
+            // Pre-warm the certificate so it's ready by the time the learner
+            // reaches a "Download Certificate" action — idempotent, so this
+            // never creates a duplicate if the learner also clicks download
+            // before this finishes.
+            void getCertificateDownloadUrl(updated.course_id).catch((err) =>
+              log.warn('Failed to pre-generate certificate (ignored):', err),
             );
           }
         })

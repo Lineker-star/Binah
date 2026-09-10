@@ -680,7 +680,8 @@
       "low": "بداية جيدة — راجع وحاول مجددًا."
     },
     "recommendationTitle": "التركيز الموصى به",
-    "dismissRecommendation": "إغلاق"
+    "dismissRecommendation": "إغلاق",
+    "downloadCertificate": "تنزيل الشهادة"
   },
   "whiteboard": {
     "title": "السبورة التفاعلية",
@@ -2172,8 +2173,10 @@
       "resource_pack": "حزمة الموارد",
       "classroom_zip": "ملف ZIP للفصل",
       "mp4": "فيديو (MP4)",
-      "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)"
-    }
+      "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)",
+      "certificate": "شهادة"
+    },
+    "downloadCertificate": "تنزيل الشهادة"
   },
   "textbook": {
     "noChaptersSelected": "اختر فصلاً واحداً على الأقل لإنشاء الدورة.",

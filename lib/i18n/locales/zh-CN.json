@@ -680,7 +680,8 @@
       "low": "万事开头难，回去再练练吧。"
     },
     "recommendationTitle": "建议重点",
-    "dismissRecommendation": "关闭"
+    "dismissRecommendation": "关闭",
+    "downloadCertificate": "下载证书"
   },
   "whiteboard": {
     "title": "互动白板",
@@ -2172,8 +2173,10 @@
       "resource_pack": "资源包",
       "classroom_zip": "课堂 ZIP",
       "mp4": "视频 (MP4)",
-      "lecture_notes_pdf": "讲义笔记 (PDF)"
-    }
+      "lecture_notes_pdf": "讲义笔记 (PDF)",
+      "certificate": "证书"
+    },
+    "downloadCertificate": "下载证书"
   },
   "textbook": {
     "noChaptersSelected": "请至少选择一个章节以创建课程。",

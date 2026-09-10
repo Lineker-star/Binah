@@ -2108,7 +2108,8 @@
       "low": "不錯的開始，回顧一下再試一次。"
     },
     "recommendationTitle": "建議重點",
-    "dismissRecommendation": "關閉"
+    "dismissRecommendation": "關閉",
+    "downloadCertificate": "下載證書"
   },
   "proMode": {
     "attach": "添加材料",
@@ -2172,8 +2173,10 @@
       "resource_pack": "資源包",
       "classroom_zip": "課堂 ZIP",
       "mp4": "影片 (MP4)",
-      "lecture_notes_pdf": "講義筆記 (PDF)"
-    }
+      "lecture_notes_pdf": "講義筆記 (PDF)",
+      "certificate": "證書"
+    },
+    "downloadCertificate": "下載證書"
   },
   "textbook": {
     "noChaptersSelected": "請至少選擇一個章節以建立課程。",

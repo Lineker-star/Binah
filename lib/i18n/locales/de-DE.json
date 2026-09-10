@@ -680,7 +680,8 @@
       "low": "Ein guter Anfang — wiederhole den Stoff und versuche es erneut."
     },
     "recommendationTitle": "Empfohlener Fokus",
-    "dismissRecommendation": "Verwerfen"
+    "dismissRecommendation": "Verwerfen",
+    "downloadCertificate": "Zertifikat herunterladen"
   },
   "whiteboard": {
     "title": "Interaktives Whiteboard",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Ressourcenpaket",
       "classroom_zip": "Klassenzimmer-ZIP",
       "mp4": "Video (MP4)",
-      "lecture_notes_pdf": "Vorlesungsnotizen (PDF)"
-    }
+      "lecture_notes_pdf": "Vorlesungsnotizen (PDF)",
+      "certificate": "Zertifikat"
+    },
+    "downloadCertificate": "Zertifikat herunterladen"
   },
   "textbook": {
     "noChaptersSelected": "Wähle mindestens ein Kapitel aus, um einen Kurs zu erstellen.",

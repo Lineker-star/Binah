@@ -680,7 +680,8 @@
       "low": "좋은 시작입니다 — 복습하고 다시 도전해 보세요."
     },
     "recommendationTitle": "추천 집중 영역",
-    "dismissRecommendation": "닫기"
+    "dismissRecommendation": "닫기",
+    "downloadCertificate": "수료증 다운로드"
   },
   "whiteboard": {
     "title": "인터랙티브 화이트보드",
@@ -2172,8 +2173,10 @@
       "resource_pack": "리소스 팩",
       "classroom_zip": "클래스룸 ZIP",
       "mp4": "동영상 (MP4)",
-      "lecture_notes_pdf": "강의 노트 (PDF)"
-    }
+      "lecture_notes_pdf": "강의 노트 (PDF)",
+      "certificate": "수료증"
+    },
+    "downloadCertificate": "수료증 다운로드"
   },
   "textbook": {
     "noChaptersSelected": "코스를 만들려면 최소 한 개의 챕터를 선택하세요.",

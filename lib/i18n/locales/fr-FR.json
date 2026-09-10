@@ -680,7 +680,8 @@
       "low": "Un bon début. Revoyez le cours et retentez."
     },
     "recommendationTitle": "Axe recommandé",
-    "dismissRecommendation": "Ignorer"
+    "dismissRecommendation": "Ignorer",
+    "downloadCertificate": "Télécharger le certificat"
   },
   "whiteboard": {
     "title": "Tableau blanc interactif",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Pack de ressources",
       "classroom_zip": "ZIP du cours",
       "mp4": "Vidéo (MP4)",
-      "lecture_notes_pdf": "Notes de cours (PDF)"
-    }
+      "lecture_notes_pdf": "Notes de cours (PDF)",
+      "certificate": "Certificat"
+    },
+    "downloadCertificate": "Télécharger le certificat"
   },
   "textbook": {
     "noChaptersSelected": "Sélectionnez au moins un chapitre pour créer un cours.",

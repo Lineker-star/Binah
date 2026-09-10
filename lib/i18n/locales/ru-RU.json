@@ -680,7 +680,8 @@
       "low": "Неплохое начало — повторите ещё раз."
     },
     "recommendationTitle": "Рекомендуемый фокус",
-    "dismissRecommendation": "Скрыть"
+    "dismissRecommendation": "Скрыть",
+    "downloadCertificate": "Скачать сертификат"
   },
   "whiteboard": {
     "title": "Интерактивная доска",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Пакет ресурсов",
       "classroom_zip": "ZIP-архив класса",
       "mp4": "Видео (MP4)",
-      "lecture_notes_pdf": "Конспект лекции (PDF)"
-    }
+      "lecture_notes_pdf": "Конспект лекции (PDF)",
+      "certificate": "Сертификат"
+    },
+    "downloadCertificate": "Скачать сертификат"
   },
   "textbook": {
     "noChaptersSelected": "Выберите хотя бы одну главу, чтобы создать курс.",

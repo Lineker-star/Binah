@@ -680,7 +680,8 @@
       "low": "A good start — review and try again."
     },
     "recommendationTitle": "Recommended focus",
-    "dismissRecommendation": "Dismiss"
+    "dismissRecommendation": "Dismiss",
+    "downloadCertificate": "Download Certificate"
   },
   "whiteboard": {
     "title": "Interactive Whiteboard",
@@ -2172,8 +2173,10 @@
       "resource_pack": "Resource Pack",
       "classroom_zip": "Classroom ZIP",
       "mp4": "Video (MP4)",
-      "lecture_notes_pdf": "Lecture Notes (PDF)"
-    }
+      "lecture_notes_pdf": "Lecture Notes (PDF)",
+      "certificate": "Certificate"
+    },
+    "downloadCertificate": "Download certificate"
   },
   "textbook": {
     "noChaptersSelected": "Select at least one chapter to build a course.",

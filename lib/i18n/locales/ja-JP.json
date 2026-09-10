@@ -680,7 +680,8 @@
       "low": "始まりはこれから。復習しましょう。"
     },
     "recommendationTitle": "おすすめの重点分野",
-    "dismissRecommendation": "閉じる"
+    "dismissRecommendation": "閉じる",
+    "downloadCertificate": "修了証をダウンロード"
   },
   "whiteboard": {
     "title": "インタラクティブホワイトボード",
@@ -2172,8 +2173,10 @@
       "resource_pack": "リソースパック",
       "classroom_zip": "クラスルームZIP",
       "mp4": "動画 (MP4)",
-      "lecture_notes_pdf": "講義ノート (PDF)"
-    }
+      "lecture_notes_pdf": "講義ノート (PDF)",
+      "certificate": "修了証"
+    },
+    "downloadCertificate": "修了証をダウンロード"
   },
   "textbook": {
     "noChaptersSelected": "コースを作成するには、少なくとも1つの章を選択してください。",
