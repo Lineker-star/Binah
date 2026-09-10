@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Disables the dev-mode indicator overlay (the "N" badge / issues counter
+  // bottom-left). No effect on production builds — it's already absent there.
+  devIndicators: false,
   output: process.env.VERCEL ? undefined : 'standalone',
   outputFileTracingIncludes: {
     '/*': [
