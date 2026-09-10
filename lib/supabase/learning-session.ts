@@ -23,6 +23,7 @@ export interface LearningSession {
   total_active_seconds: number;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
 }
 
 /**
@@ -69,7 +70,7 @@ export async function createLearningSession(input: {
   return data as LearningSession;
 }
 
-/** List the signed-in learner's own sessions, most recently updated first. */
+/** List the signed-in learner's own, non-removed sessions, most recently updated first. */
 export async function listLearnerSessions(): Promise<LearningSession[]> {
   const supabase = createClient();
   const {
@@ -81,9 +82,20 @@ export async function listLearnerSessions(): Promise<LearningSession[]> {
     .from('learning_sessions')
     .select('*')
     .eq('learner_id', user.id)
+    .is('deleted_at', null)
     .order('updated_at', { ascending: false });
   if (error) throw error;
   return (data ?? []) as LearningSession[];
+}
+
+/** Soft-delete one session from the learner's own history view. */
+export async function removeSessionFromHistory(sessionId: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('learning_sessions')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', sessionId);
+  if (error) throw error;
 }
 
 /**

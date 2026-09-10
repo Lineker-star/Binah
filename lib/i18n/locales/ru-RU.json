@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "История",
+    "pageTitle": "История обучения",
+    "subtitle": "Все ваши курсы и сессии, прошлые и текущие.",
+    "backToHome": "Вернуться на главную",
+    "filterAll": "Все",
+    "filterInProgress": "В процессе",
+    "filterFinished": "Завершённые",
+    "coursesHeading": "Курсы",
+    "standaloneHeading": "Сессии",
+    "lessonsProgress": "Завершено {{completed}} из {{total}} уроков",
+    "lessonLabel": "Урок {{number}}",
+    "removeFromHistory": "Удалить из истории",
+    "removeCourseConfirmTitle": "Удалить этот курс из истории?",
+    "removeCourseConfirmDesc": "Курс и его уроки будут скрыты из истории. Они не будут удалены, и это действие нельзя отменить отсюда.",
+    "removeSessionConfirmTitle": "Удалить эту сессию из истории?",
+    "removeSessionConfirmDesc": "Сессия будет скрыта из истории. Она не будет удалена, и это действие нельзя отменить отсюда.",
+    "removed": "Удалено из истории",
+    "removeFailed": "Не удалось удалить из истории",
+    "emptyAll": "Здесь пока ничего нет — начните курс или сессию на главной странице.",
+    "emptyFiltered": "Ничего не соответствует этому фильтру.",
+    "courseStatusPlanning": "Планирование",
+    "courseStatusInProgress": "В процессе",
+    "courseStatusCompleted": "Завершён"
   }
 }

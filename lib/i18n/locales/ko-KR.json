@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "기록",
+    "pageTitle": "학습 기록",
+    "subtitle": "과거와 현재의 모든 코스와 세션입니다.",
+    "backToHome": "홈으로 돌아가기",
+    "filterAll": "전체",
+    "filterInProgress": "진행 중",
+    "filterFinished": "완료됨",
+    "coursesHeading": "코스",
+    "standaloneHeading": "세션",
+    "lessonsProgress": "{{total}}개 레슨 중 {{completed}}개 완료",
+    "lessonLabel": "레슨 {{number}}",
+    "removeFromHistory": "기록에서 제거",
+    "removeCourseConfirmTitle": "이 코스를 기록에서 제거하시겠습니까?",
+    "removeCourseConfirmDesc": "코스와 해당 레슨이 기록에서 숨겨집니다. 삭제되지는 않으며, 이 작업은 여기서 되돌릴 수 없습니다.",
+    "removeSessionConfirmTitle": "이 세션을 기록에서 제거하시겠습니까?",
+    "removeSessionConfirmDesc": "세션이 기록에서 숨겨집니다. 삭제되지는 않으며, 이 작업은 여기서 되돌릴 수 없습니다.",
+    "removed": "기록에서 제거되었습니다",
+    "removeFailed": "기록에서 제거하지 못했습니다",
+    "emptyAll": "아직 아무것도 없습니다 — 홈페이지에서 코스나 세션을 시작하세요.",
+    "emptyFiltered": "이 필터와 일치하는 항목이 없습니다.",
+    "courseStatusPlanning": "계획 중",
+    "courseStatusInProgress": "진행 중",
+    "courseStatusCompleted": "완료됨"
   }
 }

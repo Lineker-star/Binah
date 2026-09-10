@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "Verlauf",
+    "pageTitle": "Lernverlauf",
+    "subtitle": "Alle deine Kurse und Sitzungen, vergangen und aktuell.",
+    "backToHome": "Zurück zur Startseite",
+    "filterAll": "Alle",
+    "filterInProgress": "In Bearbeitung",
+    "filterFinished": "Abgeschlossen",
+    "coursesHeading": "Kurse",
+    "standaloneHeading": "Sitzungen",
+    "lessonsProgress": "{{completed}} von {{total}} Lektionen abgeschlossen",
+    "lessonLabel": "Lektion {{number}}",
+    "removeFromHistory": "Aus dem Verlauf entfernen",
+    "removeCourseConfirmTitle": "Diesen Kurs aus deinem Verlauf entfernen?",
+    "removeCourseConfirmDesc": "Dadurch werden der Kurs und seine Lektionen aus deinem Verlauf ausgeblendet. Er wird nicht gelöscht, und diese Aktion kann von hier aus nicht rückgängig gemacht werden.",
+    "removeSessionConfirmTitle": "Diese Sitzung aus deinem Verlauf entfernen?",
+    "removeSessionConfirmDesc": "Dadurch wird die Sitzung aus deinem Verlauf ausgeblendet. Sie wird nicht gelöscht, und diese Aktion kann von hier aus nicht rückgängig gemacht werden.",
+    "removed": "Aus dem Verlauf entfernt",
+    "removeFailed": "Entfernen aus dem Verlauf fehlgeschlagen",
+    "emptyAll": "Hier ist noch nichts — starte einen Kurs oder eine Sitzung auf der Startseite.",
+    "emptyFiltered": "Nichts entspricht diesem Filter.",
+    "courseStatusPlanning": "Planung",
+    "courseStatusInProgress": "In Bearbeitung",
+    "courseStatusCompleted": "Abgeschlossen"
   }
 }

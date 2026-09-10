@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "Lịch sử",
+    "pageTitle": "Lịch sử học tập",
+    "subtitle": "Tất cả khóa học và phiên học của bạn, quá khứ và hiện tại.",
+    "backToHome": "Quay lại trang chủ",
+    "filterAll": "Tất cả",
+    "filterInProgress": "Đang tiến hành",
+    "filterFinished": "Đã hoàn thành",
+    "coursesHeading": "Khóa học",
+    "standaloneHeading": "Phiên học",
+    "lessonsProgress": "Đã hoàn thành {{completed}}/{{total}} bài học",
+    "lessonLabel": "Bài học {{number}}",
+    "removeFromHistory": "Xóa khỏi lịch sử",
+    "removeCourseConfirmTitle": "Xóa khóa học này khỏi lịch sử của bạn?",
+    "removeCourseConfirmDesc": "Thao tác này sẽ ẩn khóa học và các bài học của nó khỏi lịch sử của bạn. Khóa học sẽ không bị xóa, và thao tác này không thể hoàn tác từ đây.",
+    "removeSessionConfirmTitle": "Xóa phiên học này khỏi lịch sử của bạn?",
+    "removeSessionConfirmDesc": "Thao tác này sẽ ẩn phiên học khỏi lịch sử của bạn. Phiên học sẽ không bị xóa, và thao tác này không thể hoàn tác từ đây.",
+    "removed": "Đã xóa khỏi lịch sử",
+    "removeFailed": "Không thể xóa khỏi lịch sử",
+    "emptyAll": "Chưa có gì ở đây — hãy bắt đầu một khóa học hoặc phiên học từ trang chủ.",
+    "emptyFiltered": "Không có mục nào khớp với bộ lọc này.",
+    "courseStatusPlanning": "Đang lên kế hoạch",
+    "courseStatusInProgress": "Đang tiến hành",
+    "courseStatusCompleted": "Đã hoàn thành"
   }
 }

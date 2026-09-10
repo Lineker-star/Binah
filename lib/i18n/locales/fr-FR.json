@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "Historique",
+    "pageTitle": "Historique d'apprentissage",
+    "subtitle": "Tous vos cours et sessions, passés et actuels.",
+    "backToHome": "Retour à l'accueil",
+    "filterAll": "Tous",
+    "filterInProgress": "En cours",
+    "filterFinished": "Terminés",
+    "coursesHeading": "Cours",
+    "standaloneHeading": "Sessions",
+    "lessonsProgress": "{{completed}} sur {{total}} leçons terminées",
+    "lessonLabel": "Leçon {{number}}",
+    "removeFromHistory": "Retirer de l'historique",
+    "removeCourseConfirmTitle": "Retirer ce cours de votre historique ?",
+    "removeCourseConfirmDesc": "Cela masque le cours et ses leçons de votre historique. Il ne sera pas supprimé, et cette action ne peut pas être annulée depuis ici.",
+    "removeSessionConfirmTitle": "Retirer cette session de votre historique ?",
+    "removeSessionConfirmDesc": "Cela masque la session de votre historique. Elle ne sera pas supprimée, et cette action ne peut pas être annulée depuis ici.",
+    "removed": "Retiré de l'historique",
+    "removeFailed": "Échec du retrait de l'historique",
+    "emptyAll": "Rien ici pour l'instant — démarrez un cours ou une session depuis la page d'accueil.",
+    "emptyFiltered": "Rien ne correspond à ce filtre.",
+    "courseStatusPlanning": "Planification",
+    "courseStatusInProgress": "En cours",
+    "courseStatusCompleted": "Terminé"
   }
 }

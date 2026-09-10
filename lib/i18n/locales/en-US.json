@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "History",
+    "pageTitle": "Learning History",
+    "subtitle": "All your courses and sessions, past and present.",
+    "backToHome": "Back to home",
+    "filterAll": "All",
+    "filterInProgress": "In Progress",
+    "filterFinished": "Finished",
+    "coursesHeading": "Courses",
+    "standaloneHeading": "Sessions",
+    "lessonsProgress": "{{completed}} of {{total}} lessons complete",
+    "lessonLabel": "Lesson {{number}}",
+    "removeFromHistory": "Remove from history",
+    "removeCourseConfirmTitle": "Remove this course from your history?",
+    "removeCourseConfirmDesc": "This hides the course and its lessons from your history. It won't be deleted, and this action can't be undone from here.",
+    "removeSessionConfirmTitle": "Remove this session from your history?",
+    "removeSessionConfirmDesc": "This hides the session from your history. It won't be deleted, and this action can't be undone from here.",
+    "removed": "Removed from history",
+    "removeFailed": "Failed to remove from history",
+    "emptyAll": "Nothing here yet — start a course or a session from the home page.",
+    "emptyFiltered": "Nothing matches this filter.",
+    "courseStatusPlanning": "Planning",
+    "courseStatusInProgress": "In Progress",
+    "courseStatusCompleted": "Completed"
   }
 }

@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "履歴",
+    "pageTitle": "学習履歴",
+    "subtitle": "過去から現在までのすべてのコースとセッション。",
+    "backToHome": "ホームに戻る",
+    "filterAll": "すべて",
+    "filterInProgress": "進行中",
+    "filterFinished": "完了",
+    "coursesHeading": "コース",
+    "standaloneHeading": "セッション",
+    "lessonsProgress": "{{total}}レッスン中{{completed}}完了",
+    "lessonLabel": "レッスン{{number}}",
+    "removeFromHistory": "履歴から削除",
+    "removeCourseConfirmTitle": "このコースを履歴から削除しますか?",
+    "removeCourseConfirmDesc": "コースとそのレッスンが履歴から非表示になります。削除されるわけではなく、この操作はここから元に戻せません。",
+    "removeSessionConfirmTitle": "このセッションを履歴から削除しますか?",
+    "removeSessionConfirmDesc": "セッションが履歴から非表示になります。削除されるわけではなく、この操作はここから元に戻せません。",
+    "removed": "履歴から削除しました",
+    "removeFailed": "履歴からの削除に失敗しました",
+    "emptyAll": "まだ何もありません — ホームページからコースやセッションを開始してください。",
+    "emptyFiltered": "このフィルターに一致するものはありません。",
+    "courseStatusPlanning": "計画中",
+    "courseStatusInProgress": "進行中",
+    "courseStatusCompleted": "完了"
   }
 }

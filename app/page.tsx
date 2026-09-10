@@ -21,6 +21,7 @@ import {
   TrendingUp,
   LogOut,
   BookOpen,
+  History,
 } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -1010,6 +1011,7 @@ function GreetingBar({
   onLogOut,
 }: GreetingBarProps) {
   const { t } = useI18n();
+  const router = useRouter();
   // Guest-mode local store — the fallback used ONLY for display when there's
   // no Supabase session. A signed-in pill always reflects the real profiles
   // row below, never this store, so it never drifts from actual auth state.
@@ -1137,6 +1139,17 @@ function GreetingBar({
                   >
                     <TrendingUp className="size-3.5 text-muted-foreground" />
                     {t('settings.progress.nav')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      router.push('/history');
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                  >
+                    <History className="size-3.5 text-muted-foreground" />
+                    {t('history.navLabel')}
                   </button>
                   <button
                     type="button"

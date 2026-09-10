@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "历史记录",
+    "pageTitle": "学习历史",
+    "subtitle": "您的所有课程和学习记录，包括过去和当前的。",
+    "backToHome": "返回首页",
+    "filterAll": "全部",
+    "filterInProgress": "进行中",
+    "filterFinished": "已完成",
+    "coursesHeading": "课程",
+    "standaloneHeading": "学习记录",
+    "lessonsProgress": "已完成 {{total}} 节课中的 {{completed}} 节",
+    "lessonLabel": "第 {{number}} 课",
+    "removeFromHistory": "从历史记录中移除",
+    "removeCourseConfirmTitle": "要从历史记录中移除此课程吗?",
+    "removeCourseConfirmDesc": "这将从您的历史记录中隐藏该课程及其各节课。课程不会被删除，并且此操作无法在此处撤销。",
+    "removeSessionConfirmTitle": "要从历史记录中移除此学习记录吗?",
+    "removeSessionConfirmDesc": "这将从您的历史记录中隐藏该学习记录。它不会被删除，并且此操作无法在此处撤销。",
+    "removed": "已从历史记录中移除",
+    "removeFailed": "从历史记录中移除失败",
+    "emptyAll": "这里还没有内容 — 从主页开始一门课程或一个学习记录。",
+    "emptyFiltered": "没有符合此筛选条件的内容。",
+    "courseStatusPlanning": "规划中",
+    "courseStatusInProgress": "进行中",
+    "courseStatusCompleted": "已完成"
   }
 }

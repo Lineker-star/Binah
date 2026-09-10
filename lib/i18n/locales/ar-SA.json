@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "السجل",
+    "pageTitle": "سجل التعلم",
+    "subtitle": "جميع دوراتك وجلساتك، الحالية والسابقة.",
+    "backToHome": "العودة إلى الصفحة الرئيسية",
+    "filterAll": "الكل",
+    "filterInProgress": "قيد التقدم",
+    "filterFinished": "منتهية",
+    "coursesHeading": "الدورات",
+    "standaloneHeading": "الجلسات",
+    "lessonsProgress": "اكتمل {{completed}} من {{total}} دروس",
+    "lessonLabel": "الدرس {{number}}",
+    "removeFromHistory": "إزالة من السجل",
+    "removeCourseConfirmTitle": "إزالة هذه الدورة من سجلك؟",
+    "removeCourseConfirmDesc": "سيؤدي هذا إلى إخفاء الدورة ودروسها من سجلك. لن يتم حذفها، ولا يمكن التراجع عن هذا الإجراء من هنا.",
+    "removeSessionConfirmTitle": "إزالة هذه الجلسة من سجلك؟",
+    "removeSessionConfirmDesc": "سيؤدي هذا إلى إخفاء الجلسة من سجلك. لن يتم حذفها، ولا يمكن التراجع عن هذا الإجراء من هنا.",
+    "removed": "تمت الإزالة من السجل",
+    "removeFailed": "تعذّرت الإزالة من السجل",
+    "emptyAll": "لا يوجد شيء هنا بعد — ابدأ دورة أو جلسة من الصفحة الرئيسية.",
+    "emptyFiltered": "لا توجد نتائج تطابق هذا الفلتر.",
+    "courseStatusPlanning": "قيد التخطيط",
+    "courseStatusInProgress": "قيد التقدم",
+    "courseStatusCompleted": "مكتملة"
   }
 }

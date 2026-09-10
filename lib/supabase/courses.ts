@@ -17,6 +17,7 @@ export interface Course {
   status: CourseStatus;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
 }
 
 /**
@@ -71,5 +72,38 @@ export async function fetchCourse(courseId: string): Promise<Course | null> {
 export async function updateCourseStatus(courseId: string, status: CourseStatus): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from('courses').update({ status }).eq('id', courseId);
+  if (error) throw error;
+}
+
+/** List the signed-in learner's own, non-removed courses, most recently updated first. */
+export async function listLearnerCourses(): Promise<Course[]> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data, error } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('learner_id', user.id)
+    .is('deleted_at', null)
+    .order('updated_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as Course[];
+}
+
+/**
+ * Soft-delete a course from the learner's own history view. Hides the whole
+ * course (and, by extension, all of its lesson sessions — they're filtered
+ * out via their parent course rather than individually flagged) without
+ * touching the underlying rows.
+ */
+export async function removeCourseFromHistory(courseId: string): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('courses')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', courseId);
   if (error) throw error;
 }

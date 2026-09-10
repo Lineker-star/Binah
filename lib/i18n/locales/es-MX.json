@@ -2125,5 +2125,30 @@
         "materialExtraction": null
       }
     }
+  },
+  "history": {
+    "navLabel": "Historial",
+    "pageTitle": "Historial de aprendizaje",
+    "subtitle": "Todos tus cursos y sesiones, pasados y actuales.",
+    "backToHome": "Volver al inicio",
+    "filterAll": "Todos",
+    "filterInProgress": "En curso",
+    "filterFinished": "Finalizados",
+    "coursesHeading": "Cursos",
+    "standaloneHeading": "Sesiones",
+    "lessonsProgress": "{{completed}} de {{total}} lecciones completadas",
+    "lessonLabel": "Lección {{number}}",
+    "removeFromHistory": "Quitar del historial",
+    "removeCourseConfirmTitle": "¿Quitar este curso de tu historial?",
+    "removeCourseConfirmDesc": "Esto oculta el curso y sus lecciones de tu historial. No se eliminará, y esta acción no se puede deshacer desde aquí.",
+    "removeSessionConfirmTitle": "¿Quitar esta sesión de tu historial?",
+    "removeSessionConfirmDesc": "Esto oculta la sesión de tu historial. No se eliminará, y esta acción no se puede deshacer desde aquí.",
+    "removed": "Se quitó del historial",
+    "removeFailed": "No se pudo quitar del historial",
+    "emptyAll": "Todavía no hay nada aquí — inicia un curso o una sesión desde la página principal.",
+    "emptyFiltered": "Nada coincide con este filtro.",
+    "courseStatusPlanning": "Planificación",
+    "courseStatusInProgress": "En curso",
+    "courseStatusCompleted": "Completado"
   }
 }
