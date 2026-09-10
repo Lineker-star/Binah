@@ -2168,5 +2168,35 @@
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Lecture Notes (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Select at least one chapter to build a course.",
+    "buildFailed": "Failed to build course from this textbook",
+    "notFound": "Textbook not found",
+    "processing": "Detecting chapters and summarizing…",
+    "error": "Something went wrong processing this PDF",
+    "pageCount": "{{count}} pages",
+    "sectionsDetected": "{{count}} sections detected",
+    "estimatedMinutes": "~{{minutes}}m estimated",
+    "whatThisBookCovers": "What this book covers",
+    "summaryUnavailable": "Summary unavailable.",
+    "audioOverview": "Audio overview",
+    "audioGenerating": "Generating…",
+    "audioUnavailable": "Audio overview unavailable",
+    "twoVoicesIntro": "Two voices introduce the book",
+    "turnOf": "Turn {{current}} of {{total}}",
+    "teacher": "Teacher",
+    "classmate": "Classmate",
+    "chaptersHeading": "Chapters",
+    "frontMatter": "Front matter",
+    "backMatter": "Back matter",
+    "pdfOutline": "PDF outline",
+    "aiDetected": "AI-detected · no bookmark",
+    "pageRange": "pp. {{start}}–{{end}}",
+    "selectionStatus": "{{selected}} of {{total}} sections selected",
+    "buildCourse": "Build My Course",
+    "uploadButton": "Upload a textbook",
+    "uploadHint": "Detect chapters from a PDF and review them before any lesson is generated.",
+    "uploadFailed": "Failed to upload textbook"
   }
 }

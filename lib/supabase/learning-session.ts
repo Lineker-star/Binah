@@ -14,6 +14,11 @@ export interface LearningSession {
   skill_track_id: string | null;
   course_id: string | null;
   lesson_number: number | null;
+  /** Set when this lesson was generated from a textbook chapter (see
+   *  lib/textbook/**) — a lightweight traceability link, not duplicated
+   *  chapter text. Both null for ad-hoc/skill-track/prompt-based courses. */
+  source_ingestion_id: string | null;
+  source_chapter_index: number | null;
   started_at: string;
   paused_at: string | null;
   resumed_at: string | null;
@@ -46,6 +51,9 @@ export async function createLearningSession(input: {
    *  lib/courses/lessons.ts) — both null for ad-hoc/skill-track generation. */
   courseId?: string | null;
   lessonNumber?: number | null;
+  /** Set when this lesson was generated from a textbook chapter. */
+  sourceIngestionId?: string | null;
+  sourceChapterIndex?: number | null;
 }): Promise<LearningSession | null> {
   const supabase = createClient();
   const {
@@ -63,6 +71,8 @@ export async function createLearningSession(input: {
       skill_track_id: input.skillTrackId ?? null,
       course_id: input.courseId ?? null,
       lesson_number: input.lessonNumber ?? null,
+      source_ingestion_id: input.sourceIngestionId ?? null,
+      source_chapter_index: input.sourceChapterIndex ?? null,
     })
     .select('*')
     .single();

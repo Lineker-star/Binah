@@ -2168,5 +2168,35 @@
       "mp4": "فيديو (MP4)",
       "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "اختر فصلاً واحداً على الأقل لإنشاء الدورة.",
+    "buildFailed": "تعذّر إنشاء الدورة من هذا الكتاب",
+    "notFound": "الكتاب غير موجود",
+    "processing": "جارٍ اكتشاف الفصول وتلخيصها…",
+    "error": "حدث خطأ أثناء معالجة ملف PDF هذا",
+    "pageCount": "{{count}} صفحة",
+    "sectionsDetected": "تم اكتشاف {{count}} قسم",
+    "estimatedMinutes": "~{{minutes}} دقيقة تقديرًا",
+    "whatThisBookCovers": "ما يغطيه هذا الكتاب",
+    "summaryUnavailable": "الملخص غير متاح.",
+    "audioOverview": "نظرة صوتية عامة",
+    "audioGenerating": "جارٍ الإنشاء…",
+    "audioUnavailable": "النظرة الصوتية العامة غير متاحة",
+    "twoVoicesIntro": "صوتان يقدّمان الكتاب",
+    "turnOf": "الدور {{current}} من {{total}}",
+    "teacher": "المعلّم",
+    "classmate": "الزميل",
+    "chaptersHeading": "الفصول",
+    "frontMatter": "مقدمة الكتاب",
+    "backMatter": "ملحقات الكتاب",
+    "pdfOutline": "مخطط PDF",
+    "aiDetected": "تم اكتشافه بالذكاء الاصطناعي · لا توجد إشارة مرجعية",
+    "pageRange": "ص. {{start}}–{{end}}",
+    "selectionStatus": "تم تحديد {{selected}} من {{total}} أقسام",
+    "buildCourse": "إنشاء دورتي",
+    "uploadButton": "رفع كتاب دراسي",
+    "uploadHint": "اكتشف الفصول من ملف PDF وراجعها قبل إنشاء أي درس.",
+    "uploadFailed": "تعذّر رفع الكتاب الدراسي"
   }
 }

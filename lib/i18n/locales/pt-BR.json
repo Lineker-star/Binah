@@ -2168,5 +2168,35 @@
       "mp4": "Vídeo (MP4)",
       "lecture_notes_pdf": "Notas de aula (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Selecione pelo menos um capítulo para criar um curso.",
+    "buildFailed": "Falha ao criar o curso a partir deste livro",
+    "notFound": "Livro não encontrado",
+    "processing": "Detectando capítulos e resumindo…",
+    "error": "Ocorreu um erro ao processar este PDF",
+    "pageCount": "{{count}} páginas",
+    "sectionsDetected": "{{count}} seções detectadas",
+    "estimatedMinutes": "~{{minutes}} min estimados",
+    "whatThisBookCovers": "O que este livro aborda",
+    "summaryUnavailable": "Resumo indisponível.",
+    "audioOverview": "Visão geral em áudio",
+    "audioGenerating": "Gerando…",
+    "audioUnavailable": "Visão geral em áudio indisponível",
+    "twoVoicesIntro": "Duas vozes apresentam o livro",
+    "turnOf": "Turno {{current}} de {{total}}",
+    "teacher": "Professor",
+    "classmate": "Colega",
+    "chaptersHeading": "Capítulos",
+    "frontMatter": "Elementos pré-textuais",
+    "backMatter": "Elementos pós-textuais",
+    "pdfOutline": "Estrutura do PDF",
+    "aiDetected": "Detectado por IA · sem marcador",
+    "pageRange": "pp. {{start}}–{{end}}",
+    "selectionStatus": "{{selected}} de {{total}} seções selecionadas",
+    "buildCourse": "Criar meu curso",
+    "uploadButton": "Enviar um livro didático",
+    "uploadHint": "Detecta os capítulos de um PDF para revisão antes de gerar qualquer lição.",
+    "uploadFailed": "Falha ao enviar o livro didático"
   }
 }

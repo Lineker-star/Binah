@@ -2168,5 +2168,35 @@
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Vorlesungsnotizen (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Wähle mindestens ein Kapitel aus, um einen Kurs zu erstellen.",
+    "buildFailed": "Kurs konnte aus diesem Lehrbuch nicht erstellt werden",
+    "notFound": "Lehrbuch nicht gefunden",
+    "processing": "Kapitel werden erkannt und zusammengefasst …",
+    "error": "Beim Verarbeiten dieser PDF ist ein Fehler aufgetreten",
+    "pageCount": "{{count}} Seiten",
+    "sectionsDetected": "{{count}} Abschnitte erkannt",
+    "estimatedMinutes": "~{{minutes}} Min. geschätzt",
+    "whatThisBookCovers": "Worum es in diesem Buch geht",
+    "summaryUnavailable": "Zusammenfassung nicht verfügbar.",
+    "audioOverview": "Audio-Überblick",
+    "audioGenerating": "Wird erstellt …",
+    "audioUnavailable": "Audio-Überblick nicht verfügbar",
+    "twoVoicesIntro": "Zwei Stimmen stellen das Buch vor",
+    "turnOf": "Beitrag {{current}} von {{total}}",
+    "teacher": "Lehrer",
+    "classmate": "Mitschüler",
+    "chaptersHeading": "Kapitel",
+    "frontMatter": "Vorspann",
+    "backMatter": "Anhang",
+    "pdfOutline": "PDF-Gliederung",
+    "aiDetected": "KI-erkannt · kein Lesezeichen",
+    "pageRange": "S. {{start}}–{{end}}",
+    "selectionStatus": "{{selected}} von {{total}} Abschnitten ausgewählt",
+    "buildCourse": "Meinen Kurs erstellen",
+    "uploadButton": "Lehrbuch hochladen",
+    "uploadHint": "Kapitel aus einer PDF erkennen und vor der Lektionserstellung überprüfen.",
+    "uploadFailed": "Lehrbuch konnte nicht hochgeladen werden"
   }
 }

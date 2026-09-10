@@ -65,3 +65,59 @@ export function buildLessonSessionState(
     lessonNumber,
   };
 }
+
+/**
+ * Same as `buildLessonRequirement`, but for a lesson generated from a
+ * specific textbook chapter — the chapter's own text (via `pdfText` below)
+ * grounds generation instead of general knowledge alone.
+ */
+export function buildChapterLessonRequirement(
+  course: Pick<Course, 'title' | 'description' | 'planned_lesson_count'>,
+  lessonNumber: number,
+  chapterTitle: string,
+  priorLessonTitles?: string[],
+): string {
+  const total = course.planned_lesson_count;
+  const intro = `Lesson ${lessonNumber} of ${total ?? 'several'} in the course "${course.title}", covering the source book's chapter "${chapterTitle}".`;
+  const context = course.description ? ` Course context: ${course.description}` : '';
+  const continuity =
+    priorLessonTitles && priorLessonTitles.length > 0
+      ? ` The previous lesson covered: ${priorLessonTitles.join('; ')}. Build on this — introduce new material for this lesson rather than repeating what was already covered.`
+      : '';
+  return `${intro}${context}${continuity} Base this lesson on the chapter text provided as source material rather than general knowledge alone. Keep this lesson focused and appropriately scoped for a single lesson.`;
+}
+
+/**
+ * Build the sessionStorage payload for one lesson generated from a
+ * textbook chapter. `pdfText` reuses the exact channel the ad-hoc
+ * PDF-upload flow already feeds into scene-outline generation
+ * (`app/generation-preview/page.tsx`) — the difference is the text here is
+ * one chapter's own extraction (see lib/pdf/textbook-outline.ts), not a
+ * whole-document bundle truncated to a shared budget.
+ */
+export function buildChapterLessonSessionState(
+  course: Course,
+  lessonNumber: number,
+  chapterTitle: string,
+  chapterText: string,
+  sourceIngestionId: string,
+  sourceChapterIndex: number,
+  priorLessonTitles?: string[],
+): GenerationSessionState {
+  return {
+    sessionId: nanoid(),
+    requirements: {
+      requirement: buildChapterLessonRequirement(course, lessonNumber, chapterTitle, priorLessonTitles),
+      courseMode: true,
+    },
+    pdfText: chapterText,
+    pdfImages: [],
+    imageStorageIds: [],
+    sceneOutlines: null,
+    currentStep: 'generating',
+    courseId: course.id,
+    lessonNumber,
+    sourceIngestionId,
+    sourceChapterIndex,
+  };
+}

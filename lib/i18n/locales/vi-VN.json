@@ -2168,5 +2168,35 @@
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Ghi chú bài giảng (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Chọn ít nhất một chương để tạo khóa học.",
+    "buildFailed": "Không thể tạo khóa học từ sách này",
+    "notFound": "Không tìm thấy sách",
+    "processing": "Đang phát hiện chương và tóm tắt…",
+    "error": "Đã xảy ra lỗi khi xử lý tệp PDF này",
+    "pageCount": "{{count}} trang",
+    "sectionsDetected": "Đã phát hiện {{count}} phần",
+    "estimatedMinutes": "Ước tính ~{{minutes}} phút",
+    "whatThisBookCovers": "Nội dung cuốn sách này",
+    "summaryUnavailable": "Không có bản tóm tắt.",
+    "audioOverview": "Tổng quan âm thanh",
+    "audioGenerating": "Đang tạo…",
+    "audioUnavailable": "Không có tổng quan âm thanh",
+    "twoVoicesIntro": "Hai giọng nói giới thiệu cuốn sách",
+    "turnOf": "Lượt {{current}}/{{total}}",
+    "teacher": "Giáo viên",
+    "classmate": "Bạn học",
+    "chaptersHeading": "Các chương",
+    "frontMatter": "Phần mở đầu",
+    "backMatter": "Phần phụ lục",
+    "pdfOutline": "Mục lục PDF",
+    "aiDetected": "AI phát hiện · không có dấu trang",
+    "pageRange": "tr. {{start}}–{{end}}",
+    "selectionStatus": "Đã chọn {{selected}}/{{total}} phần",
+    "buildCourse": "Tạo khóa học của tôi",
+    "uploadButton": "Tải lên sách giáo khoa",
+    "uploadHint": "Phát hiện các chương từ tệp PDF và xem lại trước khi tạo bài học.",
+    "uploadFailed": "Không thể tải lên sách giáo khoa"
   }
 }

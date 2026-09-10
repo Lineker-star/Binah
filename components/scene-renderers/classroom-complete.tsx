@@ -29,7 +29,8 @@ import {
 import { loadQuizAttemptState } from '@/lib/quiz/runtime';
 import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import { fetchCourse, type Course } from '@/lib/supabase/courses';
-import { buildLessonSessionState } from '@/lib/courses/lessons';
+import { buildChapterLessonSessionState, buildLessonSessionState } from '@/lib/courses/lessons';
+import { fetchIngestion } from '@/lib/supabase/textbook-ingestions';
 import {
   dismissRecommendation,
   listActiveRecommendations,
@@ -426,7 +427,12 @@ function CourseRecommendationCard({ courseId }: { courseId: string }) {
 function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scenes: Scene[] }) {
   const { t } = useI18n();
   const router = useRouter();
-  const [loaded, setLoaded] = useState<{ course: Course; lessonNumber: number } | null>(null);
+  const [loaded, setLoaded] = useState<{
+    course: Course;
+    lessonNumber: number;
+    sourceIngestionId: string | null;
+    sourceChapterIndex: number | null;
+  } | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(AUTO_CONTINUE_COUNTDOWN_SECONDS);
   const [paused, setPaused] = useState(false);
   const startedRef = useRef(false);
@@ -438,7 +444,14 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
     const lessonNumber = session.lesson_number;
     fetchCourse(session.course_id)
       .then((course) => {
-        if (course) setLoaded({ course, lessonNumber });
+        if (course) {
+          setLoaded({
+            course,
+            lessonNumber,
+            sourceIngestionId: session.source_ingestion_id,
+            sourceChapterIndex: session.source_chapter_index,
+          });
+        }
       })
       .catch((err) => log.warn('Failed to load course for continuation (ignored):', err));
   }, [stageId]);
@@ -448,10 +461,39 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
     loaded.course.planned_lesson_count != null &&
     loaded.lessonNumber >= loaded.course.planned_lesson_count;
 
-  const startNextLesson = useCallback(() => {
+  const startNextLesson = useCallback(async () => {
     if (!loaded || startedRef.current) return;
     startedRef.current = true;
     const priorLessonTitles = scenes.map((s) => s.title).filter((title): title is string => !!title);
+
+    if (loaded.sourceIngestionId && loaded.sourceChapterIndex != null) {
+      try {
+        const ingestion = await fetchIngestion(loaded.sourceIngestionId);
+        const items = ingestion?.chapters?.items ?? [];
+        const nextIndex = items.findIndex(
+          (c, i) => i > loaded.sourceChapterIndex! && c.includeAsLesson,
+        );
+        if (nextIndex !== -1) {
+          const nextChapter = items[nextIndex];
+          const sessionState = buildChapterLessonSessionState(
+            loaded.course,
+            loaded.lessonNumber + 1,
+            nextChapter.title,
+            nextChapter.text,
+            loaded.sourceIngestionId,
+            nextIndex,
+            priorLessonTitles,
+          );
+          sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
+          router.push('/generation-preview');
+          return;
+        }
+        log.warn('No further selected chapters found; falling back to a general next lesson.');
+      } catch (err) {
+        log.warn('Failed to load next chapter for continuation (falling back):', err);
+      }
+    }
+
     const sessionState = buildLessonSessionState(loaded.course, loaded.lessonNumber + 1, priorLessonTitles);
     sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
     router.push('/generation-preview');

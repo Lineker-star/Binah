@@ -2168,5 +2168,35 @@
       "mp4": "影片 (MP4)",
       "lecture_notes_pdf": "講義筆記 (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "請至少選擇一個章節以建立課程。",
+    "buildFailed": "無法根據此教材建立課程",
+    "notFound": "找不到該教材",
+    "processing": "正在偵測章節並產生摘要…",
+    "error": "處理此 PDF 時發生錯誤",
+    "pageCount": "{{count}} 頁",
+    "sectionsDetected": "已偵測到 {{count}} 個部分",
+    "estimatedMinutes": "預估約 {{minutes}} 分鐘",
+    "whatThisBookCovers": "本書內容概覽",
+    "summaryUnavailable": "摘要無法使用。",
+    "audioOverview": "音訊概覽",
+    "audioGenerating": "產生中…",
+    "audioUnavailable": "音訊概覽無法使用",
+    "twoVoicesIntro": "兩個聲音為您介紹本書",
+    "turnOf": "第 {{current}} / {{total}} 段",
+    "teacher": "老師",
+    "classmate": "同學",
+    "chaptersHeading": "章節",
+    "frontMatter": "前置內容",
+    "backMatter": "附錄內容",
+    "pdfOutline": "PDF 目錄",
+    "aiDetected": "AI 偵測 · 無書籤",
+    "pageRange": "第 {{start}}–{{end}} 頁",
+    "selectionStatus": "已選擇 {{total}} 個部分中的 {{selected}} 個",
+    "buildCourse": "建立我的課程",
+    "uploadButton": "上傳教材",
+    "uploadHint": "從 PDF 偵測章節，並在產生課程前進行審閱。",
+    "uploadFailed": "教材上傳失敗"
   }
 }

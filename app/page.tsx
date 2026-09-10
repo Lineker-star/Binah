@@ -22,6 +22,7 @@ import {
   LogOut,
   BookOpen,
   History,
+  UploadCloud,
 } from 'lucide-react';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -50,8 +51,10 @@ import { hasUsableLLMProvider } from '@/lib/store/settings-validation';
 import { useUserProfileStore } from '@/lib/store/user-profile';
 import { AvatarPicker } from '@/components/avatar-picker';
 import { RecentSessions } from '@/components/discovery/recent-sessions';
+import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { createCourse } from '@/lib/supabase/courses';
+import { ingestTextbook } from '@/lib/supabase/textbook-ingestions';
 import { buildLessonRequirement } from '@/lib/courses/lessons';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -131,6 +134,24 @@ function HomePage() {
   // Do not replay the classic hero's entrance after the route handoff already
   // carried the lockup and composer into place.
   const [swapped] = useState(arrivedByProSwap);
+  const [uploadingTextbook, setUploadingTextbook] = useState(false);
+  const textbookInputRef = useRef<HTMLInputElement>(null);
+
+  const handleTextbookFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploadingTextbook(true);
+    try {
+      const id = await ingestTextbook(file);
+      router.push(`/textbook/${id}`);
+    } catch (err) {
+      log.error('Failed to upload textbook:', err);
+      toast.error(t('textbook.uploadFailed'));
+    } finally {
+      setUploadingTextbook(false);
+    }
+  };
   const heroEnter = (from: Record<string, number>) => (swapped ? false : from);
   const showVocationalTestUi = shouldShowVocationalTestUi();
   const workbenchBuildEnabled = isProWorkbenchEnabled();
@@ -810,6 +831,38 @@ function HomePage() {
                   {t('toolbar.structuredCourseHint')}
                 </TooltipContent>
               </Tooltip>
+
+              {/* Upload a textbook — a separate entry point from Structured
+                  Course above: instead of planning lessons from a prompt,
+                  this detects the PDF's own chapters and lets the learner
+                  review/confirm them before any lesson is generated. */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    disabled={uploadingTextbook}
+                    onClick={() => textbookInputRef.current?.click()}
+                    className="inline-flex h-8 shrink-0 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border border-border/60 bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:bg-muted/60 active:scale-95 disabled:opacity-50"
+                  >
+                    {uploadingTextbook ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      <UploadCloud className="size-3.5" />
+                    )}
+                    <span>{t('textbook.uploadButton')}</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="text-xs">
+                  {t('textbook.uploadHint')}
+                </TooltipContent>
+              </Tooltip>
+              <input
+                ref={textbookInputRef}
+                type="file"
+                accept="application/pdf"
+                className="hidden"
+                onChange={handleTextbookFile}
+              />
 
               {/* Interactive mode toggle */}
               <Tooltip>

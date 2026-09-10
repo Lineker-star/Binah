@@ -2168,5 +2168,35 @@
       "mp4": "動画 (MP4)",
       "lecture_notes_pdf": "講義ノート (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "コースを作成するには、少なくとも1つの章を選択してください。",
+    "buildFailed": "この教科書からコースを作成できませんでした",
+    "notFound": "教科書が見つかりません",
+    "processing": "章を検出して要約しています…",
+    "error": "このPDFの処理中に問題が発生しました",
+    "pageCount": "{{count}}ページ",
+    "sectionsDetected": "{{count}}個のセクションを検出",
+    "estimatedMinutes": "推定約{{minutes}}分",
+    "whatThisBookCovers": "この本の内容",
+    "summaryUnavailable": "要約は利用できません。",
+    "audioOverview": "音声概要",
+    "audioGenerating": "生成中…",
+    "audioUnavailable": "音声概要は利用できません",
+    "twoVoicesIntro": "2つの声がこの本を紹介します",
+    "turnOf": "{{total}}件中{{current}}件目",
+    "teacher": "先生",
+    "classmate": "クラスメート",
+    "chaptersHeading": "章",
+    "frontMatter": "前付け",
+    "backMatter": "後付け",
+    "pdfOutline": "PDFのアウトライン",
+    "aiDetected": "AI検出 · ブックマークなし",
+    "pageRange": "p. {{start}}–{{end}}",
+    "selectionStatus": "{{total}}件中{{selected}}件のセクションを選択",
+    "buildCourse": "コースを作成",
+    "uploadButton": "教科書をアップロード",
+    "uploadHint": "PDFから章を検出し、レッスン生成前に確認できます。",
+    "uploadFailed": "教科書のアップロードに失敗しました"
   }
 }

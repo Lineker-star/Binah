@@ -2168,5 +2168,35 @@
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Apuntes de clase (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Selecciona al menos un capítulo para crear un curso.",
+    "buildFailed": "No se pudo crear el curso a partir de este libro",
+    "notFound": "Libro no encontrado",
+    "processing": "Detectando capítulos y resumiendo…",
+    "error": "Ocurrió un error al procesar este PDF",
+    "pageCount": "{{count}} páginas",
+    "sectionsDetected": "{{count}} secciones detectadas",
+    "estimatedMinutes": "~{{minutes}} min estimados",
+    "whatThisBookCovers": "Qué cubre este libro",
+    "summaryUnavailable": "Resumen no disponible.",
+    "audioOverview": "Resumen en audio",
+    "audioGenerating": "Generando…",
+    "audioUnavailable": "Resumen en audio no disponible",
+    "twoVoicesIntro": "Dos voces presentan el libro",
+    "turnOf": "Turno {{current}} de {{total}}",
+    "teacher": "Profesor",
+    "classmate": "Compañero",
+    "chaptersHeading": "Capítulos",
+    "frontMatter": "Preliminares",
+    "backMatter": "Material final",
+    "pdfOutline": "Esquema del PDF",
+    "aiDetected": "Detectado por IA · sin marcador",
+    "pageRange": "pp. {{start}}–{{end}}",
+    "selectionStatus": "{{selected}} de {{total}} secciones seleccionadas",
+    "buildCourse": "Crear mi curso",
+    "uploadButton": "Subir un libro de texto",
+    "uploadHint": "Detecta los capítulos de un PDF y revísalos antes de generar cualquier lección.",
+    "uploadFailed": "No se pudo subir el libro de texto"
   }
 }

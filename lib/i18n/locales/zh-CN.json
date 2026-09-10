@@ -2168,5 +2168,35 @@
       "mp4": "视频 (MP4)",
       "lecture_notes_pdf": "讲义笔记 (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "请至少选择一个章节以创建课程。",
+    "buildFailed": "无法根据此教材创建课程",
+    "notFound": "未找到该教材",
+    "processing": "正在检测章节并生成摘要…",
+    "error": "处理此 PDF 时出错",
+    "pageCount": "{{count}} 页",
+    "sectionsDetected": "已检测到 {{count}} 个部分",
+    "estimatedMinutes": "预计约 {{minutes}} 分钟",
+    "whatThisBookCovers": "本书内容概览",
+    "summaryUnavailable": "摘要不可用。",
+    "audioOverview": "音频概览",
+    "audioGenerating": "生成中…",
+    "audioUnavailable": "音频概览不可用",
+    "twoVoicesIntro": "两个声音为您介绍本书",
+    "turnOf": "第 {{current}} / {{total}} 段",
+    "teacher": "老师",
+    "classmate": "同学",
+    "chaptersHeading": "章节",
+    "frontMatter": "前置内容",
+    "backMatter": "附录内容",
+    "pdfOutline": "PDF 目录",
+    "aiDetected": "AI 检测 · 无书签",
+    "pageRange": "第 {{start}}–{{end}} 页",
+    "selectionStatus": "已选择 {{total}} 个部分中的 {{selected}} 个",
+    "buildCourse": "创建我的课程",
+    "uploadButton": "上传教材",
+    "uploadHint": "从 PDF 中检测章节，并在生成课程前进行审阅。",
+    "uploadFailed": "教材上传失败"
   }
 }

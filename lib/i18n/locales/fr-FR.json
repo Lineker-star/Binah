@@ -2168,5 +2168,35 @@
       "mp4": "Vidéo (MP4)",
       "lecture_notes_pdf": "Notes de cours (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Sélectionnez au moins un chapitre pour créer un cours.",
+    "buildFailed": "Échec de la création du cours à partir de ce livre",
+    "notFound": "Livre introuvable",
+    "processing": "Détection des chapitres et résumé en cours…",
+    "error": "Une erreur s'est produite lors du traitement de ce PDF",
+    "pageCount": "{{count}} pages",
+    "sectionsDetected": "{{count}} sections détectées",
+    "estimatedMinutes": "~{{minutes}} min estimées",
+    "whatThisBookCovers": "Ce que couvre ce livre",
+    "summaryUnavailable": "Résumé indisponible.",
+    "audioOverview": "Aperçu audio",
+    "audioGenerating": "Génération…",
+    "audioUnavailable": "Aperçu audio indisponible",
+    "twoVoicesIntro": "Deux voix présentent le livre",
+    "turnOf": "Tour {{current}} sur {{total}}",
+    "teacher": "Enseignant",
+    "classmate": "Camarade",
+    "chaptersHeading": "Chapitres",
+    "frontMatter": "Pages liminaires",
+    "backMatter": "Annexes",
+    "pdfOutline": "Plan du PDF",
+    "aiDetected": "Détecté par IA · sans signet",
+    "pageRange": "p. {{start}}–{{end}}",
+    "selectionStatus": "{{selected}} sections sélectionnées sur {{total}}",
+    "buildCourse": "Créer mon cours",
+    "uploadButton": "Importer un manuel",
+    "uploadHint": "Détecte les chapitres d'un PDF et permet de les vérifier avant de générer une leçon.",
+    "uploadFailed": "Échec de l'import du manuel"
   }
 }

@@ -558,6 +558,8 @@ function GenerationPreviewContent() {
         skillTrackId: currentSession.skillTrackId ?? null,
         courseId: currentSession.courseId ?? null,
         lessonNumber: currentSession.lessonNumber ?? null,
+        sourceIngestionId: currentSession.sourceIngestionId ?? null,
+        sourceChapterIndex: currentSession.sourceChapterIndex ?? null,
       })
         .then((session) => {
           // "Update courses.status to 'in_progress' once lesson 1 starts" —

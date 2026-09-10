@@ -2168,5 +2168,35 @@
       "mp4": "Видео (MP4)",
       "lecture_notes_pdf": "Конспект лекции (PDF)"
     }
+  },
+  "textbook": {
+    "noChaptersSelected": "Выберите хотя бы одну главу, чтобы создать курс.",
+    "buildFailed": "Не удалось создать курс из этой книги",
+    "notFound": "Книга не найдена",
+    "processing": "Определение глав и составление сводки…",
+    "error": "При обработке этого PDF произошла ошибка",
+    "pageCount": "{{count}} страниц",
+    "sectionsDetected": "Обнаружено разделов: {{count}}",
+    "estimatedMinutes": "~{{minutes}} мин (оценка)",
+    "whatThisBookCovers": "О чём эта книга",
+    "summaryUnavailable": "Сводка недоступна.",
+    "audioOverview": "Аудио-обзор",
+    "audioGenerating": "Создание…",
+    "audioUnavailable": "Аудио-обзор недоступен",
+    "twoVoicesIntro": "Два голоса представляют книгу",
+    "turnOf": "Реплика {{current}} из {{total}}",
+    "teacher": "Учитель",
+    "classmate": "Одноклассник",
+    "chaptersHeading": "Главы",
+    "frontMatter": "Вступительная часть",
+    "backMatter": "Заключительная часть",
+    "pdfOutline": "Оглавление PDF",
+    "aiDetected": "Определено ИИ · без закладки",
+    "pageRange": "стр. {{start}}–{{end}}",
+    "selectionStatus": "Выбрано разделов: {{selected}} из {{total}}",
+    "buildCourse": "Создать курс",
+    "uploadButton": "Загрузить учебник",
+    "uploadHint": "Определяет главы из PDF и позволяет проверить их перед созданием урока.",
+    "uploadFailed": "Не удалось загрузить учебник"
   }
 }

@@ -48,6 +48,12 @@ export interface GenerationSessionState {
   // tagged with course_id/lesson_number for lazy per-lesson continuation.
   courseId?: string;
   lessonNumber?: number;
+  // Set when this lesson was generated from a textbook chapter (see
+  // lib/textbook/**) — threaded through to the resulting learning_sessions
+  // row as a lightweight grounding/citation link (chapter title + page
+  // range live on the ingestion row, not duplicated here).
+  sourceIngestionId?: string;
+  sourceChapterIndex?: number;
 }
 
 export type GenerationStep = {
