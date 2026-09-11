@@ -870,8 +870,13 @@ function HomePage() {
             />
 
             {/* Toolbar row */}
-            <div className="px-3 pb-3 flex items-end gap-2">
-              <div className="flex-1 min-w-0">
+            <div className="px-3 pb-3 flex flex-wrap items-end gap-2">
+              {/* A floor width, not min-w-0: without it flex-1 will shrink
+                  this column past what GenerationToolbar's own icons need,
+                  which forces IT to wrap into many cramped rows instead of
+                  the whole row wrapping Structured Course/Upload Textbook
+                  onto a clean line below. */}
+              <div className="flex-1 min-w-[200px]">
                 <GenerationToolbar
                   webSearch={form.webSearch}
                   onWebSearchChange={(v) => updateForm('webSearch', v)}
