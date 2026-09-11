@@ -728,7 +728,9 @@
     "aiGrading": "Correction par l’IA…",
     "aiGradingWait": "Veuillez patienter, analyse de vos réponses en cours",
     "quizReport": "Bilan du quiz",
-    "retry": "Recommencer"
+    "retry": "Recommencer",
+    "retake": "Retenter",
+    "retakePrompt": "Vous n'avez pas atteint les 70% requis pour réussir. Vous pouvez retenter à tout moment, ou continuer quand vous êtes prêt."
   },
   "roundtable": {
     "teacher": "PROFESSEUR",

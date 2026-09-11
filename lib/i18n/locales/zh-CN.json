@@ -728,7 +728,9 @@
     "aiGrading": "AI 正在批改中...",
     "aiGradingWait": "请稍候，正在分析你的答案",
     "quizReport": "答题报告",
-    "retry": "重新答题"
+    "retry": "重新答题",
+    "retake": "重新测试",
+    "retakePrompt": "未达到70%的通过分数。你可以随时重新测试,也可以准备好后继续。"
   },
   "roundtable": {
     "teacher": "教师",

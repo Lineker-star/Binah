@@ -705,7 +705,9 @@
     "aiGrading": "AI 正在批改中...",
     "aiGradingWait": "請稍候，正在分析你的答案",
     "quizReport": "答題報告",
-    "retry": "重新答題"
+    "retry": "重新答題",
+    "retake": "重新測驗",
+    "retakePrompt": "未達到70%的通過分數。你可以隨時重新測驗,也可以準備好後繼續。"
   },
   "roundtable": {
     "teacher": "教師",

@@ -728,7 +728,9 @@
     "aiGrading": "AI is grading...",
     "aiGradingWait": "Please wait, analyzing your answers",
     "quizReport": "Quiz Report",
-    "retry": "Retry"
+    "retry": "Retry",
+    "retake": "Retake",
+    "retakePrompt": "You didn't reach the 70% passing score. You can retake anytime, or continue when you're ready."
   },
   "roundtable": {
     "teacher": "TEACHER",

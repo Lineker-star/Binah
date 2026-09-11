@@ -728,7 +728,9 @@
     "aiGrading": "AIが採点中...",
     "aiGradingWait": "回答を分析しています。お待ちください",
     "quizReport": "クイズレポート",
-    "retry": "やり直す"
+    "retry": "やり直す",
+    "retake": "再受験",
+    "retakePrompt": "合格ライン(70%)に達しませんでした。いつでも再受験できますし、準備ができたら次に進むこともできます。"
   },
   "roundtable": {
     "teacher": "教師",

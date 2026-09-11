@@ -728,7 +728,9 @@
     "aiGrading": "La IA está calificando...",
     "aiGradingWait": "Espera un momento, analizando tus respuestas",
     "quizReport": "Reporte del cuestionario",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "retake": "Reintentar",
+    "retakePrompt": "No alcanzaste el 70% para aprobar. Puedes volver a intentarlo cuando quieras, o continuar cuando estés listo."
   },
   "roundtable": {
     "teacher": "DOCENTE",
