@@ -18,6 +18,7 @@ import { extractTextbookOutline, extractChapterText, type DetectedChapter } from
 import { detectHeadingCandidates } from '@/lib/pdf/heading-heuristic';
 import { detectChaptersViaFallback } from '@/lib/server/textbook/chapter-fallback';
 import { generateChapterSummary, generateWholeBookSummary } from '@/lib/server/textbook/summaries';
+import { persistBookStructure } from '@/lib/server/textbook/persist-structure';
 import type { IngestedChapter, TextbookChaptersData } from '@/lib/textbook/types';
 
 const log = createLogger('TextbookIngestAPI');
@@ -88,6 +89,12 @@ export async function POST(req: NextRequest) {
         .eq('id', ingestionId);
       return apiError('PARSE_FAILED', 422, 'No chapters could be detected in this PDF.');
     }
+
+    // Structural rows (book_modules/book_chapters) alongside the JSON below
+    // -- best-effort, since nothing user-visible reads them yet.
+    await persistBookStructure(admin, ingestionId, totalPages, chapters).catch((err) => {
+      log.warn(`Failed to persist book structure for ingestion ${ingestionId} (continuing):`, err);
+    });
 
     // Text extraction is cheap (string slicing from the already-parsed
     // per-page array, no LLM cost) so every chapter gets its own text —
