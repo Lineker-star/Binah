@@ -104,6 +104,16 @@ export interface SignedAudioOverviewTurn {
 /** Best-effort: kick off Audio Overview generation using the learner's configured TTS voice. */
 export async function generateAudioOverview(ingestionId: string): Promise<void> {
   const ttsConfig = await getCurrentTTSConfig();
+  // Every provider's config, not just the selected one -- lets the server
+  // retry a failed turn once against a different enabled provider instead
+  // of just recording it as failed (see the route for why: Audio Overview
+  // has no course-level narrator binding to fall back on the way lesson
+  // narration does). getCurrentTTSConfig() itself stays scoped to the
+  // selected provider only -- its return type is shared with server-side
+  // TTS synthesis config generally, not the place to grow this.
+  const { useSettingsStore } = await import('@/lib/store/settings');
+  const { ttsProvidersConfig } = useSettingsStore.getState();
+
   const res = await fetch(`/api/textbook/${ingestionId}/audio-overview`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...modelConfigHeaders() },
@@ -114,6 +124,7 @@ export async function generateAudioOverview(ingestionId: string): Promise<void> 
       ttsSpeed: ttsConfig.speed,
       ttsApiKey: ttsConfig.apiKey,
       ttsBaseUrl: ttsConfig.baseUrl,
+      ttsProvidersConfig,
     }),
   });
   if (!res.ok) {

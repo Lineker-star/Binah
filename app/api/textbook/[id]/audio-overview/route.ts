@@ -26,6 +26,8 @@ import {
   resolveTTSBaseUrl,
   resolveTTSModel,
 } from '@/lib/server/provider-config';
+import { getEnabledProvidersWithVoices, resolveDeterministicFallbackVoice } from '@/lib/audio/voice-resolver';
+import type { TTSEnablementConfig } from '@/lib/audio/provider-enablement';
 import type { TTSProviderId } from '@/lib/audio/types';
 import type { AudioOverviewTurn, TextbookChaptersData } from '@/lib/textbook/types';
 
@@ -40,6 +42,15 @@ interface RequestBody {
   ttsSpeed?: number;
   ttsApiKey?: string;
   ttsBaseUrl?: string;
+  /**
+   * Every provider's config, not just the selected one -- needed to compute
+   * a fallback candidate list when the selected provider fails (see the
+   * per-turn retry below). Audio Overview has no course-level narrator
+   * agent to check first (it runs before any course/lessons exist), so
+   * unlike lesson narration it can't lean on a voice binding; this is the
+   * layer that still applies without one.
+   */
+  ttsProvidersConfig?: Record<string, TTSEnablementConfig & { modelId?: string }>;
 }
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -150,22 +161,93 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       throw new Error('Audio overview script generation produced no turns');
     }
 
+    const synthesize = (
+      providerId: TTSProviderId,
+      voice: string,
+      voiceModelId: string | undefined,
+      voiceApiKey: string | undefined,
+      voiceBaseUrl: string | undefined,
+      text: string,
+    ) =>
+      generateTTS(
+        {
+          providerId,
+          modelId: voiceModelId,
+          voice,
+          speed: body.ttsSpeed ?? 1,
+          apiKey: voiceApiKey,
+          baseUrl: voiceBaseUrl,
+        },
+        text,
+      );
+
     const admin = createServiceRoleClient();
     const turns: AudioOverviewTurn[] = [];
     for (let i = 0; i < script.length; i++) {
       const turn = script[i];
       try {
-        const { audio, format } = await generateTTS(
-          {
-            providerId: body.ttsProviderId,
+        let synthesized: Awaited<ReturnType<typeof generateTTS>>;
+        try {
+          synthesized = await synthesize(
+            body.ttsProviderId,
+            voiceFor(turn.speaker),
             modelId,
-            voice: voiceFor(turn.speaker),
-            speed: body.ttsSpeed ?? 1,
             apiKey,
             baseUrl,
-          },
-          turn.text,
-        );
+            turn.text,
+          );
+        } catch (primaryErr) {
+          // Audio Overview has no course-level narrator binding to lean on
+          // (it runs before any course/lessons exist, unlike lesson
+          // narration -- see lib/hooks/use-scene-generator.ts) -- this is
+          // the layer that substitutes for it: one reactive retry against a
+          // different enabled provider, excluding whichever one just
+          // failed, rather than just recording the turn as failed. No
+          // change to provider ordering/preference beyond this.
+          const fallback = resolveDeterministicFallbackVoice(
+            getEnabledProvidersWithVoices(body.ttsProvidersConfig ?? {}).filter(
+              (p) => p.providerId !== body.ttsProviderId,
+            ),
+            0,
+          );
+          if (!fallback) throw primaryErr;
+
+          log.warn(
+            `Turn ${i} failed on ${body.ttsProviderId}, retrying once with ${fallback.providerId}:`,
+            primaryErr,
+          );
+          const fallbackManaged = isServerConfiguredProvider('tts', fallback.providerId);
+          const fallbackConfig = body.ttsProvidersConfig?.[fallback.providerId];
+          const fallbackApiKey = resolveTTSApiKey(
+            fallback.providerId,
+            fallbackManaged ? undefined : fallbackConfig?.apiKey,
+          );
+          const fallbackBaseUrl = resolveTTSBaseUrl(
+            fallback.providerId,
+            fallbackManaged ? undefined : fallbackConfig?.baseUrl,
+          );
+          const fallbackModelId = resolveTTSModel(
+            fallback.providerId,
+            fallback.modelId,
+            fallback.voiceId,
+          );
+          const fallbackVoices = getTTSVoices(fallback.providerId);
+          const fallbackClassmateVoice =
+            fallbackVoices.find((v) => v.id !== fallback.voiceId)?.id ?? fallback.voiceId;
+          const fallbackVoiceFor = (speaker: 'teacher' | 'classmate') =>
+            speaker === 'teacher' ? fallback.voiceId : fallbackClassmateVoice;
+
+          synthesized = await synthesize(
+            fallback.providerId,
+            fallbackVoiceFor(turn.speaker),
+            fallbackModelId,
+            fallbackApiKey,
+            fallbackBaseUrl,
+            turn.text,
+          );
+        }
+
+        const { audio, format } = synthesized;
         const objectPath = `${user.id}/${id}/audio-overview/${i}.${format}`;
         const { error: uploadError } = await admin.storage
           .from('learner-exports')
