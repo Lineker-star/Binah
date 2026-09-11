@@ -19,6 +19,7 @@ import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
 import { generateCourseFinalAssessment } from '@/lib/courses/final-assessment';
 import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
 import { checkChapterCompletion } from '@/lib/supabase/chapter-completion';
+import { checkModuleCompletion } from '@/lib/supabase/module-completion';
 import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -1239,19 +1240,43 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
             log.warn('Failed to pre-generate certificate (ignored):', err),
           );
 
-          // Continuous Assessment: independent of the course-final branch
-          // above — fires whenever THIS chapter's own last planned lesson
-          // just completed, whether or not the whole course is done yet.
-          // Book-chapter-course only by design (see lib/supabase/chapter-
-          // completion.ts); a no-op for ad-hoc/non-book sessions, which
-          // never carry source_ingestion_id/source_chapter_index at all.
+          // Continuous Assessment / Exam: independent of the course-final
+          // branch above — fire whenever THIS chapter's own last planned
+          // lesson just completed, whether or not the whole course is done
+          // yet. Book-chapter-course only by design (see lib/supabase/
+          // chapter-completion.ts and module-completion.ts); a no-op for
+          // ad-hoc/non-book sessions, which never carry source_ingestion_id
+          // /source_chapter_index at all.
+          //
+          // A chapter can simultaneously be "this chapter's last lesson"
+          // AND "the last chapter in its module/book" — both checks can
+          // resolve true off the same completion event. Only one page can
+          // be navigated to, so Exam (the broader-scope assessment) wins
+          // the race; the narrower Continuous Assessment for that one
+          // chapter is skipped for this occurrence. Flagged as a judgment
+          // call, not a requirement — revisit if chaining both in sequence
+          // turns out to matter more than getting straight to the exam.
           if (updated.source_ingestion_id != null && updated.source_chapter_index != null) {
-            checkChapterCompletion(updated.source_ingestion_id, updated.source_chapter_index)
-              .then((chapter) => {
-                if (chapter) router.push(`/assessment/continuous/${chapter.chapterId}`);
+            const sourceIngestionId = updated.source_ingestion_id;
+            const sourceChapterIndex = updated.source_chapter_index;
+            checkModuleCompletion(sourceIngestionId, sourceChapterIndex)
+              .then((moduleResult) => {
+                if (moduleResult) {
+                  router.push(
+                    moduleResult.moduleId
+                      ? `/assessment/exam/module/${moduleResult.moduleId}`
+                      : `/assessment/exam/book/${sourceIngestionId}`,
+                  );
+                  return;
+                }
+                return checkChapterCompletion(sourceIngestionId, sourceChapterIndex).then(
+                  (chapter) => {
+                    if (chapter) router.push(`/assessment/continuous/${chapter.chapterId}`);
+                  },
+                );
               })
               .catch((err) =>
-                log.warn('Failed to check chapter completion (ignored):', err),
+                log.warn('Failed to check chapter/module completion (ignored):', err),
               );
           }
         })
