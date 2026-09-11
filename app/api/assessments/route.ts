@@ -146,6 +146,45 @@ export async function POST(req: NextRequest) {
 
     const admin = createServiceRoleClient();
 
+    // A retake (learner didn't pass, tried again) inserts a new row rather
+    // than overwriting the failed attempt — full history feeds the
+    // learning-metrics/growth graphs (Tier W). attempt_number is scoped to
+    // whichever FK actually identifies "the same assessment" for this type:
+    // session_id+scene_id for a lesson-embedded quiz/PBL, chapter_id for
+    // Continuous Assessment, module_id (or course_id when the source book
+    // has no module layer) for Exam. Computed server-side, never trusted
+    // from the request body, same reasoning as course_id/chapter_id above.
+    let attemptScope = admin
+      .from('assessments')
+      .select('attempt_number')
+      .eq('learner_id', user.id)
+      .eq('assessment_type', body.assessmentType);
+    if (body.assessmentType === 'continuous_assessment') {
+      attemptScope = chapterId
+        ? attemptScope.eq('chapter_id', chapterId)
+        : attemptScope.is('chapter_id', null);
+    } else if (body.assessmentType === 'exam') {
+      if (moduleId) {
+        attemptScope = attemptScope.eq('module_id', moduleId);
+      } else if (courseId) {
+        attemptScope = attemptScope.eq('course_id', courseId);
+      } else {
+        attemptScope = attemptScope.is('module_id', null).is('course_id', null);
+      }
+    } else {
+      attemptScope = body.sessionId
+        ? attemptScope.eq('session_id', body.sessionId)
+        : attemptScope.is('session_id', null);
+      attemptScope = body.sceneId
+        ? attemptScope.eq('scene_id', body.sceneId)
+        : attemptScope.is('scene_id', null);
+    }
+    const { data: priorAttempts, error: attemptsError } = await attemptScope
+      .order('attempt_number', { ascending: false })
+      .limit(1);
+    if (attemptsError) throw attemptsError;
+    const attemptNumber = ((priorAttempts?.[0]?.attempt_number as number | undefined) ?? 0) + 1;
+
     const { data: inserted, error: insertError } = await admin
       .from('assessments')
       .insert({
@@ -156,6 +195,7 @@ export async function POST(req: NextRequest) {
         session_id: body.sessionId ?? null,
         scene_id: body.sceneId ?? null,
         assessment_type: body.assessmentType,
+        attempt_number: attemptNumber,
         score: body.score ?? null,
         max_score: body.maxScore ?? null,
         feedback: body.feedback ?? null,
