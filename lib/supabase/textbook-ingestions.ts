@@ -65,7 +65,17 @@ export async function fetchIngestion(id: string): Promise<TextbookIngestion | nu
   return (data as TextbookIngestion | null) ?? null;
 }
 
-/** Persist the learner's chapter selection (which sections become lessons) before building the course. */
+/**
+ * Persist the learner's chapter selection (which sections become lessons) before building the course.
+ *
+ * TODO(consolidation): this JSON field is the only place holding each
+ * chapter's `summary`, extracted `text`, and `includeAsLesson` toggle —
+ * `book_chapters` (see lib/server/textbook/persist-structure.ts) has no
+ * columns for any of the three, so it can't fully replace this yet. A
+ * future cutover would need those columns added first. Deliberately not
+ * doing that now — revisit as its own dedicated cleanup task once the Q-W
+ * tiers are functionally complete, not as part of active feature work.
+ */
 export async function updateIngestionChapters(
   id: string,
   chapters: TextbookChaptersData,
