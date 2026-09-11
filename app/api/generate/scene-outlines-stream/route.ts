@@ -22,6 +22,7 @@ import {
   buildVisionUserContent,
   buildOutlinePrompt,
   ensureTrailingQuizOutline,
+  enforceMinimumQuizQuestions,
   uniquifyMediaElementIds,
   formatTeacherPersonaForPrompt,
 } from '@openmaic/generation';
@@ -72,6 +73,11 @@ function extractLanguageDirective(buffer: string): string | null {
  * the buffer head. Returns the decoded title, or null if not yet streamed.
  */
 const COURSE_TITLE_RE = /"courseTitle"\s*:\s*"((?:[^"\\]|\\.)*)"/;
+
+/** Minimum trailing-quiz question count for a book-structured course lesson
+ *  (see enforceMinimumQuizQuestions) — well above the generic guarantee's
+ *  synthetic-fallback default of 3. */
+const MIN_BOOK_STRUCTURED_QUIZ_QUESTIONS = 10;
 
 // Normalize a captured title identically to the non-streaming parser
 // (@openmaic/generation outline parser): ignore whitespace-only titles and cap
@@ -420,6 +426,7 @@ export async function POST(req: NextRequest) {
     // images removed, mapping naming only resolved ids) so its placeholder
     // text never promises an image this route will not attach.
     const courseMode = requirements.courseMode === true;
+    const bookStructuredCourse = requirements.bookStructuredCourse === true;
     let prompts: { system: string; user: string } | null = buildOutlinePrompt(requirements, {
       pdfText,
       pdfImages: resolvedPdfImages ?? pdfImages,
@@ -680,6 +687,19 @@ export async function POST(req: NextRequest) {
             // doesn't use.
             if (!taskEngineMode) {
               parsedOutlines = ensureTrailingQuizOutline(parsedOutlines);
+              // Book-structured course lessons (generated from a textbook
+              // chapter — see lib/courses/lessons.ts) get a richer minimum
+              // than the generic guarantee's synthetic-fallback default of
+              // 3: applied after the guarantee above so it covers both a
+              // model-generated quiz that came in low and the synthetic
+              // fallback alike, without duplicating the "is there a quiz"
+              // check that already lives in ensureTrailingQuizOutline.
+              if (bookStructuredCourse) {
+                parsedOutlines = enforceMinimumQuizQuestions(
+                  parsedOutlines,
+                  MIN_BOOK_STRUCTURED_QUIZ_QUESTIONS,
+                );
+              }
             }
             // Replace sequential gen_img_N/gen_vid_N with globally unique IDs
             const uniquifiedOutlines = uniquifyMediaElementIds(parsedOutlines);

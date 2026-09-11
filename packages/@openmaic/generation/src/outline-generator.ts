@@ -284,3 +284,36 @@ export function ensureTrailingQuizOutline(outlines: SceneOutline[]): SceneOutlin
 
   return [...outlines, fallbackQuiz];
 }
+
+/**
+ * Raise the trailing quiz scene's question count to at least `minimum`,
+ * leaving it untouched if it already meets or exceeds that — never trims a
+ * richer model-generated (or already-boosted) quiz down. No-op when the
+ * last scene isn't a quiz; pair with `ensureTrailingQuizOutline` first if
+ * one must always exist. Only the trailing scene is touched — a mid-lesson
+ * formative-check quiz elsewhere in the outline is intentionally left at
+ * whatever size the model gave it, since inflating a quick check-in isn't
+ * what this guarantee is for.
+ */
+export function enforceMinimumQuizQuestions(
+  outlines: SceneOutline[],
+  minimum: number,
+): SceneOutline[] {
+  if (outlines.length === 0) return outlines;
+  const lastIndex = outlines.length - 1;
+  const last = outlines[lastIndex];
+  if (last.type !== 'quiz') return outlines;
+  if ((last.quizConfig?.questionCount ?? 0) >= minimum) return outlines;
+
+  const next = [...outlines];
+  next[lastIndex] = {
+    ...last,
+    quizConfig: {
+      difficulty: 'medium',
+      questionTypes: ['single', 'multiple'],
+      ...last.quizConfig,
+      questionCount: minimum,
+    },
+  };
+  return next;
+}

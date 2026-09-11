@@ -109,6 +109,7 @@ export function buildChapterLessonSessionState(
     requirements: {
       requirement: buildChapterLessonRequirement(course, lessonNumber, chapterTitle, priorLessonTitles),
       courseMode: true,
+      bookStructuredCourse: true,
     },
     pdfText: chapterText,
     pdfImages: [],

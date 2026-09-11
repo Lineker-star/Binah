@@ -33,6 +33,12 @@ export interface UserRequirements {
    *  theory, as a strong default rather than a hard rule. Never set for
    *  ad-hoc single-prompt generation. */
   courseMode?: boolean;
+  /** True for a lesson generated from a textbook chapter as part of a
+   *  book-structured course (see lib/courses/lessons.ts#buildChapterLessonSessionState).
+   *  Always accompanies `courseMode: true`; raises the trailing quiz's
+   *  minimum question count (see enforceMinimumQuizQuestions) on top of
+   *  the courseMode framing every structured-course lesson already gets. */
+  bookStructuredCourse?: boolean;
 }
 
 export interface WidgetOutline {

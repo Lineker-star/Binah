@@ -110,6 +110,12 @@ export interface UserRequirements {
    *  instruction and enables a code-level fallback that guarantees a
    *  trailing quiz scene. Never set for ad-hoc single-prompt generation. */
   courseMode?: boolean;
+  /** True for a lesson generated from a textbook chapter as part of a
+   *  book-structured course (see lib/courses/lessons.ts#buildChapterLessonSessionState).
+   *  Always accompanies `courseMode: true`; raises the trailing quiz's
+   *  minimum question count on top of the courseMode framing every
+   *  structured-course lesson already gets. */
+  bookStructuredCourse?: boolean;
 }
 
 // ==================== Stage 1 Output: Scene Outlines (Simplified) ====================

@@ -4,6 +4,8 @@ import { describe, expect, test, vi } from 'vitest';
 import {
   DEFAULT_LANGUAGE_DIRECTIVE,
   applyOutlineFallbacks,
+  ensureTrailingQuizOutline,
+  enforceMinimumQuizQuestions,
   generateSceneOutlinesFromRequirements,
   sanitizeProceduralSkillOutline,
   type AICallFn,
@@ -180,6 +182,111 @@ describe('outline fallbacks', () => {
     };
     applyOutlineFallbacks({ ...baseOutline, type: 'interactive' }, true, { logger });
     expect(warn).toHaveBeenCalledOnce();
+  });
+});
+
+describe('ensureTrailingQuizOutline', () => {
+  const slide = { ...baseOutline, id: 'scene_1', order: 1 };
+
+  test('appends a synthetic quiz when the outline has none', () => {
+    const result = ensureTrailingQuizOutline([slide]);
+    expect(result).toHaveLength(2);
+    expect(result[1].type).toBe('quiz');
+    expect(result[1].quizConfig?.questionCount).toBe(3);
+  });
+
+  test('is a no-op when the outline already ends with a quiz', () => {
+    const quiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_2',
+      type: 'quiz',
+      order: 2,
+      quizConfig: { questionCount: 5, difficulty: 'hard', questionTypes: ['single'] },
+    };
+    const outlines = [slide, quiz];
+    expect(ensureTrailingQuizOutline(outlines)).toBe(outlines);
+  });
+
+  test('leaves a mid-lesson quiz alone when the trailing scene is not a quiz', () => {
+    const midQuiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_mid',
+      type: 'quiz',
+      order: 1,
+      quizConfig: { questionCount: 2, difficulty: 'easy', questionTypes: ['single'] },
+    };
+    const result = ensureTrailingQuizOutline([midQuiz, slide]);
+    expect(result).toHaveLength(3);
+    expect(result[0]).toBe(midQuiz);
+    expect(result[0].quizConfig?.questionCount).toBe(2);
+    expect(result[2].type).toBe('quiz');
+  });
+});
+
+describe('enforceMinimumQuizQuestions', () => {
+  const slide = { ...baseOutline, id: 'scene_1', order: 1 };
+
+  test('raises a low trailing question count to the minimum', () => {
+    const quiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_2',
+      type: 'quiz',
+      order: 2,
+      quizConfig: { questionCount: 3, difficulty: 'medium', questionTypes: ['single'] },
+    };
+    const result = enforceMinimumQuizQuestions([slide, quiz], 10);
+    expect(result[1].quizConfig).toMatchObject({
+      questionCount: 10,
+      difficulty: 'medium',
+      questionTypes: ['single'],
+    });
+  });
+
+  test('never lowers a quiz that already meets or exceeds the minimum', () => {
+    const quiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_2',
+      type: 'quiz',
+      order: 2,
+      quizConfig: { questionCount: 15, difficulty: 'hard', questionTypes: ['multiple'] },
+    };
+    const outlines = [slide, quiz];
+    expect(enforceMinimumQuizQuestions(outlines, 10)).toBe(outlines);
+  });
+
+  test('is a no-op when the trailing scene is not a quiz at all', () => {
+    const outlines = [slide];
+    expect(enforceMinimumQuizQuestions(outlines, 10)).toBe(outlines);
+  });
+
+  test('fills in default difficulty/questionTypes when the quiz has no quizConfig', () => {
+    const quiz: SceneOutline = { ...baseOutline, id: 'scene_2', type: 'quiz', order: 2 };
+    const result = enforceMinimumQuizQuestions([slide, quiz], 10);
+    expect(result[1].quizConfig).toEqual({
+      questionCount: 10,
+      difficulty: 'medium',
+      questionTypes: ['single', 'multiple'],
+    });
+  });
+
+  test('only touches the trailing quiz, leaving an earlier mid-lesson quiz untouched', () => {
+    const midQuiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_mid',
+      type: 'quiz',
+      order: 1,
+      quizConfig: { questionCount: 2, difficulty: 'easy', questionTypes: ['single'] },
+    };
+    const trailingQuiz: SceneOutline = {
+      ...baseOutline,
+      id: 'scene_3',
+      type: 'quiz',
+      order: 3,
+      quizConfig: { questionCount: 3, difficulty: 'medium', questionTypes: ['single'] },
+    };
+    const result = enforceMinimumQuizQuestions([midQuiz, slide, trailingQuiz], 10);
+    expect(result[0].quizConfig?.questionCount).toBe(2);
+    expect(result[2].quizConfig?.questionCount).toBe(10);
   });
 });
 

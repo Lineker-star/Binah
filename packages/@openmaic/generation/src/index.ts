@@ -77,6 +77,7 @@ export {
   applyOutlineFallbacks,
   buildOutlinePrompt,
   ensureTrailingQuizOutline,
+  enforceMinimumQuizQuestions,
   generateSceneOutlinesFromRequirements,
   sanitizeProceduralSkillOutline,
 } from './outline-generator.js';

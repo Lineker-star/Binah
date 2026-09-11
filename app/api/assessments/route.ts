@@ -64,14 +64,33 @@ export async function POST(req: NextRequest) {
     // request body — look it up so the recommendation generated below (and
     // any future course-scoped assessment query) can actually relate back
     // to the course, the same way course-final's own insert already does.
+    // A session generated from a textbook chapter (source_ingestion_id +
+    // source_chapter_index — see lib/courses/lessons.ts) resolves the same
+    // way to book_chapters.id, via the chapter_number that ingestion's
+    // structuring plan (lib/textbook/book-plan.ts) assigned it at ingest
+    // time: chapter_number is 1-based, source_chapter_index is the same
+    // chapter's 0-based position in that array, so number = index + 1.
     let courseId: string | null = null;
+    let chapterId: string | null = null;
     if (body.sessionId) {
       const { data: session } = await supabase
         .from('learning_sessions')
-        .select('course_id')
+        .select('course_id, source_ingestion_id, source_chapter_index')
         .eq('id', body.sessionId)
         .maybeSingle();
       courseId = (session?.course_id as string | null) ?? null;
+
+      const sourceIngestionId = (session?.source_ingestion_id as string | null) ?? null;
+      const sourceChapterIndex = (session?.source_chapter_index as number | null) ?? null;
+      if (sourceIngestionId != null && sourceChapterIndex != null) {
+        const { data: chapter } = await supabase
+          .from('book_chapters')
+          .select('id')
+          .eq('ingestion_id', sourceIngestionId)
+          .eq('chapter_number', sourceChapterIndex + 1)
+          .maybeSingle();
+        chapterId = (chapter?.id as string | null) ?? null;
+      }
     }
 
     const admin = createServiceRoleClient();
@@ -81,6 +100,7 @@ export async function POST(req: NextRequest) {
       .insert({
         learner_id: user.id,
         course_id: courseId,
+        chapter_id: chapterId,
         session_id: body.sessionId ?? null,
         scene_id: body.sceneId ?? null,
         assessment_type: body.assessmentType,
