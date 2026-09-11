@@ -2216,5 +2216,12 @@
     "lessonCount": "課程數：{{count}}",
     "totalLessonsWithModules": "共 {{lessons}} 堂課，涵蓋 {{modules}} 個模組、{{chapters}} 章",
     "totalLessonsNoModules": "共 {{lessons}} 堂課，涵蓋 {{chapters}} 章"
+  },
+  "continuousAssessment": {
+    "generating": "正在產生評估…",
+    "generateFailed": "產生連續評估失敗。",
+    "title": "連續評估",
+    "subtitle": "涵蓋章節《{{chapter}}》的全部內容",
+    "continueToBook": "繼續"
   }
 }

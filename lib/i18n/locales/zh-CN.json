@@ -2216,5 +2216,12 @@
     "lessonCount": "课程数：{{count}}",
     "totalLessonsWithModules": "共 {{lessons}} 节课，涵盖 {{modules}} 个模块、{{chapters}} 章",
     "totalLessonsNoModules": "共 {{lessons}} 节课，涵盖 {{chapters}} 章"
+  },
+  "continuousAssessment": {
+    "generating": "正在生成评估…",
+    "generateFailed": "生成连续评估失败。",
+    "title": "连续评估",
+    "subtitle": "涵盖章节《{{chapter}}》的全部内容",
+    "continueToBook": "继续"
   }
 }

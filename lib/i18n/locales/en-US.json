@@ -2216,5 +2216,12 @@
     "lessonCount": "Lessons: {{count}}",
     "totalLessonsWithModules": "{{lessons}} lessons across {{modules}} modules, {{chapters}} chapters",
     "totalLessonsNoModules": "{{lessons}} lessons across {{chapters}} chapters"
+  },
+  "continuousAssessment": {
+    "generating": "Generating your assessment…",
+    "generateFailed": "Failed to generate the continuous assessment.",
+    "title": "Continuous Assessment",
+    "subtitle": "Covering everything from \"{{chapter}}\"",
+    "continueToBook": "Continue"
   }
 }

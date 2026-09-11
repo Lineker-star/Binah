@@ -2216,5 +2216,12 @@
     "lessonCount": "레슨 수: {{count}}",
     "totalLessonsWithModules": "{{modules}}개 모듈, {{chapters}}개 챕터에 걸쳐 {{lessons}}개 레슨",
     "totalLessonsNoModules": "{{chapters}}개 챕터에 걸쳐 {{lessons}}개 레슨"
+  },
+  "continuousAssessment": {
+    "generating": "평가를 생성하는 중…",
+    "generateFailed": "지속 평가 생성에 실패했습니다.",
+    "title": "지속 평가",
+    "subtitle": "\"{{chapter}}\"의 모든 내용을 다룹니다",
+    "continueToBook": "계속하기"
   }
 }

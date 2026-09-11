@@ -2216,5 +2216,12 @@
     "lessonCount": "Số bài học: {{count}}",
     "totalLessonsWithModules": "{{lessons}} bài học trong {{modules}} học phần, {{chapters}} chương",
     "totalLessonsNoModules": "{{lessons}} bài học trong {{chapters}} chương"
+  },
+  "continuousAssessment": {
+    "generating": "Đang tạo bài đánh giá…",
+    "generateFailed": "Không thể tạo bài đánh giá liên tục.",
+    "title": "Đánh Giá Liên Tục",
+    "subtitle": "Bao quát toàn bộ chương \"{{chapter}}\"",
+    "continueToBook": "Tiếp tục"
   }
 }

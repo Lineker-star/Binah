@@ -2216,5 +2216,12 @@
     "lessonCount": "Уроков: {{count}}",
     "totalLessonsWithModules": "{{lessons}} уроков в {{modules}} модулях, {{chapters}} главах",
     "totalLessonsNoModules": "{{lessons}} уроков в {{chapters}} главах"
+  },
+  "continuousAssessment": {
+    "generating": "Формируем вашу оценку…",
+    "generateFailed": "Не удалось сформировать непрерывную оценку.",
+    "title": "Непрерывная оценка",
+    "subtitle": "Охватывает всё из главы «{{chapter}}»",
+    "continueToBook": "Продолжить"
   }
 }

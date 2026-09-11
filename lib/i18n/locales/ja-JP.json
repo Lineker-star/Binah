@@ -2216,5 +2216,12 @@
     "lessonCount": "レッスン数: {{count}}",
     "totalLessonsWithModules": "全{{modules}}モジュール・{{chapters}}章で{{lessons}}レッスン",
     "totalLessonsNoModules": "全{{chapters}}章で{{lessons}}レッスン"
+  },
+  "continuousAssessment": {
+    "generating": "評価を生成しています…",
+    "generateFailed": "継続評価の生成に失敗しました。",
+    "title": "継続評価",
+    "subtitle": "「{{chapter}}」の内容をすべて対象とします",
+    "continueToBook": "続ける"
   }
 }
