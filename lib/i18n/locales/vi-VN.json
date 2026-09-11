@@ -2223,5 +2223,12 @@
     "title": "Đánh Giá Liên Tục",
     "subtitle": "Bao quát toàn bộ chương \"{{chapter}}\"",
     "continueToBook": "Tiếp tục"
+  },
+  "exam": {
+    "generating": "Đang tạo bài thi…",
+    "generateFailed": "Không thể tạo bài thi.",
+    "title": "Bài Thi",
+    "subtitle": "Bao quát toàn bộ \"{{scope}}\"",
+    "continueToBook": "Tiếp tục"
   }
 }

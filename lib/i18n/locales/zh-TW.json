@@ -2223,5 +2223,12 @@
     "title": "連續評估",
     "subtitle": "涵蓋章節《{{chapter}}》的全部內容",
     "continueToBook": "繼續"
+  },
+  "exam": {
+    "generating": "正在產生考試…",
+    "generateFailed": "產生考試失敗。",
+    "title": "考試",
+    "subtitle": "涵蓋《{{scope}}》的全部內容",
+    "continueToBook": "繼續"
   }
 }

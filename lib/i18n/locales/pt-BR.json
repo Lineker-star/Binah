@@ -2223,5 +2223,12 @@
     "title": "Avaliação Contínua",
     "subtitle": "Cobrindo tudo do capítulo \"{{chapter}}\"",
     "continueToBook": "Continuar"
+  },
+  "exam": {
+    "generating": "Gerando sua prova…",
+    "generateFailed": "Falha ao gerar a prova.",
+    "title": "Prova",
+    "subtitle": "Cobrindo tudo de \"{{scope}}\"",
+    "continueToBook": "Continuar"
   }
 }

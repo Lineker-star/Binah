@@ -2223,5 +2223,12 @@
     "title": "连续评估",
     "subtitle": "涵盖章节《{{chapter}}》的全部内容",
     "continueToBook": "继续"
+  },
+  "exam": {
+    "generating": "正在生成考试…",
+    "generateFailed": "生成考试失败。",
+    "title": "考试",
+    "subtitle": "涵盖《{{scope}}》的全部内容",
+    "continueToBook": "继续"
   }
 }

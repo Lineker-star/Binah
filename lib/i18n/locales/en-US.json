@@ -2223,5 +2223,12 @@
     "title": "Continuous Assessment",
     "subtitle": "Covering everything from \"{{chapter}}\"",
     "continueToBook": "Continue"
+  },
+  "exam": {
+    "generating": "Generating your exam…",
+    "generateFailed": "Failed to generate the exam.",
+    "title": "Exam",
+    "subtitle": "Covering everything from \"{{scope}}\"",
+    "continueToBook": "Continue"
   }
 }

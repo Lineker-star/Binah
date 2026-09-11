@@ -2223,5 +2223,12 @@
     "title": "지속 평가",
     "subtitle": "\"{{chapter}}\"의 모든 내용을 다룹니다",
     "continueToBook": "계속하기"
+  },
+  "exam": {
+    "generating": "시험을 생성하는 중…",
+    "generateFailed": "시험 생성에 실패했습니다.",
+    "title": "시험",
+    "subtitle": "\"{{scope}}\"의 모든 내용을 다룹니다",
+    "continueToBook": "계속하기"
   }
 }

@@ -2223,5 +2223,12 @@
     "title": "継続評価",
     "subtitle": "「{{chapter}}」の内容をすべて対象とします",
     "continueToBook": "続ける"
+  },
+  "exam": {
+    "generating": "試験を生成しています…",
+    "generateFailed": "試験の生成に失敗しました。",
+    "title": "試験",
+    "subtitle": "「{{scope}}」の内容をすべて対象とします",
+    "continueToBook": "続ける"
   }
 }

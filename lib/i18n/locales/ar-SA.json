@@ -2223,5 +2223,12 @@
     "title": "التقييم المستمر",
     "subtitle": "يغطي كل ما جاء في \"{{chapter}}\"",
     "continueToBook": "متابعة"
+  },
+  "exam": {
+    "generating": "جارٍ إنشاء الامتحان…",
+    "generateFailed": "تعذّر إنشاء الامتحان.",
+    "title": "امتحان",
+    "subtitle": "يغطي كل ما جاء في \"{{scope}}\"",
+    "continueToBook": "متابعة"
   }
 }

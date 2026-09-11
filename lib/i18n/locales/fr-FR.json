@@ -2223,5 +2223,12 @@
     "title": "Évaluation Continue",
     "subtitle": "Couvre tout le chapitre « {{chapter}} »",
     "continueToBook": "Continuer"
+  },
+  "exam": {
+    "generating": "Génération de votre examen…",
+    "generateFailed": "Échec de la génération de l'examen.",
+    "title": "Examen",
+    "subtitle": "Couvre tout « {{scope}} »",
+    "continueToBook": "Continuer"
   }
 }

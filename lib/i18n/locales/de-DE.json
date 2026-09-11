@@ -2223,5 +2223,12 @@
     "title": "Fortlaufende Bewertung",
     "subtitle": "Deckt alles aus „{{chapter}}\" ab",
     "continueToBook": "Weiter"
+  },
+  "exam": {
+    "generating": "Prüfung wird erstellt…",
+    "generateFailed": "Die Prüfung konnte nicht erstellt werden.",
+    "title": "Prüfung",
+    "subtitle": "Deckt alles aus „{{scope}}\" ab",
+    "continueToBook": "Weiter"
   }
 }
