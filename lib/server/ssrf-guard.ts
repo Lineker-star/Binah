@@ -243,6 +243,35 @@ export function isPrivateIP(ip: string): boolean {
   return false;
 }
 
+/**
+ * Whether a URL's hostname is a literal local/private network target — the
+ * same address classes `validateUrlForSSRF` blocks, but without its
+ * ALLOW_LOCAL_NETWORKS bypass or DNS resolution of ordinary hostnames.
+ * For classifying *behavior* that should key off "this is a local network
+ * target" (e.g. retrying a flaky local inference server on a dropped
+ * connection) independent of whether fetching it is currently permitted at
+ * all — that permission question is `validateUrlForSSRF`'s job, not this
+ * one's.
+ */
+export function isLocalOrPrivateUrl(url: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return false;
+  }
+  const hostname = normalizeAddress(parsed.hostname);
+  if (
+    hostname === 'localhost' ||
+    hostname.endsWith('.local') ||
+    hostname === '0.0.0.0' ||
+    hostname === '::1'
+  ) {
+    return true;
+  }
+  return isIP(hostname) ? isPrivateIP(hostname) : false;
+}
+
 const LOCAL_NETWORK_BLOCK_MESSAGE =
   'Local/private network URLs are not allowed. If this is a self-hosted deployment or internal gateway (including split-horizon DNS), set ALLOW_LOCAL_NETWORKS=true to allow local network targets.';
 

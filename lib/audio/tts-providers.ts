@@ -98,6 +98,7 @@ import { isQwenCloneVoice, resolveTTSModelForVoice, TTS_PROVIDERS } from './cons
 import { downloadAudio, QwenVoiceCloneError, synthesizeQwenVoiceClone } from './qwen-voice-clone';
 import { evictQwenVoiceRegistrationMemo } from './qwen-voice-clone-registration';
 import { splitConcatenatedJsonObjects } from './json-stream';
+import { fetchWithLocalRetry } from '@/lib/server/fetch-with-local-retry';
 import {
   VOXCPM_VLLM_MODEL_ID,
   VOXCPM_AUTO_VOICE_ID,
@@ -324,7 +325,7 @@ async function generateLemonadeTTS(
   const modelId = config.modelId || TTS_PROVIDERS['lemonade-tts'].defaultModelId;
   const voice = config.voice || 'af_heart';
 
-  const response = await fetch(`${baseUrl}/audio/speech`, {
+  const response = await fetchWithLocalRetry(`${baseUrl}/audio/speech`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

@@ -150,6 +150,7 @@ import { experimental_transcribe as transcribe } from 'ai';
 import type { ASRModelConfig } from './types';
 import { isCustomASRProvider } from './types';
 import { ASR_PROVIDERS } from './constants';
+import { fetchWithLocalRetry } from '@/lib/server/fetch-with-local-retry';
 
 /**
  * Result of ASR transcription
@@ -235,7 +236,7 @@ async function transcribeWavOpenAICompatibleASR(
     formData.set('language', config.language);
   }
 
-  const response = await fetch(`${baseUrl}/audio/transcriptions`, {
+  const response = await fetchWithLocalRetry(`${baseUrl}/audio/transcriptions`, {
     method: 'POST',
     headers: getOptionalBearerAuthHeaders(config.apiKey),
     body: formData,
