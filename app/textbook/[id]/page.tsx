@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, Pause, Play, Sparkles } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Loader2, Pause, Play, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -103,6 +103,7 @@ export default function TextbookChapterReviewPage() {
   // -- `some` naturally stays false for those, and the list below renders
   // exactly as it did before this hierarchy existed.
   const hasModules = items.some((c) => c.moduleNumber != null);
+  const hasLessonPlan = items.some((c) => c.plannedLessonCount != null);
   const moduleLessonTotals = new Map<number, number>();
   if (hasModules) {
     for (const chapter of items) {
@@ -113,6 +114,43 @@ export default function TextbookChapterReviewPage() {
       );
     }
   }
+
+  const chapterOnlyItems = items.filter((c) => c.kind === 'chapter');
+  const totalLessons = chapterOnlyItems.reduce((sum, c) => sum + (c.plannedLessonCount ?? 0), 0);
+  const moduleCount = new Set(
+    items.map((c) => c.moduleNumber).filter((n): n is number => n != null),
+  ).size;
+
+  // Contiguous groups by module number -- module assignment never
+  // interleaves (see lib/textbook/structure-plan.ts#groupChaptersIntoModules),
+  // so a single left-to-right pass is enough to bucket every item.
+  interface ModuleGroup {
+    moduleNumber: number;
+    entries: Array<{ chapter: IngestedChapter; index: number }>;
+  }
+  const moduleGroups: ModuleGroup[] = [];
+  if (hasModules) {
+    for (let index = 0; index < items.length; index++) {
+      const chapter = items[index];
+      if (chapter.moduleNumber == null) continue;
+      const currentGroup = moduleGroups[moduleGroups.length - 1];
+      if (currentGroup?.moduleNumber === chapter.moduleNumber) {
+        currentGroup.entries.push({ chapter, index });
+      } else {
+        moduleGroups.push({ moduleNumber: chapter.moduleNumber, entries: [{ chapter, index }] });
+      }
+    }
+  }
+
+  const [collapsedModules, setCollapsedModules] = useState<Set<number>>(new Set());
+  const toggleModuleCollapsed = (moduleNumber: number) => {
+    setCollapsedModules((prev) => {
+      const next = new Set(prev);
+      if (next.has(moduleNumber)) next.delete(moduleNumber);
+      else next.add(moduleNumber);
+      return next;
+    });
+  };
 
   const toggleChapter = (index: number) => {
     if (!ingestion?.chapters) return;
@@ -237,6 +275,69 @@ export default function TextbookChapterReviewPage() {
   const chapters = ingestion.chapters!;
   const bookTitle = ingestion.original_filename.replace(/\.pdf$/i, '');
 
+  const renderChapterCard = (chapter: IngestedChapter, index: number): ReactNode => {
+    const isFrontOrBack = chapter.kind !== 'chapter';
+    return (
+      <div
+        key={index}
+        className={cn(
+          'rounded-xl border border-border/60 bg-card/60 p-4 flex gap-3 items-start transition-colors',
+          !chapter.includeAsLesson && 'opacity-55',
+        )}
+      >
+        <input
+          type="checkbox"
+          checked={chapter.includeAsLesson}
+          onChange={() => toggleChapter(index)}
+          className="mt-1 size-4 accent-primary cursor-pointer"
+        />
+        {!isFrontOrBack ? (
+          <div className="shrink-0 size-7 rounded-lg bg-primary/10 text-primary text-[12px] font-bold flex items-center justify-center">
+            {items.slice(0, index + 1).filter((c) => c.kind === 'chapter').length}
+          </div>
+        ) : (
+          <div className="shrink-0 size-7 rounded-lg bg-muted text-muted-foreground text-[12px] flex items-center justify-center">
+            —
+          </div>
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <span className="text-[14px] font-medium text-foreground">{chapter.title}</span>
+            {isFrontOrBack ? (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+                {chapter.kind === 'front_matter' ? t('textbook.frontMatter') : t('textbook.backMatter')}
+              </span>
+            ) : (
+              <span
+                className={cn(
+                  'text-[10px] px-1.5 py-0.5 rounded-full',
+                  chapter.detectionMethod === 'native_outline'
+                    ? 'bg-muted text-muted-foreground'
+                    : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                )}
+              >
+                {chapter.detectionMethod === 'native_outline'
+                  ? t('textbook.pdfOutline')
+                  : t('textbook.aiDetected')}
+              </span>
+            )}
+            {chapter.plannedLessonCount != null && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+                {t('textbook.lessonCount', { count: chapter.plannedLessonCount })}
+              </span>
+            )}
+          </div>
+          {chapter.summary && (
+            <p className="text-[13px] leading-relaxed text-muted-foreground">{chapter.summary}</p>
+          )}
+        </div>
+        <div className="shrink-0 text-[12px] text-muted-foreground tabular-nums pt-1">
+          {t('textbook.pageRange', { start: chapter.startPage, end: chapter.endPage })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10 pb-32">
       <Link
@@ -249,6 +350,20 @@ export default function TextbookChapterReviewPage() {
 
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-foreground">{bookTitle}</h1>
+        {hasLessonPlan && (
+          <p className="text-[14px] font-semibold text-primary mt-2">
+            {hasModules
+              ? t('textbook.totalLessonsWithModules', {
+                  lessons: totalLessons,
+                  modules: moduleCount,
+                  chapters: chapterOnlyItems.length,
+                })
+              : t('textbook.totalLessonsNoModules', {
+                  lessons: totalLessons,
+                  chapters: chapterOnlyItems.length,
+                })}
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-2 mt-2">
           {ingestion.total_pages != null && (
             <span className="text-[12px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
@@ -329,102 +444,53 @@ export default function TextbookChapterReviewPage() {
         </h2>
       </div>
 
-      <div className="flex flex-col gap-2">
-        {items.flatMap((chapter, index) => {
-          const isFrontOrBack = chapter.kind !== 'chapter';
-          const elements: ReactNode[] = [];
-
-          // Absent on ingestions written before this field existed — those
-          // render exactly as before, with no module headers or lesson counts.
-          const startsNewModule =
-            hasModules &&
-            chapter.moduleNumber != null &&
-            (index === 0 || items[index - 1].moduleNumber !== chapter.moduleNumber);
-          if (startsNewModule) {
-            const moduleNumber = chapter.moduleNumber as number;
-            const lessonTotal = moduleLessonTotals.get(moduleNumber);
-            elements.push(
+      {hasModules ? (
+        <div className="flex flex-col gap-3">
+          {moduleGroups.map((group) => {
+            const collapsed = collapsedModules.has(group.moduleNumber);
+            const lessonTotal = moduleLessonTotals.get(group.moduleNumber);
+            return (
               <div
-                key={`module-${moduleNumber}`}
-                className="flex items-center gap-2 mt-3 first:mt-0 px-1"
+                key={group.moduleNumber}
+                className="rounded-2xl border border-border/60 bg-card/40 overflow-hidden"
               >
-                <h3 className="text-[12.5px] font-semibold text-foreground">
-                  {t('textbook.moduleHeading', { number: moduleNumber })}
-                </h3>
-                {lessonTotal != null && (
-                  <span className="text-[11px] text-muted-foreground">
-                    {t('textbook.lessonCount', { count: lessonTotal })}
-                  </span>
-                )}
-              </div>,
-            );
-          }
-
-          elements.push(
-            <div
-              key={index}
-              className={cn(
-                'rounded-xl border border-border/60 bg-card/60 p-4 flex gap-3 items-start transition-colors',
-                !chapter.includeAsLesson && 'opacity-55',
-              )}
-            >
-              <input
-                type="checkbox"
-                checked={chapter.includeAsLesson}
-                onChange={() => toggleChapter(index)}
-                className="mt-1 size-4 accent-primary cursor-pointer"
-              />
-              {!isFrontOrBack ? (
-                <div className="shrink-0 size-7 rounded-lg bg-primary/10 text-primary text-[12px] font-bold flex items-center justify-center">
-                  {items.slice(0, index + 1).filter((c) => c.kind === 'chapter').length}
-                </div>
-              ) : (
-                <div className="shrink-0 size-7 rounded-lg bg-muted text-muted-foreground text-[12px] flex items-center justify-center">
-                  —
-                </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="text-[14px] font-medium text-foreground">{chapter.title}</span>
-                  {isFrontOrBack ? (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
-                      {chapter.kind === 'front_matter'
-                        ? t('textbook.frontMatter')
-                        : t('textbook.backMatter')}
-                    </span>
-                  ) : (
-                    <span
+                <button
+                  type="button"
+                  onClick={() => toggleModuleCollapsed(group.moduleNumber)}
+                  aria-expanded={!collapsed}
+                  className="w-full flex items-center justify-between gap-2 px-4 py-3 text-left hover:bg-muted/40 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <ChevronDown
                       className={cn(
-                        'text-[10px] px-1.5 py-0.5 rounded-full',
-                        chapter.detectionMethod === 'native_outline'
-                          ? 'bg-muted text-muted-foreground'
-                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                        'size-4 shrink-0 text-muted-foreground transition-transform',
+                        collapsed && '-rotate-90',
                       )}
-                    >
-                      {chapter.detectionMethod === 'native_outline'
-                        ? t('textbook.pdfOutline')
-                        : t('textbook.aiDetected')}
+                    />
+                    <h3 className="text-[13px] font-semibold text-foreground truncate">
+                      {t('textbook.moduleHeading', { number: group.moduleNumber })}
+                    </h3>
+                  </div>
+                  {lessonTotal != null && (
+                    <span className="shrink-0 text-[11px] text-muted-foreground">
+                      {t('textbook.lessonCount', { count: lessonTotal })}
                     </span>
                   )}
-                  {chapter.plannedLessonCount != null && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
-                      {t('textbook.lessonCount', { count: chapter.plannedLessonCount })}
-                    </span>
-                  )}
-                </div>
-                {chapter.summary && (
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">{chapter.summary}</p>
+                </button>
+                {!collapsed && (
+                  <div className="flex flex-col gap-2 px-3 pb-3 pt-1">
+                    {group.entries.map(({ chapter, index }) => renderChapterCard(chapter, index))}
+                  </div>
                 )}
               </div>
-              <div className="shrink-0 text-[12px] text-muted-foreground tabular-nums pt-1">
-                {t('textbook.pageRange', { start: chapter.startPage, end: chapter.endPage })}
-              </div>
-            </div>,
-          );
-
-          return elements;
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {items.map((chapter, index) => renderChapterCard(chapter, index))}
+        </div>
+      )}
 
       <div className="fixed left-0 right-0 bottom-0 flex justify-center px-6 pb-6 pt-10 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none">
         <div className="pointer-events-auto w-full max-w-4xl flex items-center justify-between gap-4 rounded-2xl border border-border/60 bg-card px-5 py-3 shadow-lg">

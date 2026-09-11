@@ -2213,6 +2213,8 @@
     "uploadHint": "اكتشف الفصول من ملف PDF وراجعها قبل إنشاء أي درس.",
     "uploadFailed": "تعذّر رفع الكتاب الدراسي",
     "moduleHeading": "الوحدة {{number}}",
-    "lessonCount": "الدروس: {{count}}"
+    "lessonCount": "الدروس: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} درسًا موزعة على {{modules}} وحدات و{{chapters}} فصول",
+    "totalLessonsNoModules": "{{lessons}} درسًا موزعة على {{chapters}} فصول"
   }
 }

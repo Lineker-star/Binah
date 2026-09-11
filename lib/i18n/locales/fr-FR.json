@@ -2213,6 +2213,8 @@
     "uploadHint": "Détecte les chapitres d'un PDF et permet de les vérifier avant de générer une leçon.",
     "uploadFailed": "Échec de l'import du manuel",
     "moduleHeading": "Module {{number}}",
-    "lessonCount": "Leçons : {{count}}"
+    "lessonCount": "Leçons : {{count}}",
+    "totalLessonsWithModules": "{{lessons}} leçons réparties sur {{modules}} modules, {{chapters}} chapitres",
+    "totalLessonsNoModules": "{{lessons}} leçons réparties sur {{chapters}} chapitres"
   }
 }

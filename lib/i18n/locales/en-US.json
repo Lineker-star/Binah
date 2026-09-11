@@ -2213,6 +2213,8 @@
     "uploadHint": "Detect chapters from a PDF and review them before any lesson is generated.",
     "uploadFailed": "Failed to upload textbook",
     "moduleHeading": "Module {{number}}",
-    "lessonCount": "Lessons: {{count}}"
+    "lessonCount": "Lessons: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} lessons across {{modules}} modules, {{chapters}} chapters",
+    "totalLessonsNoModules": "{{lessons}} lessons across {{chapters}} chapters"
   }
 }

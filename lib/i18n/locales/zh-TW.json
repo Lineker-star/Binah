@@ -2213,6 +2213,8 @@
     "uploadHint": "從 PDF 偵測章節，並在產生課程前進行審閱。",
     "uploadFailed": "教材上傳失敗",
     "moduleHeading": "模組 {{number}}",
-    "lessonCount": "課程數：{{count}}"
+    "lessonCount": "課程數：{{count}}",
+    "totalLessonsWithModules": "共 {{lessons}} 堂課，涵蓋 {{modules}} 個模組、{{chapters}} 章",
+    "totalLessonsNoModules": "共 {{lessons}} 堂課，涵蓋 {{chapters}} 章"
   }
 }

@@ -2213,6 +2213,8 @@
     "uploadHint": "Kapitel aus einer PDF erkennen und vor der Lektionserstellung überprüfen.",
     "uploadFailed": "Lehrbuch konnte nicht hochgeladen werden",
     "moduleHeading": "Modul {{number}}",
-    "lessonCount": "Lektionen: {{count}}"
+    "lessonCount": "Lektionen: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} Lektionen in {{modules}} Modulen, {{chapters}} Kapiteln",
+    "totalLessonsNoModules": "{{lessons}} Lektionen in {{chapters}} Kapiteln"
   }
 }

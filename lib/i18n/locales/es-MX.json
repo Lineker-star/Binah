@@ -2213,6 +2213,8 @@
     "uploadHint": "Detecta los capítulos de un PDF y revísalos antes de generar cualquier lección.",
     "uploadFailed": "No se pudo subir el libro de texto",
     "moduleHeading": "Módulo {{number}}",
-    "lessonCount": "Lecciones: {{count}}"
+    "lessonCount": "Lecciones: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} lecciones en {{modules}} módulos, {{chapters}} capítulos",
+    "totalLessonsNoModules": "{{lessons}} lecciones en {{chapters}} capítulos"
   }
 }

@@ -2213,6 +2213,8 @@
     "uploadHint": "Определяет главы из PDF и позволяет проверить их перед созданием урока.",
     "uploadFailed": "Не удалось загрузить учебник",
     "moduleHeading": "Модуль {{number}}",
-    "lessonCount": "Уроков: {{count}}"
+    "lessonCount": "Уроков: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} уроков в {{modules}} модулях, {{chapters}} главах",
+    "totalLessonsNoModules": "{{lessons}} уроков в {{chapters}} главах"
   }
 }

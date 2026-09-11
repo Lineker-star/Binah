@@ -2213,6 +2213,8 @@
     "uploadHint": "Phát hiện các chương từ tệp PDF và xem lại trước khi tạo bài học.",
     "uploadFailed": "Không thể tải lên sách giáo khoa",
     "moduleHeading": "Học phần {{number}}",
-    "lessonCount": "Số bài học: {{count}}"
+    "lessonCount": "Số bài học: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} bài học trong {{modules}} học phần, {{chapters}} chương",
+    "totalLessonsNoModules": "{{lessons}} bài học trong {{chapters}} chương"
   }
 }

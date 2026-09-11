@@ -2213,6 +2213,8 @@
     "uploadHint": "Detecta os capítulos de um PDF para revisão antes de gerar qualquer lição.",
     "uploadFailed": "Falha ao enviar o livro didático",
     "moduleHeading": "Módulo {{number}}",
-    "lessonCount": "Lições: {{count}}"
+    "lessonCount": "Lições: {{count}}",
+    "totalLessonsWithModules": "{{lessons}} aulas em {{modules}} módulos, {{chapters}} capítulos",
+    "totalLessonsNoModules": "{{lessons}} aulas em {{chapters}} capítulos"
   }
 }

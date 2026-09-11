@@ -2213,6 +2213,8 @@
     "uploadHint": "PDFから章を検出し、レッスン生成前に確認できます。",
     "uploadFailed": "教科書のアップロードに失敗しました",
     "moduleHeading": "モジュール {{number}}",
-    "lessonCount": "レッスン数: {{count}}"
+    "lessonCount": "レッスン数: {{count}}",
+    "totalLessonsWithModules": "全{{modules}}モジュール・{{chapters}}章で{{lessons}}レッスン",
+    "totalLessonsNoModules": "全{{chapters}}章で{{lessons}}レッスン"
   }
 }

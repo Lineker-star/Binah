@@ -2213,6 +2213,8 @@
     "uploadHint": "从 PDF 中检测章节，并在生成课程前进行审阅。",
     "uploadFailed": "教材上传失败",
     "moduleHeading": "模块 {{number}}",
-    "lessonCount": "课程数：{{count}}"
+    "lessonCount": "课程数：{{count}}",
+    "totalLessonsWithModules": "共 {{lessons}} 节课，涵盖 {{modules}} 个模块、{{chapters}} 章",
+    "totalLessonsNoModules": "共 {{lessons}} 节课，涵盖 {{chapters}} 章"
   }
 }
