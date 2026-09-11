@@ -2211,6 +2211,8 @@
     "buildCourse": "Crear mi curso",
     "uploadButton": "Subir un libro de texto",
     "uploadHint": "Detecta los capítulos de un PDF y revísalos antes de generar cualquier lección.",
-    "uploadFailed": "No se pudo subir el libro de texto"
+    "uploadFailed": "No se pudo subir el libro de texto",
+    "moduleHeading": "Módulo {{number}}",
+    "lessonCount": "Lecciones: {{count}}"
   }
 }

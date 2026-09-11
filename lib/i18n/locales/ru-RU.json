@@ -2211,6 +2211,8 @@
     "buildCourse": "Создать курс",
     "uploadButton": "Загрузить учебник",
     "uploadHint": "Определяет главы из PDF и позволяет проверить их перед созданием урока.",
-    "uploadFailed": "Не удалось загрузить учебник"
+    "uploadFailed": "Не удалось загрузить учебник",
+    "moduleHeading": "Модуль {{number}}",
+    "lessonCount": "Уроков: {{count}}"
   }
 }

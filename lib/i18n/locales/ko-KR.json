@@ -2211,6 +2211,8 @@
     "buildCourse": "내 코스 만들기",
     "uploadButton": "교재 업로드",
     "uploadHint": "PDF에서 챕터를 감지하고 레슨 생성 전에 검토하세요.",
-    "uploadFailed": "교재 업로드에 실패했습니다"
+    "uploadFailed": "교재 업로드에 실패했습니다",
+    "moduleHeading": "모듈 {{number}}",
+    "lessonCount": "레슨 수: {{count}}"
   }
 }

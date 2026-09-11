@@ -19,6 +19,7 @@ import { detectHeadingCandidates } from '@/lib/pdf/heading-heuristic';
 import { detectChaptersViaFallback } from '@/lib/server/textbook/chapter-fallback';
 import { generateChapterSummary, generateWholeBookSummary } from '@/lib/server/textbook/summaries';
 import { persistBookStructure } from '@/lib/server/textbook/persist-structure';
+import { computeBookPlan } from '@/lib/textbook/book-plan';
 import type { IngestedChapter, TextbookChaptersData } from '@/lib/textbook/types';
 
 const log = createLogger('TextbookIngestAPI');
@@ -90,9 +91,15 @@ export async function POST(req: NextRequest) {
       return apiError('PARSE_FAILED', 422, 'No chapters could be detected in this PDF.');
     }
 
+    // Computed once, used both to persist book_modules/book_chapters below
+    // and to stamp plannedLessonCount/moduleNumber onto the ingestion JSON
+    // (see `items` further down) -- one computation, not two that could
+    // drift from each other.
+    const bookPlan = computeBookPlan(totalPages, chapters);
+
     // Structural rows (book_modules/book_chapters) alongside the JSON below
-    // -- best-effort, since nothing user-visible reads them yet.
-    await persistBookStructure(admin, ingestionId, totalPages, chapters).catch((err) => {
+    // -- best-effort, since nothing user-visible depends on these tables yet.
+    await persistBookStructure(admin, ingestionId, chapters, bookPlan).catch((err) => {
       log.warn(`Failed to persist book structure for ingestion ${ingestionId} (continuing):`, err);
     });
 
@@ -134,6 +141,8 @@ export async function POST(req: NextRequest) {
       summary: i < summarizable.length ? chapterSummaries[i] : '',
       text: chapterTexts[i],
       includeAsLesson: c.kind === 'chapter',
+      plannedLessonCount: bookPlan.chapters[i]?.plannedLessonCount ?? null,
+      moduleNumber: bookPlan.chapters[i]?.moduleNumber ?? null,
     }));
 
     const chaptersData: TextbookChaptersData = {

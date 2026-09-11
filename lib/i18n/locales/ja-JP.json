@@ -2211,6 +2211,8 @@
     "buildCourse": "コースを作成",
     "uploadButton": "教科書をアップロード",
     "uploadHint": "PDFから章を検出し、レッスン生成前に確認できます。",
-    "uploadFailed": "教科書のアップロードに失敗しました"
+    "uploadFailed": "教科書のアップロードに失敗しました",
+    "moduleHeading": "モジュール {{number}}",
+    "lessonCount": "レッスン数: {{count}}"
   }
 }

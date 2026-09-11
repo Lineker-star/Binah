@@ -22,6 +22,20 @@ export interface IngestedChapter {
   text: string;
   /** Learner-controlled: whether this section should become a lesson when the course is built. */
   includeAsLesson: boolean;
+  /**
+   * Q.1 structuring plan (lib/textbook/structure-plan.ts): how many lessons
+   * this chapter splits into. `null` for front/back matter (never turned
+   * into a lesson, so the formula was never run on it). Absent (not just
+   * `null`) on ingestions written before this field existed.
+   */
+  plannedLessonCount?: number | null;
+  /**
+   * Which module (1-based) this chapter belongs to, if the book qualifies
+   * for module structuring (lib/textbook/structure-plan.ts#needsModuleLayer).
+   * `null` when the book has no module layer. Absent on ingestions written
+   * before this field existed.
+   */
+  moduleNumber?: number | null;
 }
 
 export type AudioOverviewSpeaker = 'teacher' | 'classmate';

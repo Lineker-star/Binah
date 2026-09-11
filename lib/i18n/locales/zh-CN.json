@@ -2211,6 +2211,8 @@
     "buildCourse": "创建我的课程",
     "uploadButton": "上传教材",
     "uploadHint": "从 PDF 中检测章节，并在生成课程前进行审阅。",
-    "uploadFailed": "教材上传失败"
+    "uploadFailed": "教材上传失败",
+    "moduleHeading": "模块 {{number}}",
+    "lessonCount": "课程数：{{count}}"
   }
 }

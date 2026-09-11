@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { persistBookStructure } from '@/lib/server/textbook/persist-structure';
+import { computeBookPlan } from '@/lib/textbook/book-plan';
 import type { DetectedChapter } from '@/lib/pdf/textbook-outline';
 
 /** A minimal fake Supabase client recording every insert, supporting both
@@ -57,8 +58,9 @@ describe('persistBookStructure', () => {
       detected('Chapter 2', 16, 30), // 15 pages
       detected('Index', 31, 32, 'back_matter'),
     ];
+    const plan = computeBookPlan(32, chapters);
 
-    await persistBookStructure(admin, 'ing-1', 32, chapters);
+    await persistBookStructure(admin, 'ing-1', chapters, plan);
 
     expect(inserted.book_modules).toHaveLength(0);
     expect(inserted.book_chapters).toHaveLength(4);
@@ -88,8 +90,9 @@ describe('persistBookStructure', () => {
       detected('Chapter 3', 151, 450),
       detected('Chapter 4', 451, 510),
     ];
+    const plan = computeBookPlan(510, chapters);
 
-    await persistBookStructure(admin, 'ing-2', 510, chapters);
+    await persistBookStructure(admin, 'ing-2', chapters, plan);
 
     expect(inserted.book_modules).toHaveLength(2);
     const moduleRows = inserted.book_modules as Array<Record<string, unknown>>;
@@ -110,7 +113,8 @@ describe('persistBookStructure', () => {
 
   it('is a no-op for an empty chapter list', async () => {
     const { admin, inserted } = createFakeAdmin();
-    await persistBookStructure(admin, 'ing-3', 0, []);
+    const plan = computeBookPlan(0, []);
+    await persistBookStructure(admin, 'ing-3', [], plan);
     expect(inserted.book_modules).toHaveLength(0);
     expect(inserted.book_chapters).toHaveLength(0);
   });

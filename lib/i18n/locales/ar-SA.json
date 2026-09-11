@@ -2211,6 +2211,8 @@
     "buildCourse": "إنشاء دورتي",
     "uploadButton": "رفع كتاب دراسي",
     "uploadHint": "اكتشف الفصول من ملف PDF وراجعها قبل إنشاء أي درس.",
-    "uploadFailed": "تعذّر رفع الكتاب الدراسي"
+    "uploadFailed": "تعذّر رفع الكتاب الدراسي",
+    "moduleHeading": "الوحدة {{number}}",
+    "lessonCount": "الدروس: {{count}}"
   }
 }

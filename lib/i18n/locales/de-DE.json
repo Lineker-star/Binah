@@ -2211,6 +2211,8 @@
     "buildCourse": "Meinen Kurs erstellen",
     "uploadButton": "Lehrbuch hochladen",
     "uploadHint": "Kapitel aus einer PDF erkennen und vor der Lektionserstellung überprüfen.",
-    "uploadFailed": "Lehrbuch konnte nicht hochgeladen werden"
+    "uploadFailed": "Lehrbuch konnte nicht hochgeladen werden",
+    "moduleHeading": "Modul {{number}}",
+    "lessonCount": "Lektionen: {{count}}"
   }
 }

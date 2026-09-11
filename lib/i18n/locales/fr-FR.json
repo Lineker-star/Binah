@@ -2211,6 +2211,8 @@
     "buildCourse": "Créer mon cours",
     "uploadButton": "Importer un manuel",
     "uploadHint": "Détecte les chapitres d'un PDF et permet de les vérifier avant de générer une leçon.",
-    "uploadFailed": "Échec de l'import du manuel"
+    "uploadFailed": "Échec de l'import du manuel",
+    "moduleHeading": "Module {{number}}",
+    "lessonCount": "Leçons : {{count}}"
   }
 }

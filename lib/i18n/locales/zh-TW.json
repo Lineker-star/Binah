@@ -2211,6 +2211,8 @@
     "buildCourse": "建立我的課程",
     "uploadButton": "上傳教材",
     "uploadHint": "從 PDF 偵測章節，並在產生課程前進行審閱。",
-    "uploadFailed": "教材上傳失敗"
+    "uploadFailed": "教材上傳失敗",
+    "moduleHeading": "模組 {{number}}",
+    "lessonCount": "課程數：{{count}}"
   }
 }

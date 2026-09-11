@@ -2211,6 +2211,8 @@
     "buildCourse": "Tạo khóa học của tôi",
     "uploadButton": "Tải lên sách giáo khoa",
     "uploadHint": "Phát hiện các chương từ tệp PDF và xem lại trước khi tạo bài học.",
-    "uploadFailed": "Không thể tải lên sách giáo khoa"
+    "uploadFailed": "Không thể tải lên sách giáo khoa",
+    "moduleHeading": "Học phần {{number}}",
+    "lessonCount": "Số bài học: {{count}}"
   }
 }

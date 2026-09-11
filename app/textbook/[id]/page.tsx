@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Loader2, Pause, Play, Sparkles } from 'lucide-react';
@@ -98,6 +98,21 @@ export default function TextbookChapterReviewPage() {
 
   const items = ingestion?.chapters?.items ?? [];
   const selectedCount = items.filter((c) => c.includeAsLesson).length;
+
+  // Both fields are absent (not just null) on ingestions written before Q.3
+  // -- `some` naturally stays false for those, and the list below renders
+  // exactly as it did before this hierarchy existed.
+  const hasModules = items.some((c) => c.moduleNumber != null);
+  const moduleLessonTotals = new Map<number, number>();
+  if (hasModules) {
+    for (const chapter of items) {
+      if (chapter.moduleNumber == null || chapter.plannedLessonCount == null) continue;
+      moduleLessonTotals.set(
+        chapter.moduleNumber,
+        (moduleLessonTotals.get(chapter.moduleNumber) ?? 0) + chapter.plannedLessonCount,
+      );
+    }
+  }
 
   const toggleChapter = (index: number) => {
     if (!ingestion?.chapters) return;
@@ -315,9 +330,37 @@ export default function TextbookChapterReviewPage() {
       </div>
 
       <div className="flex flex-col gap-2">
-        {items.map((chapter, index) => {
+        {items.flatMap((chapter, index) => {
           const isFrontOrBack = chapter.kind !== 'chapter';
-          return (
+          const elements: ReactNode[] = [];
+
+          // Absent on ingestions written before this field existed — those
+          // render exactly as before, with no module headers or lesson counts.
+          const startsNewModule =
+            hasModules &&
+            chapter.moduleNumber != null &&
+            (index === 0 || items[index - 1].moduleNumber !== chapter.moduleNumber);
+          if (startsNewModule) {
+            const moduleNumber = chapter.moduleNumber as number;
+            const lessonTotal = moduleLessonTotals.get(moduleNumber);
+            elements.push(
+              <div
+                key={`module-${moduleNumber}`}
+                className="flex items-center gap-2 mt-3 first:mt-0 px-1"
+              >
+                <h3 className="text-[12.5px] font-semibold text-foreground">
+                  {t('textbook.moduleHeading', { number: moduleNumber })}
+                </h3>
+                {lessonTotal != null && (
+                  <span className="text-[11px] text-muted-foreground">
+                    {t('textbook.lessonCount', { count: lessonTotal })}
+                  </span>
+                )}
+              </div>,
+            );
+          }
+
+          elements.push(
             <div
               key={index}
               className={cn(
@@ -363,6 +406,11 @@ export default function TextbookChapterReviewPage() {
                         : t('textbook.aiDetected')}
                     </span>
                   )}
+                  {chapter.plannedLessonCount != null && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+                      {t('textbook.lessonCount', { count: chapter.plannedLessonCount })}
+                    </span>
+                  )}
                 </div>
                 {chapter.summary && (
                   <p className="text-[13px] leading-relaxed text-muted-foreground">{chapter.summary}</p>
@@ -371,8 +419,10 @@ export default function TextbookChapterReviewPage() {
               <div className="shrink-0 text-[12px] text-muted-foreground tabular-nums pt-1">
                 {t('textbook.pageRange', { start: chapter.startPage, end: chapter.endPage })}
               </div>
-            </div>
+            </div>,
           );
+
+          return elements;
         })}
       </div>
 
