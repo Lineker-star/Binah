@@ -1,9 +1,11 @@
 /**
  * POST /api/artifacts/certificate — generate (idempotently) and return a
- * signed download URL for a completed course's certificate. A certificate
- * is naturally a singleton per course: if one already exists for this
- * learner+course, this signs and returns the existing storage object
- * instead of creating a duplicate generated_artifacts row/Storage object.
+ * signed download URL for a completed learning experience's certificate.
+ * Takes either a `courseId` (Structured Course) or a `sessionId` (ad-hoc
+ * single-prompt session with no courses row). A certificate is naturally a
+ * singleton per course or session: if one already exists, this signs and
+ * returns the existing storage object instead of creating a duplicate
+ * generated_artifacts row/Storage object.
  *
  * Callable two ways: fire-and-forget right when a course completes (see
  * components/edit/PlaybackChromeRoot.tsx), and on-demand from the
@@ -23,7 +25,8 @@ const log = createLogger('CertificateAPI');
 const SIGNED_URL_TTL_SECONDS = 300;
 
 interface RequestBody {
-  courseId: string;
+  courseId?: string;
+  sessionId?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -37,33 +40,71 @@ export async function POST(req: NextRequest) {
     }
 
     const body = (await req.json()) as RequestBody;
-    if (!body.courseId || typeof body.courseId !== 'string') {
-      return apiError('MISSING_REQUIRED_FIELD', 400, 'courseId is required');
+    const courseId = typeof body.courseId === 'string' ? body.courseId : null;
+    const sessionId = typeof body.sessionId === 'string' ? body.sessionId : null;
+    if (!courseId && !sessionId) {
+      return apiError('MISSING_REQUIRED_FIELD', 400, 'courseId or sessionId is required');
     }
 
-    const { data: course, error: courseError } = await supabase
-      .from('courses')
-      .select('id, title, status')
-      .eq('id', body.courseId)
-      .eq('learner_id', user.id)
-      .maybeSingle();
-    if (courseError) throw courseError;
-    if (!course) {
-      return apiError('INVALID_REQUEST', 404, 'Course not found');
-    }
-    if (course.status !== 'completed') {
-      return apiError('INVALID_REQUEST', 400, 'Course is not completed yet');
+    let certificateTitle: string;
+    // Identifies the existing-artifact lookup and the insert below — exactly
+    // one of the pair is set, matching whichever branch resolved ownership.
+    let insertCourseId: string | null;
+    let insertSessionId: string | null;
+
+    if (courseId) {
+      const { data: course, error: courseError } = await supabase
+        .from('courses')
+        .select('id, title, status')
+        .eq('id', courseId)
+        .eq('learner_id', user.id)
+        .maybeSingle();
+      if (courseError) throw courseError;
+      if (!course) {
+        return apiError('INVALID_REQUEST', 404, 'Course not found');
+      }
+      if (course.status !== 'completed') {
+        return apiError('INVALID_REQUEST', 400, 'Course is not completed yet');
+      }
+      certificateTitle = course.title as string;
+      insertCourseId = courseId;
+      insertSessionId = null;
+    } else {
+      // Ad-hoc single-prompt session — no courses row to check status on;
+      // the caller only reaches here once the session itself is completed.
+      const { data: session, error: sessionError } = await supabase
+        .from('learning_sessions')
+        .select('id, title, status')
+        .eq('id', sessionId as string)
+        .eq('learner_id', user.id)
+        .maybeSingle();
+      if (sessionError) throw sessionError;
+      if (!session) {
+        return apiError('INVALID_REQUEST', 404, 'Session not found');
+      }
+      if (session.status !== 'completed') {
+        return apiError('INVALID_REQUEST', 400, 'Session is not completed yet');
+      }
+      certificateTitle = session.title as string;
+      insertCourseId = null;
+      insertSessionId = session.id as string;
     }
 
     const admin = createServiceRoleClient();
 
-    const { data: existing, error: existingError } = await admin
+    // Keyed by whichever id owns this certificate. No unique DB constraint
+    // backs this (same as the pre-existing course-keyed check) — a
+    // concurrent double-call can still race past both selects before either
+    // insert lands. Matches the guarantee the course path already had.
+    let existingQuery = admin
       .from('generated_artifacts')
       .select('id, storage_path')
       .eq('learner_id', user.id)
-      .eq('course_id', body.courseId)
-      .eq('artifact_type', 'certificate')
-      .maybeSingle();
+      .eq('artifact_type', 'certificate');
+    existingQuery = insertCourseId
+      ? existingQuery.eq('course_id', insertCourseId)
+      : existingQuery.eq('session_id', insertSessionId as string).is('course_id', null);
+    const { data: existing, error: existingError } = await existingQuery.maybeSingle();
     if (existingError) throw existingError;
 
     let storagePath: string;
@@ -79,7 +120,7 @@ export async function POST(req: NextRequest) {
 
       const pdfBytes = await buildCertificatePdf({
         learnerName,
-        courseTitle: course.title as string,
+        courseTitle: certificateTitle,
         completionDate: new Date(),
       });
 
@@ -91,8 +132,8 @@ export async function POST(req: NextRequest) {
 
       const { error: insertError } = await admin.from('generated_artifacts').insert({
         learner_id: user.id,
-        course_id: body.courseId,
-        session_id: null,
+        course_id: insertCourseId,
+        session_id: insertSessionId,
         artifact_type: 'certificate',
         storage_path: storagePath,
         file_size_bytes: pdfBytes.byteLength,

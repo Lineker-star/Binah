@@ -2,12 +2,19 @@ import { getCurrentModelConfig } from '@/lib/utils/model-config';
 
 /**
  * Fire the course-final assessment synthesis (see
- * app/api/assessments/course-final/route.ts) once a course's last planned
- * lesson completes. Fire-and-forget from the caller — the actual insert and
- * learning_metrics recompute happen server-side; this just kicks it off
- * with the learner's configured model.
+ * app/api/assessments/course-final/route.ts) once a learning experience
+ * reaches its completion screen. Fire-and-forget from the caller — the
+ * actual insert and learning_metrics recompute happen server-side; this
+ * just kicks it off with the learner's configured model.
+ *
+ * Two shapes: `courseId` for a Structured Course (aggregates every lesson's
+ * quiz scores once the last planned lesson completes); `sessionId` for an
+ * ad-hoc single-prompt session, which has no `courses` row to aggregate
+ * across — that one session is treated as both the first and final lesson.
  */
-export async function generateCourseFinalAssessment(courseId: string): Promise<void> {
+export async function generateCourseFinalAssessment(
+  target: { courseId: string } | { sessionId: string },
+): Promise<void> {
   const modelConfig = getCurrentModelConfig();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -20,7 +27,7 @@ export async function generateCourseFinalAssessment(courseId: string): Promise<v
   const res = await fetch('/api/assessments/course-final', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ courseId }),
+    body: JSON.stringify(target),
   });
   if (!res.ok) {
     const text = await res.text();

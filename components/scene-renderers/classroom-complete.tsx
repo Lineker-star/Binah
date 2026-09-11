@@ -439,7 +439,7 @@ function CertificateDownloadButton({ courseId }: { courseId: string }) {
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      const url = await getCertificateDownloadUrl(courseId);
+      const url = await getCertificateDownloadUrl({ courseId });
       window.open(url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       log.error('Failed to download certificate:', err);

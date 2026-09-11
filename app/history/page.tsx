@@ -144,7 +144,7 @@ export default function HistoryPage() {
   const handleDownloadCertificate = async (course: Course) => {
     setDownloadingCertificateId(course.id);
     try {
-      const url = await getCertificateDownloadUrl(course.id);
+      const url = await getCertificateDownloadUrl({ courseId: course.id });
       window.open(url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       log.error('Failed to download certificate:', err);

@@ -3,12 +3,18 @@
  * course's certificate. Idempotent server-side — safe to call both as a
  * fire-and-forget at course completion and again on-demand from a
  * "Download Certificate" click.
+ *
+ * Two shapes: `courseId` for a Structured Course; `sessionId` for an
+ * ad-hoc single-prompt session with no `courses` row — the certificate is
+ * keyed to the session instead.
  */
-export async function getCertificateDownloadUrl(courseId: string): Promise<string> {
+export async function getCertificateDownloadUrl(
+  target: { courseId: string } | { sessionId: string },
+): Promise<string> {
   const res = await fetch('/api/artifacts/certificate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ courseId }),
+    body: JSON.stringify(target),
   });
   if (!res.ok) {
     const text = await res.text();

@@ -1204,27 +1204,37 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
       void endSession(session.id, { completed: true })
         .then(async (updated) => {
           noteLearningSession(stageId, updated);
-          // "Update courses.status to 'completed' once the final planned
-          // lesson is marked completed" — this lesson's own session just
-          // was, so check whether it was the course's last one.
-          if (!updated.course_id || !updated.lesson_number) return;
-          const course = await fetchCourse(updated.course_id);
-          if (course && updated.lesson_number === course.planned_lesson_count) {
+
+          // Fires the course-final assessment/recommendation/certificate
+          // pipeline (Tiers K.3/L/P.2) for ANY completed session, not just
+          // Structured Course ones. With a course_id, this only happens once
+          // the final planned lesson completes, and updates courses.status
+          // (unchanged Structured Course behavior). Without one, this is an
+          // ad-hoc single-prompt session with no courses row — it stands in
+          // as both the first and final "lesson" the moment it completes.
+          let target: { courseId: string } | { sessionId: string };
+          if (updated.course_id && updated.lesson_number) {
+            const course = await fetchCourse(updated.course_id);
+            if (!course || updated.lesson_number !== course.planned_lesson_count) return;
             await updateCourseStatus(updated.course_id, 'completed');
-            // Synthesizes one course_final assessment from the per-lesson
-            // quiz scores already recorded — never blocks course completion
-            // itself on this; a failure here just means no course-final row.
-            void generateCourseFinalAssessment(updated.course_id).catch((err) =>
-              log.warn('Failed to generate course-final assessment (ignored):', err),
-            );
-            // Pre-warm the certificate so it's ready by the time the learner
-            // reaches a "Download Certificate" action — idempotent, so this
-            // never creates a duplicate if the learner also clicks download
-            // before this finishes.
-            void getCertificateDownloadUrl(updated.course_id).catch((err) =>
-              log.warn('Failed to pre-generate certificate (ignored):', err),
-            );
+            target = { courseId: updated.course_id };
+          } else {
+            target = { sessionId: updated.id };
           }
+
+          // Synthesizes one course_final assessment from the recorded quiz
+          // score(s) — never blocks completion itself on this; a failure
+          // here just means no course-final row.
+          void generateCourseFinalAssessment(target).catch((err) =>
+            log.warn('Failed to generate course-final assessment (ignored):', err),
+          );
+          // Pre-warm the certificate so it's ready by the time the learner
+          // reaches a "Download Certificate" action — idempotent, so this
+          // never creates a duplicate if the learner also clicks download
+          // before this finishes.
+          void getCertificateDownloadUrl(target).catch((err) =>
+            log.warn('Failed to pre-generate certificate (ignored):', err),
+          );
         })
         .catch((err) => log.warn('Failed to auto-complete learning session (ignored):', err));
     }, [isPendingScene, currentScene, isCourseComplete, stage?.id]);

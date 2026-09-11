@@ -24,7 +24,8 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role';
 const log = createLogger('CourseFinalAssessmentAPI');
 
 interface RequestBody {
-  courseId: string;
+  courseId?: string;
+  sessionId?: string;
 }
 
 interface SynthesizedFeedback {
@@ -87,37 +88,74 @@ export async function POST(req: NextRequest) {
     }
 
     const body = (await req.json()) as RequestBody;
-    if (!body.courseId || typeof body.courseId !== 'string') {
-      return apiError('MISSING_REQUIRED_FIELD', 400, 'courseId is required');
+    const courseId = typeof body.courseId === 'string' ? body.courseId : null;
+    const sessionId = typeof body.sessionId === 'string' ? body.sessionId : null;
+    if (!courseId && !sessionId) {
+      return apiError('MISSING_REQUIRED_FIELD', 400, 'courseId or sessionId is required');
     }
 
-    // Explicit ownership check — RLS already scopes this, but a clear 404
-    // beats a confusing empty-aggregate result for a courseId that isn't
-    // this learner's (or doesn't exist).
-    const { data: course, error: courseError } = await supabase
-      .from('courses')
-      .select('id, title')
-      .eq('id', body.courseId)
-      .eq('learner_id', user.id)
-      .maybeSingle();
-    if (courseError) throw courseError;
-    if (!course) {
-      return apiError('INVALID_REQUEST', 404, 'Course not found');
-    }
+    // courseTitle doubles as the report's subject line either way: the
+    // course's own title when aggregating a Structured Course, or the
+    // ad-hoc session's title when there's no course row to name it after.
+    let courseTitle: string;
+    let sessionIds: string[];
+    let lessonNumberBySession: Map<string, number | null>;
+    let insertCourseId: string | null;
+    let insertSessionId: string | null;
 
-    const { data: sessions, error: sessionsError } = await supabase
-      .from('learning_sessions')
-      .select('id, lesson_number')
-      .eq('course_id', body.courseId);
-    if (sessionsError) throw sessionsError;
+    if (courseId) {
+      // Explicit ownership check — RLS already scopes this, but a clear 404
+      // beats a confusing empty-aggregate result for a courseId that isn't
+      // this learner's (or doesn't exist).
+      const { data: course, error: courseError } = await supabase
+        .from('courses')
+        .select('id, title')
+        .eq('id', courseId)
+        .eq('learner_id', user.id)
+        .maybeSingle();
+      if (courseError) throw courseError;
+      if (!course) {
+        return apiError('INVALID_REQUEST', 404, 'Course not found');
+      }
 
-    const sessionIds = (sessions ?? []).map((s) => s.id as string);
-    if (sessionIds.length === 0) {
-      return apiSuccess({ created: false, reason: 'no_sessions' });
+      const { data: sessions, error: sessionsError } = await supabase
+        .from('learning_sessions')
+        .select('id, lesson_number')
+        .eq('course_id', courseId);
+      if (sessionsError) throw sessionsError;
+
+      const ids = (sessions ?? []).map((s) => s.id as string);
+      if (ids.length === 0) {
+        return apiSuccess({ created: false, reason: 'no_sessions' });
+      }
+
+      courseTitle = course.title as string;
+      sessionIds = ids;
+      lessonNumberBySession = new Map(
+        (sessions ?? []).map((s) => [s.id as string, s.lesson_number as number | null]),
+      );
+      insertCourseId = courseId;
+      insertSessionId = null;
+    } else {
+      // Ad-hoc single-prompt session — no courses row exists, so this one
+      // session stands in as both the first and final "lesson."
+      const { data: session, error: sessionError } = await supabase
+        .from('learning_sessions')
+        .select('id, title')
+        .eq('id', sessionId as string)
+        .eq('learner_id', user.id)
+        .maybeSingle();
+      if (sessionError) throw sessionError;
+      if (!session) {
+        return apiError('INVALID_REQUEST', 404, 'Session not found');
+      }
+
+      courseTitle = session.title as string;
+      sessionIds = [session.id as string];
+      lessonNumberBySession = new Map([[session.id as string, 1]]);
+      insertCourseId = null;
+      insertSessionId = session.id as string;
     }
-    const lessonNumberBySession = new Map(
-      (sessions ?? []).map((s) => [s.id as string, s.lesson_number as number | null]),
-    );
 
     const { data: quizAssessments, error: assessmentsError } = await supabase
       .from('assessments')
@@ -155,7 +193,7 @@ export async function POST(req: NextRequest) {
       'course-final-assessment',
     );
 
-    const prompt = buildSynthesisPrompt(course.title, lessons);
+    const prompt = buildSynthesisPrompt(courseTitle, lessons);
     const response = await callLLM(
       { model: languageModel, system: prompt.system, prompt: prompt.user },
       'course-final-assessment',
@@ -174,8 +212,8 @@ export async function POST(req: NextRequest) {
       .from('assessments')
       .insert({
         learner_id: user.id,
-        course_id: body.courseId,
-        session_id: null,
+        course_id: insertCourseId,
+        session_id: insertSessionId,
         scene_id: null,
         assessment_type: 'course_final',
         score: totalScore,
