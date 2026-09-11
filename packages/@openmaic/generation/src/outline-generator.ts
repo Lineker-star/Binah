@@ -244,13 +244,16 @@ export function applyOutlineFallbacks(
 const FALLBACK_QUIZ_KEY_POINT_LIMIT = 6;
 
 /**
- * Guarantee a structured-course lesson ends with a quiz scene.
+ * Guarantee a lesson ends with a quiz scene — any lesson, course-mode or
+ * ad-hoc single-prompt alike.
  *
  * The requirements-to-outlines template's `courseMode` rule ASKS the model
- * for this, but the model's compliance is never guaranteed — this is the
- * actual guarantee, applied after generation. A no-op when the outlines
- * already end with a quiz scene; otherwise appends one synthetic capstone
- * quiz, seeded with key points pooled from the other scenes so the later
+ * for this when generating a structured-course lesson, but the model's
+ * compliance is never guaranteed even then — and an ad-hoc lesson gets no
+ * such prompt-level nudge at all. This is the actual guarantee, applied
+ * after generation regardless of mode. A no-op when the outlines already
+ * end with a quiz scene; otherwise appends one synthetic capstone quiz,
+ * seeded with key points pooled from the other scenes so the later
  * quiz-content generation step has real material to write questions from
  * rather than nothing. Never reorders or removes anything the model
  * produced — a quiz scene elsewhere in the lesson (mid-lesson formative

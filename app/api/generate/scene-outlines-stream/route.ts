@@ -662,13 +662,23 @@ export async function POST(req: NextRequest) {
           }
 
           if (parsedOutlines.length > 0) {
-            // Course-mode guarantee: the template's courseMode rule asks the
-            // model for a trailing quiz scene, but compliance isn't
-            // guaranteed — this is the actual guarantee. No-op if one's
-            // already there. Applied here (not per-outline during streaming)
+            // Trailing-quiz guarantee: the template's courseMode rule asks the
+            // model for one, but compliance isn't guaranteed even then — and
+            // an ad-hoc lesson gets no such prompt-level nudge at all. This
+            // is the actual guarantee, applied to every ordinary lesson
+            // regardless of courseMode. No-op if the outlines already end
+            // with a quiz. Applied here (not per-outline during streaming)
             // since it needs the complete, final outline list to know
             // whether the last scene is really a quiz.
-            if (courseMode) {
+            //
+            // Excluded for taskEngineMode: a vocational/procedural-skill
+            // lesson's scene vocabulary (game, simulation, diagram, ...) has
+            // no generic-MCQ "quiz" concept in it at all — an illegal quiz
+            // outline there is normalized away to `slide`, not preserved
+            // (see the taskEngineMode sanitation above), so appending one
+            // here would be forcing a scene type that mode deliberately
+            // doesn't use.
+            if (!taskEngineMode) {
               parsedOutlines = ensureTrailingQuizOutline(parsedOutlines);
             }
             // Replace sequential gen_img_N/gen_vid_N with globally unique IDs
