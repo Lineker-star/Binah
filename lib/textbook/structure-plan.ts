@@ -46,3 +46,50 @@ const MODULE_LAYER_PAGE_THRESHOLD = 200;
 export function needsModuleLayer(totalPageCount: number): boolean {
   return totalPageCount > MODULE_LAYER_PAGE_THRESHOLD;
 }
+
+export interface TextbookChapterRef {
+  chapterNumber: number;
+  pageCount: number;
+}
+
+export interface TextbookModule {
+  moduleNumber: number;
+  chapters: TextbookChapterRef[];
+  totalPageCount: number;
+}
+
+/**
+ * Group chapters into modules, sequentially and greedily in book order.
+ *
+ * Chapters accumulate into the current module until its running total
+ * reaches the module page target (200); that module then closes and a new
+ * one starts with the next chapter. A chapter is never split across two
+ * modules -- it belongs entirely to whichever module it was accumulated
+ * into, even if that pushes the module's total somewhat over target. The
+ * final module may legitimately end up under target (whatever pages
+ * remain at the end of the book); earlier chapters are never re-bucketed
+ * to force it upward. A chapter that alone is already >= target becomes a
+ * single-chapter module on its own.
+ */
+export function groupChaptersIntoModules(
+  chapters: ReadonlyArray<TextbookChapterRef>,
+): TextbookModule[] {
+  const modules: TextbookModule[] = [];
+  let current: TextbookChapterRef[] = [];
+  let currentTotal = 0;
+
+  for (const chapter of chapters) {
+    current.push(chapter);
+    currentTotal += chapter.pageCount;
+    if (currentTotal >= MODULE_LAYER_PAGE_THRESHOLD) {
+      modules.push({ moduleNumber: modules.length + 1, chapters: current, totalPageCount: currentTotal });
+      current = [];
+      currentTotal = 0;
+    }
+  }
+  if (current.length > 0) {
+    modules.push({ moduleNumber: modules.length + 1, chapters: current, totalPageCount: currentTotal });
+  }
+
+  return modules;
+}
