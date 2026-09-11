@@ -40,6 +40,16 @@ export class AudioPlayer {
   /** The object URL backing the current audio element, if any. */
   private blobUrl: string | null = null;
   /**
+   * Settles (successfully or not) once the current element's native play()
+   * has settled. Calling the native pause() while a play() is still pending
+   * is exactly what produces "The play() request was interrupted by a call
+   * to pause()" -- every internal native pause goes through
+   * pauseNativeElement() below instead, which defers until play() has
+   * actually settled rather than racing it. Never rejects itself, so a
+   * consumer can chain off it without its own catch.
+   */
+  private pendingPlay: Promise<void> | null = null;
+  /**
    * The in-flight legacy narration fetch of the current play, if any. Aborted
    * when the play is superseded (a replacement play, stop, or destroy), so a
    * stale fetch is cancelled at the network layer instead of settling before
@@ -66,10 +76,28 @@ export class AudioPlayer {
     if (this.blobUrl === blobUrl) this.blobUrl = null;
   }
 
+  /**
+   * Pause `audio` and (optionally) reset its position -- immediately if its
+   * play() has already settled, or deferred until it does. By construction
+   * this can never fire while the native play() is still pending, since it
+   * only runs once `pendingPlay` itself settles, which only happens after
+   * that play() already has.
+   */
+  private pauseNativeElement(audio: HTMLAudioElement, resetTime: boolean): void {
+    const finish = () => {
+      audio.pause();
+      if (resetTime) audio.currentTime = 0;
+    };
+    if (this.pendingPlay) {
+      void this.pendingPlay.then(finish);
+      return;
+    }
+    finish();
+  }
+
   private stopAudioElement(): void {
     if (this.audio) {
-      this.audio.pause();
-      this.audio.currentTime = 0;
+      this.pauseNativeElement(this.audio, true);
       this.audio = null;
     }
     // Stop or replacement before natural end must not leak the fetched
@@ -164,11 +192,19 @@ export class AudioPlayer {
       // Play. If play() rejects (autoplay policy, decode error, interrupted
       // load) the 'ended' listener never fires, so revoke the blob URL here to
       // avoid leaking it for the lifetime of the document.
+      const nativePlay = this.audio.play();
+      const settle = nativePlay.then(
+        () => {},
+        () => {},
+      );
+      this.pendingPlay = settle;
       try {
-        await this.audio.play();
+        await nativePlay;
       } catch (playError) {
         this.releaseBlobUrl(blobUrl);
         throw playError;
+      } finally {
+        if (this.pendingPlay === settle) this.pendingPlay = null;
       }
       if (requestToken !== this.requestToken) {
         this.releaseBlobUrl(blobUrl);
@@ -189,7 +225,7 @@ export class AudioPlayer {
   public pause(): void {
     this.requestToken += 1;
     if (this.audio && !this.audio.paused) {
-      this.audio.pause();
+      this.pauseNativeElement(this.audio, false);
     }
   }
 
@@ -213,9 +249,19 @@ export class AudioPlayer {
   public resume(): void {
     if (this.audio?.paused) {
       this.audio.playbackRate = this.playbackRate;
-      this.audio.play().catch((error) => {
-        log.error('Failed to resume audio:', error);
-      });
+      const nativePlay = this.audio.play();
+      const settle = nativePlay.then(
+        () => {},
+        () => {},
+      );
+      this.pendingPlay = settle;
+      nativePlay
+        .catch((error) => {
+          log.error('Failed to resume audio:', error);
+        })
+        .finally(() => {
+          if (this.pendingPlay === settle) this.pendingPlay = null;
+        });
     }
   }
 
