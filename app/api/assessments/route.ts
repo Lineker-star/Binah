@@ -7,7 +7,7 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
 const log = createLogger('AssessmentsAPI');
 
-const ASSESSMENT_TYPES = ['quiz', 'pbl', 'continuous_assessment'] as const;
+const ASSESSMENT_TYPES = ['quiz', 'pbl', 'continuous_assessment', 'exam'] as const;
 type AssessmentType = (typeof ASSESSMENT_TYPES)[number];
 
 interface AssessmentRequest {
@@ -16,6 +16,10 @@ interface AssessmentRequest {
   sceneId?: string | null;
   /** Continuous Assessment: not tied to a session, so passed directly. */
   chapterId?: string | null;
+  /** Exam, module tier: not tied to a session, so passed directly. */
+  moduleId?: string | null;
+  /** Exam, book tier (no module layer): passed directly, no module to derive it from. */
+  courseId?: string | null;
   score?: number | null;
   maxScore?: number | null;
   feedback?: string | null;
@@ -56,7 +60,11 @@ export async function POST(req: NextRequest) {
 
     const body = (await req.json()) as AssessmentRequest;
     if (!ASSESSMENT_TYPES.includes(body.assessmentType)) {
-      return apiError('INVALID_REQUEST', 400, "assessmentType must be 'quiz', 'pbl', or 'continuous_assessment'");
+      return apiError(
+        'INVALID_REQUEST',
+        400,
+        "assessmentType must be 'quiz', 'pbl', 'continuous_assessment', or 'exam'",
+      );
     }
     if (!body.evaluatedBy || typeof body.evaluatedBy !== 'string') {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'evaluatedBy is required');
@@ -73,12 +81,16 @@ export async function POST(req: NextRequest) {
     // time: chapter_number is 1-based, source_chapter_index is the same
     // chapter's 0-based position in that array, so number = index + 1.
     //
-    // Continuous Assessment has no session at all (session_id is null by
-    // design — it spans the whole chapter, not one lesson), so it passes
-    // chapterId directly instead; course_id is then resolved the other way,
-    // chapter -> ingestion -> course.
-    let courseId: string | null = null;
+    // Continuous Assessment and Exam have no session at all (session_id is
+    // null by design — they span a whole chapter/module, not one lesson),
+    // so they pass chapterId/moduleId directly instead; course_id is then
+    // resolved the other way: chapter -> ingestion -> course, or module ->
+    // ingestion -> course. Exam's book tier (no module layer — see
+    // needsModuleLayer in lib/textbook/structure-plan.ts) has no module row
+    // to derive course_id from, so it passes courseId straight through.
+    let courseId: string | null = body.courseId ?? null;
     let chapterId: string | null = body.chapterId ?? null;
+    const moduleId: string | null = body.moduleId ?? null;
     if (body.sessionId) {
       const { data: session } = await supabase
         .from('learning_sessions')
@@ -115,6 +127,21 @@ export async function POST(req: NextRequest) {
           .maybeSingle();
         courseId = (ingestion?.course_id as string | null) ?? null;
       }
+    } else if (moduleId) {
+      const { data: moduleRow } = await supabase
+        .from('book_modules')
+        .select('ingestion_id')
+        .eq('id', moduleId)
+        .maybeSingle();
+      const ingestionId = (moduleRow?.ingestion_id as string | null) ?? null;
+      if (ingestionId) {
+        const { data: ingestion } = await supabase
+          .from('textbook_ingestions')
+          .select('course_id')
+          .eq('id', ingestionId)
+          .maybeSingle();
+        courseId = (ingestion?.course_id as string | null) ?? null;
+      }
     }
 
     const admin = createServiceRoleClient();
@@ -125,6 +152,7 @@ export async function POST(req: NextRequest) {
         learner_id: user.id,
         course_id: courseId,
         chapter_id: chapterId,
+        module_id: moduleId,
         session_id: body.sessionId ?? null,
         scene_id: body.sceneId ?? null,
         assessment_type: body.assessmentType,
@@ -152,9 +180,13 @@ export async function POST(req: NextRequest) {
     // PBL evaluation is out of scope for now — only real, individually-
     // scored quiz-shaped assessments feed the recommendation flow, per the
     // same scope decision as the course-final synthesis (PBL may be added
-    // later). Continuous Assessment is quiz-shaped (real questions, real
-    // grading) so it's included alongside 'quiz'.
-    if (body.assessmentType === 'quiz' || body.assessmentType === 'continuous_assessment') {
+    // later). Continuous Assessment and Exam are both quiz-shaped (real
+    // questions, real grading) so they're included alongside 'quiz'.
+    if (
+      body.assessmentType === 'quiz' ||
+      body.assessmentType === 'continuous_assessment' ||
+      body.assessmentType === 'exam'
+    ) {
       await generateRecommendationForAssessment(req, inserted.id as string, user.id);
     }
 
