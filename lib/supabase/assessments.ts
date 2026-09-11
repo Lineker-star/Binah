@@ -1,11 +1,18 @@
 import { createClient } from './client';
 
-export type AssessmentType = 'quiz' | 'pbl';
+export type AssessmentType = 'quiz' | 'pbl' | 'continuous_assessment';
 
 export interface RecordAssessmentInput {
   assessmentType: AssessmentType;
   sessionId?: string | null;
   sceneId?: string | null;
+  /**
+   * Set directly for an assessment not tied to any one lesson (Continuous
+   * Assessment: session_id is null, chapter_id is this instead). The
+   * regular per-lesson quiz path leaves this unset — the server derives it
+   * from sessionId, same as it always has.
+   */
+  chapterId?: string | null;
   score?: number | null;
   maxScore?: number | null;
   feedback?: string | null;

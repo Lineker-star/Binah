@@ -7,13 +7,15 @@ import { createServiceRoleClient } from '@/lib/supabase/service-role';
 
 const log = createLogger('AssessmentsAPI');
 
-const ASSESSMENT_TYPES = ['quiz', 'pbl'] as const;
+const ASSESSMENT_TYPES = ['quiz', 'pbl', 'continuous_assessment'] as const;
 type AssessmentType = (typeof ASSESSMENT_TYPES)[number];
 
 interface AssessmentRequest {
   assessmentType: AssessmentType;
   sessionId?: string | null;
   sceneId?: string | null;
+  /** Continuous Assessment: not tied to a session, so passed directly. */
+  chapterId?: string | null;
   score?: number | null;
   maxScore?: number | null;
   feedback?: string | null;
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     const body = (await req.json()) as AssessmentRequest;
     if (!ASSESSMENT_TYPES.includes(body.assessmentType)) {
-      return apiError('INVALID_REQUEST', 400, "assessmentType must be 'quiz' or 'pbl'");
+      return apiError('INVALID_REQUEST', 400, "assessmentType must be 'quiz', 'pbl', or 'continuous_assessment'");
     }
     if (!body.evaluatedBy || typeof body.evaluatedBy !== 'string') {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'evaluatedBy is required');
@@ -70,8 +72,13 @@ export async function POST(req: NextRequest) {
     // structuring plan (lib/textbook/book-plan.ts) assigned it at ingest
     // time: chapter_number is 1-based, source_chapter_index is the same
     // chapter's 0-based position in that array, so number = index + 1.
+    //
+    // Continuous Assessment has no session at all (session_id is null by
+    // design — it spans the whole chapter, not one lesson), so it passes
+    // chapterId directly instead; course_id is then resolved the other way,
+    // chapter -> ingestion -> course.
     let courseId: string | null = null;
-    let chapterId: string | null = null;
+    let chapterId: string | null = body.chapterId ?? null;
     if (body.sessionId) {
       const { data: session } = await supabase
         .from('learning_sessions')
@@ -80,16 +87,33 @@ export async function POST(req: NextRequest) {
         .maybeSingle();
       courseId = (session?.course_id as string | null) ?? null;
 
-      const sourceIngestionId = (session?.source_ingestion_id as string | null) ?? null;
-      const sourceChapterIndex = (session?.source_chapter_index as number | null) ?? null;
-      if (sourceIngestionId != null && sourceChapterIndex != null) {
-        const { data: chapter } = await supabase
-          .from('book_chapters')
-          .select('id')
-          .eq('ingestion_id', sourceIngestionId)
-          .eq('chapter_number', sourceChapterIndex + 1)
+      if (!chapterId) {
+        const sourceIngestionId = (session?.source_ingestion_id as string | null) ?? null;
+        const sourceChapterIndex = (session?.source_chapter_index as number | null) ?? null;
+        if (sourceIngestionId != null && sourceChapterIndex != null) {
+          const { data: chapter } = await supabase
+            .from('book_chapters')
+            .select('id')
+            .eq('ingestion_id', sourceIngestionId)
+            .eq('chapter_number', sourceChapterIndex + 1)
+            .maybeSingle();
+          chapterId = (chapter?.id as string | null) ?? null;
+        }
+      }
+    } else if (chapterId) {
+      const { data: chapter } = await supabase
+        .from('book_chapters')
+        .select('ingestion_id')
+        .eq('id', chapterId)
+        .maybeSingle();
+      const ingestionId = (chapter?.ingestion_id as string | null) ?? null;
+      if (ingestionId) {
+        const { data: ingestion } = await supabase
+          .from('textbook_ingestions')
+          .select('course_id')
+          .eq('id', ingestionId)
           .maybeSingle();
-        chapterId = (chapter?.id as string | null) ?? null;
+        courseId = (ingestion?.course_id as string | null) ?? null;
       }
     }
 
@@ -125,10 +149,12 @@ export async function POST(req: NextRequest) {
       log.error('Assessment recorded but metrics recompute failed:', recomputeError);
     }
 
-    // PBL evaluation is out of scope for now — only quiz assessments feed
-    // the recommendation flow, per the same scope decision as the
-    // course-final synthesis (quiz-only; PBL may be added later).
-    if (body.assessmentType === 'quiz') {
+    // PBL evaluation is out of scope for now — only real, individually-
+    // scored quiz-shaped assessments feed the recommendation flow, per the
+    // same scope decision as the course-final synthesis (PBL may be added
+    // later). Continuous Assessment is quiz-shaped (real questions, real
+    // grading) so it's included alongside 'quiz'.
+    if (body.assessmentType === 'quiz' || body.assessmentType === 'continuous_assessment') {
       await generateRecommendationForAssessment(req, inserted.id as string, user.id);
     }
 
