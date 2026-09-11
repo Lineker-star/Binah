@@ -99,6 +99,7 @@ export default function ContinuousAssessmentPage() {
           title={t('continuousAssessment.title')}
           subtitle={t('continuousAssessment.subtitle', { chapter: assessment.chapterTitle })}
           onComplete={handleComplete}
+          onRetake={() => setDone(false)}
         />
       </div>
 

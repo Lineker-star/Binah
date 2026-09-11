@@ -28,6 +28,7 @@ import {
   MultipleChoiceQuestion,
   ShortAnswerQuestion,
   ScoreBanner,
+  RetakePrompt,
 } from '@/components/quiz/quiz-question-parts';
 
 type Phase = 'not_started' | 'answering' | 'grading' | 'reviewing';
@@ -47,6 +48,11 @@ export interface StandaloneQuizSurfaceProps {
    *  assessment or navigates anywhere -- that's the caller's call, since
    *  what assessment_type/chapter_id/course_id apply differs per use. */
   readonly onComplete?: (result: StandaloneQuizResult) => void | Promise<void>;
+  /** Called when the learner starts a retake after a completed attempt --
+   *  a chance for the caller to undo any "you're done" UI (e.g. a
+   *  Continue button) it showed after the previous onComplete, since this
+   *  component has no idea that state exists. */
+  readonly onRetake?: () => void;
 }
 
 export function StandaloneQuizSurface({
@@ -54,6 +60,7 @@ export function StandaloneQuizSurface({
   title,
   subtitle,
   onComplete,
+  onRetake,
 }: StandaloneQuizSurfaceProps) {
   const { t, locale } = useI18n();
   const [phase, setPhase] = useState<Phase>('not_started');
@@ -103,12 +110,14 @@ export function StandaloneQuizSurface({
   }, [questions, answers, locale, totalPoints, onComplete]);
 
   const handleRetry = useCallback(() => {
+    onRetake?.();
     setPhase('not_started');
     setAnswers({});
     setResults([]);
-  }, []);
+  }, [onRetake]);
 
   const earnedScore = useMemo(() => results.reduce((sum, r) => sum + r.earned, 0), [results]);
+  const passed = totalPoints > 0 && earnedScore / totalPoints >= 0.7;
 
   const resultMap = useMemo(() => {
     const map: Record<string, QuestionResult> = {};
@@ -253,18 +262,21 @@ export function StandaloneQuizSurface({
                   {t('quiz.quizReport')}
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={handleRetry}
-                className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                {t('quiz.retry')}
-              </button>
+              {passed && (
+                <button
+                  type="button"
+                  onClick={handleRetry}
+                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  {t('quiz.retry')}
+                </button>
+              )}
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               <ScoreBanner score={earnedScore} total={totalPoints} results={results} />
+              {!passed && <RetakePrompt onRetake={handleRetry} />}
 
               {questions.map((q, i) => {
                 const r = resultMap[q.id];

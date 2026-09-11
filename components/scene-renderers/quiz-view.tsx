@@ -21,6 +21,7 @@ import {
   MultipleChoiceQuestion,
   ShortAnswerQuestion,
   ScoreBanner,
+  RetakePrompt,
 } from '@/components/quiz/quiz-question-parts';
 import { writeDraftRecovery } from '@/lib/quiz/persistence';
 import {
@@ -248,6 +249,7 @@ export function QuizView({ questions, sceneId, stageId }: QuizViewProps) {
   }, [attemptId, retrying, runtimeWriter, sceneId, stageId, viewLifetime]);
 
   const earnedScore = useMemo(() => results.reduce((sum, r) => sum + r.earned, 0), [results]);
+  const passed = totalPoints > 0 && earnedScore / totalPoints >= 0.7;
 
   const resultMap = useMemo(() => {
     const map: Record<string, QuestionResult> = {};
@@ -431,20 +433,25 @@ export function QuizView({ questions, sceneId, stageId }: QuizViewProps) {
                   {t('quiz.quizReport')}
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={() => void handleRetry()}
-                disabled={retrying}
-                className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                {t('quiz.retry')}
-              </button>
+              {passed && (
+                <button
+                  type="button"
+                  onClick={() => void handleRetry()}
+                  disabled={retrying}
+                  className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  {t('quiz.retry')}
+                </button>
+              )}
             </div>
 
             {/* Results */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               <ScoreBanner score={earnedScore} total={totalPoints} results={results} />
+              {!passed && (
+                <RetakePrompt onRetake={() => void handleRetry()} retaking={retrying} />
+              )}
 
               {questions.map((q, i) => {
                 const r = resultMap[q.id];

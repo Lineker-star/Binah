@@ -97,6 +97,7 @@ export default function ExamPage() {
           title={t('exam.title')}
           subtitle={t('exam.subtitle', { scope: exam.examTitle })}
           onComplete={handleComplete}
+          onRetake={() => setDone(false)}
         />
       </div>
 

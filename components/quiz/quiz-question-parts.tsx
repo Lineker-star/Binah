@@ -19,6 +19,7 @@ import {
   Check,
   BookOpenText,
   Sparkles,
+  RotateCcw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -523,6 +524,44 @@ export function ShortAnswerQuestion({
         </div>
       )}
     </QuestionCard>
+  );
+}
+
+/**
+ * Shown instead of the reviewing screen's subtle "Retry" header link when
+ * the just-graded score is below the 70% passed threshold — offers a
+ * Retake as a real option right where the learner would otherwise just
+ * move on, without forcing it (moving forward always stays available;
+ * the caller's own "Continue" action is untouched either way).
+ */
+export function RetakePrompt({
+  onRetake,
+  retaking,
+}: {
+  onRetake: () => void;
+  retaking?: boolean;
+}) {
+  const { t } = useI18n();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-900/20 px-4 py-3"
+    >
+      <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
+        {t('quiz.retakePrompt')}
+      </p>
+      <button
+        type="button"
+        onClick={onRetake}
+        disabled={retaking}
+        className="flex items-center gap-1.5 shrink-0 px-3.5 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-medium hover:bg-amber-600 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <RotateCcw className="w-3.5 h-3.5" />
+        {t('quiz.retake')}
+      </button>
+    </motion.div>
   );
 }
 
