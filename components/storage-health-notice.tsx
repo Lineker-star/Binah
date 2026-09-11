@@ -43,7 +43,11 @@ export function StorageHealthNotice() {
           toast.dismiss(id);
           return;
         }
-        toast.error(t('settings.persistUnavailable'), { id, duration: Infinity });
+        // Non-critical: the store keeps working in memory, and the "changes
+        // lost" toast above is what actually demands acknowledgement. This
+        // one just needs to be seen, so it times out like any other toast —
+        // matching the duration SlideNavRail already uses for its undo toast.
+        toast.error(t('settings.persistUnavailable'), { id, duration: 5000 });
       }),
     [t],
   );
