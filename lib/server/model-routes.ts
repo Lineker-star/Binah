@@ -140,6 +140,7 @@ export const LLM_STAGES = [
   'agent-profiles',
   'course-final-assessment',
   'continuous-assessment',
+  'exam',
   'assessment-recommendation',
   'lecture-notes',
   'textbook-chapter-fallback',
