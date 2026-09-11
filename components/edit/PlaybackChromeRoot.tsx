@@ -12,11 +12,13 @@ import {
 } from 'react';
 import { useStageStore } from '@/lib/store';
 import { PENDING_SCENE_ID } from '@/lib/store/stage';
+import { useRouter } from 'next/navigation';
 import { getLearningSession, noteLearningSession } from '@/lib/classroom/learning-session-signal';
 import { endSession } from '@/lib/supabase/learning-session';
 import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
 import { generateCourseFinalAssessment } from '@/lib/courses/final-assessment';
 import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
+import { checkChapterCompletion } from '@/lib/supabase/chapter-completion';
 import { createLogger } from '@/lib/logger';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { useSettingsStore } from '@/lib/store/settings';
@@ -134,6 +136,7 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
     ref,
   ) {
     const { t } = useI18n();
+    const router = useRouter();
     const {
       mode,
       stage,
@@ -1235,9 +1238,25 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
           void getCertificateDownloadUrl(target).catch((err) =>
             log.warn('Failed to pre-generate certificate (ignored):', err),
           );
+
+          // Continuous Assessment: independent of the course-final branch
+          // above — fires whenever THIS chapter's own last planned lesson
+          // just completed, whether or not the whole course is done yet.
+          // Book-chapter-course only by design (see lib/supabase/chapter-
+          // completion.ts); a no-op for ad-hoc/non-book sessions, which
+          // never carry source_ingestion_id/source_chapter_index at all.
+          if (updated.source_ingestion_id != null && updated.source_chapter_index != null) {
+            checkChapterCompletion(updated.source_ingestion_id, updated.source_chapter_index)
+              .then((chapter) => {
+                if (chapter) router.push(`/assessment/continuous/${chapter.chapterId}`);
+              })
+              .catch((err) =>
+                log.warn('Failed to check chapter completion (ignored):', err),
+              );
+          }
         })
         .catch((err) => log.warn('Failed to auto-complete learning session (ignored):', err));
-    }, [isPendingScene, currentScene, isCourseComplete, stage?.id]);
+    }, [isPendingScene, currentScene, isCourseComplete, stage?.id, router]);
 
     // previous scene (gated)
     const handlePreviousScene = useCallback(() => {
