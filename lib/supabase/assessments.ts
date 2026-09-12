@@ -34,6 +34,44 @@ export interface RecordAssessmentInput {
   evaluatedBy: string;
 }
 
+/** One assessment row as read back for the learner's own growth charts
+ *  (see components/settings/progress-growth-charts.tsx). assessment_type
+ *  is a bare string, not the narrower write-side AssessmentType, since a
+ *  read also sees 'course_final' — inserted via its own dedicated route
+ *  (app/api/assessments/course-final/route.ts), never through the generic
+ *  one this file's AssessmentType scopes. */
+export interface AssessmentRecord {
+  id: string;
+  assessment_type: string;
+  score: number | null;
+  max_score: number | null;
+  passed: boolean | null;
+  attempt_number: number;
+  created_at: string;
+}
+
+/**
+ * The signed-in learner's own assessments, oldest first — the source data
+ * for a score-over-time trend. A retake never overwrites the failed
+ * attempt (see attempt_number — Tier R.4), so this naturally returns full
+ * attempt history, not just the latest attempt per scope.
+ */
+export async function listOwnAssessments(): Promise<AssessmentRecord[]> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data, error } = await supabase
+    .from('assessments')
+    .select('id, assessment_type, score, max_score, passed, attempt_number, created_at')
+    .eq('learner_id', user.id)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as AssessmentRecord[];
+}
+
 /**
  * Record one assessment (quiz grading or PBL evaluation) and refresh the
  * learner's `learning_metrics`, via `POST /api/assessments`.

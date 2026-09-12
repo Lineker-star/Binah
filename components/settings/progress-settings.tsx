@@ -12,6 +12,7 @@ import {
 } from '@/lib/supabase/recommendations';
 import { createClient } from '@/lib/supabase/client';
 import { createLogger } from '@/lib/logger';
+import { ProgressGrowthCharts } from './progress-growth-charts';
 
 const log = createLogger('ProgressSettings');
 
@@ -143,6 +144,8 @@ export function ProgressSettings() {
           value={lastActiveDisplay}
         />
       </div>
+
+      <ProgressGrowthCharts />
 
       {recommendations.length > 0 && (
         <div className="flex flex-col gap-3">
