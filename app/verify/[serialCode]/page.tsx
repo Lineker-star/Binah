@@ -8,9 +8,11 @@
  * never expose more than it does (no overall_score, no skills_acquired,
  * no serial_code, no email — see the function's own definition).
  *
- * The actual fetch stays server-side (this file); rendering + the FR/EN
- * toggle live in the client component below, since a toggle needs client
- * state and this page's data fetch doesn't.
+ * The actual fetch stays server-side (this file); rendering lives in the
+ * client component below (it needs useI18n(), which needs client
+ * context), fully localized through the app's own 12-locale i18n system
+ * (I18nProvider is mounted at the root layout, so it's already available
+ * here) rather than a page-specific bilingual scheme.
  */
 import { createClient } from '@/lib/supabase/server';
 import { VerifyCard, type VerifyCertificateRow } from './verify-card';
