@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { createClient } from '@/lib/supabase/client';
 import { createLogger } from '@/lib/logger';
@@ -16,7 +15,6 @@ import { createLogger } from '@/lib/logger';
 const log = createLogger('Auth');
 
 type Mode = 'sign-in' | 'sign-up';
-type SignupRole = 'learner' | 'parent';
 
 function AuthPageContent() {
   const { t } = useI18n();
@@ -28,7 +26,6 @@ function AuthPageContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [role, setRole] = useState<SignupRole>('learner');
   const [submitting, setSubmitting] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
 
@@ -59,7 +56,10 @@ function AuthPageContent() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { display_name: displayName.trim() || undefined, role } },
+          // Every self-signup is a learner account — parent accounts are no
+          // longer self-selectable here (see handle_new_user, which still
+          // honors a 'parent' role for any account created some other way).
+          options: { data: { display_name: displayName.trim() || undefined, role: 'learner' } },
         });
         if (error) throw error;
         if (data.session) {
@@ -144,29 +144,6 @@ function AuthPageContent() {
               autoComplete={mode === 'sign-up' ? 'new-password' : 'current-password'}
             />
           </div>
-
-          {mode === 'sign-up' && (
-            <div className="flex flex-col gap-2">
-              <Label>{t('auth.roleLabel')}</Label>
-              <div className="flex gap-2">
-                {(['learner', 'parent'] as const).map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => setRole(r)}
-                    className={cn(
-                      'flex-1 rounded-xl border px-3 py-2 text-sm transition-colors',
-                      role === r
-                        ? 'border-violet-400 dark:border-violet-500 bg-violet-50 dark:bg-violet-900/30 text-foreground'
-                        : 'border-border/60 text-muted-foreground hover:text-foreground',
-                    )}
-                  >
-                    {r === 'learner' ? t('auth.roleLearner') : t('auth.roleParent')}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           <Button type="submit" disabled={submitting} className="mt-2">
             {submitting && <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />}
