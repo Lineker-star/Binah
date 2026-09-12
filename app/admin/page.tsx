@@ -99,7 +99,10 @@ export default function AdminLearnerListPage() {
                     ` · Last active ${new Date(learner.last_active_at).toLocaleDateString()}`}
                 </span>
               </div>
-              <Badge variant={ROLE_BADGE_VARIANT[learner.role]}>{learner.role}</Badge>
+              <div className="flex shrink-0 items-center gap-2">
+                {learner.suspended && <Badge variant="destructive">suspended</Badge>}
+                <Badge variant={ROLE_BADGE_VARIANT[learner.role]}>{learner.role}</Badge>
+              </div>
             </Link>
           ))}
         </div>

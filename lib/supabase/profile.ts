@@ -12,6 +12,15 @@ export interface Profile {
   avatar_url: string | null;
   locale: string;
   date_of_birth: string | null;
+  /**
+   * Soft-suspended, not deleted — none of the account's sessions/
+   * assessments/certificates are touched. Display mirror only; the real
+   * enforcement is Supabase Auth's own ban (auth.users.banned_until, set
+   * via the Admin API in app/api/admin/suspend-account/route.ts), which the
+   * existing global middleware auth gate already rejects on its next
+   * getUser() call with zero extra code of its own.
+   */
+  suspended: boolean;
   created_at: string;
   updated_at: string;
 }

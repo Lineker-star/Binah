@@ -12,6 +12,7 @@ export interface AdminLearnerListItem {
   id: string;
   display_name: string | null;
   role: UserRole;
+  suspended: boolean;
   created_at: string;
   last_active_at: string | null;
 }
@@ -53,7 +54,7 @@ export async function fetchAllLearnerProfiles(): Promise<AdminLearnerListItem[]>
     await Promise.all([
       supabase
         .from('profiles')
-        .select('id, display_name, role, created_at')
+        .select('id, display_name, role, suspended, created_at')
         .order('created_at', { ascending: false }),
       supabase.from('learning_metrics').select('learner_id, last_active_at'),
     ]);
@@ -67,6 +68,7 @@ export async function fetchAllLearnerProfiles(): Promise<AdminLearnerListItem[]>
     id: p.id,
     display_name: p.display_name,
     role: p.role,
+    suspended: p.suspended,
     created_at: p.created_at,
     last_active_at: lastActiveById.get(p.id) ?? null,
   }));
@@ -149,6 +151,24 @@ export async function changeUserRole(
     details: { from: fromRole, to: toRole },
   });
   if (auditError) throw auditError;
+}
+
+/**
+ * Suspend or reactivate an account. Routed through the server (unlike the
+ * other functions in this file) because the real enforcement — Supabase
+ * Auth's own ban via the Admin API — requires the service-role key, which
+ * never reaches the browser; see app/api/admin/suspend-account/route.ts.
+ */
+export async function suspendAccount(learnerId: string, suspend: boolean): Promise<void> {
+  const res = await fetch('/api/admin/suspend-account', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ learnerId, suspend }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error || 'Failed to update suspension state');
+  }
 }
 
 /** A parent's linked child, as shown on the parent's admin detail page. */

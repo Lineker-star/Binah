@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Ban, Loader2, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -19,12 +19,14 @@ import { Button } from '@/components/ui/button';
 import {
   fetchLearnerDetail,
   changeUserRole,
+  suspendAccount,
   fetchLinkedChildrenForParent,
   linkParentToChild,
   type LearnerDetail,
   type AdminLinkedChild,
 } from '@/lib/supabase/admin';
 import { USER_ROLES, type UserRole } from '@/lib/supabase/profile';
+import { createClient } from '@/lib/supabase/client';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('AdminLearnerDetail');
@@ -38,10 +40,18 @@ export default function AdminLearnerDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [roleDraft, setRoleDraft] = useState<UserRole>('learner');
   const [changingRole, setChangingRole] = useState(false);
+  const [suspending, setSuspending] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const [children, setChildren] = useState<AdminLinkedChild[]>([]);
   const [childEmail, setChildEmail] = useState('');
   const [linking, setLinking] = useState(false);
+
+  useEffect(() => {
+    createClient()
+      .auth.getUser()
+      .then(({ data }) => setCurrentUserId(data.user?.id ?? null));
+  }, []);
 
   const loadChildren = (parentId: string) => {
     fetchLinkedChildrenForParent(parentId)
@@ -108,6 +118,22 @@ export default function AdminLearnerDetailPage() {
     }
   };
 
+  const handleSuspendToggle = async () => {
+    if (!detail) return;
+    const nextSuspended = !detail.profile.suspended;
+    setSuspending(true);
+    try {
+      await suspendAccount(detail.profile.id, nextSuspended);
+      setDetail({ ...detail, profile: { ...detail.profile, suspended: nextSuspended } });
+      toast.success(nextSuspended ? 'Account suspended.' : 'Account reactivated.');
+    } catch (err) {
+      log.error('Failed to update suspension state:', err);
+      toast.error(err instanceof Error ? err.message : 'Failed to update suspension state.');
+    } finally {
+      setSuspending(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
       <Link
@@ -136,8 +162,9 @@ export default function AdminLearnerDetailPage() {
         <>
           <div className="mt-6 flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-lg font-semibold text-foreground">
+              <h1 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 {detail.profile.display_name || '(no name)'}
+                {detail.profile.suspended && <Badge variant="destructive">suspended</Badge>}
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Joined {new Date(detail.profile.created_at).toLocaleDateString()}
@@ -163,6 +190,27 @@ export default function AdminLearnerDetailPage() {
                 </SelectContent>
               </Select>
               {changingRole && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+              <Button
+                size="sm"
+                variant={detail.profile.suspended ? 'outline' : 'destructive'}
+                className="gap-1.5"
+                disabled={suspending || detail.profile.id === currentUserId}
+                title={
+                  detail.profile.id === currentUserId
+                    ? "You can't suspend your own account."
+                    : undefined
+                }
+                onClick={handleSuspendToggle}
+              >
+                {suspending ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : detail.profile.suspended ? (
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                ) : (
+                  <Ban className="h-3.5 w-3.5" />
+                )}
+                {detail.profile.suspended ? 'Reactivate' : 'Suspend'}
+              </Button>
             </div>
           </div>
 
