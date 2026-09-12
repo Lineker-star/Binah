@@ -1893,7 +1893,12 @@
       "roleParent": "Elternteil",
       "roleAdmin": "Administrator",
       "saved": "Profil aktualisiert",
-      "saveFailed": "Profil konnte nicht aktualisiert werden"
+      "saveFailed": "Profil konnte nicht aktualisiert werden",
+      "requestParentAccount": "Tutor-/Elternkonto beantragen",
+      "roleRequestSubmitted": "Anfrage gesendet — ein Admin wird sie prüfen.",
+      "roleRequestFailed": "Anfrage konnte nicht gesendet werden.",
+      "roleRequestPending": "Deine Anfrage für ein Eltern-/Tutorkonto wird noch geprüft.",
+      "roleRequestRejected": "Deine vorherige Anfrage wurde abgelehnt. Du kannst erneut anfragen."
     },
     "progress": {
       "nav": "Mein Fortschritt",

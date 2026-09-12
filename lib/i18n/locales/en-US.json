@@ -1893,7 +1893,12 @@
       "roleParent": "Parent",
       "roleAdmin": "Admin",
       "saved": "Profile updated",
-      "saveFailed": "Couldn't update profile"
+      "saveFailed": "Couldn't update profile",
+      "requestParentAccount": "Request Tutor/Parent Account",
+      "roleRequestSubmitted": "Request submitted — an admin will review it.",
+      "roleRequestFailed": "Failed to submit the request.",
+      "roleRequestPending": "Your request to become a parent/tutor account is pending review.",
+      "roleRequestRejected": "Your previous request was declined. You can request again."
     },
     "progress": {
       "nav": "My Progress",

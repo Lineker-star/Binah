@@ -1893,7 +1893,12 @@
       "roleParent": "Parent",
       "roleAdmin": "Administrateur",
       "saved": "Profil mis à jour",
-      "saveFailed": "Impossible de mettre à jour le profil"
+      "saveFailed": "Impossible de mettre à jour le profil",
+      "requestParentAccount": "Demander un compte tuteur/parent",
+      "roleRequestSubmitted": "Demande envoyée — un administrateur va l’examiner.",
+      "roleRequestFailed": "Échec de l'envoi de la demande.",
+      "roleRequestPending": "Votre demande de compte parent/tuteur est en cours d’examen.",
+      "roleRequestRejected": "Votre demande précédente a été refusée. Vous pouvez la soumettre à nouveau."
     },
     "progress": {
       "nav": "Ma progression",

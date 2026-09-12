@@ -1893,7 +1893,12 @@
       "roleParent": "家长",
       "roleAdmin": "管理员",
       "saved": "个人资料已更新",
-      "saveFailed": "个人资料更新失败"
+      "saveFailed": "个人资料更新失败",
+      "requestParentAccount": "申请家长/辅导老师账户",
+      "roleRequestSubmitted": "申请已提交,管理员将进行审核。",
+      "roleRequestFailed": "提交申请失败。",
+      "roleRequestPending": "你的家长/辅导老师账户申请正在审核中。",
+      "roleRequestRejected": "你之前的申请已被拒绝,可以重新申请。"
     },
     "progress": {
       "nav": "我的进度",

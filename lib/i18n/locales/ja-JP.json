@@ -1893,7 +1893,12 @@
       "roleParent": "保護者",
       "roleAdmin": "管理者",
       "saved": "プロフィールを更新しました",
-      "saveFailed": "プロフィールを更新できませんでした"
+      "saveFailed": "プロフィールを更新できませんでした",
+      "requestParentAccount": "保護者/チューターアカウントを申請",
+      "roleRequestSubmitted": "申請を送信しました。管理者が確認します。",
+      "roleRequestFailed": "申請の送信に失敗しました。",
+      "roleRequestPending": "保護者/チューターアカウントへの申請は審査中です。",
+      "roleRequestRejected": "前回の申請は却下されました。再度申請できます。"
     },
     "progress": {
       "nav": "学習の進捗",

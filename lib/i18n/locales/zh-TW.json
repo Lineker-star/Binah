@@ -1867,7 +1867,12 @@
       "roleParent": "家長",
       "roleAdmin": "管理員",
       "saved": "個人資料已更新",
-      "saveFailed": "個人資料更新失敗"
+      "saveFailed": "個人資料更新失敗",
+      "requestParentAccount": "申請家長/輔導老師帳戶",
+      "roleRequestSubmitted": "申請已送出,管理員將進行審核。",
+      "roleRequestFailed": "送出申請失敗。",
+      "roleRequestPending": "你的家長/輔導老師帳戶申請正在審核中。",
+      "roleRequestRejected": "你先前的申請已被拒絕,可以重新申請。"
     },
     "progress": {
       "nav": "我的進度",

@@ -26,6 +26,11 @@ import {
   type Profile,
   type UserRole,
 } from '@/lib/supabase/profile';
+import {
+  fetchOwnRoleRequest,
+  submitRoleRequest,
+  type RoleRequest,
+} from '@/lib/supabase/role-requests';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ProfileSettings');
@@ -55,6 +60,12 @@ export function ProfileSettings() {
   const [locale, setLocaleDraft] = useState<Locale>('en-US');
   const [role, setRoleDraft] = useState<UserRole>('learner');
 
+  // A learner's own most recent role request (AA.2) — null once approved,
+  // since profile.role itself then reads 'parent' and this branch of the UI
+  // no longer renders at all.
+  const [roleRequest, setRoleRequest] = useState<RoleRequest | null>(null);
+  const [requestingRole, setRequestingRole] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -67,6 +78,13 @@ export function ProfileSettings() {
           setAvatarUrl(pickerValue(p.avatar_url));
           setLocaleDraft(p.locale as Locale);
           setRoleDraft(p.role);
+          if (p.role === 'learner') {
+            fetchOwnRoleRequest()
+              .then((r) => {
+                if (!cancelled) setRoleRequest(r);
+              })
+              .catch((error) => log.warn('Failed to load role request status:', error));
+          }
         }
       })
       .catch((error) => {
@@ -79,6 +97,20 @@ export function ProfileSettings() {
       cancelled = true;
     };
   }, []);
+
+  const handleRequestRole = async () => {
+    setRequestingRole(true);
+    try {
+      const request = await submitRoleRequest();
+      setRoleRequest(request);
+      toast.success(t('settings.profile.roleRequestSubmitted'));
+    } catch (error) {
+      log.error('Failed to submit role request:', error);
+      toast.error(t('settings.profile.roleRequestFailed'));
+    } finally {
+      setRequestingRole(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!profile) return;
@@ -180,8 +212,33 @@ export function ProfileSettings() {
             </SelectContent>
           </Select>
         ) : (
-          <div id="profile-role" className="text-sm text-muted-foreground py-1.5">
-            {t(ROLE_LABEL_KEY[profile.role])}
+          <div id="profile-role" className="flex flex-col gap-2">
+            <div className="text-sm text-muted-foreground py-1.5">
+              {t(ROLE_LABEL_KEY[profile.role])}
+            </div>
+            {profile.role === 'learner' &&
+              (roleRequest?.status === 'pending' ? (
+                <p className="text-xs text-muted-foreground">
+                  {t('settings.profile.roleRequestPending')}
+                </p>
+              ) : (
+                <div className="flex flex-col items-start gap-1.5">
+                  {roleRequest?.status === 'rejected' && (
+                    <p className="text-xs text-muted-foreground">
+                      {t('settings.profile.roleRequestRejected')}
+                    </p>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleRequestRole}
+                    disabled={requestingRole}
+                  >
+                    {requestingRole && <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />}
+                    {t('settings.profile.requestParentAccount')}
+                  </Button>
+                </div>
+              ))}
           </div>
         )}
       </div>

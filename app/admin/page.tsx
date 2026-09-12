@@ -47,12 +47,20 @@ export default function AdminLearnerListPage() {
             All learner, parent, and admin accounts. Click a row for sessions and assessments.
           </p>
         </div>
-        <Link
-          href="/admin/skill-tracks"
-          className="shrink-0 text-sm text-violet-600 dark:text-violet-400 hover:underline"
-        >
-          Skill Tracks →
-        </Link>
+        <div className="flex shrink-0 items-center gap-4">
+          <Link
+            href="/admin/role-requests"
+            className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
+          >
+            Role Requests →
+          </Link>
+          <Link
+            href="/admin/skill-tracks"
+            className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
+          >
+            Skill Tracks →
+          </Link>
+        </div>
       </div>
 
       {loading && (

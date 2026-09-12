@@ -1893,7 +1893,12 @@
       "roleParent": "Phụ huynh",
       "roleAdmin": "Quản trị viên",
       "saved": "Đã cập nhật hồ sơ",
-      "saveFailed": "Không thể cập nhật hồ sơ"
+      "saveFailed": "Không thể cập nhật hồ sơ",
+      "requestParentAccount": "Yêu cầu tài khoản Gia sư/Phụ huynh",
+      "roleRequestSubmitted": "Đã gửi yêu cầu — quản trị viên sẽ xem xét.",
+      "roleRequestFailed": "Không thể gửi yêu cầu.",
+      "roleRequestPending": "Yêu cầu trở thành tài khoản phụ huynh/gia sư của bạn đang chờ duyệt.",
+      "roleRequestRejected": "Yêu cầu trước đó của bạn đã bị từ chối. Bạn có thể yêu cầu lại."
     },
     "progress": {
       "nav": "Tiến độ của tôi",

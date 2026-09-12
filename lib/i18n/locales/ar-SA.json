@@ -1893,7 +1893,12 @@
       "roleParent": "ولي أمر",
       "roleAdmin": "مسؤول",
       "saved": "تم تحديث الملف الشخصي",
-      "saveFailed": "تعذّر تحديث الملف الشخصي"
+      "saveFailed": "تعذّر تحديث الملف الشخصي",
+      "requestParentAccount": "طلب حساب ولي أمر/معلم",
+      "roleRequestSubmitted": "تم إرسال الطلب — سيقوم أحد المشرفين بمراجعته.",
+      "roleRequestFailed": "فشل إرسال الطلب.",
+      "roleRequestPending": "طلبك لتصبح حساب ولي أمر/معلم قيد المراجعة.",
+      "roleRequestRejected": "تم رفض طلبك السابق. يمكنك التقديم مرة أخرى."
     },
     "progress": {
       "nav": "تقدّمي",

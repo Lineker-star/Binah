@@ -1893,7 +1893,12 @@
       "roleParent": "Responsável",
       "roleAdmin": "Administrador",
       "saved": "Perfil atualizado",
-      "saveFailed": "Não foi possível atualizar o perfil"
+      "saveFailed": "Não foi possível atualizar o perfil",
+      "requestParentAccount": "Solicitar conta de tutor/responsável",
+      "roleRequestSubmitted": "Solicitação enviada — um administrador vai revisá-la.",
+      "roleRequestFailed": "Falha ao enviar a solicitação.",
+      "roleRequestPending": "Sua solicitação para se tornar uma conta de responsável/tutor está em análise.",
+      "roleRequestRejected": "Sua solicitação anterior foi recusada. Você pode solicitar novamente."
     },
     "progress": {
       "nav": "Meu progresso",

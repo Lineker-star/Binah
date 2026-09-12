@@ -5,6 +5,7 @@ import type { LearningSession } from './learning-session';
 import type { LearningMetrics } from './learning-metrics';
 import type { AssessmentType } from './assessments';
 import type { SkillTrack } from './skill-tracks';
+import type { RoleRequest } from './role-requests';
 
 /** One row in the admin learner list — a profile with its metrics rolled in. */
 export interface AdminLearnerListItem {
@@ -300,4 +301,81 @@ export async function updateSkillTrack(
     .single();
   if (error) throw error;
   return data as SkillTrack;
+}
+
+/** One pending role_requests row plus the requesting learner's basic profile info. */
+export interface PendingRoleRequest extends RoleRequest {
+  learner_display_name: string | null;
+  learner_email: string | null;
+}
+
+/** Every pending role request, oldest first, for the admin review screen. */
+export async function fetchPendingRoleRequests(): Promise<PendingRoleRequest[]> {
+  const supabase = createClient();
+  const { data: requests, error } = await supabase
+    .from('role_requests')
+    .select('*')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+
+  const rows = (requests ?? []) as RoleRequest[];
+  if (rows.length === 0) return [];
+
+  const learnerIds = [...new Set(rows.map((r) => r.learner_id))];
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, display_name, email')
+    .in('id', learnerIds);
+  if (profilesError) throw profilesError;
+
+  const byId = new Map(
+    (profiles ?? []).map((p) => [p.id as string, p as { display_name: string | null; email: string | null }]),
+  );
+  return rows.map((r) => ({
+    ...r,
+    learner_display_name: byId.get(r.learner_id)?.display_name ?? null,
+    learner_email: byId.get(r.learner_id)?.email ?? null,
+  }));
+}
+
+/**
+ * Approve a role request: changes the requester's role (reusing
+ * changeUserRole's existing write + admin_audit_log pattern) and marks the
+ * request approved. Two plain writes, not a transaction — the same accepted
+ * simplification changeUserRole itself already documents. No notification
+ * system exists in this codebase (confirmed before building this) to push
+ * to the requester; the role change alone is what they'll see reflected
+ * next time they load the app (app/page.tsx's own auth effect already
+ * re-reads profiles.role on every load and routes a parent to /parent).
+ */
+export async function approveRoleRequest(request: RoleRequest): Promise<void> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not signed in');
+
+  await changeUserRole(request.learner_id, 'learner', request.requested_role);
+
+  const { error } = await supabase
+    .from('role_requests')
+    .update({ status: 'approved', reviewed_by: user.id, reviewed_at: new Date().toISOString() })
+    .eq('id', request.id);
+  if (error) throw error;
+}
+
+/** Reject a role request — no role change, just marks it reviewed. */
+export async function rejectRoleRequest(requestId: string): Promise<void> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not signed in');
+
+  const { error } = await supabase
+    .from('role_requests')
+    .update({ status: 'rejected', reviewed_by: user.id, reviewed_at: new Date().toISOString() })
+    .eq('id', requestId);
+  if (error) throw error;
 }
