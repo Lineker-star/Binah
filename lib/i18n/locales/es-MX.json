@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Enfoque recomendado",
     "dismissRecommendation": "Descartar",
-    "downloadCertificate": "Descargar certificado"
+    "downloadCertificate": "Descargar certificado",
+    "certificateIneligible": "Los certificados están disponibles para cursos de más de 10 lecciones.",
+    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento."
   },
   "whiteboard": {
     "title": "Pizarrón interactivo",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Apuntes de clase (PDF)",
       "certificate": "Certificado"
     },
-    "downloadCertificate": "Descargar certificado"
+    "downloadCertificate": "Descargar certificado",
+    "certificateIneligible": "Los certificados están disponibles para cursos de más de 10 lecciones.",
+    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento."
   },
   "textbook": {
     "noChaptersSelected": "Selecciona al menos un capítulo para crear un curso.",

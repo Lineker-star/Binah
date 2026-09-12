@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Empfohlener Fokus",
     "dismissRecommendation": "Verwerfen",
-    "downloadCertificate": "Zertifikat herunterladen"
+    "downloadCertificate": "Zertifikat herunterladen",
+    "certificateIneligible": "Zertifikate sind für Kurse mit mehr als 10 Lektionen verfügbar.",
+    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal."
   },
   "whiteboard": {
     "title": "Interaktives Whiteboard",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Vorlesungsnotizen (PDF)",
       "certificate": "Zertifikat"
     },
-    "downloadCertificate": "Zertifikat herunterladen"
+    "downloadCertificate": "Zertifikat herunterladen",
+    "certificateIneligible": "Zertifikate sind für Kurse mit mehr als 10 Lektionen verfügbar.",
+    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal."
   },
   "textbook": {
     "noChaptersSelected": "Wähle mindestens ein Kapitel aus, um einen Kurs zu erstellen.",

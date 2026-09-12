@@ -2116,7 +2116,9 @@
     },
     "recommendationTitle": "建議重點",
     "dismissRecommendation": "關閉",
-    "downloadCertificate": "下載證書"
+    "downloadCertificate": "下載證書",
+    "certificateIneligible": "證書僅適用於超過10課的課程。",
+    "certificatePending": "你的證書仍在準備中,請稍後再試。"
   },
   "proMode": {
     "attach": "添加材料",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "講義筆記 (PDF)",
       "certificate": "證書"
     },
-    "downloadCertificate": "下載證書"
+    "downloadCertificate": "下載證書",
+    "certificateIneligible": "證書僅適用於超過10課的課程。",
+    "certificatePending": "你的證書仍在準備中,請稍後再試。"
   },
   "textbook": {
     "noChaptersSelected": "請至少選擇一個章節以建立課程。",

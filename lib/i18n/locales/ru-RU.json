@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Рекомендуемый фокус",
     "dismissRecommendation": "Скрыть",
-    "downloadCertificate": "Скачать сертификат"
+    "downloadCertificate": "Скачать сертификат",
+    "certificateIneligible": "Сертификаты доступны для курсов из более чем 10 уроков.",
+    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту."
   },
   "whiteboard": {
     "title": "Интерактивная доска",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Конспект лекции (PDF)",
       "certificate": "Сертификат"
     },
-    "downloadCertificate": "Скачать сертификат"
+    "downloadCertificate": "Скачать сертификат",
+    "certificateIneligible": "Сертификаты доступны для курсов из более чем 10 уроков.",
+    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту."
   },
   "textbook": {
     "noChaptersSelected": "Выберите хотя бы одну главу, чтобы создать курс.",

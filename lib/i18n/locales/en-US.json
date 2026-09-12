@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Recommended focus",
     "dismissRecommendation": "Dismiss",
-    "downloadCertificate": "Download Certificate"
+    "downloadCertificate": "Download Certificate",
+    "certificateIneligible": "Certificates are available for courses of more than 10 lessons.",
+    "certificatePending": "Your certificate is still being prepared — try again in a moment."
   },
   "whiteboard": {
     "title": "Interactive Whiteboard",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Lecture Notes (PDF)",
       "certificate": "Certificate"
     },
-    "downloadCertificate": "Download certificate"
+    "downloadCertificate": "Download certificate",
+    "certificateIneligible": "Certificates are available for courses of more than 10 lessons.",
+    "certificatePending": "Your certificate is still being prepared — try again in a moment."
   },
   "textbook": {
     "noChaptersSelected": "Select at least one chapter to build a course.",

@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "おすすめの重点分野",
     "dismissRecommendation": "閉じる",
-    "downloadCertificate": "修了証をダウンロード"
+    "downloadCertificate": "修了証をダウンロード",
+    "certificateIneligible": "証明書は11レッスン以上のコースで利用できます。",
+    "certificatePending": "証明書を準備中です。少し経ってから再度お試しください。"
   },
   "whiteboard": {
     "title": "インタラクティブホワイトボード",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "講義ノート (PDF)",
       "certificate": "修了証"
     },
-    "downloadCertificate": "修了証をダウンロード"
+    "downloadCertificate": "修了証をダウンロード",
+    "certificateIneligible": "証明書は11レッスン以上のコースで利用できます。",
+    "certificatePending": "証明書を準備中です。少し経ってから再度お試しください。"
   },
   "textbook": {
     "noChaptersSelected": "コースを作成するには、少なくとも1つの章を選択してください。",

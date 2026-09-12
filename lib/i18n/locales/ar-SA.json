@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "التركيز الموصى به",
     "dismissRecommendation": "إغلاق",
-    "downloadCertificate": "تنزيل الشهادة"
+    "downloadCertificate": "تنزيل الشهادة",
+    "certificateIneligible": "الشهادات متوفرة للدورات التي تضم أكثر من 10 دروس.",
+    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات."
   },
   "whiteboard": {
     "title": "السبورة التفاعلية",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)",
       "certificate": "شهادة"
     },
-    "downloadCertificate": "تنزيل الشهادة"
+    "downloadCertificate": "تنزيل الشهادة",
+    "certificateIneligible": "الشهادات متوفرة للدورات التي تضم أكثر من 10 دروس.",
+    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات."
   },
   "textbook": {
     "noChaptersSelected": "اختر فصلاً واحداً على الأقل لإنشاء الدورة.",

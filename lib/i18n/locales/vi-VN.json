@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Trọng tâm được đề xuất",
     "dismissRecommendation": "Bỏ qua",
-    "downloadCertificate": "Tải chứng chỉ"
+    "downloadCertificate": "Tải chứng chỉ",
+    "certificateIneligible": "Chứng chỉ chỉ dành cho các khóa học có hơn 10 bài học.",
+    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút."
   },
   "whiteboard": {
     "title": "Bảng tương tác",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Ghi chú bài giảng (PDF)",
       "certificate": "Chứng chỉ"
     },
-    "downloadCertificate": "Tải chứng chỉ"
+    "downloadCertificate": "Tải chứng chỉ",
+    "certificateIneligible": "Chứng chỉ chỉ dành cho các khóa học có hơn 10 bài học.",
+    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút."
   },
   "textbook": {
     "noChaptersSelected": "Chọn ít nhất một chương để tạo khóa học.",

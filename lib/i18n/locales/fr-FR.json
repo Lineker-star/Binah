@@ -682,7 +682,9 @@
     },
     "recommendationTitle": "Axe recommandé",
     "dismissRecommendation": "Ignorer",
-    "downloadCertificate": "Télécharger le certificat"
+    "downloadCertificate": "Télécharger le certificat",
+    "certificateIneligible": "Les certificats sont disponibles pour les cours de plus de 10 leçons.",
+    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant."
   },
   "whiteboard": {
     "title": "Tableau blanc interactif",
@@ -2183,7 +2185,9 @@
       "lecture_notes_pdf": "Notes de cours (PDF)",
       "certificate": "Certificat"
     },
-    "downloadCertificate": "Télécharger le certificat"
+    "downloadCertificate": "Télécharger le certificat",
+    "certificateIneligible": "Les certificats sont disponibles pour les cours de plus de 10 leçons.",
+    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant."
   },
   "textbook": {
     "noChaptersSelected": "Sélectionnez au moins un chapitre pour créer un cours.",
