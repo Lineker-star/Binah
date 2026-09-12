@@ -144,8 +144,16 @@ export default function HistoryPage() {
   const handleDownloadCertificate = async (course: Course) => {
     setDownloadingCertificateId(course.id);
     try {
-      const url = await getCertificateDownloadUrl({ courseId: course.id });
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const result = await getCertificateDownloadUrl({ courseId: course.id });
+      if (result.status === 'ineligible') {
+        toast.info(t('history.certificateIneligible'));
+        return;
+      }
+      if (result.status === 'pending') {
+        toast.info(t('history.certificatePending'));
+        return;
+      }
+      window.open(result.url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       log.error('Failed to download certificate:', err);
       toast.error(t('history.downloadFailed'));

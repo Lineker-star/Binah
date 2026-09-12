@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { animate, motion, MotionConfig, useReducedMotion } from 'motion/react';
+import { toast } from 'sonner';
 import {
   ArrowRight,
   Award,
@@ -439,8 +440,16 @@ function CertificateDownloadButton({ courseId }: { courseId: string }) {
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      const url = await getCertificateDownloadUrl({ courseId });
-      window.open(url, '_blank', 'noopener,noreferrer');
+      const result = await getCertificateDownloadUrl({ courseId });
+      if (result.status === 'ineligible') {
+        toast.info(t('classroomComplete.certificateIneligible'));
+        return;
+      }
+      if (result.status === 'pending') {
+        toast.info(t('classroomComplete.certificatePending'));
+        return;
+      }
+      window.open(result.url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       log.error('Failed to download certificate:', err);
     } finally {
