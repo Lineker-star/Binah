@@ -20,6 +20,12 @@ import {
 import { createCourse } from '@/lib/supabase/courses';
 import { buildChapterLessonSessionState } from '@/lib/courses/lessons';
 import type { IngestedChapter } from '@/lib/textbook/types';
+import {
+  listIngestionLessonsByChapter,
+  type ChapterExportLesson,
+} from '@/lib/supabase/learning-session';
+import { listBookChapterIds } from '@/lib/supabase/book-chapters';
+import { ChapterDownloadMenu } from '@/components/textbook/chapter-download-menu';
 
 const log = createLogger('TextbookChapterReview');
 
@@ -51,6 +57,25 @@ export default function TextbookChapterReviewPage() {
 
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const audioElRef = useRef<HTMLAudioElement | null>(null);
+
+  // Per-lesson/per-chapter download data — best-effort and non-blocking:
+  // the chapter cards render fine before/without this, it just skips
+  // showing a download action until it resolves (or for an anonymous
+  // visitor, forever — both queries return empty rather than erroring).
+  const [chapterLessons, setChapterLessons] = useState<Map<number, ChapterExportLesson[]>>(
+    new Map(),
+  );
+  const [bookChapterIds, setBookChapterIds] = useState<Map<number, string>>(new Map());
+
+  useEffect(() => {
+    if (!ingestion) return;
+    listIngestionLessonsByChapter(ingestion.id)
+      .then(setChapterLessons)
+      .catch((err) => log.warn('Failed to load chapter lesson data (ignored):', err));
+    listBookChapterIds(ingestion.id)
+      .then(setBookChapterIds)
+      .catch((err) => log.warn('Failed to load book chapter ids (ignored):', err));
+  }, [ingestion?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const load = useCallback(() => {
     fetchIngestion(id)
@@ -331,8 +356,17 @@ export default function TextbookChapterReviewPage() {
             <p className="text-[13px] leading-relaxed text-muted-foreground">{chapter.summary}</p>
           )}
         </div>
-        <div className="shrink-0 text-[12px] text-muted-foreground tabular-nums pt-1">
-          {t('textbook.pageRange', { start: chapter.startPage, end: chapter.endPage })}
+        <div className="shrink-0 flex flex-col items-end gap-1.5">
+          <span className="text-[12px] text-muted-foreground tabular-nums">
+            {t('textbook.pageRange', { start: chapter.startPage, end: chapter.endPage })}
+          </span>
+          {!isFrontOrBack && (
+            <ChapterDownloadMenu
+              title={chapter.title}
+              lessons={chapterLessons.get(index) ?? []}
+              chapterId={bookChapterIds.get(index + 1) ?? null}
+            />
+          )}
         </div>
       </div>
     );
