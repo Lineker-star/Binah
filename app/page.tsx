@@ -57,6 +57,7 @@ import { createClient } from '@/lib/supabase/client';
 import { createCourse } from '@/lib/supabase/courses';
 import { ingestTextbook } from '@/lib/supabase/textbook-ingestions';
 import { buildLessonRequirement } from '@/lib/courses/lessons';
+import { parseDepthSignal } from '@/lib/courses/parse-depth-signal';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
@@ -391,6 +392,41 @@ function HomePage() {
             field === 'courseMinutesPerLesson' ? (value as number) : form.courseMinutesPerLesson,
         });
       }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  /**
+   * Turning "Structured Course" on is the one moment the free-text prompt
+   * gets a chance to set the lesson-count field itself — a stated depth
+   * preference ("teach me X in 10 lessons", "as many lessons as possible")
+   * otherwise reaches nowhere, since the field is normal state with no
+   * other link to the prompt text. Only pre-fills when the field is still
+   * at its default: a value the learner already changed by hand is never
+   * silently overwritten, and this never re-parses on later edits to the
+   * prompt — it's a one-time suggestion at the moment of toggling on, not
+   * a live sync.
+   */
+  const handleToggleStructuredCourse = () => {
+    const turningOn = !form.courseMode;
+    let nextLessonCount = form.courseLessonCount;
+    if (turningOn && form.courseLessonCount === DEFAULT_COURSE_LESSON_COUNT) {
+      const suggested = parseDepthSignal(form.requirement);
+      if (suggested != null) {
+        nextLessonCount = Math.min(
+          COURSE_LESSON_COUNT_RANGE.max,
+          Math.max(COURSE_LESSON_COUNT_RANGE.min, suggested),
+        );
+      }
+    }
+    setForm((prev) => ({ ...prev, courseMode: turningOn, courseLessonCount: nextLessonCount }));
+    try {
+      updateCourseDraftCache({
+        courseMode: turningOn,
+        courseLessonCount: nextLessonCount,
+        courseMinutesPerLesson: form.courseMinutesPerLesson,
+      });
     } catch {
       /* ignore */
     }
@@ -900,7 +936,7 @@ function HomePage() {
                   <button
                     type="button"
                     aria-pressed={form.courseMode}
-                    onClick={() => updateForm('courseMode', !form.courseMode)}
+                    onClick={handleToggleStructuredCourse}
                     className={cn(
                       'inline-flex h-8 shrink-0 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition-all active:scale-95',
                       form.courseMode
