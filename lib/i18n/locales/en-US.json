@@ -684,7 +684,8 @@
     "dismissRecommendation": "Dismiss",
     "downloadCertificate": "Download Certificate",
     "certificateIneligible": "Certificates are available for courses of more than 10 lessons.",
-    "certificatePending": "Your certificate is still being prepared — try again in a moment."
+    "certificatePending": "Your certificate is still being prepared — try again in a moment.",
+    "downloadCertificateExcellence": "Download Certificate of Excellence"
   },
   "whiteboard": {
     "title": "Interactive Whiteboard",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "Classroom ZIP",
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Lecture Notes (PDF)",
-      "certificate": "Certificate"
+      "certificate": "Certificate",
+      "certificate_excellence": "Certificate of Excellence"
     },
     "downloadCertificate": "Download certificate",
     "certificateIneligible": "Certificates are available for courses of more than 10 lessons.",
-    "certificatePending": "Your certificate is still being prepared — try again in a moment."
+    "certificatePending": "Your certificate is still being prepared — try again in a moment.",
+    "downloadCertificateExcellence": "Download certificate of excellence"
   },
   "textbook": {
     "noChaptersSelected": "Select at least one chapter to build a course.",

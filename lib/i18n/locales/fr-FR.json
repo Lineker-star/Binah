@@ -684,7 +684,8 @@
     "dismissRecommendation": "Ignorer",
     "downloadCertificate": "Télécharger le certificat",
     "certificateIneligible": "Les certificats sont disponibles pour les cours de plus de 10 leçons.",
-    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant."
+    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant.",
+    "downloadCertificateExcellence": "Télécharger le Certificat d'Excellence"
   },
   "whiteboard": {
     "title": "Tableau blanc interactif",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ZIP du cours",
       "mp4": "Vidéo (MP4)",
       "lecture_notes_pdf": "Notes de cours (PDF)",
-      "certificate": "Certificat"
+      "certificate": "Certificat",
+      "certificate_excellence": "Certificat d'Excellence"
     },
     "downloadCertificate": "Télécharger le certificat",
     "certificateIneligible": "Les certificats sont disponibles pour les cours de plus de 10 leçons.",
-    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant."
+    "certificatePending": "Votre certificat est encore en préparation — réessayez dans un instant.",
+    "downloadCertificateExcellence": "Télécharger le certificat d'excellence"
   },
   "textbook": {
     "noChaptersSelected": "Sélectionnez au moins un chapitre pour créer un cours.",

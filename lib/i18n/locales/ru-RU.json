@@ -684,7 +684,8 @@
     "dismissRecommendation": "Скрыть",
     "downloadCertificate": "Скачать сертификат",
     "certificateIneligible": "Сертификаты доступны для курсов из более чем 10 уроков.",
-    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту."
+    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту.",
+    "downloadCertificateExcellence": "Скачать сертификат с отличием"
   },
   "whiteboard": {
     "title": "Интерактивная доска",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ZIP-архив класса",
       "mp4": "Видео (MP4)",
       "lecture_notes_pdf": "Конспект лекции (PDF)",
-      "certificate": "Сертификат"
+      "certificate": "Сертификат",
+      "certificate_excellence": "Сертификат с отличием"
     },
     "downloadCertificate": "Скачать сертификат",
     "certificateIneligible": "Сертификаты доступны для курсов из более чем 10 уроков.",
-    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту."
+    "certificatePending": "Ваш сертификат ещё готовится — попробуйте снова через минуту.",
+    "downloadCertificateExcellence": "Скачать сертификат с отличием"
   },
   "textbook": {
     "noChaptersSelected": "Выберите хотя бы одну главу, чтобы создать курс.",

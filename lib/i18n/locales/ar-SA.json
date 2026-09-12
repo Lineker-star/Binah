@@ -684,7 +684,8 @@
     "dismissRecommendation": "إغلاق",
     "downloadCertificate": "تنزيل الشهادة",
     "certificateIneligible": "الشهادات متوفرة للدورات التي تضم أكثر من 10 دروس.",
-    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات."
+    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات.",
+    "downloadCertificateExcellence": "تنزيل شهادة التميز"
   },
   "whiteboard": {
     "title": "السبورة التفاعلية",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ملف ZIP للفصل",
       "mp4": "فيديو (MP4)",
       "lecture_notes_pdf": "ملاحظات المحاضرة (PDF)",
-      "certificate": "شهادة"
+      "certificate": "شهادة",
+      "certificate_excellence": "شهادة التميز"
     },
     "downloadCertificate": "تنزيل الشهادة",
     "certificateIneligible": "الشهادات متوفرة للدورات التي تضم أكثر من 10 دروس.",
-    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات."
+    "certificatePending": "شهادتك قيد التحضير — حاول مرة أخرى بعد لحظات.",
+    "downloadCertificateExcellence": "تنزيل شهادة التميز"
   },
   "textbook": {
     "noChaptersSelected": "اختر فصلاً واحداً على الأقل لإنشاء الدورة.",

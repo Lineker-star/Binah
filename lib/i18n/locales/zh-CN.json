@@ -684,7 +684,8 @@
     "dismissRecommendation": "关闭",
     "downloadCertificate": "下载证书",
     "certificateIneligible": "证书仅适用于超过10课的课程。",
-    "certificatePending": "你的证书仍在准备中,请稍后重试。"
+    "certificatePending": "你的证书仍在准备中,请稍后重试。",
+    "downloadCertificateExcellence": "下载卓越证书"
   },
   "whiteboard": {
     "title": "互动白板",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "课堂 ZIP",
       "mp4": "视频 (MP4)",
       "lecture_notes_pdf": "讲义笔记 (PDF)",
-      "certificate": "证书"
+      "certificate": "证书",
+      "certificate_excellence": "卓越证书"
     },
     "downloadCertificate": "下载证书",
     "certificateIneligible": "证书仅适用于超过10课的课程。",
-    "certificatePending": "你的证书仍在准备中,请稍后重试。"
+    "certificatePending": "你的证书仍在准备中,请稍后重试。",
+    "downloadCertificateExcellence": "下载卓越证书"
   },
   "textbook": {
     "noChaptersSelected": "请至少选择一个章节以创建课程。",

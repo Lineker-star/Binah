@@ -684,7 +684,8 @@
     "dismissRecommendation": "Verwerfen",
     "downloadCertificate": "Zertifikat herunterladen",
     "certificateIneligible": "Zertifikate sind für Kurse mit mehr als 10 Lektionen verfügbar.",
-    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal."
+    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal.",
+    "downloadCertificateExcellence": "Exzellenzzertifikat herunterladen"
   },
   "whiteboard": {
     "title": "Interaktives Whiteboard",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "Klassenzimmer-ZIP",
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Vorlesungsnotizen (PDF)",
-      "certificate": "Zertifikat"
+      "certificate": "Zertifikat",
+      "certificate_excellence": "Exzellenzzertifikat"
     },
     "downloadCertificate": "Zertifikat herunterladen",
     "certificateIneligible": "Zertifikate sind für Kurse mit mehr als 10 Lektionen verfügbar.",
-    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal."
+    "certificatePending": "Dein Zertifikat wird noch vorbereitet — versuche es gleich noch einmal.",
+    "downloadCertificateExcellence": "Exzellenzzertifikat herunterladen"
   },
   "textbook": {
     "noChaptersSelected": "Wähle mindestens ein Kapitel aus, um einen Kurs zu erstellen.",

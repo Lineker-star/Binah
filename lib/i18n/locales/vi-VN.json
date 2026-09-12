@@ -684,7 +684,8 @@
     "dismissRecommendation": "Bỏ qua",
     "downloadCertificate": "Tải chứng chỉ",
     "certificateIneligible": "Chứng chỉ chỉ dành cho các khóa học có hơn 10 bài học.",
-    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút."
+    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút.",
+    "downloadCertificateExcellence": "Tải Chứng Chỉ Xuất Sắc"
   },
   "whiteboard": {
     "title": "Bảng tương tác",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ZIP lớp học",
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Ghi chú bài giảng (PDF)",
-      "certificate": "Chứng chỉ"
+      "certificate": "Chứng chỉ",
+      "certificate_excellence": "Chứng Chỉ Xuất Sắc"
     },
     "downloadCertificate": "Tải chứng chỉ",
     "certificateIneligible": "Chứng chỉ chỉ dành cho các khóa học có hơn 10 bài học.",
-    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút."
+    "certificatePending": "Chứng chỉ của bạn vẫn đang được chuẩn bị — hãy thử lại sau một chút.",
+    "downloadCertificateExcellence": "Tải chứng chỉ xuất sắc"
   },
   "textbook": {
     "noChaptersSelected": "Chọn ít nhất một chương để tạo khóa học.",

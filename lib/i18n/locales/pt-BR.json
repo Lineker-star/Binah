@@ -684,7 +684,8 @@
     "dismissRecommendation": "Dispensar",
     "downloadCertificate": "Baixar certificado",
     "certificateIneligible": "Os certificados estão disponíveis para cursos com mais de 10 aulas.",
-    "certificatePending": "Seu certificado ainda está sendo preparado — tente novamente em um momento."
+    "certificatePending": "Seu certificado ainda está sendo preparado — tente novamente em um momento.",
+    "downloadCertificateExcellence": "Baixar Certificado de Excelência"
   },
   "whiteboard": {
     "title": "Quadro Interativo",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ZIP da sala de aula",
       "mp4": "Vídeo (MP4)",
       "lecture_notes_pdf": "Notas de aula (PDF)",
-      "certificate": "Certificado"
+      "certificate": "Certificado",
+      "certificate_excellence": "Certificado de Excelência"
     },
     "downloadCertificate": "Baixar certificado",
     "certificateIneligible": "Os certificados estão disponíveis para cursos com mais de 10 aulas.",
-    "certificatePending": "Seu certificado ainda está sendo preparado — tente novamente em um momento."
+    "certificatePending": "Seu certificado ainda está sendo preparado — tente novamente em um momento.",
+    "downloadCertificateExcellence": "Baixar certificado de excelência"
   },
   "textbook": {
     "noChaptersSelected": "Selecione pelo menos um capítulo para criar um curso.",

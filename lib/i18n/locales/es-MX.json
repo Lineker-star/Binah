@@ -684,7 +684,8 @@
     "dismissRecommendation": "Descartar",
     "downloadCertificate": "Descargar certificado",
     "certificateIneligible": "Los certificados están disponibles para cursos de más de 10 lecciones.",
-    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento."
+    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento.",
+    "downloadCertificateExcellence": "Descargar Certificado de Excelencia"
   },
   "whiteboard": {
     "title": "Pizarrón interactivo",
@@ -2183,11 +2184,13 @@
       "classroom_zip": "ZIP del curso",
       "mp4": "Video (MP4)",
       "lecture_notes_pdf": "Apuntes de clase (PDF)",
-      "certificate": "Certificado"
+      "certificate": "Certificado",
+      "certificate_excellence": "Certificado de Excelencia"
     },
     "downloadCertificate": "Descargar certificado",
     "certificateIneligible": "Los certificados están disponibles para cursos de más de 10 lecciones.",
-    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento."
+    "certificatePending": "Tu certificado todavía se está preparando — intenta de nuevo en un momento.",
+    "downloadCertificateExcellence": "Descargar certificado de excelencia"
   },
   "textbook": {
     "noChaptersSelected": "Selecciona al menos un capítulo para crear un curso.",
