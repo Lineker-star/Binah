@@ -2056,6 +2056,13 @@ export const useSettingsStore = create<SettingsState>()(
                   });
                   actions.setVideoProvider(row.provider_id as VideoProviderId);
                   break;
+                case 'webSearch':
+                  actions.setWebSearchProviderConfig(row.provider_id as WebSearchProviderId, {
+                    apiKey,
+                    baseUrl,
+                  });
+                  actions.setWebSearchProvider(row.provider_id as WebSearchProviderId);
+                  break;
               }
             }
           } catch (e) {

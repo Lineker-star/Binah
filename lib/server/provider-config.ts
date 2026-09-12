@@ -635,7 +635,7 @@ export function mergeSystemProviderDefault(
 export type ProviderSection = 'providers' | 'tts' | 'asr' | 'pdf' | 'image' | 'video' | 'webSearch';
 
 /** The subset of ProviderSection an admin can set a learner default for (#BB.1). */
-export type SystemDefaultSection = Exclude<ProviderSection, 'webSearch'>;
+export type SystemDefaultSection = ProviderSection;
 
 /** Whether the operator configured this provider in the given section. */
 export function isServerConfiguredProvider(section: ProviderSection, providerId: string): boolean {

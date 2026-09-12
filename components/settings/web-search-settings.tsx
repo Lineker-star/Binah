@@ -21,12 +21,19 @@ import {
 } from '@/lib/web-search/constants';
 import type { BaiduSubSources, WebSearchProviderId } from '@/lib/web-search/types';
 import { ExternalLink, Eye, EyeOff } from 'lucide-react';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
+} from './set-as-learner-default-button';
 
 interface WebSearchSettingsProps {
   selectedProviderId: WebSearchProviderId;
+  isAdmin?: boolean;
 }
 
-export function WebSearchSettings({ selectedProviderId }: WebSearchSettingsProps) {
+export function WebSearchSettings({ selectedProviderId, isAdmin }: WebSearchSettingsProps) {
   const { t } = useI18n();
   const [showApiKey, setShowApiKey] = useState(false);
 
@@ -59,8 +66,9 @@ export function WebSearchSettings({ selectedProviderId }: WebSearchSettingsProps
     <div className="space-y-6 max-w-3xl">
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="webSearch" />}
         </div>
       )}
 
@@ -148,6 +156,24 @@ export function WebSearchSettings({ selectedProviderId }: WebSearchSettingsProps
               </p>
             );
           })()}
+
+          <div className="flex flex-wrap items-center gap-2">
+            {isAdmin && (
+              <SetAsLearnerDefaultButton
+                section="webSearch"
+                providerId={selectedProviderId}
+                apiKey={webSearchProvidersConfig[selectedProviderId]?.apiKey}
+                baseUrl={webSearchProvidersConfig[selectedProviderId]?.baseUrl}
+              />
+            )}
+            <SaveAsMyDefaultButton
+              section="webSearch"
+              providerId={selectedProviderId}
+              apiKey={webSearchProvidersConfig[selectedProviderId]?.apiKey}
+              baseUrl={webSearchProvidersConfig[selectedProviderId]?.baseUrl}
+            />
+            <ClearMyDefaultButton section="webSearch" />
+          </div>
         </>
       )}
 

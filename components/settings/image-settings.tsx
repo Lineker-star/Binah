@@ -269,6 +269,7 @@ export function ImageSettings({ selectedProviderId, isAdmin }: ImageSettingsProp
                   providerId={selectedProviderId}
                   apiKey={currentConfig?.apiKey}
                   baseUrl={currentConfig?.baseUrl}
+                  modelId={imageModelId}
                   disabled={requiresApiKey && !currentConfig?.apiKey}
                 />
               )}
@@ -277,6 +278,7 @@ export function ImageSettings({ selectedProviderId, isAdmin }: ImageSettingsProp
                 providerId={selectedProviderId}
                 apiKey={currentConfig?.apiKey}
                 baseUrl={currentConfig?.baseUrl}
+                modelId={imageModelId}
                 disabled={requiresApiKey && !currentConfig?.apiKey}
               />
               <ClearMyDefaultButton section="image" />

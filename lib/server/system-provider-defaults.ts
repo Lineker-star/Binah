@@ -14,7 +14,15 @@ interface SystemSettingsRow {
   extra_config: { accessKeyId?: string; accessKeySecret?: string } | null;
 }
 
-const ALL_SECTIONS: SystemDefaultSection[] = ['providers', 'image', 'video', 'tts', 'asr', 'pdf'];
+const ALL_SECTIONS: SystemDefaultSection[] = [
+  'providers',
+  'image',
+  'video',
+  'tts',
+  'asr',
+  'pdf',
+  'webSearch',
+];
 
 /**
  * Reads every `system_settings` row (admin-only RLS — a service-role client
@@ -31,9 +39,13 @@ const ALL_SECTIONS: SystemDefaultSection[] = ['providers', 'image', 'video', 'tt
 export async function hydrateSystemProviderDefaults(): Promise<void> {
   try {
     const supabase = createServiceRoleClient();
+    // owner_id IS NULL only — a personal (BB.3) row must never leak into the
+    // global (BB.2) cache this feeds. The service-role client bypasses RLS
+    // entirely, so this filter is the only thing enforcing that boundary here.
     const { data, error } = await supabase
       .from('system_settings')
-      .select('section, provider_id, model_id, api_key, base_url, extra_config');
+      .select('section, provider_id, model_id, api_key, base_url, extra_config')
+      .is('owner_id', null);
     if (error) throw error;
 
     const rows = (data ?? []) as SystemSettingsRow[];

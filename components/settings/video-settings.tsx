@@ -234,6 +234,7 @@ export function VideoSettings({ selectedProviderId, isAdmin }: VideoSettingsProp
                   providerId={selectedProviderId}
                   apiKey={currentConfig?.apiKey}
                   baseUrl={currentConfig?.baseUrl}
+                  modelId={videoModelId}
                   disabled={!currentConfig?.apiKey}
                 />
               )}
@@ -242,6 +243,7 @@ export function VideoSettings({ selectedProviderId, isAdmin }: VideoSettingsProp
                 providerId={selectedProviderId}
                 apiKey={currentConfig?.apiKey}
                 baseUrl={currentConfig?.baseUrl}
+                modelId={videoModelId}
                 disabled={!currentConfig?.apiKey}
               />
               <ClearMyDefaultButton section="video" />

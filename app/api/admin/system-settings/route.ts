@@ -26,7 +26,15 @@ import { createLogger } from '@/lib/logger';
 
 const log = createLogger('AdminSystemSettings');
 
-const VALID_SECTIONS: SystemDefaultSection[] = ['providers', 'image', 'video', 'tts', 'asr', 'pdf'];
+const VALID_SECTIONS: SystemDefaultSection[] = [
+  'providers',
+  'image',
+  'video',
+  'tts',
+  'asr',
+  'pdf',
+  'webSearch',
+];
 
 function isValidSection(value: unknown): value is SystemDefaultSection {
   return typeof value === 'string' && (VALID_SECTIONS as string[]).includes(value);
