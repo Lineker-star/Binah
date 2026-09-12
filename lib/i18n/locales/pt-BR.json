@@ -1907,7 +1907,19 @@
       "lastActive": "Última atividade",
       "never": "Nunca",
       "recommendationsHeading": "Recomendações",
-      "dismissRecommendation": "Dispensar"
+      "dismissRecommendation": "Dispensar",
+      "growthHeading": "Progresso ao longo do tempo",
+      "scoreTrendLabel": "Tendência de pontuação",
+      "passFailLabel": "Aprovado / reprovado por tipo de avaliação",
+      "timeActiveLabel": "Tempo ativo",
+      "chartEmpty": "Ainda não há dados suficientes",
+      "passed": "Aprovado",
+      "failed": "Reprovado",
+      "typeQuiz": "Quiz",
+      "typeContinuousAssessment": "Avaliação Contínua",
+      "typeExam": "Prova",
+      "typePbl": "Projeto",
+      "typeCourseFinal": "Avaliação Final do Curso"
     },
     "tokenPlan": {
       "nav": "Token Plan",

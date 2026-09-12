@@ -1907,7 +1907,19 @@
       "lastActive": "Последняя активность",
       "never": "Никогда",
       "recommendationsHeading": "Рекомендации",
-      "dismissRecommendation": "Скрыть"
+      "dismissRecommendation": "Скрыть",
+      "growthHeading": "Прогресс с течением времени",
+      "scoreTrendLabel": "Динамика баллов",
+      "passFailLabel": "Сдано / не сдано по типу оценивания",
+      "timeActiveLabel": "Активное время",
+      "chartEmpty": "Пока недостаточно данных",
+      "passed": "Сдано",
+      "failed": "Не сдано",
+      "typeQuiz": "Тест",
+      "typeContinuousAssessment": "Непрерывная оценка",
+      "typeExam": "Экзамен",
+      "typePbl": "Проект",
+      "typeCourseFinal": "Итоговая оценка курса"
     },
     "tokenPlan": {
       "nav": "Token Plan",

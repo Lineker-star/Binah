@@ -1907,7 +1907,19 @@
       "lastActive": "最終アクティブ",
       "never": "なし",
       "recommendationsHeading": "おすすめ",
-      "dismissRecommendation": "閉じる"
+      "dismissRecommendation": "閉じる",
+      "growthHeading": "時間経過による成長",
+      "scoreTrendLabel": "スコアの推移",
+      "passFailLabel": "評価タイプ別の合否",
+      "timeActiveLabel": "アクティブ時間",
+      "chartEmpty": "まだ十分なデータがありません",
+      "passed": "合格",
+      "failed": "不合格",
+      "typeQuiz": "クイズ",
+      "typeContinuousAssessment": "継続評価",
+      "typeExam": "試験",
+      "typePbl": "プロジェクト",
+      "typeCourseFinal": "コース最終評価"
     },
     "tokenPlan": {
       "nav": "Token Plan",

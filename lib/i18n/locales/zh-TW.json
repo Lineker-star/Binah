@@ -1881,7 +1881,19 @@
       "lastActive": "最近活動",
       "never": "從未",
       "recommendationsHeading": "建議",
-      "dismissRecommendation": "關閉"
+      "dismissRecommendation": "關閉",
+      "growthHeading": "成長趨勢",
+      "scoreTrendLabel": "成績趨勢",
+      "passFailLabel": "按評估類型劃分的通過/未通過率",
+      "timeActiveLabel": "活躍時長",
+      "chartEmpty": "資料還不夠",
+      "passed": "通過",
+      "failed": "未通過",
+      "typeQuiz": "測驗",
+      "typeContinuousAssessment": "連續評估",
+      "typeExam": "考試",
+      "typePbl": "專案",
+      "typeCourseFinal": "課程期末評估"
     },
     "tokenPlan": {
       "nav": "Token Plan",

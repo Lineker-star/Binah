@@ -1907,7 +1907,19 @@
       "lastActive": "Hoạt động gần nhất",
       "never": "Chưa từng",
       "recommendationsHeading": "Đề xuất",
-      "dismissRecommendation": "Bỏ qua"
+      "dismissRecommendation": "Bỏ qua",
+      "growthHeading": "Tiến bộ theo thời gian",
+      "scoreTrendLabel": "Xu hướng điểm số",
+      "passFailLabel": "Đạt / Không đạt theo loại đánh giá",
+      "timeActiveLabel": "Thời gian hoạt động",
+      "chartEmpty": "Chưa đủ dữ liệu",
+      "passed": "Đạt",
+      "failed": "Không đạt",
+      "typeQuiz": "Trắc nghiệm",
+      "typeContinuousAssessment": "Đánh Giá Liên Tục",
+      "typeExam": "Bài Thi",
+      "typePbl": "Dự án",
+      "typeCourseFinal": "Đánh Giá Cuối Khóa"
     },
     "tokenPlan": {
       "nav": "Gói token",

@@ -1907,7 +1907,19 @@
       "lastActive": "آخر نشاط",
       "never": "أبدًا",
       "recommendationsHeading": "التوصيات",
-      "dismissRecommendation": "إغلاق"
+      "dismissRecommendation": "إغلاق",
+      "growthHeading": "التقدم عبر الوقت",
+      "scoreTrendLabel": "اتجاه الدرجات",
+      "passFailLabel": "النجاح / الرسوب حسب نوع التقييم",
+      "timeActiveLabel": "الوقت النشط",
+      "chartEmpty": "لا توجد بيانات كافية بعد",
+      "passed": "ناجح",
+      "failed": "راسب",
+      "typeQuiz": "اختبار قصير",
+      "typeContinuousAssessment": "التقييم المستمر",
+      "typeExam": "امتحان",
+      "typePbl": "مشروع",
+      "typeCourseFinal": "التقييم النهائي للدورة"
     },
     "tokenPlan": {
       "nav": "Token Plan",

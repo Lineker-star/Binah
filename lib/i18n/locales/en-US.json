@@ -1907,7 +1907,19 @@
       "lastActive": "Last active",
       "never": "Never",
       "recommendationsHeading": "Recommendations",
-      "dismissRecommendation": "Dismiss"
+      "dismissRecommendation": "Dismiss",
+      "growthHeading": "Growth over time",
+      "scoreTrendLabel": "Score trend",
+      "passFailLabel": "Pass / fail by assessment type",
+      "timeActiveLabel": "Active time",
+      "chartEmpty": "Not enough data yet",
+      "passed": "Passed",
+      "failed": "Failed",
+      "typeQuiz": "Quiz",
+      "typeContinuousAssessment": "Continuous Assessment",
+      "typeExam": "Exam",
+      "typePbl": "Project",
+      "typeCourseFinal": "Course Final"
     },
     "tokenPlan": {
       "nav": "Token Plan",

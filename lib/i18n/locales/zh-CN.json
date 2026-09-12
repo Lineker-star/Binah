@@ -1907,7 +1907,19 @@
       "lastActive": "最近活动",
       "never": "从未",
       "recommendationsHeading": "建议",
-      "dismissRecommendation": "关闭"
+      "dismissRecommendation": "关闭",
+      "growthHeading": "成长趋势",
+      "scoreTrendLabel": "成绩趋势",
+      "passFailLabel": "按评估类型划分的通过/未通过率",
+      "timeActiveLabel": "活跃时长",
+      "chartEmpty": "数据还不够",
+      "passed": "通过",
+      "failed": "未通过",
+      "typeQuiz": "测验",
+      "typeContinuousAssessment": "连续评估",
+      "typeExam": "考试",
+      "typePbl": "项目",
+      "typeCourseFinal": "课程期末评估"
     },
     "tokenPlan": {
       "nav": "Token Plan",

@@ -1907,7 +1907,19 @@
       "lastActive": "마지막 활동",
       "never": "없음",
       "recommendationsHeading": "추천",
-      "dismissRecommendation": "닫기"
+      "dismissRecommendation": "닫기",
+      "growthHeading": "시간에 따른 성장",
+      "scoreTrendLabel": "점수 추이",
+      "passFailLabel": "평가 유형별 합격/불합격",
+      "timeActiveLabel": "활동 시간",
+      "chartEmpty": "아직 데이터가 충분하지 않습니다",
+      "passed": "합격",
+      "failed": "불합격",
+      "typeQuiz": "퀴즈",
+      "typeContinuousAssessment": "지속 평가",
+      "typeExam": "시험",
+      "typePbl": "프로젝트",
+      "typeCourseFinal": "코스 최종 평가"
     },
     "tokenPlan": {
       "nav": "Token Plan",
