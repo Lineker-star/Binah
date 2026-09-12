@@ -48,6 +48,19 @@ function stripHtml(value: string): string {
     .trim();
 }
 
+/**
+ * A clean, bounded reason for a non-2xx response — never the raw body. A
+ * rate-limit or WAF response can be an entire HTML error page (SvelteKit
+ * boilerplate, i18n strings, captcha tokens), which must never reach a
+ * learner-facing "Generation failed" message or get echoed into logs.
+ * `res.statusText` is populated straight from the HTTP status line, so
+ * this never needs to read the body at all.
+ */
+function describeHttpFailure(res: Response): string {
+  if (res.status === 429) return 'rate limited';
+  return res.statusText || `HTTP ${res.status}`;
+}
+
 function isBraveOwnedUrl(value: string): boolean {
   try {
     const host = new URL(value).hostname.toLowerCase();
@@ -131,8 +144,7 @@ async function searchWithBraveApi(
   });
 
   if (!res.ok) {
-    const errorText = await res.text().catch(() => '');
-    throw new Error(`Brave API error (${res.status}): ${errorText || res.statusText}`);
+    throw new Error(`Brave API error (${res.status}): ${describeHttpFailure(res)}`);
   }
 
   const data = (await res.json()) as {
@@ -172,8 +184,7 @@ async function searchWithBraveScrape(
   });
 
   if (!res.ok) {
-    const errorText = await res.text().catch(() => '');
-    throw new Error(`Brave Search error (${res.status}): ${errorText || res.statusText}`);
+    throw new Error(`Brave Search error (${res.status}): ${describeHttpFailure(res)}`);
   }
 
   const html = await res.text();
