@@ -3,7 +3,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Award, Download, ExternalLink, Loader2, Play, Trash2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Award,
+  Download,
+  ExternalLink,
+  Loader2,
+  Play,
+  Trash2,
+  Trophy,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/lib/hooks/use-i18n';
@@ -16,7 +25,10 @@ import {
   type SessionStatus,
 } from '@/lib/supabase/learning-session';
 import { listLearnerCourses, removeCourseFromHistory, type Course } from '@/lib/supabase/courses';
-import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
+import {
+  getCertificateDownloadUrl,
+  getCertificateExcellenceDownloadUrl,
+} from '@/lib/supabase/certificates';
 import {
   getArtifactDownloadUrl,
   listGeneratedArtifacts,
@@ -64,6 +76,7 @@ const ARTIFACT_TYPE_KEYS: Record<string, string> = {
   mp4: 'history.artifactType.mp4',
   lecture_notes_pdf: 'history.artifactType.lecture_notes_pdf',
   certificate: 'history.artifactType.certificate',
+  certificate_excellence: 'history.artifactType.certificate_excellence',
 };
 
 const COURSE_BADGE: Record<Course['status'], { key: string; className: string }> = {
@@ -112,6 +125,9 @@ export default function HistoryPage() {
   const [artifacts, setArtifacts] = useState<GeneratedArtifact[]>([]);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [downloadingCertificateId, setDownloadingCertificateId] = useState<string | null>(null);
+  const [downloadingCertificateExcellenceId, setDownloadingCertificateExcellenceId] = useState<
+    string | null
+  >(null);
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [busyId, setBusyId] = useState<string | null>(null);
   const [removeCourseTarget, setRemoveCourseTarget] = useState<Course | null>(null);
@@ -144,7 +160,20 @@ export default function HistoryPage() {
   const handleDownloadCertificate = async (course: Course) => {
     setDownloadingCertificateId(course.id);
     try {
-      const result = await getCertificateDownloadUrl({ courseId: course.id });
+      const url = await getCertificateDownloadUrl({ courseId: course.id });
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      log.error('Failed to download certificate:', err);
+      toast.error(t('history.downloadFailed'));
+    } finally {
+      setDownloadingCertificateId(null);
+    }
+  };
+
+  const handleDownloadCertificateExcellence = async (course: Course) => {
+    setDownloadingCertificateExcellenceId(course.id);
+    try {
+      const result = await getCertificateExcellenceDownloadUrl({ courseId: course.id });
       if (result.status === 'ineligible') {
         toast.info(t('history.certificateIneligible'));
         return;
@@ -155,10 +184,10 @@ export default function HistoryPage() {
       }
       window.open(result.url, '_blank', 'noopener,noreferrer');
     } catch (err) {
-      log.error('Failed to download certificate:', err);
+      log.error('Failed to download certificate of excellence:', err);
       toast.error(t('history.downloadFailed'));
     } finally {
-      setDownloadingCertificateId(null);
+      setDownloadingCertificateExcellenceId(null);
     }
   };
 
@@ -344,6 +373,21 @@ export default function HistoryPage() {
                                 <Loader2 className="size-3.5 animate-spin" />
                               ) : (
                                 <Award className="size-3.5" />
+                              )}
+                            </button>
+                          )}
+                          {course.status === 'completed' && (
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadCertificateExcellence(course)}
+                              disabled={downloadingCertificateExcellenceId === course.id}
+                              title={t('history.downloadCertificateExcellence')}
+                              className="inline-flex items-center justify-center size-8 rounded-lg border border-amber-300/60 dark:border-amber-700/60 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors disabled:opacity-50 cursor-pointer"
+                            >
+                              {downloadingCertificateExcellenceId === course.id ? (
+                                <Loader2 className="size-3.5 animate-spin" />
+                              ) : (
+                                <Trophy className="size-3.5" />
                               )}
                             </button>
                           )}

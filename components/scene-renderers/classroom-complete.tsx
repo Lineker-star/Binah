@@ -33,7 +33,10 @@ import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import { fetchCourse, type Course } from '@/lib/supabase/courses';
 import { buildChapterLessonSessionState, buildLessonSessionState } from '@/lib/courses/lessons';
 import { fetchIngestion } from '@/lib/supabase/textbook-ingestions';
-import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
+import {
+  getCertificateDownloadUrl,
+  getCertificateExcellenceDownloadUrl,
+} from '@/lib/supabase/certificates';
 import {
   dismissRecommendation,
   listActiveRecommendations,
@@ -432,6 +435,9 @@ function CourseRecommendationCard({ courseId }: { courseId: string }) {
  * PlaybackChromeRoot.tsx), so by the time this renders it's usually
  * already generated — but the download route is idempotent, so clicking
  * before that finishes just generates it on demand instead of erroring.
+ * Unconditional: every completed course or session gets this one, no
+ * lesson-count threshold. The separate, additional Certificate of
+ * Excellence (courses over 10 lessons only) has its own button below.
  */
 function CertificateDownloadButton({ courseId }: { courseId: string }) {
   const { t } = useI18n();
@@ -440,16 +446,8 @@ function CertificateDownloadButton({ courseId }: { courseId: string }) {
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      const result = await getCertificateDownloadUrl({ courseId });
-      if (result.status === 'ineligible') {
-        toast.info(t('classroomComplete.certificateIneligible'));
-        return;
-      }
-      if (result.status === 'pending') {
-        toast.info(t('classroomComplete.certificatePending'));
-        return;
-      }
-      window.open(result.url, '_blank', 'noopener,noreferrer');
+      const url = await getCertificateDownloadUrl({ courseId });
+      window.open(url, '_blank', 'noopener,noreferrer');
     } catch (err) {
       log.error('Failed to download certificate:', err);
     } finally {
@@ -466,6 +464,56 @@ function CertificateDownloadButton({ courseId }: { courseId: string }) {
     >
       {downloading ? <Loader2 className="size-4 animate-spin" /> : <Award className="size-4" />}
       {t('classroomComplete.downloadCertificate')}
+    </button>
+  );
+}
+
+/**
+ * A separate, additional certificate for courses over 10 lessons (grade,
+ * skills acquired, serial code) — shown alongside the plain
+ * CertificateDownloadButton above, not instead of it. Always rendered for
+ * a completed course; a small course's click resolves to `ineligible`
+ * rather than the button being hidden, since eligibility depends on the
+ * book's true structured lesson total (not just a client-side field) and
+ * isn't worth a pre-check fetch just to decide visibility.
+ */
+function CertificateExcellenceDownloadButton({ courseId }: { courseId: string }) {
+  const { t } = useI18n();
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const result = await getCertificateExcellenceDownloadUrl({ courseId });
+      if (result.status === 'ineligible') {
+        toast.info(t('classroomComplete.certificateIneligible'));
+        return;
+      }
+      if (result.status === 'pending') {
+        toast.info(t('classroomComplete.certificatePending'));
+        return;
+      }
+      window.open(result.url, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      log.error('Failed to download certificate of excellence:', err);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleDownload}
+      disabled={downloading}
+      className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/60 dark:border-amber-700/60 px-4 py-2 text-sm font-medium text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors disabled:opacity-50 cursor-pointer"
+    >
+      {downloading ? (
+        <Loader2 className="size-4 animate-spin" />
+      ) : (
+        <Trophy className="size-4" />
+      )}
+      {t('classroomComplete.downloadCertificateExcellence')}
     </button>
   );
 }
@@ -577,7 +625,10 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
           <Trophy className="size-4" />
           {t('classroomComplete.courseComplete', { title: course.title })}
         </motion.div>
-        <CertificateDownloadButton courseId={course.id} />
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <CertificateDownloadButton courseId={course.id} />
+          <CertificateExcellenceDownloadButton courseId={course.id} />
+        </div>
         <CourseRecommendationCard courseId={course.id} />
       </div>
     );
