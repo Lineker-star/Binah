@@ -114,9 +114,11 @@ export type ChapterExportLesson = Pick<
  *
  * Uses the same source_ingestion_id + source_chapter_index join every
  * other chapter-scoped feature in this app already uses (lib/supabase/
- * chapter-completion.ts, module-completion.ts) — learning_sessions.
- * source_chapter_id exists as a column but is never written by any code
- * path, so it's not a usable join key.
+ * chapter-completion.ts, module-completion.ts). A direct source_chapter_id
+ * FK column briefly existed on learning_sessions but was never written by
+ * any code path and has since been dropped (book_chapters/book_modules
+ * rows are write-once at ingest and never renumbered, so the index join
+ * has no fragility to guard against).
  */
 export async function listIngestionLessonsByChapter(
   sourceIngestionId: string,
