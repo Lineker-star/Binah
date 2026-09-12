@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Nhảy tới phần còn thiếu tên",
     "analyzingMediaMaterial": "Đang phân tích âm thanh/video",
     "courseEstimate": "~{{duration}} tổng cộng · {{lessons}} bài học × {{minutesEach}} phút mỗi bài",
-    "narrationUnavailable": "Không có lời thuyết minh cho cảnh này — tiếp tục không có âm thanh."
+    "narrationUnavailable": "Không có lời thuyết minh cho cảnh này — tiếp tục không có âm thanh.",
+    "webSearchUnavailable": "Không thể tìm kiếm trên web — tiếp tục mà không có ngữ cảnh nghiên cứu."
   },
   "settings": {
     "title": "Cài đặt",

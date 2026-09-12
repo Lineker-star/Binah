@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "跳到待补充标题的章节",
     "analyzingMediaMaterial": "解析音视频内容",
     "courseEstimate": "共约 {{duration}} · {{lessons}} 节课 × 每节 {{minutesEach}} 分钟",
-    "narrationUnavailable": "此场景暂无旁白 — 将继续但没有声音。"
+    "narrationUnavailable": "此场景暂无旁白 — 将继续但没有声音。",
+    "webSearchUnavailable": "网络搜索不可用,将在没有研究背景资料的情况下继续。"
   },
   "settings": {
     "title": "设置",

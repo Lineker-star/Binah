@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Aller à une section dont le titre manque encore",
     "analyzingMediaMaterial": "Analyse de l’audio et de la vidéo",
     "courseEstimate": "~{{duration}} au total · {{lessons}} leçons × {{minutesEach}} min chacune",
-    "narrationUnavailable": "Narration indisponible pour cette scène — poursuite sans audio."
+    "narrationUnavailable": "Narration indisponible pour cette scène — poursuite sans audio.",
+    "webSearchUnavailable": "Recherche web indisponible — poursuite sans contexte de recherche."
   },
   "settings": {
     "title": "Paramètres",

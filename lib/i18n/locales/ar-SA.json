@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "الانتقال إلى قسم بحاجة إلى عنوان",
     "analyzingMediaMaterial": "تحليل الصوت/الفيديو",
     "courseEstimate": "~{{duration}} إجمالاً · {{lessons}} دروس × {{minutesEach}} دقيقة لكل درس",
-    "narrationUnavailable": "التعليق الصوتي غير متاح لهذا المشهد — المتابعة بدون صوت."
+    "narrationUnavailable": "التعليق الصوتي غير متاح لهذا المشهد — المتابعة بدون صوت.",
+    "webSearchUnavailable": "البحث على الويب غير متاح — المتابعة دون سياق بحثي."
   },
   "settings": {
     "title": "الإعدادات",

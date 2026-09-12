@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Jump to a section that still needs a title",
     "analyzingMediaMaterial": "Analyzing audio/video",
     "courseEstimate": "~{{duration}} total · {{lessons}} lessons × {{minutesEach}} min each",
-    "narrationUnavailable": "Narration unavailable for this scene — continuing without audio."
+    "narrationUnavailable": "Narration unavailable for this scene — continuing without audio.",
+    "webSearchUnavailable": "Web search unavailable — continuing without research context."
   },
   "settings": {
     "title": "Settings",

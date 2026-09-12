@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "タイトルが未入力のセクションへ移動",
     "analyzingMediaMaterial": "音声・動画を解析中",
     "courseEstimate": "合計 約{{duration}} · {{lessons}}レッスン × 各{{minutesEach}}分",
-    "narrationUnavailable": "このシーンのナレーションは利用できません — 音声なしで続行します。"
+    "narrationUnavailable": "このシーンのナレーションは利用できません — 音声なしで続行します。",
+    "webSearchUnavailable": "ウェブ検索を利用できません。リサーチ情報なしで続行します。"
   },
   "settings": {
     "title": "設定",

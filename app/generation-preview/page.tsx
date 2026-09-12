@@ -506,44 +506,57 @@ function GenerationPreviewContent() {
         const wsSettings = useSettingsStore.getState();
         const wsProviderId = wsSettings.webSearchProviderId;
         const wsConfig = wsSettings.webSearchProvidersConfig?.[wsProviderId];
-        const res = await fetch('/api/web-search', {
-          method: 'POST',
-          headers: getApiHeaders(),
-          body: JSON.stringify(
-            withThinkingConfig({
-              query: currentSession.requirements.requirement,
-              pdfText: currentSession.pdfText || undefined,
-              providerId: wsProviderId,
-              apiKey: wsConfig?.apiKey || undefined,
-              baseUrl: wsProviderId === 'searxng' ? undefined : wsConfig?.baseUrl || undefined,
-              baiduSubSources: wsProviderId === 'baidu' ? wsSettings.baiduSubSources : undefined,
-              claudeModelId: wsProviderId === 'claude' ? wsConfig?.modelId || undefined : undefined,
-            }),
-          ),
-          signal,
-        });
+        try {
+          const res = await fetch('/api/web-search', {
+            method: 'POST',
+            headers: getApiHeaders(),
+            body: JSON.stringify(
+              withThinkingConfig({
+                query: currentSession.requirements.requirement,
+                pdfText: currentSession.pdfText || undefined,
+                providerId: wsProviderId,
+                apiKey: wsConfig?.apiKey || undefined,
+                baseUrl: wsProviderId === 'searxng' ? undefined : wsConfig?.baseUrl || undefined,
+                baiduSubSources: wsProviderId === 'baidu' ? wsSettings.baiduSubSources : undefined,
+                claudeModelId:
+                  wsProviderId === 'claude' ? wsConfig?.modelId || undefined : undefined,
+              }),
+            ),
+            signal,
+          });
 
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({ error: 'Web search failed' }));
-          throw new Error(data.error || t('generation.webSearchFailed'));
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({ error: 'Web search failed' }));
+            throw new Error(data.error || t('generation.webSearchFailed'));
+          }
+
+          const searchData = await res.json();
+          const sources = (searchData.sources || []).map((s: { title: string; url: string }) => ({
+            title: s.title,
+            url: s.url,
+          }));
+          setWebSearchSources(sources);
+
+          const updatedSessionWithSearch = {
+            ...currentSession,
+            researchContext: searchData.context || '',
+            researchSources: sources,
+          };
+          setSession(updatedSessionWithSearch);
+          sessionStorage.setItem('generationSession', JSON.stringify(updatedSessionWithSearch));
+          currentSession = updatedSessionWithSearch;
+          activeSteps = getActiveSteps(currentSession);
+        } catch (err) {
+          // Web search is opt-in enrichment, not a hard requirement — a
+          // search provider hiccup (rate limit, provider down, bad key) no
+          // longer aborts the whole generation. Mirrors the TTS non-blocking
+          // pattern below: navigating away still aborts (re-thrown), but any
+          // other failure just skips research context and the course
+          // generates without it, same as if the toggle had been off.
+          if (isAbortError(err)) throw err;
+          log.warn('Web search failed (continuing without research context):', err);
+          toast.warning(t('generation.webSearchUnavailable'));
         }
-
-        const searchData = await res.json();
-        const sources = (searchData.sources || []).map((s: { title: string; url: string }) => ({
-          title: s.title,
-          url: s.url,
-        }));
-        setWebSearchSources(sources);
-
-        const updatedSessionWithSearch = {
-          ...currentSession,
-          researchContext: searchData.context || '',
-          researchSources: sources,
-        };
-        setSession(updatedSessionWithSearch);
-        sessionStorage.setItem('generationSession', JSON.stringify(updatedSessionWithSearch));
-        currentSession = updatedSessionWithSearch;
-        activeSteps = getActiveSteps(currentSession);
       }
 
       // Load imageMapping early (needed for both outline and scene generation).

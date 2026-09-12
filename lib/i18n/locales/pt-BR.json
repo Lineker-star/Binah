@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Ir para uma seção que ainda precisa de título",
     "analyzingMediaMaterial": "Analisando áudio/vídeo",
     "courseEstimate": "~{{duration}} no total · {{lessons}} lições × {{minutesEach}} min cada",
-    "narrationUnavailable": "Narração indisponível para esta cena — continuando sem áudio."
+    "narrationUnavailable": "Narração indisponível para esta cena — continuando sem áudio.",
+    "webSearchUnavailable": "Busca na web indisponível — continuando sem contexto de pesquisa."
   },
   "settings": {
     "title": "Configurações",

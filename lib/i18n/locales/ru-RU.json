@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Перейти к разделу без заголовка",
     "analyzingMediaMaterial": "Анализ аудио/видео",
     "courseEstimate": "~{{duration}} всего · {{lessons}} уроков × {{minutesEach}} мин. каждый",
-    "narrationUnavailable": "Озвучка для этой сцены недоступна — продолжаем без звука."
+    "narrationUnavailable": "Озвучка для этой сцены недоступна — продолжаем без звука.",
+    "webSearchUnavailable": "Веб-поиск недоступен — продолжаем без контекста исследования."
   },
   "settings": {
     "title": "Настройки",

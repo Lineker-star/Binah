@@ -1171,7 +1171,8 @@
     "jumpToBlankTitle": "Zu einem Abschnitt ohne Titel springen",
     "analyzingMediaMaterial": "Audio- und Videomaterial wird analysiert",
     "courseEstimate": "~{{duration}} insgesamt · {{lessons}} Lektionen × {{minutesEach}} Min. je Lektion",
-    "narrationUnavailable": "Vertonung für diese Szene nicht verfügbar — wird ohne Ton fortgesetzt."
+    "narrationUnavailable": "Vertonung für diese Szene nicht verfügbar — wird ohne Ton fortgesetzt.",
+    "webSearchUnavailable": "Websuche nicht verfügbar — wird ohne Recherchekontext fortgesetzt."
   },
   "settings": {
     "title": "Einstellungen",
