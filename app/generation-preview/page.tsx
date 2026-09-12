@@ -735,6 +735,18 @@ function GenerationPreviewContent() {
         const effectiveTaskEngineMode = outlineResult.taskEngineMode;
         setIsOutlineStreaming(false);
 
+        // A deterministic "welcome back" recap scene (see lib/courses/
+        // recap.ts) — not LLM-authored, so it's prepended here rather than
+        // requested from the outline stream above. Only reached on a fresh
+        // generation (this whole block is skipped when sceneOutlines was
+        // already cached), so it can never be prepended twice on a resume.
+        if (currentSession.recapOutline) {
+          outlines = [
+            currentSession.recapOutline,
+            ...outlines.map((o) => ({ ...o, order: o.order + 1 })),
+          ];
+        }
+
         // Mid-stream review intent (sticky ref) overrides the auto-continue timer.
         const userOpenedReviewEarly = outlineReviewIntentRef.current;
         const shouldReviewOutlines =

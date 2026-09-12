@@ -32,6 +32,7 @@ import { loadQuizAttemptState } from '@/lib/quiz/runtime';
 import { getLearningSession } from '@/lib/classroom/learning-session-signal';
 import { fetchCourse, type Course } from '@/lib/supabase/courses';
 import { buildChapterLessonSessionState, buildLessonSessionState } from '@/lib/courses/lessons';
+import { buildRecapOutline } from '@/lib/courses/recap';
 import { fetchIngestion } from '@/lib/supabase/textbook-ingestions';
 import {
   getCertificateDownloadUrl,
@@ -569,6 +570,28 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
         );
         if (nextIndex !== -1) {
           const nextChapter = items[nextIndex];
+
+          // Every chapter continuation is at least a chapter boundary (the
+          // search above always lands on a strictly later chapter, never a
+          // second lesson within the same one — a pre-existing gap, not
+          // something this recap logic changes). Module-tier wins over
+          // chapter-tier when the next chapter belongs to a different
+          // module than the one just finished (both need a module layer —
+          // see needsModuleLayer in lib/textbook/structure-plan.ts; a
+          // module-less book never takes this branch).
+          const finishedChapter = items[loaded.sourceChapterIndex];
+          const finishedModule = finishedChapter?.moduleNumber ?? null;
+          const nextModule = nextChapter.moduleNumber ?? null;
+          const recapOutline =
+            finishedModule != null && nextModule != null && finishedModule !== nextModule
+              ? buildRecapOutline(
+                  'module',
+                  items
+                    .filter((c) => c.moduleNumber === finishedModule && c.summary)
+                    .map((c) => c.summary),
+                )
+              : buildRecapOutline('chapter', finishedChapter?.summary ? [finishedChapter.summary] : []);
+
           const sessionState = buildChapterLessonSessionState(
             loaded.course,
             loaded.lessonNumber + 1,
@@ -578,6 +601,7 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
             nextIndex,
             priorLessonTitles,
           );
+          sessionState.recapOutline = recapOutline;
           sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
           router.push('/generation-preview');
           return;
@@ -589,6 +613,7 @@ function CourseContinuation({ stageId, scenes }: { stageId?: string | null; scen
     }
 
     const sessionState = buildLessonSessionState(loaded.course, loaded.lessonNumber + 1, priorLessonTitles);
+    sessionState.recapOutline = buildRecapOutline('lesson', priorLessonTitles);
     sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
     router.push('/generation-preview');
   }, [loaded, scenes, router]);

@@ -54,6 +54,17 @@ export interface GenerationSessionState {
   // range live on the ingestion row, not duplicated here).
   sourceIngestionId?: string;
   sourceChapterIndex?: number;
+  /**
+   * A deterministic "welcome back" recap scene (see lib/courses/recap.ts),
+   * built by the caller that decided this transition needs one — lib/
+   * courses/lessons.ts's session-state builders don't compute this
+   * themselves, since the lesson/chapter/module boundary decision needs
+   * context (the just-finished lesson's own scenes, chapter/module
+   * summaries) that only the completion screen already has in hand.
+   * Prepended once, right after fresh outlines are generated (never on a
+   * resumed/cached session, so it can't be inserted twice).
+   */
+  recapOutline?: SceneOutline | null;
 }
 
 export type GenerationStep = {
