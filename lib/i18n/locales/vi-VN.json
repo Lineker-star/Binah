@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "Giọng đọc của trình duyệt không hỗ trợ các chức năng âm thanh trên dòng thời gian của trình sửa (nghe thử, tạo lại, lồng tiếng hàng loạt). Hãy chuyển sang một nhà cung cấp giọng đọc có quản lý để tạo và quản lý âm thanh theo từng dòng.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "Đặt làm mặc định cho học viên",
+    "learnerDefaultSaved": "Đã lưu làm mặc định cho mọi tài khoản học viên.",
+    "learnerDefaultSaveFailed": "Không thể lưu giá trị mặc định cho học viên.",
+    "clearLearnerDefault": "Xóa giá trị mặc định cho học viên",
+    "learnerDefaultCleared": "Đã xóa giá trị mặc định cho học viên.",
+    "learnerDefaultClearFailed": "Không thể xóa giá trị mặc định cho học viên."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

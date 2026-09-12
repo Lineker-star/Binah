@@ -12,6 +12,10 @@ import type { PDFProviderId } from '@/lib/pdf/types';
 import { getFormatLabelsForProviders } from '@/lib/document/mime';
 import { CheckCircle2, Eye, EyeOff, Loader2, Zap, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+} from './set-as-learner-default-button';
 
 /**
  * Get display label for feature
@@ -30,9 +34,11 @@ function getFeatureLabel(feature: string, t: (key: string) => string): string {
 
 interface PDFSettingsProps {
   selectedProviderId: PDFProviderId;
+  /** Renders the "Set as learner default" action (BB.1) — admin accounts only. */
+  isAdmin?: boolean;
 }
 
-export function PDFSettings({ selectedProviderId }: PDFSettingsProps) {
+export function PDFSettings({ selectedProviderId, isAdmin }: PDFSettingsProps) {
   const { t } = useI18n();
   const [showApiKey, setShowApiKey] = useState(false);
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
@@ -107,8 +113,9 @@ export function PDFSettings({ selectedProviderId }: PDFSettingsProps) {
     <div className="space-y-6 max-w-3xl">
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="pdf" />}
         </div>
       )}
 
@@ -334,6 +341,24 @@ export function PDFSettings({ selectedProviderId }: PDFSettingsProps) {
                 <span className="break-all">{testMessage}</span>
               </div>
             </div>
+          )}
+
+          {isAdmin && (
+            <SetAsLearnerDefaultButton
+              section="pdf"
+              providerId={selectedProviderId}
+              apiKey={providerConfig?.apiKey}
+              baseUrl={providerConfig?.baseUrl}
+              extraConfig={
+                isAliDocMind
+                  ? {
+                      accessKeyId: providerConfig?.accessKeyId,
+                      accessKeySecret: providerConfig?.accessKeySecret,
+                    }
+                  : undefined
+              }
+              disabled={!isServerConfigured && !canTest}
+            />
           )}
 
           {/* Request URL Preview */}

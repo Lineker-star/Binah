@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "El TTS nativo del navegador no admite las funciones de audio de la línea de tiempo del editor (vista previa, regenerar y voz en off masiva). Cambia a un proveedor de TTS administrado para generar y administrar el audio por línea.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "Establecer como predeterminado para alumnos",
+    "learnerDefaultSaved": "Guardado como predeterminado para cada cuenta de alumno.",
+    "learnerDefaultSaveFailed": "No se pudo guardar el valor predeterminado del alumno.",
+    "clearLearnerDefault": "Borrar valor predeterminado del alumno",
+    "learnerDefaultCleared": "Valor predeterminado del alumno borrado.",
+    "learnerDefaultClearFailed": "No se pudo borrar el valor predeterminado del alumno."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

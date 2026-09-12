@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "Встроенный в браузер TTS не поддерживает функции аудио на таймлайне редактора (прослушивание, повторная генерация и массовая озвучка). Переключитесь на управляемый TTS-провайдер, чтобы генерировать и управлять аудио для каждой строки.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "Сделать по умолчанию для учащихся",
+    "learnerDefaultSaved": "Сохранено как значение по умолчанию для всех учётных записей учащихся.",
+    "learnerDefaultSaveFailed": "Не удалось сохранить значение по умолчанию для учащихся.",
+    "clearLearnerDefault": "Сбросить значение по умолчанию для учащихся",
+    "learnerDefaultCleared": "Значение по умолчанию для учащихся сброшено.",
+    "learnerDefaultClearFailed": "Не удалось сбросить значение по умолчанию для учащихся."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

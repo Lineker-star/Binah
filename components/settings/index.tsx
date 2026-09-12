@@ -280,6 +280,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
   }, [open]);
   const isLearner = role === 'learner';
   const restrictedNav = roleLoading || isLearner;
+  const isAdmin = role === 'admin';
 
   // Navigation
   const [activeSection, setActiveSection] = useState<SettingsSection>('providers');
@@ -1206,23 +1207,28 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
                   modelsUrl={providersConfig[selectedProviderId]?.modelsUrl}
                   onResetToDefault={() => handleResetProvider(selectedProviderId)}
                   isBuiltIn={providersConfig[selectedProviderId]?.isBuiltIn ?? true}
+                  isAdmin={isAdmin}
                 />
               )}
 
               {displaySection === 'pdf' && (
-                <PDFSettings selectedProviderId={selectedPdfProviderId} />
+                <PDFSettings selectedProviderId={selectedPdfProviderId} isAdmin={isAdmin} />
               )}
               {displaySection === 'web-search' && (
                 <WebSearchSettings selectedProviderId={selectedWebSearchProviderId} />
               )}
               {displaySection === 'image' && (
-                <ImageSettings selectedProviderId={selectedImageProviderId} />
+                <ImageSettings selectedProviderId={selectedImageProviderId} isAdmin={isAdmin} />
               )}
               {displaySection === 'video' && (
-                <VideoSettings selectedProviderId={selectedVideoProviderId} />
+                <VideoSettings selectedProviderId={selectedVideoProviderId} isAdmin={isAdmin} />
               )}
-              {displaySection === 'tts' && <TTSSettings selectedProviderId={ttsProviderId} />}
-              {displaySection === 'asr' && <ASRSettings selectedProviderId={asrProviderId} />}
+              {displaySection === 'tts' && (
+                <TTSSettings selectedProviderId={ttsProviderId} isAdmin={isAdmin} />
+              )}
+              {displaySection === 'asr' && (
+                <ASRSettings selectedProviderId={asrProviderId} isAdmin={isAdmin} />
+              )}
             </div>
 
             {/* Footer */}

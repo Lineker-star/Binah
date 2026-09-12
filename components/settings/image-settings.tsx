@@ -23,9 +23,15 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ImageProviderId } from '@/lib/media/types';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+} from './set-as-learner-default-button';
 
 interface ImageSettingsProps {
   selectedProviderId: ImageProviderId;
+  /** Renders the "Set as learner default" action (BB.1) — admin accounts only. */
+  isAdmin?: boolean;
 }
 
 interface WorkflowEntry {
@@ -33,7 +39,7 @@ interface WorkflowEntry {
   name: string;
 }
 
-export function ImageSettings({ selectedProviderId }: ImageSettingsProps) {
+export function ImageSettings({ selectedProviderId, isAdmin }: ImageSettingsProps) {
   const { t } = useI18n();
 
   const imageModelId = useSettingsStore((state) => state.imageModelId);
@@ -203,8 +209,9 @@ export function ImageSettings({ selectedProviderId }: ImageSettingsProps) {
 
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="image" />}
         </div>
       )}
 
@@ -254,6 +261,15 @@ export function ImageSettings({ selectedProviderId }: ImageSettingsProps) {
                   </>
                 )}
               </Button>
+              {isAdmin && (
+                <SetAsLearnerDefaultButton
+                  section="image"
+                  providerId={selectedProviderId}
+                  apiKey={currentConfig?.apiKey}
+                  baseUrl={currentConfig?.baseUrl}
+                  disabled={requiresApiKey && !currentConfig?.apiKey}
+                />
+              )}
             </div>
             {testMessage && (
               <div

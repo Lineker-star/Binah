@@ -1,5 +1,11 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
+// server-only's real implementation unconditionally throws outside Next's own
+// bundler (it relies on Next's client/server conditional package resolution,
+// which plain vitest doesn't apply) — neutralize it so provider-config.ts
+// (imported for real below, not mocked) can load.
+vi.mock('server-only', () => ({}));
+
 // Mock fs — only intercept server-providers.yml; delegate everything else to real fs.
 // This prevents YAML config from leaking host-machine state into tests while keeping
 // the mock scoped to what provider-config actually reads.
@@ -1117,6 +1123,64 @@ video:
         await import('@/lib/server/provider-config');
       expect(isServerConfiguredProvider('pdf', 'alidocmind')).toBe(false);
       expect(resolveManagedAliDocMindCredentials()).toBeUndefined();
+    });
+  });
+
+  describe('mergeSystemProviderDefault (BB.1 — admin-set learner default)', () => {
+    it('merges into an unconfigured section and becomes resolvable like a real server entry', async () => {
+      const { mergeSystemProviderDefault, isServerConfiguredProvider, resolveApiKey } =
+        await import('@/lib/server/provider-config');
+
+      expect(isServerConfiguredProvider('providers', 'anthropic')).toBe(false);
+
+      mergeSystemProviderDefault('providers', {
+        providerId: 'anthropic',
+        apiKey: 'sk-admin-default',
+      });
+
+      expect(isServerConfiguredProvider('providers', 'anthropic')).toBe(true);
+      // Managed ⇒ authoritative even over a client-sent key.
+      expect(resolveApiKey('anthropic', 'sk-client')).toBe('sk-admin-default');
+    });
+
+    it('is a no-op when the operator already configured this section via YAML/env (file wins)', async () => {
+      vi.stubEnv('OPENAI_API_KEY', 'sk-operator');
+      const { mergeSystemProviderDefault, isServerConfiguredProvider, resolveApiKey } =
+        await import('@/lib/server/provider-config');
+
+      mergeSystemProviderDefault('providers', {
+        providerId: 'anthropic',
+        apiKey: 'sk-admin-default',
+      });
+
+      // The operator's openai entry is untouched, and the admin default for a
+      // *different* provider in the same section never gets merged in.
+      expect(resolveApiKey('openai')).toBe('sk-operator');
+      expect(isServerConfiguredProvider('providers', 'anthropic')).toBe(false);
+      expect(resolveApiKey('anthropic', 'sk-client')).toBe('sk-client');
+    });
+
+    it('clears a previously-merged default on refresh without touching operator config', async () => {
+      const { mergeSystemProviderDefault, isServerConfiguredProvider } =
+        await import('@/lib/server/provider-config');
+
+      mergeSystemProviderDefault('image', { providerId: 'seedream', apiKey: 'sk-1' });
+      expect(isServerConfiguredProvider('image', 'seedream')).toBe(true);
+
+      mergeSystemProviderDefault('image', null);
+      expect(isServerConfiguredProvider('image', 'seedream')).toBe(false);
+    });
+
+    it('replaces a prior system default with a newly-picked provider on refresh', async () => {
+      const { mergeSystemProviderDefault, isServerConfiguredProvider } =
+        await import('@/lib/server/provider-config');
+
+      mergeSystemProviderDefault('tts', { providerId: 'azure-tts', apiKey: 'sk-1' });
+      expect(isServerConfiguredProvider('tts', 'azure-tts')).toBe(true);
+
+      mergeSystemProviderDefault('tts', { providerId: 'openai-tts', apiKey: 'sk-2' });
+      expect(isServerConfiguredProvider('tts', 'azure-tts')).toBe(false);
+      expect(isServerConfiguredProvider('tts', 'openai-tts')).toBe(true);
     });
   });
 });

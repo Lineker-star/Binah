@@ -38,6 +38,15 @@ interface ServerProviderEntry {
    * Honored for the capability sections in {@link DISABLE_ENV_MAPS} (#665).
    */
   enabled?: boolean;
+  /**
+   * Set only on an entry merged in from `system_settings` (an admin's saved
+   * learner default) rather than YAML/env. Lets {@link mergeSystemProviderDefault}
+   * find and clear its own prior entry on refresh without touching real
+   * operator config, and lets it detect "operator already configured this
+   * section" (any sibling entry without this flag) to enforce file-wins
+   * precedence.
+   */
+  source?: 'system-settings';
 }
 
 interface ServerConfig {
@@ -563,6 +572,54 @@ function getConfig(): ServerConfig {
   return config;
 }
 
+/**
+ * Merge (or clear) an admin-saved `system_settings` learner default into the
+ * live cached config — every existing resolver in this file
+ * (isServerConfiguredProvider, resolveSectionApiKey, getServerProviders, ...)
+ * picks it up with no changes of its own, since they all read through
+ * {@link getConfig}. Called once at boot and on a periodic refresh from
+ * lib/server/system-provider-defaults.ts, and immediately in-process right
+ * after an admin's save for same-instance instant effect.
+ *
+ * File-wins precedence (per BB.1): skipped when the operator already
+ * configured ANYTHING for this section via YAML/env — a real operator
+ * entry (no `source` flag) present in the section means this is a no-op.
+ * Passing `entry: null` clears this section's system-settings-sourced
+ * entry (the admin removed their saved default, or a refresh found the
+ * row deleted).
+ */
+export function mergeSystemProviderDefault(
+  section: SystemDefaultSection,
+  entry: {
+    providerId: string;
+    apiKey?: string;
+    baseUrl?: string;
+    models?: string[];
+    accessKeyId?: string;
+    accessKeySecret?: string;
+  } | null,
+): void {
+  const cfg = getConfig();
+  const sectionConfig = cfg[section];
+
+  for (const id of Object.keys(sectionConfig)) {
+    if (sectionConfig[id]?.source === 'system-settings') delete sectionConfig[id];
+  }
+
+  if (!entry) return;
+  // An operator entry (no `source` flag) already present ⇒ file wins.
+  if (Object.keys(sectionConfig).length > 0) return;
+
+  sectionConfig[entry.providerId] = {
+    apiKey: entry.apiKey || '',
+    baseUrl: entry.baseUrl,
+    models: entry.models,
+    accessKeyId: entry.accessKeyId,
+    accessKeySecret: entry.accessKeySecret,
+    source: 'system-settings',
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Managed-provider resolution
 //
@@ -575,7 +632,10 @@ function getConfig(): ServerConfig {
 // server config (the bug class #533 patched route-by-route).
 // ---------------------------------------------------------------------------
 
-type ProviderSection = 'providers' | 'tts' | 'asr' | 'pdf' | 'image' | 'video' | 'webSearch';
+export type ProviderSection = 'providers' | 'tts' | 'asr' | 'pdf' | 'image' | 'video' | 'webSearch';
+
+/** The subset of ProviderSection an admin can set a learner default for (#BB.1). */
+export type SystemDefaultSection = Exclude<ProviderSection, 'webSearch'>;
 
 /** Whether the operator configured this provider in the given section. */
 export function isServerConfiguredProvider(section: ProviderSection, providerId: string): boolean {

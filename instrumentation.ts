@@ -28,6 +28,25 @@ export async function register(): Promise<void> {
   const { validateServerConfig } = await import('@/lib/server/config-validation');
   validateServerConfig();
 
+  // Learner LLM/image/video/TTS/ASR/PDF defaults, admin-set via Settings
+  // ("Set as default for learners") and stored in system_settings. Merged
+  // into the same in-memory cache YAML/env already populate — see
+  // mergeSystemProviderDefault — so every existing resolver picks it up
+  // with no changes of its own. A single fast SELECT, awaited here (unlike
+  // the timer below, this really is I/O `register()` shouldn't skip): a
+  // learner's very first request should already see the admin default, not
+  // a window where none is merged in yet. Refreshed periodically after that
+  // for multi-instance eventual consistency and to pick up a row deleted or
+  // changed outside this process; the admin-save route also calls the merge
+  // function directly for immediate same-instance effect.
+  const { hydrateSystemProviderDefaults } = await import(
+    '@/lib/server/system-provider-defaults'
+  );
+  await hydrateSystemProviderDefaults();
+  const systemDefaultsInterval = setInterval(() => {
+    void hydrateSystemProviderDefaults();
+  }, 2 * 60 * 1000);
+
   let runner: import('@/lib/server/agent-runtime/runner').AgentRunnerHandle | undefined;
   let extractionRunner:
     | import('@/lib/server/material-extraction/runner').MaterialExtractionRunnerHandle
@@ -57,6 +76,7 @@ export async function register(): Promise<void> {
   let shutdownPromise: Promise<void> | undefined;
   const shutdown = (): Promise<void> => {
     shutdownPromise ??= (async () => {
+      clearInterval(systemDefaultsInterval);
       // Park sessions before any pool they use is closed. This preserves the
       // last durable entry-tree checkpoint for immediate takeover.
       try {

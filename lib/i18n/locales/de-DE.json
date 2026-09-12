@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "Browserintegrierte TTS unterstützt die Audiofunktionen der Editor-Zeitleiste nicht (Vorschau, erneute Generierung und Sammelvertonung). Wechsle zu einem verwalteten TTS-Anbieter, um Audio für einzelne Zeilen zu generieren und zu verwalten.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "Als Lernenden-Standard festlegen",
+    "learnerDefaultSaved": "Als Standard für jedes Lernkonto gespeichert.",
+    "learnerDefaultSaveFailed": "Der Lernenden-Standard konnte nicht gespeichert werden.",
+    "clearLearnerDefault": "Lernenden-Standard entfernen",
+    "learnerDefaultCleared": "Lernenden-Standard entfernt.",
+    "learnerDefaultClearFailed": "Der Lernenden-Standard konnte nicht entfernt werden."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

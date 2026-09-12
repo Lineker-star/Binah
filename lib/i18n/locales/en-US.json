@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "Browser-native TTS doesn't support the editor timeline's audio features (preview, regenerate, and bulk voiceover). Switch to a managed TTS provider to generate and manage per-line audio.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "Set as learner default",
+    "learnerDefaultSaved": "Saved as the default for every learner account.",
+    "learnerDefaultSaveFailed": "Failed to save the learner default.",
+    "clearLearnerDefault": "Clear learner default",
+    "learnerDefaultCleared": "Learner default cleared.",
+    "learnerDefaultClearFailed": "Failed to clear the learner default."
   },
   "workspace": {
     "untitledCourse": "Untitled course",

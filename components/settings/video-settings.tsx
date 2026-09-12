@@ -22,12 +22,18 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { VideoProviderId } from '@/lib/media/types';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+} from './set-as-learner-default-button';
 
 interface VideoSettingsProps {
   selectedProviderId: VideoProviderId;
+  /** Renders the "Set as learner default" action (BB.1) — admin accounts only. */
+  isAdmin?: boolean;
 }
 
-export function VideoSettings({ selectedProviderId }: VideoSettingsProps) {
+export function VideoSettings({ selectedProviderId, isAdmin }: VideoSettingsProps) {
   const { t } = useI18n();
 
   const videoModelId = useSettingsStore((state) => state.videoModelId);
@@ -165,8 +171,9 @@ export function VideoSettings({ selectedProviderId }: VideoSettingsProps) {
 
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="video" />}
         </div>
       )}
 
@@ -219,6 +226,15 @@ export function VideoSettings({ selectedProviderId }: VideoSettingsProps) {
                   </>
                 )}
               </Button>
+              {isAdmin && (
+                <SetAsLearnerDefaultButton
+                  section="video"
+                  providerId={selectedProviderId}
+                  apiKey={currentConfig?.apiKey}
+                  baseUrl={currentConfig?.baseUrl}
+                  disabled={!currentConfig?.apiKey}
+                />
+              )}
             </div>
             {testMessage && (
               <div

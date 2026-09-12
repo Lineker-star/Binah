@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "ブラウザ内蔵 TTS はエディターのタイムライン音声機能（試聴・再生成・一括音声生成）に対応していません。マネージド TTS プロバイダーに切り替えると、行ごとの音声を生成・管理できます。",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "学習者のデフォルトとして設定",
+    "learnerDefaultSaved": "すべての学習者アカウントのデフォルトとして保存しました。",
+    "learnerDefaultSaveFailed": "学習者のデフォルトを保存できませんでした。",
+    "clearLearnerDefault": "学習者のデフォルトを解除",
+    "learnerDefaultCleared": "学習者のデフォルトを解除しました。",
+    "learnerDefaultClearFailed": "学習者のデフォルトを解除できませんでした。"
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

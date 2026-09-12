@@ -1939,7 +1939,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "瀏覽器內建 TTS 不支援編輯器時間軸的音訊功能（試聽、重新生成、全部配音）。切換到受管 TTS 供應商即可逐句生成和管理音訊。",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "設為學生預設值",
+    "learnerDefaultSaved": "已儲存為所有學生帳戶的預設值。",
+    "learnerDefaultSaveFailed": "儲存學生預設值失敗。",
+    "clearLearnerDefault": "清除學生預設值",
+    "learnerDefaultCleared": "已清除學生預設值。",
+    "learnerDefaultClearFailed": "清除學生預設值失敗。"
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

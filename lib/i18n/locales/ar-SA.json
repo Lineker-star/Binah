@@ -1965,7 +1965,13 @@
     },
     "ttsBrowserNativeTimelineNotice": "لا يدعم تحويل النص إلى كلام المدمج في المتصفح ميزات الصوت في الخط الزمني للمحرر (المعاينة وإعادة التوليد والتعليق الصوتي الجماعي). بدّل إلى مزود TTS مُدار لتوليد صوت كل سطر وإدارته.",
     "alidocmindAccessKeyId": "AccessKey ID",
-    "alidocmindAccessKeySecret": "AccessKey Secret"
+    "alidocmindAccessKeySecret": "AccessKey Secret",
+    "setAsLearnerDefault": "تعيين كافتراضي للمتعلمين",
+    "learnerDefaultSaved": "تم الحفظ كافتراضي لكل حساب متعلم.",
+    "learnerDefaultSaveFailed": "فشل حفظ الإعداد الافتراضي للمتعلمين.",
+    "clearLearnerDefault": "مسح الإعداد الافتراضي للمتعلمين",
+    "learnerDefaultCleared": "تم مسح الإعداد الافتراضي للمتعلمين.",
+    "learnerDefaultClearFailed": "فشل مسح الإعداد الافتراضي للمتعلمين."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

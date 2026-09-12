@@ -37,6 +37,10 @@ import type { ProviderConfig } from '@/lib/ai/providers';
 import type { ProvidersConfig } from '@/lib/types/settings';
 import { createVerifyModelRequest, formatContextWindow } from './utils';
 import { cn } from '@/lib/utils';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+} from './set-as-learner-default-button';
 
 interface ProviderConfigPanelProps {
   provider: ProviderConfig;
@@ -55,6 +59,8 @@ interface ProviderConfigPanelProps {
   modelsUrl?: string;
   onResetToDefault?: () => void; // Reset provider to default configuration
   isBuiltIn: boolean; // To determine if reset button should be shown
+  /** Renders the "Set as learner default" action (BB.1) — admin accounts only. */
+  isAdmin?: boolean;
 }
 
 export function ProviderConfigPanel({
@@ -72,6 +78,7 @@ export function ProviderConfigPanel({
   modelsUrl,
   onResetToDefault,
   isBuiltIn,
+  isAdmin,
 }: ProviderConfigPanelProps) {
   const { t } = useI18n();
 
@@ -212,8 +219,9 @@ export function ProviderConfigPanel({
     <div className="space-y-6 max-w-3xl">
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="providers" />}
         </div>
       )}
 
@@ -265,6 +273,15 @@ export function ProviderConfigPanel({
                   </>
                 )}
               </Button>
+              {isAdmin && (
+                <SetAsLearnerDefaultButton
+                  section="providers"
+                  providerId={provider.id}
+                  apiKey={apiKey}
+                  baseUrl={baseUrl}
+                  disabled={requiresApiKey && !apiKey}
+                />
+              )}
             </div>
             {testMessage && (
               <div

@@ -32,14 +32,20 @@ import { toast } from 'sonner';
 import { createLogger } from '@/lib/logger';
 import { normalizeASRUploadAudio } from '@/lib/audio/wav-utils';
 import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
+import {
+  SetAsLearnerDefaultButton,
+  ClearLearnerDefaultButton,
+} from './set-as-learner-default-button';
 
 const log = createLogger('ASRSettings');
 
 interface ASRSettingsProps {
   selectedProviderId: ASRProviderId;
+  /** Renders the "Set as learner default" action (BB.1) — admin accounts only. */
+  isAdmin?: boolean;
 }
 
-export function ASRSettings({ selectedProviderId }: ASRSettingsProps) {
+export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
   const { t } = useI18n();
 
   const asrLanguage = useSettingsStore((state) => state.asrLanguage);
@@ -210,8 +216,9 @@ export function ASRSettings({ selectedProviderId }: ASRSettingsProps) {
     <div className="space-y-6 max-w-3xl">
       {/* Server-configured notice */}
       {isServerConfigured && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300">
-          {t('settings.serverConfiguredNotice')}
+        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30 p-3 text-sm text-blue-700 dark:text-blue-300 flex items-center justify-between gap-2">
+          <span>{t('settings.serverConfiguredNotice')}</span>
+          {isAdmin && <ClearLearnerDefaultButton section="asr" />}
         </div>
       )}
 
@@ -366,6 +373,17 @@ export function ASRSettings({ selectedProviderId }: ASRSettingsProps) {
             <p className="flex-1 min-w-0 break-all">{testMessage}</p>
           </div>
         </div>
+      )}
+
+      {isAdmin && !isServerConfigured && (
+        <SetAsLearnerDefaultButton
+          section="asr"
+          providerId={selectedProviderId}
+          apiKey={providerConfig?.apiKey}
+          baseUrl={providerConfig?.baseUrl}
+          modelId={providerConfig?.modelId}
+          disabled={requiresApiKey && !providerConfig?.apiKey}
+        />
       )}
 
       {/* Model Selection — built-in providers */}
