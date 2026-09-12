@@ -55,6 +55,11 @@ export async function buildCertificatePdf(params: {
   learnerName: string;
   courseTitle: string;
   completionDate: Date;
+  /** Defaults to "Certificate of Completion" (the plain, thresholdless
+   *  certificate) — the richer Certificate of Excellence passes its own
+   *  heading so the two are visually distinct on the page itself, not
+   *  just in the underlying data. */
+  heading?: string;
   /** Letter grade and overall score (0-100), from the course's final
    *  assessment — undefined/null renders the certificate without a
    *  grade line (e.g. score data not ready yet is never sent through). */
@@ -99,7 +104,7 @@ export async function buildCertificatePdf(params: {
 
   centeredText(page, DEFAULT_BRAND.productName.toUpperCase(), PAGE_HEIGHT - 96, 13, bold, brand);
 
-  centeredText(page, 'Certificate of Completion', PAGE_HEIGHT - 168, 28, bold, ink);
+  centeredText(page, params.heading ?? 'Certificate of Completion', PAGE_HEIGHT - 168, 28, bold, ink);
 
   centeredText(page, 'This certifies that', PAGE_HEIGHT - 226, 12, font, muted);
 
