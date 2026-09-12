@@ -28,6 +28,7 @@ import type { ImageProviderId } from '@/lib/media/types';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { createLogger } from '@/lib/logger';
 import { validateUrlForSSRF } from '@/lib/server/ssrf-guard';
+import { blockLearnerAccess } from '@/lib/server/require-not-learner';
 
 const log = createLogger('VerifyImageProvider');
 
@@ -37,6 +38,9 @@ const log = createLogger('VerifyImageProvider');
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
+  const blocked = await blockLearnerAccess();
+  if (blocked) return blocked;
+
   try {
     const providerId = (request.headers.get('x-image-provider')?.trim() ||
       resolveServerImageProviderId()) as ImageProviderId;

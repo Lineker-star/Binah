@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   resolvePDFApiKey: vi.fn(),
   resolvePDFBaseUrl: vi.fn(),
   validateUrlForSSRF: vi.fn(),
+  blockLearnerAccess: vi.fn(),
 }));
 
 vi.mock('@/lib/server/provider-config', () => ({
@@ -18,6 +19,10 @@ vi.mock('@/lib/server/provider-config', () => ({
 
 vi.mock('@/lib/server/ssrf-guard', () => ({
   validateUrlForSSRF: mocks.validateUrlForSSRF,
+}));
+
+vi.mock('@/lib/server/require-not-learner', () => ({
+  blockLearnerAccess: mocks.blockLearnerAccess,
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -47,6 +52,8 @@ describe('POST /api/verify-pdf-provider', () => {
     mocks.resolvePDFApiKey.mockReset();
     mocks.resolvePDFBaseUrl.mockReset();
     mocks.validateUrlForSSRF.mockReset();
+    mocks.blockLearnerAccess.mockReset();
+    mocks.blockLearnerAccess.mockResolvedValue(null);
 
     mocks.isServerConfiguredProvider.mockReturnValue(false);
     mocks.resolvePDFApiKey.mockImplementation(

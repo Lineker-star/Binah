@@ -1,10 +1,17 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { NextRequest } from 'next/server';
 
-const mocks = vi.hoisted(() => ({ validateUrlForSSRF: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+  validateUrlForSSRF: vi.fn(),
+  blockLearnerAccess: vi.fn(),
+}));
 
 vi.mock('@/lib/server/ssrf-guard', () => ({
   validateUrlForSSRF: mocks.validateUrlForSSRF,
+}));
+
+vi.mock('@/lib/server/require-not-learner', () => ({
+  blockLearnerAccess: mocks.blockLearnerAccess,
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -30,7 +37,9 @@ describe('POST /api/provider/probe-models', () => {
   beforeEach(() => {
     vi.resetModules();
     mocks.validateUrlForSSRF.mockReset();
+    mocks.blockLearnerAccess.mockReset();
     mocks.validateUrlForSSRF.mockResolvedValue(null);
+    mocks.blockLearnerAccess.mockResolvedValue(null);
   });
 
   afterEach(() => {

@@ -70,6 +70,24 @@ import { AddAudioProviderDialog, type NewAudioProviderData } from './add-audio-p
 import { isCustomTTSProvider, isCustomASRProvider } from '@/lib/audio/types';
 import { resolveASRProviderName, resolveTTSProviderName } from '@/lib/audio/provider-display';
 import type { SettingsSection, EditingModel } from '@/lib/types/settings';
+import { fetchOwnProfile, type UserRole } from '@/lib/supabase/profile';
+
+/**
+ * Provider/API-key configuration tabs — learners must not see or access
+ * these at all (confirmed decision). Hiding them here is only the UI half;
+ * the routes they talk to (verify-model, provider/probe-models,
+ * verify-image-provider, verify-video-provider, verify-pdf-provider) each
+ * independently reject a learner caller via blockLearnerAccess(), since a
+ * hidden tab alone isn't enforcement.
+ */
+const LEARNER_HIDDEN_SECTIONS: SettingsSection[] = [
+  'providers',
+  'image',
+  'video',
+  'tts',
+  'asr',
+  'pdf',
+];
 
 // ─── Provider List Column (reusable) ───
 function ProviderListColumn<T extends string>({
@@ -231,8 +249,48 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
   const setTTSProvider = useSettingsStore((state) => state.setTTSProvider);
   const setASRProvider = useSettingsStore((state) => state.setASRProvider);
 
+  // Current account's role — determines whether the provider/API-key tabs
+  // (LEARNER_HIDDEN_SECTIONS) render at all. Conservative while unresolved:
+  // `restrictedNav` treats "still loading" the same as "is a learner" so
+  // there's no window where a learner's browser could paint a hidden panel
+  // before the role is known.
+  const [role, setRole] = useState<UserRole | null>(null);
+  const [roleLoading, setRoleLoading] = useState(true);
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    // Re-arm the conservative "hide until known" state on every reopen, so a
+    // stale resolved role from a previous open can't briefly show hidden
+    // tabs before this fetch resolves again.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoleLoading(true);
+    fetchOwnProfile()
+      .then((p) => {
+        if (!cancelled) setRole(p?.role ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) setRole(null);
+      })
+      .finally(() => {
+        if (!cancelled) setRoleLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
+  const isLearner = role === 'learner';
+  const restrictedNav = roleLoading || isLearner;
+
   // Navigation
   const [activeSection, setActiveSection] = useState<SettingsSection>('providers');
+  // The section actually rendered — falls back to Profile whenever
+  // activeSection points at a learner-hidden tab (the initial default, a
+  // stale value from before role resolved, or an initialSection deep-link
+  // like the homepage's "Configure a provider" pill). Render-time
+  // derivation, not an effect, so there's no frame where the real content
+  // for a hidden section could paint before a correction lands.
+  const displaySection: SettingsSection =
+    restrictedNav && LEARNER_HIDDEN_SECTIONS.includes(activeSection) ? 'profile' : activeSection;
   const [selectedProviderId, setSelectedProviderId] = useState<ProviderId>(providerId);
   const [selectedPdfProviderId, setSelectedPdfProviderId] = useState<PDFProviderId>(pdfProviderId);
   const [selectedWebSearchProviderId, setSelectedWebSearchProviderId] =
@@ -550,11 +608,11 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
     'video',
     'tts',
     'asr',
-  ].includes(activeSection);
+  ].includes(displaySection);
 
   // Get header content based on section
   const getHeaderContent = () => {
-    switch (activeSection) {
+    switch (displaySection) {
       case 'general':
         return <h2 className="text-lg font-semibold">{t('settings.systemSettings')}</h2>;
       case 'profile':
@@ -751,7 +809,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               onClick={() => setActiveSection('token-plan')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'token-plan'
+                displaySection === 'token-plan'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -760,89 +818,98 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               <span className="truncate">{t('settings.tokenPlan.nav')}</span>
             </button>
 
-            <button
-              onClick={() => setActiveSection('providers')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'providers'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <Box className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.providers')}</span>
-            </button>
+            {/* LLM/Image/Video/TTS/ASR/Document-Parsing provider settings —
+                not available to a learner account at all (confirmed
+                decision): the tabs don't render, and each underlying
+                verify/probe route independently rejects a learner caller
+                too, since hiding a tab is not enforcement by itself. */}
+            {!restrictedNav && (
+              <>
+                <button
+                  onClick={() => setActiveSection('providers')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'providers'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <Box className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.providers')}</span>
+                </button>
 
-            <button
-              onClick={() => setActiveSection('image')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'image'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <ImageIcon className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.imageSettings')}</span>
-            </button>
+                <button
+                  onClick={() => setActiveSection('image')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'image'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <ImageIcon className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.imageSettings')}</span>
+                </button>
 
-            <button
-              onClick={() => setActiveSection('video')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'video'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <Film className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.videoSettings')}</span>
-            </button>
+                <button
+                  onClick={() => setActiveSection('video')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'video'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <Film className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.videoSettings')}</span>
+                </button>
 
-            <button
-              onClick={() => setActiveSection('tts')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'tts'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <Volume2 className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.ttsSettings')}</span>
-            </button>
+                <button
+                  onClick={() => setActiveSection('tts')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'tts'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <Volume2 className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.ttsSettings')}</span>
+                </button>
 
-            <button
-              onClick={() => setActiveSection('asr')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'asr'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <Mic className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.asrSettings')}</span>
-            </button>
+                <button
+                  onClick={() => setActiveSection('asr')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'asr'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <Mic className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.asrSettings')}</span>
+                </button>
 
-            <button
-              onClick={() => setActiveSection('pdf')}
-              className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'pdf'
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'hover:bg-muted',
-              )}
-            >
-              <FileText className="h-4 w-4 shrink-0" />
-              <span className="truncate">{t('settings.documentParsingSettings')}</span>
-            </button>
+                <button
+                  onClick={() => setActiveSection('pdf')}
+                  className={cn(
+                    'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
+                    displaySection === 'pdf'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted',
+                  )}
+                >
+                  <FileText className="h-4 w-4 shrink-0" />
+                  <span className="truncate">{t('settings.documentParsingSettings')}</span>
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => setActiveSection('web-search')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'web-search'
+                displaySection === 'web-search'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -855,7 +922,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               onClick={() => setActiveSection('skills')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'skills'
+                displaySection === 'skills'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -868,7 +935,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               onClick={() => setActiveSection('general')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'general'
+                displaySection === 'general'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -881,7 +948,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               onClick={() => setActiveSection('profile')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'profile'
+                displaySection === 'profile'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -894,7 +961,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               onClick={() => setActiveSection('progress')}
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-left min-w-0',
-                activeSection === 'progress'
+                displaySection === 'progress'
                   ? 'bg-primary/10 text-primary font-medium'
                   : 'hover:bg-muted',
               )}
@@ -913,7 +980,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
           </div>
 
           {/* Middle - Provider List (only shown for provider-based sections) */}
-          {activeSection === 'providers' && (
+          {displaySection === 'providers' && (
             <>
               <ProviderList
                 providers={allProviders}
@@ -931,7 +998,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'pdf' && (
+          {displaySection === 'pdf' && (
             <>
               <ProviderListColumn
                 providers={Object.values(PDF_PROVIDERS)}
@@ -950,7 +1017,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'web-search' && (
+          {displaySection === 'web-search' && (
             <>
               <ProviderListColumn
                 providers={Object.values(WEB_SEARCH_PROVIDERS).map((provider) => ({
@@ -972,7 +1039,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'image' && (
+          {displaySection === 'image' && (
             <>
               <ProviderListColumn
                 providers={Object.values(IMAGE_PROVIDERS).map((p) => ({
@@ -995,7 +1062,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'video' && (
+          {displaySection === 'video' && (
             <>
               <ProviderListColumn
                 providers={Object.values(VIDEO_PROVIDERS).map((p) => ({
@@ -1018,7 +1085,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'tts' && (
+          {displaySection === 'tts' && (
             <>
               <ProviderListColumn
                 providers={[
@@ -1051,7 +1118,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </>
           )}
 
-          {activeSection === 'asr' && (
+          {displaySection === 'asr' && (
             <>
               <ProviderListColumn
                 providers={[
@@ -1090,7 +1157,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             <div className="flex items-center justify-between p-5 border-b">
               <div className="flex items-center gap-3">{getHeaderContent()}</div>
               <div className="flex items-center gap-2">
-                {activeSection === 'providers' &&
+                {displaySection === 'providers' &&
                   !providersConfig[selectedProviderId]?.isBuiltIn && (
                     <Button
                       variant="ghost"
@@ -1109,17 +1176,17 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-5">
-              {activeSection === 'general' && <GeneralSettings />}
+              {displaySection === 'general' && <GeneralSettings />}
 
-              {activeSection === 'profile' && <ProfileSettings />}
+              {displaySection === 'profile' && <ProfileSettings />}
 
-              {activeSection === 'progress' && <ProgressSettings />}
+              {displaySection === 'progress' && <ProgressSettings />}
 
-              {activeSection === 'skills' && <SkillSettings />}
+              {displaySection === 'skills' && <SkillSettings />}
 
-              {activeSection === 'token-plan' && <TokenPlanSettings />}
+              {displaySection === 'token-plan' && <TokenPlanSettings />}
 
-              {activeSection === 'providers' && selectedProvider && (
+              {displaySection === 'providers' && selectedProvider && (
                 <ProviderConfigPanel
                   provider={selectedProvider}
                   initialApiKey={providersConfig[selectedProviderId]?.apiKey || ''}
@@ -1142,20 +1209,20 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
                 />
               )}
 
-              {activeSection === 'pdf' && (
+              {displaySection === 'pdf' && (
                 <PDFSettings selectedProviderId={selectedPdfProviderId} />
               )}
-              {activeSection === 'web-search' && (
+              {displaySection === 'web-search' && (
                 <WebSearchSettings selectedProviderId={selectedWebSearchProviderId} />
               )}
-              {activeSection === 'image' && (
+              {displaySection === 'image' && (
                 <ImageSettings selectedProviderId={selectedImageProviderId} />
               )}
-              {activeSection === 'video' && (
+              {displaySection === 'video' && (
                 <VideoSettings selectedProviderId={selectedVideoProviderId} />
               )}
-              {activeSection === 'tts' && <TTSSettings selectedProviderId={ttsProviderId} />}
-              {activeSection === 'asr' && <ASRSettings selectedProviderId={asrProviderId} />}
+              {displaySection === 'tts' && <TTSSettings selectedProviderId={ttsProviderId} />}
+              {displaySection === 'asr' && <ASRSettings selectedProviderId={asrProviderId} />}
             </div>
 
             {/* Footer */}

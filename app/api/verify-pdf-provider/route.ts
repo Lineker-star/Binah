@@ -9,10 +9,14 @@ import {
 } from '@/lib/server/provider-config';
 import { validateUrlForSSRF } from '@/lib/server/ssrf-guard';
 import { MINERU_CLOUD_DEFAULT_BASE } from '@/lib/pdf/constants';
+import { blockLearnerAccess } from '@/lib/server/require-not-learner';
 
 const log = createLogger('Verify PDF Provider');
 
 export async function POST(req: NextRequest) {
+  const blocked = await blockLearnerAccess();
+  if (blocked) return blocked;
+
   let providerId: string | undefined;
   try {
     const body = await req.json();

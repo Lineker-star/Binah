@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 const mocks = vi.hoisted(() => ({
   resolveModel: vi.fn(),
   callLLM: vi.fn(),
+  blockLearnerAccess: vi.fn(),
 }));
 
 vi.mock('@/lib/server/resolve-model', () => ({
@@ -12,6 +13,10 @@ vi.mock('@/lib/server/resolve-model', () => ({
 
 vi.mock('@/lib/ai/llm', () => ({
   callLLM: mocks.callLLM,
+}));
+
+vi.mock('@/lib/server/require-not-learner', () => ({
+  blockLearnerAccess: mocks.blockLearnerAccess,
 }));
 
 vi.mock('@/lib/logger', () => ({
@@ -38,8 +43,10 @@ describe('POST /api/verify-model', () => {
     vi.resetModules();
     mocks.resolveModel.mockReset();
     mocks.callLLM.mockReset();
+    mocks.blockLearnerAccess.mockReset();
     mocks.resolveModel.mockResolvedValue({ model: { id: 'language-model' } });
     mocks.callLLM.mockResolvedValue({ text: 'OK' });
+    mocks.blockLearnerAccess.mockResolvedValue(null);
   });
 
   it('rejects requests without a model name', async () => {
@@ -86,5 +93,23 @@ describe('POST /api/verify-model', () => {
       undefined,
       { mode: 'disabled', enabled: false },
     );
+  });
+
+  it('defers to blockLearnerAccess and never reaches the LLM for a blocked caller', async () => {
+    mocks.blockLearnerAccess.mockResolvedValue(
+      new Response(JSON.stringify({ success: false, errorCode: 'ROLE_NOT_ALLOWED' }), {
+        status: 403,
+      }),
+    );
+
+    const res = await postVerifyModel({
+      model: 'xiaomi:mimo-v2.5-pro',
+      apiKey: 'tp-test',
+      providerType: 'openai',
+    });
+
+    expect(res.status).toBe(403);
+    expect(mocks.resolveModel).not.toHaveBeenCalled();
+    expect(mocks.callLLM).not.toHaveBeenCalled();
   });
 });

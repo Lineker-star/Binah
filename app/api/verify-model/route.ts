@@ -3,9 +3,13 @@ import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { resolveModel } from '@/lib/server/resolve-model';
 import { callLLM } from '@/lib/ai/llm';
+import { blockLearnerAccess } from '@/lib/server/require-not-learner';
 const log = createLogger('Verify Model');
 
 export async function POST(req: NextRequest) {
+  const blocked = await blockLearnerAccess();
+  if (blocked) return blocked;
+
   let model: string | undefined;
   try {
     const body = await req.json();
