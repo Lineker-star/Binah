@@ -55,7 +55,9 @@
     "structuredCourseHint": "Répartissez ceci en plusieurs leçons au lieu d'une seule — la leçon suivante n'est créée qu'une fois la leçon actuelle terminée",
     "courseLessonCountLabel": "Leçons",
     "courseMinutesPerLessonLabel": "Min/leçon",
-    "courseEstimatedTotal": "~{{minutes}} min au total"
+    "courseEstimatedTotal": "~{{minutes}} min au total",
+    "moreOptions": "Plus d’options",
+    "mediaSettingsLabel": "Paramètres média et voix"
   },
   "export": {
     "pptx": "Exporter en PPTX",

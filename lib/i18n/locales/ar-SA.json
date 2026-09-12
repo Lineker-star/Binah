@@ -55,7 +55,9 @@
     "ttsTitle": "تحويل النص إلى كلام",
     "ttsHint": "اختر صوتًا للمعلم الذكي",
     "ttsPreview": "معاينة",
-    "ttsPreviewing": "جارٍ التشغيل..."
+    "ttsPreviewing": "جارٍ التشغيل...",
+    "moreOptions": "المزيد من الخيارات",
+    "mediaSettingsLabel": "إعدادات الوسائط والصوت"
   },
   "export": {
     "pptx": "تصدير PPTX",

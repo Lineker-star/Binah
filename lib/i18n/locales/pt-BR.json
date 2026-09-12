@@ -55,7 +55,9 @@
     "structuredCourseHint": "Divida isso em várias aulas em vez de uma — a próxima aula só é criada quando você terminar a atual",
     "courseLessonCountLabel": "Aulas",
     "courseMinutesPerLessonLabel": "Min/aula",
-    "courseEstimatedTotal": "~{{minutes}} min no total"
+    "courseEstimatedTotal": "~{{minutes}} min no total",
+    "moreOptions": "Mais opções",
+    "mediaSettingsLabel": "Configurações de mídia e voz"
   },
   "export": {
     "pptx": "Exportar PPTX",

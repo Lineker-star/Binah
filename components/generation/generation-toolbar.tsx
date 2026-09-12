@@ -39,7 +39,6 @@ import {
   supportsConfigurableThinking,
 } from '@/lib/ai/thinking-config';
 import type { SettingsSection } from '@/lib/types/settings';
-import { MediaPopover } from '@/components/generation/media-popover';
 import { getAcceptStringForProviders, isMimeSupportedByProviders } from '@/lib/document/mime';
 import {
   MAX_DOCUMENT_BUNDLE_FILES,
@@ -52,6 +51,12 @@ import { findModelById, modelIdsMatch } from '@/lib/ai/model-aliases';
 // ─── Constants ───────────────────────────────────────────────
 const MAX_COURSE_MATERIAL_SIZE_MB = 50;
 const MAX_COURSE_MATERIAL_SIZE_BYTES = MAX_COURSE_MATERIAL_SIZE_MB * 1024 * 1024;
+
+// ─── Pill button styles (shared with ToolbarOverflowMenu) ─────
+export const pillCls =
+  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all cursor-pointer select-none whitespace-nowrap border';
+export const pillMuted = `${pillCls} border-border/50 text-muted-foreground/70 hover:text-foreground hover:bg-muted/60`;
+export const pillActive = `${pillCls} border-violet-200/60 dark:border-violet-700/50 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300`;
 
 // ─── Types ───────────────────────────────────────────────────
 export interface GenerationToolbarProps {
@@ -220,12 +225,6 @@ export function GenerationToolbar({
     onPdfError(null);
     onCourseMaterialsAdd(dedupedFiles);
   };
-
-  // ─── Pill button helper ─────────────────────────────
-  const pillCls =
-    'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-all cursor-pointer select-none whitespace-nowrap border';
-  const pillMuted = `${pillCls} border-border/50 text-muted-foreground/70 hover:text-foreground hover:bg-muted/60`;
-  const pillActive = `${pillCls} border-violet-200/60 dark:border-violet-700/50 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300`;
 
   return (
     <div className="flex items-center gap-1.5 flex-wrap">
@@ -524,12 +523,6 @@ export function GenerationToolbar({
             <TooltipContent>{t('toolbar.webSearchNoProvider')}</TooltipContent>
           </Tooltip>
         )}
-
-        {/* ── Separator ── */}
-        <div className="w-px h-4 bg-border/60 mx-1" />
-
-        {/* ── Media popover ── */}
-        <MediaPopover onSettingsOpen={onSettingsOpen} />
       </div>
     </div>
   );

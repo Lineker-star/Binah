@@ -55,7 +55,9 @@
     "structuredCourseHint": "Teile dies in mehrere Lektionen statt einer auf — die nächste Lektion wird erst erstellt, wenn du die aktuelle abschließt",
     "courseLessonCountLabel": "Lektionen",
     "courseMinutesPerLessonLabel": "Min./Lektion",
-    "courseEstimatedTotal": "~{{minutes}} Min. insgesamt"
+    "courseEstimatedTotal": "~{{minutes}} Min. insgesamt",
+    "moreOptions": "Weitere Optionen",
+    "mediaSettingsLabel": "Medien- und Spracheinstellungen"
   },
   "export": {
     "pptx": "PPTX exportieren",

@@ -69,7 +69,7 @@ import {
   shouldShowVocationalTestUi,
 } from '@/lib/config/feature-flags';
 import { useImportPptx } from '@/lib/import/use-import-pptx';
-import { InteractiveModeButton } from '@/components/generation/interactive-mode-button';
+import { ToolbarOverflowMenu } from '@/components/generation/toolbar-overflow-menu';
 import { ProBadge } from '@/components/workbench/ProBadge';
 import { arrivedByProSwap, startProSwap } from '@/lib/workbench/pro-swap';
 import {
@@ -260,7 +260,7 @@ function HomePage() {
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState<SettingsSection | undefined>(undefined);
-  const openSettingsSection = (section: SettingsSection) => {
+  const openSettingsSection = (section?: SettingsSection) => {
     setSettingsSection(section);
     setSettingsOpen(true);
   };
@@ -916,10 +916,7 @@ function HomePage() {
                 <GenerationToolbar
                   webSearch={form.webSearch}
                   onWebSearchChange={(v) => updateForm('webSearch', v)}
-                  onSettingsOpen={(section) => {
-                    setSettingsSection(section);
-                    setSettingsOpen(true);
-                  }}
+                  onSettingsOpen={openSettingsSection}
                   courseMaterials={form.courseMaterials}
                   onCourseMaterialsAdd={addCourseMaterials}
                   onCourseMaterialRemove={removeCourseMaterial}
@@ -963,6 +960,7 @@ function HomePage() {
                     type="button"
                     disabled={uploadingTextbook}
                     onClick={handleUploadTextbookClick}
+                    aria-label={t('textbook.uploadButton')}
                     className="inline-flex h-8 shrink-0 cursor-pointer select-none items-center gap-1.5 whitespace-nowrap rounded-full border border-border/60 bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:bg-muted/60 active:scale-95 disabled:opacity-50"
                   >
                     {uploadingTextbook ? (
@@ -970,7 +968,6 @@ function HomePage() {
                     ) : (
                       <UploadCloud className="size-3.5" />
                     )}
-                    <span>{t('textbook.uploadButton')}</span>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top" className="text-xs">
@@ -985,19 +982,15 @@ function HomePage() {
                 onChange={handleTextbookFile}
               />
 
-              {/* Interactive mode toggle */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <InteractiveModeButton
-                    pressed={form.interactiveMode}
-                    label={t('toolbar.interactiveModeLabel')}
-                    onPressedChange={(pressed) => updateForm('interactiveMode', pressed)}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="top" className="text-xs">
-                  {t('toolbar.interactiveModeHint')}
-                </TooltipContent>
-              </Tooltip>
+              {/* Overflow: Interactive Mode toggle + media/voice generation
+                  settings — lower-frequency controls collapsed behind one
+                  pill so the row stays on one line at the composer's fixed
+                  800px width (see the wider investigation this replaced). */}
+              <ToolbarOverflowMenu
+                onSettingsOpen={openSettingsSection}
+                interactiveModePressed={form.interactiveMode}
+                onInteractiveModeChange={(pressed) => updateForm('interactiveMode', pressed)}
+              />
 
               {/* Voice input */}
               <SpeechButton

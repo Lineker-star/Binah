@@ -55,7 +55,9 @@
     "structuredCourseHint": "將其拆分為多節課，而不是一節課——下一節課只會在你完成目前課程後生成",
     "courseLessonCountLabel": "課程數",
     "courseMinutesPerLessonLabel": "分鐘/節",
-    "courseEstimatedTotal": "共約{{minutes}}分鐘"
+    "courseEstimatedTotal": "共約{{minutes}}分鐘",
+    "moreOptions": "更多選項",
+    "mediaSettingsLabel": "媒體與語音設定"
   },
   "export": {
     "pptx": "匯出 PPTX",

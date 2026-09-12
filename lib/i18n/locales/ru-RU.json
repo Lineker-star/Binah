@@ -55,7 +55,9 @@
     "structuredCourseHint": "Разбейте это на несколько уроков вместо одного — следующий урок создаётся только после завершения текущего",
     "courseLessonCountLabel": "Уроки",
     "courseMinutesPerLessonLabel": "Мин/урок",
-    "courseEstimatedTotal": "~{{minutes}} мин всего"
+    "courseEstimatedTotal": "~{{minutes}} мин всего",
+    "moreOptions": "Ещё",
+    "mediaSettingsLabel": "Настройки медиа и голоса"
   },
   "export": {
     "pptx": "Экспорт PPTX",

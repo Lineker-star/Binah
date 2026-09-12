@@ -55,7 +55,9 @@
     "structuredCourseHint": "하나가 아닌 여러 레슨으로 나눕니다 — 다음 레슨은 현재 레슨을 마쳐야 생성됩니다",
     "courseLessonCountLabel": "레슨 수",
     "courseMinutesPerLessonLabel": "분/레슨",
-    "courseEstimatedTotal": "총 약 {{minutes}}분"
+    "courseEstimatedTotal": "총 약 {{minutes}}분",
+    "moreOptions": "더 보기",
+    "mediaSettingsLabel": "미디어 및 음성 설정"
   },
   "export": {
     "pptx": "PPTX 내보내기",

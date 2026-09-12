@@ -55,7 +55,9 @@
     "structuredCourseHint": "1つではなく複数のレッスンに分割します — 次のレッスンは現在のレッスンを終えてから作成されます",
     "courseLessonCountLabel": "レッスン数",
     "courseMinutesPerLessonLabel": "分/レッスン",
-    "courseEstimatedTotal": "合計約{{minutes}}分"
+    "courseEstimatedTotal": "合計約{{minutes}}分",
+    "moreOptions": "その他のオプション",
+    "mediaSettingsLabel": "メディア・音声設定"
   },
   "export": {
     "pptx": "PPTXエクスポート",

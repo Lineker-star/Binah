@@ -55,7 +55,9 @@
     "structuredCourseHint": "Chia nội dung này thành nhiều bài học thay vì một — bài học tiếp theo chỉ được tạo khi bạn hoàn thành bài hiện tại",
     "courseLessonCountLabel": "Số bài học",
     "courseMinutesPerLessonLabel": "Phút/bài",
-    "courseEstimatedTotal": "~{{minutes}} phút tổng cộng"
+    "courseEstimatedTotal": "~{{minutes}} phút tổng cộng",
+    "moreOptions": "Tùy chọn khác",
+    "mediaSettingsLabel": "Cài đặt phương tiện & giọng nói"
   },
   "export": {
     "pptx": "Xuất PPTX",

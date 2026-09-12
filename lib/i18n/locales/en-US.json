@@ -55,7 +55,9 @@
     "structuredCourseHint": "Break this into multiple lessons instead of one — the next lesson is built only once you finish the current one",
     "courseLessonCountLabel": "Lessons",
     "courseMinutesPerLessonLabel": "Min/lesson",
-    "courseEstimatedTotal": "~{{minutes}} min total"
+    "courseEstimatedTotal": "~{{minutes}} min total",
+    "moreOptions": "More options",
+    "mediaSettingsLabel": "Media & voice settings"
   },
   "export": {
     "pptx": "Export PPTX",
