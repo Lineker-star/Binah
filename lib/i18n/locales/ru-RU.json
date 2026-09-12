@@ -2239,5 +2239,16 @@
     "title": "Экзамен",
     "subtitle": "Охватывает всё из «{{scope}}»",
     "continueToBook": "Продолжить"
+  },
+  "certificateVerify": {
+    "eyebrow": "Проверка сертификата {{productName}}",
+    "foundHeading": "Сертификат подтверждён",
+    "foundSubtitle": "Этот сертификат подлинный и зарегистрирован.",
+    "labelCourse": "Курс",
+    "labelGrade": "Оценка",
+    "labelAwardedTo": "Выдан",
+    "labelIssued": "Дата выдачи",
+    "notFoundHeading": "Сертификат не найден",
+    "notFoundSubtitle": "Не удалось найти сертификат с этим кодом. Проверьте код и попробуйте снова."
   }
 }

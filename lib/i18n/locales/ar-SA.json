@@ -2239,5 +2239,16 @@
     "title": "امتحان",
     "subtitle": "يغطي كل ما جاء في \"{{scope}}\"",
     "continueToBook": "متابعة"
+  },
+  "certificateVerify": {
+    "eyebrow": "التحقق من شهادة {{productName}}",
+    "foundHeading": "تم التحقق من الشهادة",
+    "foundSubtitle": "هذه الشهادة أصلية ومسجلة.",
+    "labelCourse": "الدورة",
+    "labelGrade": "الدرجة",
+    "labelAwardedTo": "مُنحت إلى",
+    "labelIssued": "تاريخ الإصدار",
+    "notFoundHeading": "الشهادة غير موجودة",
+    "notFoundSubtitle": "تعذّر التحقق من وجود شهادة بهذا الرمز. تحقق من الرمز وحاول مرة أخرى."
   }
 }

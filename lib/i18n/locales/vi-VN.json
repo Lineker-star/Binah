@@ -2239,5 +2239,16 @@
     "title": "Bài Thi",
     "subtitle": "Bao quát toàn bộ \"{{scope}}\"",
     "continueToBook": "Tiếp tục"
+  },
+  "certificateVerify": {
+    "eyebrow": "Xác minh chứng chỉ {{productName}}",
+    "foundHeading": "Chứng chỉ đã được xác minh",
+    "foundSubtitle": "Chứng chỉ này là xác thực và có trong hồ sơ.",
+    "labelCourse": "Khóa học",
+    "labelGrade": "Xếp loại",
+    "labelAwardedTo": "Cấp cho",
+    "labelIssued": "Ngày cấp",
+    "notFoundHeading": "Không tìm thấy chứng chỉ",
+    "notFoundSubtitle": "Chúng tôi không thể xác minh chứng chỉ với mã này. Vui lòng kiểm tra lại mã và thử lại."
   }
 }

@@ -2239,5 +2239,16 @@
     "title": "試験",
     "subtitle": "「{{scope}}」の内容をすべて対象とします",
     "continueToBook": "続ける"
+  },
+  "certificateVerify": {
+    "eyebrow": "{{productName}} 証明書の確認",
+    "foundHeading": "証明書が確認されました",
+    "foundSubtitle": "この証明書は本物であり、記録されています。",
+    "labelCourse": "コース",
+    "labelGrade": "評価",
+    "labelAwardedTo": "授与対象",
+    "labelIssued": "発行日",
+    "notFoundHeading": "証明書が見つかりません",
+    "notFoundSubtitle": "このコードで証明書を確認できませんでした。コードを確認して再度お試しください。"
   }
 }

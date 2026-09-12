@@ -2239,5 +2239,16 @@
     "title": "Examen",
     "subtitle": "Cubre todo \"{{scope}}\"",
     "continueToBook": "Continuar"
+  },
+  "certificateVerify": {
+    "eyebrow": "Verificación de certificado {{productName}}",
+    "foundHeading": "Certificado verificado",
+    "foundSubtitle": "Este certificado es auténtico y está registrado.",
+    "labelCourse": "Curso",
+    "labelGrade": "Calificación",
+    "labelAwardedTo": "Otorgado a",
+    "labelIssued": "Fecha de emisión",
+    "notFoundHeading": "Certificado no encontrado",
+    "notFoundSubtitle": "No pudimos verificar un certificado con este código. Revisa el código e inténtalo de nuevo."
   }
 }

@@ -2239,5 +2239,16 @@
     "title": "Examen",
     "subtitle": "Couvre tout « {{scope}} »",
     "continueToBook": "Continuer"
+  },
+  "certificateVerify": {
+    "eyebrow": "Vérification de certificat {{productName}}",
+    "foundHeading": "Certificat vérifié",
+    "foundSubtitle": "Ce certificat est authentique et enregistré.",
+    "labelCourse": "Cours",
+    "labelGrade": "Note",
+    "labelAwardedTo": "Délivré à",
+    "labelIssued": "Date de délivrance",
+    "notFoundHeading": "Certificat introuvable",
+    "notFoundSubtitle": "Nous n'avons pas pu vérifier de certificat avec ce code. Vérifiez le code et réessayez."
   }
 }

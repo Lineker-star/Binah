@@ -2239,5 +2239,16 @@
     "title": "考試",
     "subtitle": "涵蓋《{{scope}}》的全部內容",
     "continueToBook": "繼續"
+  },
+  "certificateVerify": {
+    "eyebrow": "{{productName}} 證書驗證",
+    "foundHeading": "證書已驗證",
+    "foundSubtitle": "該證書真實有效,已存檔。",
+    "labelCourse": "課程",
+    "labelGrade": "等級",
+    "labelAwardedTo": "頒發給",
+    "labelIssued": "頒發日期",
+    "notFoundHeading": "找不到證書",
+    "notFoundSubtitle": "無法使用此代碼驗證證書。請檢查代碼後重試。"
   }
 }

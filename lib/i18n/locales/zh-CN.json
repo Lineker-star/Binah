@@ -2239,5 +2239,16 @@
     "title": "考试",
     "subtitle": "涵盖《{{scope}}》的全部内容",
     "continueToBook": "继续"
+  },
+  "certificateVerify": {
+    "eyebrow": "{{productName}} 证书验证",
+    "foundHeading": "证书已验证",
+    "foundSubtitle": "该证书真实有效,已存档。",
+    "labelCourse": "课程",
+    "labelGrade": "等级",
+    "labelAwardedTo": "颁发给",
+    "labelIssued": "颁发日期",
+    "notFoundHeading": "未找到证书",
+    "notFoundSubtitle": "无法使用此代码验证证书。请检查代码后重试。"
   }
 }

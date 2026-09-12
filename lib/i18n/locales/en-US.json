@@ -2239,5 +2239,16 @@
     "title": "Exam",
     "subtitle": "Covering everything from \"{{scope}}\"",
     "continueToBook": "Continue"
+  },
+  "certificateVerify": {
+    "eyebrow": "{{productName}} Certificate Verification",
+    "foundHeading": "Certificate verified",
+    "foundSubtitle": "This certificate is authentic and on record.",
+    "labelCourse": "Course",
+    "labelGrade": "Grade",
+    "labelAwardedTo": "Awarded to",
+    "labelIssued": "Issued",
+    "notFoundHeading": "Certificate not found",
+    "notFoundSubtitle": "We couldn't verify a certificate with this code. Double-check the code and try again."
   }
 }

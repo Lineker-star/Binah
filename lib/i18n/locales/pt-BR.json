@@ -2239,5 +2239,16 @@
     "title": "Prova",
     "subtitle": "Cobrindo tudo de \"{{scope}}\"",
     "continueToBook": "Continuar"
+  },
+  "certificateVerify": {
+    "eyebrow": "Verificação de certificado {{productName}}",
+    "foundHeading": "Certificado verificado",
+    "foundSubtitle": "Este certificado é autêntico e está registrado.",
+    "labelCourse": "Curso",
+    "labelGrade": "Nota",
+    "labelAwardedTo": "Concedido a",
+    "labelIssued": "Data de emissão",
+    "notFoundHeading": "Certificado não encontrado",
+    "notFoundSubtitle": "Não conseguimos verificar um certificado com este código. Confira o código e tente novamente."
   }
 }

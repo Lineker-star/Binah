@@ -2239,5 +2239,16 @@
     "title": "Prüfung",
     "subtitle": "Deckt alles aus „{{scope}}\" ab",
     "continueToBook": "Weiter"
+  },
+  "certificateVerify": {
+    "eyebrow": "{{productName}} Zertifikatsprüfung",
+    "foundHeading": "Zertifikat verifiziert",
+    "foundSubtitle": "Dieses Zertifikat ist authentisch und registriert.",
+    "labelCourse": "Kurs",
+    "labelGrade": "Note",
+    "labelAwardedTo": "Verliehen an",
+    "labelIssued": "Ausgestellt am",
+    "notFoundHeading": "Zertifikat nicht gefunden",
+    "notFoundSubtitle": "Wir konnten mit diesem Code kein Zertifikat verifizieren. Überprüfe den Code und versuche es erneut."
   }
 }
