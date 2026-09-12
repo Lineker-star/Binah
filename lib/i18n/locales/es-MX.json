@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "No se pudo guardar el valor predeterminado del alumno.",
     "clearLearnerDefault": "Borrar valor predeterminado del alumno",
     "learnerDefaultCleared": "Valor predeterminado del alumno borrado.",
-    "learnerDefaultClearFailed": "No se pudo borrar el valor predeterminado del alumno."
+    "learnerDefaultClearFailed": "No se pudo borrar el valor predeterminado del alumno.",
+    "saveAsMyDefault": "Guardar como mi predeterminado",
+    "myDefaultSaved": "Guardado en tu cuenta — te seguirá en todos tus dispositivos.",
+    "myDefaultSaveFailed": "No se pudo guardar tu valor predeterminado.",
+    "clearMyDefault": "Borrar mi predeterminado",
+    "myDefaultCleared": "Se borró tu valor predeterminado — ahora sigues el predeterminado del alumno.",
+    "myDefaultClearFailed": "No se pudo borrar tu valor predeterminado."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

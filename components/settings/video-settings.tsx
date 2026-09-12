@@ -25,6 +25,8 @@ import type { VideoProviderId } from '@/lib/media/types';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 
 interface VideoSettingsProps {
@@ -235,6 +237,14 @@ export function VideoSettings({ selectedProviderId, isAdmin }: VideoSettingsProp
                   disabled={!currentConfig?.apiKey}
                 />
               )}
+              <SaveAsMyDefaultButton
+                section="video"
+                providerId={selectedProviderId}
+                apiKey={currentConfig?.apiKey}
+                baseUrl={currentConfig?.baseUrl}
+                disabled={!currentConfig?.apiKey}
+              />
+              <ClearMyDefaultButton section="video" />
             </div>
             {testMessage && (
               <div

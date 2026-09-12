@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "Failed to save the learner default.",
     "clearLearnerDefault": "Clear learner default",
     "learnerDefaultCleared": "Learner default cleared.",
-    "learnerDefaultClearFailed": "Failed to clear the learner default."
+    "learnerDefaultClearFailed": "Failed to clear the learner default.",
+    "saveAsMyDefault": "Save as my default",
+    "myDefaultSaved": "Saved to your account — will follow you across devices.",
+    "myDefaultSaveFailed": "Failed to save your default.",
+    "clearMyDefault": "Clear my default",
+    "myDefaultCleared": "Your default was cleared — following the learner default again.",
+    "myDefaultClearFailed": "Failed to clear your default."
   },
   "workspace": {
     "untitledCourse": "Untitled course",

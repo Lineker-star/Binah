@@ -1,30 +1,30 @@
 /**
- * Admin-only: read, save, or clear the LLM/image/video/TTS/ASR/PDF defaults
- * used by every learner account system-wide (BB.1) — learners have no
- * settings of their own to override this with.
+ * Self-service (parent or admin, never learner — BB.1): read, save, or
+ * clear the caller's OWN LLM/image/video/TTS/ASR/PDF provider choice
+ * (BB.3). Distinct from app/api/admin/system-settings/route.ts, which is
+ * admin-only and manages the single GLOBAL default (BB.2) every learner
+ * falls back to — this route only ever touches the row where
+ * owner_id = the caller's own id, enforced both here and by
+ * system_settings_owner_all (RLS refuses a learner or a different owner's
+ * row regardless of what this route does).
  *
- * Always the owner_id IS NULL row per section — a parent's own row (BB.3,
- * see app/api/settings/provider-defaults/route.ts) is a separate, disjoint
- * tier this route never reads, writes, or clears.
- *
- * GET returns the current default's providerId/modelId per section (never
- * the api_key) so the Settings dialog can show "Learner default: X" labels.
- * POST upserts one section's default and merges it into the live
- * provider-config cache immediately (lib/server/provider-config.ts's
- * mergeSystemProviderDefault — every existing resolver, and every generation
- * route, picks it up with no changes of their own). DELETE clears a section
- * back to "no admin default" (YAML/env or per-provider client keys resume
- * governing it).
+ * Deliberately does NOT touch lib/server/provider-config.ts's cache or any
+ * generation route: a personal choice is per-caller, not process-wide, so
+ * it's resolved the same way client-supplied credentials always have been —
+ * the client sends its own key on its own request. This route exists only
+ * so that choice survives across devices: GET rehydrates the caller's own
+ * saved row(s) into their local settings store (see fetchOwnProviderDefaults
+ * in lib/store/settings.ts) instead of leaving it in one browser's storage.
  */
 import { NextRequest } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
-import { requireAdmin } from '@/lib/server/require-admin';
-import { mergeSystemProviderDefault, type SystemDefaultSection } from '@/lib/server/provider-config';
+import { blockLearnerAccess } from '@/lib/server/require-not-learner';
+import type { SystemDefaultSection } from '@/lib/server/provider-config';
 import { upsertSystemSettingsRow } from '@/lib/server/system-settings-store';
 import { createLogger } from '@/lib/logger';
 
-const log = createLogger('AdminSystemSettings');
+const log = createLogger('OwnProviderDefaults');
 
 const VALID_SECTIONS: SystemDefaultSection[] = ['providers', 'image', 'video', 'tts', 'asr', 'pdf'];
 
@@ -33,21 +33,30 @@ function isValidSection(value: unknown): value is SystemDefaultSection {
 }
 
 export async function GET() {
-  const blocked = await requireAdmin();
+  const blocked = await blockLearnerAccess();
   if (blocked) return blocked;
 
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return apiError('UNAUTHENTICATED', 401, 'Sign-in required');
+
+  // RLS (system_settings_owner_all) already restricts this to the caller's
+  // own rows, but an admin caller also matches system_settings_admin_all
+  // (every row) — the explicit filter keeps this response scoped to "my own
+  // choice" specifically, regardless of the caller's other privileges.
   const { data, error } = await supabase
     .from('system_settings')
-    .select('section, provider_id, model_id, updated_at')
-    .is('owner_id', null);
+    .select('section, provider_id, model_id, api_key, base_url, extra_config')
+    .eq('owner_id', user.id);
   if (error) return apiError('INTERNAL_ERROR', 500, error.message);
 
   return apiSuccess({ defaults: data ?? [] });
 }
 
 export async function POST(req: NextRequest) {
-  const blocked = await requireAdmin();
+  const blocked = await blockLearnerAccess();
   if (blocked) return blocked;
 
   try {
@@ -74,9 +83,9 @@ export async function POST(req: NextRequest) {
     } = await supabase.auth.getUser();
     if (!user) return apiError('UNAUTHENTICATED', 401, 'Sign-in required');
 
-    const { error: upsertError } = await upsertSystemSettingsRow(supabase, {
+    const { error } = await upsertSystemSettingsRow(supabase, {
       section,
-      ownerId: null,
+      ownerId: user.id,
       providerId,
       modelId,
       apiKey,
@@ -84,35 +93,17 @@ export async function POST(req: NextRequest) {
       extraConfig,
       updatedBy: user.id,
     });
-    if (upsertError) return apiError('INTERNAL_ERROR', 500, upsertError);
-
-    // Best-effort — the setting is already saved even if this write fails.
-    const { error: auditError } = await supabase.from('admin_audit_log').insert({
-      admin_id: user.id,
-      action: 'system_settings_change',
-      target_user_id: null,
-      details: { section, providerId, modelId: modelId ?? null },
-    });
-    if (auditError) log.warn('Failed to record audit log entry:', auditError);
-
-    mergeSystemProviderDefault(section, {
-      providerId,
-      apiKey,
-      baseUrl,
-      models: modelId ? [modelId] : undefined,
-      accessKeyId: extraConfig?.accessKeyId,
-      accessKeySecret: extraConfig?.accessKeySecret,
-    });
+    if (error) return apiError('INTERNAL_ERROR', 500, error);
 
     return apiSuccess({ section, providerId });
   } catch (err) {
-    log.error('Failed to save system setting:', err);
+    log.error('Failed to save own provider default:', err);
     return apiError('INTERNAL_ERROR', 500, err instanceof Error ? err.message : 'Unknown error');
   }
 }
 
 export async function DELETE(req: NextRequest) {
-  const blocked = await requireAdmin();
+  const blocked = await blockLearnerAccess();
   if (blocked) return blocked;
 
   try {
@@ -123,18 +114,21 @@ export async function DELETE(req: NextRequest) {
     }
 
     const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return apiError('UNAUTHENTICATED', 401, 'Sign-in required');
+
     const { error } = await supabase
       .from('system_settings')
       .delete()
       .eq('section', section)
-      .is('owner_id', null);
+      .eq('owner_id', user.id);
     if (error) return apiError('INTERNAL_ERROR', 500, error.message);
-
-    mergeSystemProviderDefault(section, null);
 
     return apiSuccess({ section });
   } catch (err) {
-    log.error('Failed to clear system setting:', err);
+    log.error('Failed to clear own provider default:', err);
     return apiError('INTERNAL_ERROR', 500, err instanceof Error ? err.message : 'Unknown error');
   }
 }

@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "فشل حفظ الإعداد الافتراضي للمتعلمين.",
     "clearLearnerDefault": "مسح الإعداد الافتراضي للمتعلمين",
     "learnerDefaultCleared": "تم مسح الإعداد الافتراضي للمتعلمين.",
-    "learnerDefaultClearFailed": "فشل مسح الإعداد الافتراضي للمتعلمين."
+    "learnerDefaultClearFailed": "فشل مسح الإعداد الافتراضي للمتعلمين.",
+    "saveAsMyDefault": "حفظ كإعدادي الافتراضي",
+    "myDefaultSaved": "تم الحفظ في حسابك — سيتبعك عبر الأجهزة.",
+    "myDefaultSaveFailed": "فشل حفظ الإعداد الافتراضي الخاص بك.",
+    "clearMyDefault": "مسح إعدادي الافتراضي",
+    "myDefaultCleared": "تم مسح إعدادك الافتراضي — تم الرجوع إلى إعداد المتعلم الافتراضي.",
+    "myDefaultClearFailed": "فشل مسح الإعداد الافتراضي الخاص بك."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

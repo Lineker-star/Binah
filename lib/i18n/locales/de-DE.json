@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "Der Lernenden-Standard konnte nicht gespeichert werden.",
     "clearLearnerDefault": "Lernenden-Standard entfernen",
     "learnerDefaultCleared": "Lernenden-Standard entfernt.",
-    "learnerDefaultClearFailed": "Der Lernenden-Standard konnte nicht entfernt werden."
+    "learnerDefaultClearFailed": "Der Lernenden-Standard konnte nicht entfernt werden.",
+    "saveAsMyDefault": "Als meinen Standard speichern",
+    "myDefaultSaved": "In deinem Konto gespeichert — begleitet dich auf allen Geräten.",
+    "myDefaultSaveFailed": "Dein Standard konnte nicht gespeichert werden.",
+    "clearMyDefault": "Meinen Standard entfernen",
+    "myDefaultCleared": "Dein Standard wurde entfernt — der Lernenden-Standard gilt wieder.",
+    "myDefaultClearFailed": "Dein Standard konnte nicht entfernt werden."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

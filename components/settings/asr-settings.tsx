@@ -35,6 +35,8 @@ import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 
 const log = createLogger('ASRSettings');
@@ -375,15 +377,28 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
         </div>
       )}
 
-      {isAdmin && !isServerConfigured && (
-        <SetAsLearnerDefaultButton
-          section="asr"
-          providerId={selectedProviderId}
-          apiKey={providerConfig?.apiKey}
-          baseUrl={providerConfig?.baseUrl}
-          modelId={providerConfig?.modelId}
-          disabled={requiresApiKey && !providerConfig?.apiKey}
-        />
+      {!isServerConfigured && (
+        <div className="flex flex-wrap items-center gap-2">
+          {isAdmin && (
+            <SetAsLearnerDefaultButton
+              section="asr"
+              providerId={selectedProviderId}
+              apiKey={providerConfig?.apiKey}
+              baseUrl={providerConfig?.baseUrl}
+              modelId={providerConfig?.modelId}
+              disabled={requiresApiKey && !providerConfig?.apiKey}
+            />
+          )}
+          <SaveAsMyDefaultButton
+            section="asr"
+            providerId={selectedProviderId}
+            apiKey={providerConfig?.apiKey}
+            baseUrl={providerConfig?.baseUrl}
+            modelId={providerConfig?.modelId}
+            disabled={requiresApiKey && !providerConfig?.apiKey}
+          />
+          <ClearMyDefaultButton section="asr" />
+        </div>
       )}
 
       {/* Model Selection — built-in providers */}

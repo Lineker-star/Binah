@@ -388,6 +388,16 @@ export interface SettingsState {
 
   // Server provider actions
   fetchServerProviders: () => Promise<void>;
+  /**
+   * Rehydrates the caller's OWN saved provider choice (BB.3) from
+   * /api/settings/provider-defaults into local state, so a parent's (or
+   * admin's) personal selection follows them across devices instead of
+   * living only in one browser. Distinct from fetchServerProviders: this
+   * never touches isServerConfigured/serverDisabled flags, only the plain
+   * config+selection a signed-in non-learner could already set by hand.
+   * No-op for a learner (they have no saved rows; the endpoint 403s anyway).
+   */
+  fetchOwnProviderDefaults: () => Promise<void>;
 }
 
 // Initialize default providers config
@@ -1976,6 +1986,83 @@ export const useSettingsStore = create<SettingsState>()(
           } catch (e) {
             // Silently fail — server providers are optional
             log.warn('Failed to fetch server providers:', e);
+          }
+        },
+
+        fetchOwnProviderDefaults: async () => {
+          try {
+            const res = await fetch('/api/settings/provider-defaults');
+            if (!res.ok) return; // 403 for a learner, or simply nothing saved yet
+            const { defaults } = (await res.json()) as {
+              defaults: Array<{
+                section: string;
+                provider_id: string;
+                model_id: string | null;
+                api_key: string | null;
+                base_url: string | null;
+                extra_config: { accessKeyId?: string; accessKeySecret?: string } | null;
+              }>;
+            };
+            if (!defaults?.length) return;
+
+            const actions = get();
+            for (const row of defaults) {
+              const apiKey = row.api_key || undefined;
+              const baseUrl = row.base_url || undefined;
+              switch (row.section) {
+                case 'providers':
+                  actions.setProviderConfig(row.provider_id as ProviderId, {
+                    apiKey: apiKey ?? '',
+                    baseUrl: baseUrl ?? '',
+                  });
+                  if (row.model_id) actions.setModel(row.provider_id as ProviderId, row.model_id);
+                  break;
+                case 'tts':
+                  actions.setTTSProviderConfig(row.provider_id as TTSProviderId, {
+                    apiKey,
+                    baseUrl,
+                    modelId: row.model_id || undefined,
+                  });
+                  actions.setTTSProvider(row.provider_id as TTSProviderId);
+                  break;
+                case 'asr':
+                  actions.setASRProviderConfig(row.provider_id as ASRProviderId, {
+                    apiKey,
+                    baseUrl,
+                    modelId: row.model_id || undefined,
+                  });
+                  actions.setASRProvider(row.provider_id as ASRProviderId);
+                  break;
+                case 'pdf':
+                  actions.setPDFProviderConfig(row.provider_id as PDFProviderId, {
+                    apiKey,
+                    baseUrl,
+                    accessKeyId: row.extra_config?.accessKeyId,
+                    accessKeySecret: row.extra_config?.accessKeySecret,
+                  });
+                  actions.setPDFProvider(row.provider_id as PDFProviderId);
+                  break;
+                case 'image':
+                  actions.setImageProviderConfig(row.provider_id as ImageProviderId, {
+                    apiKey,
+                    baseUrl,
+                  });
+                  actions.setImageProvider(row.provider_id as ImageProviderId);
+                  break;
+                case 'video':
+                  actions.setVideoProviderConfig(row.provider_id as VideoProviderId, {
+                    apiKey,
+                    baseUrl,
+                  });
+                  actions.setVideoProvider(row.provider_id as VideoProviderId);
+                  break;
+              }
+            }
+          } catch (e) {
+            // Silently fail — falls back to whatever local state already has,
+            // and ultimately to the BB.2 global default via the usual
+            // fetchServerProviders auto-adopt path.
+            log.warn('Failed to fetch own provider defaults:', e);
           }
         },
       };

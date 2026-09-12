@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "Falha ao salvar o padrão do aluno.",
     "clearLearnerDefault": "Limpar padrão do aluno",
     "learnerDefaultCleared": "Padrão do aluno removido.",
-    "learnerDefaultClearFailed": "Falha ao remover o padrão do aluno."
+    "learnerDefaultClearFailed": "Falha ao remover o padrão do aluno.",
+    "saveAsMyDefault": "Salvar como meu padrão",
+    "myDefaultSaved": "Salvo na sua conta — vai te acompanhar em todos os dispositivos.",
+    "myDefaultSaveFailed": "Falha ao salvar seu padrão.",
+    "clearMyDefault": "Limpar meu padrão",
+    "myDefaultCleared": "Seu padrão foi removido — seguindo o padrão do aluno novamente.",
+    "myDefaultClearFailed": "Falha ao remover seu padrão."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

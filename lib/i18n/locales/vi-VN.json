@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "Không thể lưu giá trị mặc định cho học viên.",
     "clearLearnerDefault": "Xóa giá trị mặc định cho học viên",
     "learnerDefaultCleared": "Đã xóa giá trị mặc định cho học viên.",
-    "learnerDefaultClearFailed": "Không thể xóa giá trị mặc định cho học viên."
+    "learnerDefaultClearFailed": "Không thể xóa giá trị mặc định cho học viên.",
+    "saveAsMyDefault": "Lưu làm giá trị của tôi",
+    "myDefaultSaved": "Đã lưu vào tài khoản của bạn — sẽ theo bạn trên mọi thiết bị.",
+    "myDefaultSaveFailed": "Không thể lưu giá trị mặc định của bạn.",
+    "clearMyDefault": "Xóa giá trị của tôi",
+    "myDefaultCleared": "Đã xóa giá trị của bạn — quay lại dùng giá trị mặc định cho học viên.",
+    "myDefaultClearFailed": "Không thể xóa giá trị mặc định của bạn."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

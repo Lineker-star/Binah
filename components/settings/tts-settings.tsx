@@ -29,6 +29,8 @@ import { useSettingsStore } from '@/lib/store/settings';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 import {
   TTS_PROVIDERS,
@@ -594,15 +596,28 @@ export function TTSSettings({ selectedProviderId, isAdmin }: TTSSettingsProps) {
         </div>
       )}
 
-      {isAdmin && !isServerConfigured && (
-        <SetAsLearnerDefaultButton
-          section="tts"
-          providerId={selectedProviderId}
-          apiKey={providerConfig?.apiKey}
-          baseUrl={providerConfig?.baseUrl}
-          modelId={providerConfig?.modelId}
-          disabled={requiresApiKey && !providerConfig?.apiKey}
-        />
+      {!isServerConfigured && (
+        <div className="flex flex-wrap items-center gap-2">
+          {isAdmin && (
+            <SetAsLearnerDefaultButton
+              section="tts"
+              providerId={selectedProviderId}
+              apiKey={providerConfig?.apiKey}
+              baseUrl={providerConfig?.baseUrl}
+              modelId={providerConfig?.modelId}
+              disabled={requiresApiKey && !providerConfig?.apiKey}
+            />
+          )}
+          <SaveAsMyDefaultButton
+            section="tts"
+            providerId={selectedProviderId}
+            apiKey={providerConfig?.apiKey}
+            baseUrl={providerConfig?.baseUrl}
+            modelId={providerConfig?.modelId}
+            disabled={requiresApiKey && !providerConfig?.apiKey}
+          />
+          <ClearMyDefaultButton section="tts" />
+        </div>
       )}
 
       {/* Available Models */}

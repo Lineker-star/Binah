@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "学習者のデフォルトを保存できませんでした。",
     "clearLearnerDefault": "学習者のデフォルトを解除",
     "learnerDefaultCleared": "学習者のデフォルトを解除しました。",
-    "learnerDefaultClearFailed": "学習者のデフォルトを解除できませんでした。"
+    "learnerDefaultClearFailed": "学習者のデフォルトを解除できませんでした。",
+    "saveAsMyDefault": "自分の設定として保存",
+    "myDefaultSaved": "アカウントに保存しました。どの端末でも引き継がれます。",
+    "myDefaultSaveFailed": "自分の設定を保存できませんでした。",
+    "clearMyDefault": "自分の設定を解除",
+    "myDefaultCleared": "自分の設定を解除しました。学習者のデフォルトに戻ります。",
+    "myDefaultClearFailed": "自分の設定を解除できませんでした。"
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

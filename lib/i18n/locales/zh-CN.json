@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "保存学生默认设置失败。",
     "clearLearnerDefault": "清除学生默认设置",
     "learnerDefaultCleared": "已清除学生默认设置。",
-    "learnerDefaultClearFailed": "清除学生默认设置失败。"
+    "learnerDefaultClearFailed": "清除学生默认设置失败。",
+    "saveAsMyDefault": "保存为我的设置",
+    "myDefaultSaved": "已保存到你的账户,将在所有设备上同步。",
+    "myDefaultSaveFailed": "保存你的设置失败。",
+    "clearMyDefault": "清除我的设置",
+    "myDefaultCleared": "已清除你的设置,重新使用学生默认设置。",
+    "myDefaultClearFailed": "清除你的设置失败。"
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

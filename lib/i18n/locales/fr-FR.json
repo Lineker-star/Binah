@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "Échec de l'enregistrement du réglage par défaut des apprenants.",
     "clearLearnerDefault": "Effacer le réglage par défaut des apprenants",
     "learnerDefaultCleared": "Réglage par défaut des apprenants effacé.",
-    "learnerDefaultClearFailed": "Échec de l'effacement du réglage par défaut des apprenants."
+    "learnerDefaultClearFailed": "Échec de l'effacement du réglage par défaut des apprenants.",
+    "saveAsMyDefault": "Enregistrer comme mon réglage",
+    "myDefaultSaved": "Enregistré sur votre compte — vous suivra sur tous vos appareils.",
+    "myDefaultSaveFailed": "Échec de l'enregistrement de votre réglage.",
+    "clearMyDefault": "Effacer mon réglage",
+    "myDefaultCleared": "Votre réglage a été effacé — le réglage par défaut des apprenants s'applique à nouveau.",
+    "myDefaultClearFailed": "Échec de l'effacement de votre réglage."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

@@ -26,6 +26,8 @@ import type { ImageProviderId } from '@/lib/media/types';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 
 interface ImageSettingsProps {
@@ -270,6 +272,14 @@ export function ImageSettings({ selectedProviderId, isAdmin }: ImageSettingsProp
                   disabled={requiresApiKey && !currentConfig?.apiKey}
                 />
               )}
+              <SaveAsMyDefaultButton
+                section="image"
+                providerId={selectedProviderId}
+                apiKey={currentConfig?.apiKey}
+                baseUrl={currentConfig?.baseUrl}
+                disabled={requiresApiKey && !currentConfig?.apiKey}
+              />
+              <ClearMyDefaultButton section="image" />
             </div>
             {testMessage && (
               <div

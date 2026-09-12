@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 
 /**
@@ -360,6 +362,22 @@ export function PDFSettings({ selectedProviderId, isAdmin }: PDFSettingsProps) {
               disabled={!isServerConfigured && !canTest}
             />
           )}
+          <SaveAsMyDefaultButton
+            section="pdf"
+            providerId={selectedProviderId}
+            apiKey={providerConfig?.apiKey}
+            baseUrl={providerConfig?.baseUrl}
+            extraConfig={
+              isAliDocMind
+                ? {
+                    accessKeyId: providerConfig?.accessKeyId,
+                    accessKeySecret: providerConfig?.accessKeySecret,
+                  }
+                : undefined
+            }
+            disabled={!isServerConfigured && !canTest}
+          />
+          <ClearMyDefaultButton section="pdf" />
 
           {/* Request URL Preview */}
           {(() => {

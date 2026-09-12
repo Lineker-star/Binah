@@ -40,6 +40,8 @@ import { cn } from '@/lib/utils';
 import {
   SetAsLearnerDefaultButton,
   ClearLearnerDefaultButton,
+  SaveAsMyDefaultButton,
+  ClearMyDefaultButton,
 } from './set-as-learner-default-button';
 
 interface ProviderConfigPanelProps {
@@ -282,6 +284,14 @@ export function ProviderConfigPanel({
                   disabled={requiresApiKey && !apiKey}
                 />
               )}
+              <SaveAsMyDefaultButton
+                section="providers"
+                providerId={provider.id}
+                apiKey={apiKey}
+                baseUrl={baseUrl}
+                disabled={requiresApiKey && !apiKey}
+              />
+              <ClearMyDefaultButton section="providers" />
             </div>
             {testMessage && (
               <div

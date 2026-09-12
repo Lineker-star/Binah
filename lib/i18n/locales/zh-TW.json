@@ -1945,7 +1945,13 @@
     "learnerDefaultSaveFailed": "儲存學生預設值失敗。",
     "clearLearnerDefault": "清除學生預設值",
     "learnerDefaultCleared": "已清除學生預設值。",
-    "learnerDefaultClearFailed": "清除學生預設值失敗。"
+    "learnerDefaultClearFailed": "清除學生預設值失敗。",
+    "saveAsMyDefault": "儲存為我的設定",
+    "myDefaultSaved": "已儲存至你的帳戶,將在所有裝置上同步。",
+    "myDefaultSaveFailed": "儲存你的設定失敗。",
+    "clearMyDefault": "清除我的設定",
+    "myDefaultCleared": "已清除你的設定,重新套用學生預設值。",
+    "myDefaultClearFailed": "清除你的設定失敗。"
   },
   "workspace": {
     "untitledCourse": "未命名课堂",

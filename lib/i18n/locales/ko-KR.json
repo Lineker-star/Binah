@@ -1971,7 +1971,13 @@
     "learnerDefaultSaveFailed": "학습자 기본값 저장에 실패했습니다.",
     "clearLearnerDefault": "학습자 기본값 지우기",
     "learnerDefaultCleared": "학습자 기본값이 지워졌습니다.",
-    "learnerDefaultClearFailed": "학습자 기본값 지우기에 실패했습니다."
+    "learnerDefaultClearFailed": "학습자 기본값 지우기에 실패했습니다.",
+    "saveAsMyDefault": "내 기본값으로 저장",
+    "myDefaultSaved": "계정에 저장되었습니다. 모든 기기에서 유지됩니다.",
+    "myDefaultSaveFailed": "내 기본값 저장에 실패했습니다.",
+    "clearMyDefault": "내 기본값 지우기",
+    "myDefaultCleared": "내 기본값이 지워졌습니다. 다시 학습자 기본값을 따릅니다.",
+    "myDefaultClearFailed": "내 기본값 지우기에 실패했습니다."
   },
   "workspace": {
     "untitledCourse": "未命名课堂",
