@@ -148,6 +148,10 @@ export async function POST(req: NextRequest) {
           .createSignedUrl(artifact.storage_path as string, SIGNED_URL_TTL_SECONDS);
         if (signError) throw signError;
         if (signed?.signedUrl) {
+          const { error: logError } = await supabase
+            .from('artifact_downloads')
+            .insert({ artifact_id: existingCert.artifact_id as string, learner_id: user.id });
+          if (logError) log.warn('Failed to record download event:', logError);
           return apiSuccess({ eligible: true, url: signed.signedUrl });
         }
       }
@@ -247,6 +251,12 @@ export async function POST(req: NextRequest) {
     if (!signed?.signedUrl) {
       return apiError('INTERNAL_ERROR', 500, 'Failed to sign certificate URL');
     }
+
+    // Best-effort — the signed URL is already minted even if this fails.
+    const { error: logError } = await supabase
+      .from('artifact_downloads')
+      .insert({ artifact_id: insertedArtifact.id as string, learner_id: user.id });
+    if (logError) log.warn('Failed to record download event:', logError);
 
     return apiSuccess({ eligible: true, url: signed.signedUrl });
   } catch (error) {

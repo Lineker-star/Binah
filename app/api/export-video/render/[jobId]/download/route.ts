@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { apiError } from '@/lib/server/api-response';
 import { proxyFetch } from '@/lib/server/proxy-fetch';
 import { resolveRenderServiceUrl } from '@/lib/server/render-service';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ExportVideo Download API');
@@ -39,13 +40,18 @@ export async function GET(req: NextRequest, context: { params: Promise<{ jobId: 
     // Presigned-URL artifact store: hand the redirect to the browser.
     if (upstream.status === 302 || upstream.status === 301) {
       const location = upstream.headers.get('location');
-      if (location) return NextResponse.redirect(location, 302);
+      if (location) {
+        await logVideoExportDownload(jobId);
+        return NextResponse.redirect(location, 302);
+      }
     }
 
     if (!upstream.ok || !upstream.body) {
       const status = upstream.status === 404 || upstream.status === 409 ? upstream.status : 502;
       return apiError('UPSTREAM_ERROR', status, 'Render output not available');
     }
+
+    await logVideoExportDownload(jobId);
 
     return new NextResponse(upstream.body, {
       status: 200,
@@ -62,5 +68,22 @@ export async function GET(req: NextRequest, context: { params: Promise<{ jobId: 
     clearTimeout(headerTimeout);
     log.error(`Failed to download render output ${jobId}:`, error);
     return apiError('UPSTREAM_ERROR', 502, 'Failed to reach render service');
+  }
+}
+
+/** Best-effort — the download itself already succeeded even if this fails. */
+async function logVideoExportDownload(jobId: string): Promise<void> {
+  try {
+    const supabase = await createServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+    const { error } = await supabase
+      .from('video_export_events')
+      .insert({ learner_id: user.id, job_id: jobId, event: 'downloaded' });
+    if (error) log.warn('Failed to record video export download event:', error);
+  } catch (error) {
+    log.warn('Failed to record video export download event:', error);
   }
 }

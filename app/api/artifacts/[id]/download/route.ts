@@ -44,6 +44,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       return apiError('INTERNAL_ERROR', 500, 'Failed to sign download URL');
     }
 
+    // Best-effort — the signed URL is already minted even if this fails.
+    const { error: logError } = await supabase
+      .from('artifact_downloads')
+      .insert({ artifact_id: artifact.id, learner_id: user.id });
+    if (logError) log.warn('Failed to record download event:', logError);
+
     return apiSuccess({ url: signed.signedUrl });
   } catch (error) {
     log.error('Failed to sign artifact download URL:', error);

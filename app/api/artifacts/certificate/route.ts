@@ -118,8 +118,10 @@ export async function POST(req: NextRequest) {
     if (existingError) throw existingError;
 
     let storagePath: string;
+    let artifactId: string;
     if (existing?.storage_path) {
       storagePath = existing.storage_path as string;
+      artifactId = existing.id as string;
     } else {
       const { data: profile } = await supabase
         .from('profiles')
@@ -140,15 +142,20 @@ export async function POST(req: NextRequest) {
         .upload(storagePath, pdfBytes, { contentType: 'application/pdf' });
       if (uploadError) throw uploadError;
 
-      const { error: insertError } = await admin.from('generated_artifacts').insert({
-        learner_id: user.id,
-        course_id: insertCourseId,
-        session_id: insertSessionId,
-        artifact_type: 'certificate',
-        storage_path: storagePath,
-        file_size_bytes: pdfBytes.byteLength,
-      });
+      const { data: inserted, error: insertError } = await admin
+        .from('generated_artifacts')
+        .insert({
+          learner_id: user.id,
+          course_id: insertCourseId,
+          session_id: insertSessionId,
+          artifact_type: 'certificate',
+          storage_path: storagePath,
+          file_size_bytes: pdfBytes.byteLength,
+        })
+        .select('id')
+        .single();
       if (insertError) throw insertError;
+      artifactId = inserted.id as string;
     }
 
     const { data: signed, error: signError } = await admin.storage
@@ -158,6 +165,12 @@ export async function POST(req: NextRequest) {
     if (!signed?.signedUrl) {
       return apiError('INTERNAL_ERROR', 500, 'Failed to sign certificate URL');
     }
+
+    // Best-effort — the signed URL is already minted even if this fails.
+    const { error: logError } = await supabase
+      .from('artifact_downloads')
+      .insert({ artifact_id: artifactId, learner_id: user.id });
+    if (logError) log.warn('Failed to record download event:', logError);
 
     return apiSuccess({ url: signed.signedUrl });
   } catch (error) {

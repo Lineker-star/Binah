@@ -3,6 +3,7 @@ import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { proxyFetch } from '@/lib/server/proxy-fetch';
 import { resolveRenderServiceUrl } from '@/lib/server/render-service';
 import { capBodyStream } from '@/lib/server/capped-stream';
+import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('ExportVideo Render API');
@@ -94,6 +95,20 @@ export async function POST(req: NextRequest) {
             ? 'INVALID_REQUEST'
             : 'UPSTREAM_ERROR';
       return apiError(code, status, 'Render service rejected the request', detail);
+    }
+
+    // Best-effort activity log — the render job is already accepted even if this fails.
+    if (typeof data.jobId === 'string') {
+      const supabase = await createServerClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { error: logError } = await supabase
+          .from('video_export_events')
+          .insert({ learner_id: user.id, job_id: data.jobId, event: 'created' });
+        if (logError) log.warn('Failed to record video export event:', logError);
+      }
     }
 
     return apiSuccess({ jobId: data.jobId, pollIntervalMs: 3000 }, 202);

@@ -49,6 +49,12 @@ export default function AdminLearnerListPage() {
         </div>
         <div className="flex shrink-0 items-center gap-4">
           <Link
+            href="/admin/activity"
+            className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
+          >
+            Activity →
+          </Link>
+          <Link
             href="/admin/role-requests"
             className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
           >
