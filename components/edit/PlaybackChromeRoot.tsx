@@ -17,7 +17,10 @@ import { getLearningSession, noteLearningSession } from '@/lib/classroom/learnin
 import { endSession } from '@/lib/supabase/learning-session';
 import { fetchCourse, updateCourseStatus } from '@/lib/supabase/courses';
 import { generateCourseFinalAssessment } from '@/lib/courses/final-assessment';
-import { getCertificateDownloadUrl } from '@/lib/supabase/certificates';
+import {
+  getCertificateDownloadUrl,
+  getCertificateExcellenceDownloadUrl,
+} from '@/lib/supabase/certificates';
 import { checkChapterCompletion } from '@/lib/supabase/chapter-completion';
 import { checkModuleCompletion } from '@/lib/supabase/module-completion';
 import { createLogger } from '@/lib/logger';
@@ -1228,23 +1231,40 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
           // Synthesizes one course_final assessment from the recorded quiz
           // score(s) — never blocks completion itself on this; a failure
-          // here just means no course-final row. The certificate route
-          // reads THIS row for its grade/overall_score, so it's sequenced
-          // after this settles (success or failure) rather than fired
-          // concurrently — otherwise a large course's certificate could
-          // generate before course_final exists. Pre-warming here is still
-          // best-effort either way: idempotent, so it never creates a
+          // here just means no course-final row.
+          const courseFinalDone = generateCourseFinalAssessment(target).catch((err) =>
+            log.warn('Failed to generate course-final assessment (ignored):', err),
+          );
+
+          // Plain Certificate of Completion: unconditional, exactly as
+          // before the Certificate of Excellence existed below — no
+          // lesson-count threshold, no score dependency, so it doesn't
+          // need to wait on course-final and fires right away for every
+          // completed course or session. Idempotent, so it never creates a
           // duplicate if the learner also clicks "Download Certificate"
-          // before this finishes, and the certificate route itself treats
-          // a still-missing course_final as pending rather than an error
-          // if this ordering is ever raced from another call path.
-          void generateCourseFinalAssessment(target)
-            .catch((err) => log.warn('Failed to generate course-final assessment (ignored):', err))
-            .finally(() => {
-              void getCertificateDownloadUrl(target).catch((err) =>
-                log.warn('Failed to pre-generate certificate (ignored):', err),
+          // before this finishes.
+          void getCertificateDownloadUrl(target).catch((err) =>
+            log.warn('Failed to pre-generate certificate (ignored):', err),
+          );
+
+          // Certificate of Excellence: a SEPARATE, ADDITIONAL certificate
+          // for courses over 10 lessons (grade/skills/serial code — see
+          // app/api/artifacts/certificate-excellence/route.ts), reading
+          // course_final's score. Sequenced after it settles rather than
+          // fired concurrently — otherwise a large course's certificate
+          // could generate before course_final exists. courseId-only: an
+          // ad-hoc session can never reach the threshold. The route itself
+          // still treats a still-missing course_final as pending rather
+          // than an error, for the on-demand Download button path that
+          // isn't sequenced behind this at all.
+          if ('courseId' in target) {
+            const excellenceCourseId = target.courseId;
+            void courseFinalDone.finally(() => {
+              void getCertificateExcellenceDownloadUrl({ courseId: excellenceCourseId }).catch(
+                (err) => log.warn('Failed to pre-generate certificate of excellence (ignored):', err),
               );
             });
+          }
 
           // Continuous Assessment / Exam: independent of the course-final
           // branch above — fire whenever THIS chapter's own last planned
