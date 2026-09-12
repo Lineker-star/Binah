@@ -33,10 +33,37 @@ function centeredText(
   page.drawText(text, { x: (PAGE_WIDTH - width) / 2, y, size, font, color });
 }
 
+/** Greedy word-wrap — pdf-lib has no built-in text flow. */
+function wrapText(text: string, maxWidth: number, size: number, font: PDFFont): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let current = '';
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (current && font.widthOfTextAtSize(candidate, size) > maxWidth) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
 export async function buildCertificatePdf(params: {
   learnerName: string;
   courseTitle: string;
   completionDate: Date;
+  /** Letter grade and overall score (0-100), from the course's final
+   *  assessment — undefined/null renders the certificate without a
+   *  grade line (e.g. score data not ready yet is never sent through). */
+  grade?: string | null;
+  overallScorePct?: number | null;
+  /** LLM-synthesized skills list; empty/absent omits the section. */
+  skillsAcquired?: string[] | null;
+  /** Unique verification code (see lib/artifacts/serial-code.ts). */
+  serialCode?: string | null;
 }): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const page = doc.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
@@ -91,6 +118,36 @@ export async function buildCertificatePdf(params: {
 
   centeredText(page, 'has successfully completed the course', PAGE_HEIGHT - 322, 12, font, muted);
   centeredText(page, params.courseTitle, PAGE_HEIGHT - 352, 18, bold, ink);
+
+  let cursorY = PAGE_HEIGHT - 392;
+
+  if (params.grade || params.overallScorePct != null) {
+    const gradeParts: string[] = [];
+    if (params.grade) gradeParts.push(`Grade: ${params.grade}`);
+    if (params.overallScorePct != null) {
+      gradeParts.push(`Overall Score: ${Math.round(params.overallScorePct)}%`);
+    }
+    centeredText(page, gradeParts.join('   ·   '), cursorY, 13, bold, brand);
+    cursorY -= 30;
+  }
+
+  if (params.skillsAcquired && params.skillsAcquired.length > 0) {
+    centeredText(page, 'SKILLS ACQUIRED', cursorY, 9, bold, muted);
+    cursorY -= 16;
+    const maxTextWidth = PAGE_WIDTH - innerInset * 2 - 80;
+    const lines = wrapText(params.skillsAcquired.join('   ·   '), maxTextWidth, 11, font).slice(
+      0,
+      3,
+    );
+    for (const line of lines) {
+      centeredText(page, line, cursorY, 11, font, ink);
+      cursorY -= 16;
+    }
+  }
+
+  if (params.serialCode) {
+    centeredText(page, `Certificate No. ${params.serialCode}`, outerInset + 64, 9, font, muted);
+  }
 
   const dateText = new Intl.DateTimeFormat('en-US', {
     dateStyle: 'long',

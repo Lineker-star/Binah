@@ -1228,17 +1228,23 @@ export const PlaybackChromeRoot = forwardRef<PlaybackChromeRootHandle, PlaybackC
 
           // Synthesizes one course_final assessment from the recorded quiz
           // score(s) — never blocks completion itself on this; a failure
-          // here just means no course-final row.
-          void generateCourseFinalAssessment(target).catch((err) =>
-            log.warn('Failed to generate course-final assessment (ignored):', err),
-          );
-          // Pre-warm the certificate so it's ready by the time the learner
-          // reaches a "Download Certificate" action — idempotent, so this
-          // never creates a duplicate if the learner also clicks download
-          // before this finishes.
-          void getCertificateDownloadUrl(target).catch((err) =>
-            log.warn('Failed to pre-generate certificate (ignored):', err),
-          );
+          // here just means no course-final row. The certificate route
+          // reads THIS row for its grade/overall_score, so it's sequenced
+          // after this settles (success or failure) rather than fired
+          // concurrently — otherwise a large course's certificate could
+          // generate before course_final exists. Pre-warming here is still
+          // best-effort either way: idempotent, so it never creates a
+          // duplicate if the learner also clicks "Download Certificate"
+          // before this finishes, and the certificate route itself treats
+          // a still-missing course_final as pending rather than an error
+          // if this ordering is ever raced from another call path.
+          void generateCourseFinalAssessment(target)
+            .catch((err) => log.warn('Failed to generate course-final assessment (ignored):', err))
+            .finally(() => {
+              void getCertificateDownloadUrl(target).catch((err) =>
+                log.warn('Failed to pre-generate certificate (ignored):', err),
+              );
+            });
 
           // Continuous Assessment / Exam: independent of the course-final
           // branch above — fire whenever THIS chapter's own last planned
