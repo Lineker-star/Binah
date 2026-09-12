@@ -24,6 +24,10 @@ interface RequestBody {
   lessonText: string;
   sessionId?: string | null;
   courseId?: string | null;
+  /** Set for a chapter-level export (multiple lessons' narration bundled
+   *  into one lessonText) instead of sessionId — see
+   *  lib/export/lesson-chapter-export.ts. */
+  chapterId?: string | null;
 }
 
 interface SynthesizedNotes {
@@ -97,6 +101,7 @@ Return a JSON object with this exact structure:
           learner_id: authUser.id,
           session_id: body.sessionId ?? null,
           course_id: body.courseId ?? null,
+          chapter_id: body.chapterId ?? null,
           artifact_type: 'lecture_notes_pdf',
           storage_path: objectPath,
           file_size_bytes: pdfBytes.byteLength,

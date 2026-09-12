@@ -98,6 +98,48 @@ export async function listLearnerSessions(): Promise<LearningSession[]> {
   return (data ?? []) as LearningSession[];
 }
 
+export type ChapterExportLesson = Pick<
+  LearningSession,
+  'id' | 'stage_id' | 'title' | 'lesson_number' | 'course_id' | 'source_chapter_index'
+> & { stage_id: string };
+
+/**
+ * The signed-in learner's own completed lessons for a whole book ingestion,
+ * grouped by source_chapter_index (0-based, matching book_chapters.chapter_
+ * number - 1) — the source data for per-lesson/per-chapter export (see
+ * lib/export/lesson-chapter-export.ts), which loads each lesson's own
+ * scenes from IndexedDB by stage_id and bundles them together. One query
+ * for the whole book rather than one per chapter, since a Chapter Review
+ * page renders every chapter at once.
+ *
+ * Uses the same source_ingestion_id + source_chapter_index join every
+ * other chapter-scoped feature in this app already uses (lib/supabase/
+ * chapter-completion.ts, module-completion.ts) — learning_sessions.
+ * source_chapter_id exists as a column but is never written by any code
+ * path, so it's not a usable join key.
+ */
+export async function listIngestionLessonsByChapter(
+  sourceIngestionId: string,
+): Promise<Map<number, ChapterExportLesson[]>> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('learning_sessions')
+    .select('id, stage_id, title, lesson_number, course_id, source_chapter_index')
+    .eq('source_ingestion_id', sourceIngestionId)
+    .eq('status', 'completed')
+    .order('lesson_number', { ascending: true });
+  if (error) throw error;
+
+  const byChapter = new Map<number, ChapterExportLesson[]>();
+  for (const row of data ?? []) {
+    if (!row.stage_id || row.source_chapter_index == null) continue;
+    const list = byChapter.get(row.source_chapter_index) ?? [];
+    list.push(row as ChapterExportLesson);
+    byChapter.set(row.source_chapter_index, list);
+  }
+  return byChapter;
+}
+
 /** Soft-delete one session from the learner's own history view. */
 export async function removeSessionFromHistory(sessionId: string): Promise<void> {
   const supabase = createClient();

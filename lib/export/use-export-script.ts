@@ -178,6 +178,83 @@ export async function buildDocxBlob(stageName: string, scripts: SceneScript[]): 
 }
 
 /**
+ * One lesson's worth of scripts, labeled for a multi-lesson (chapter-level)
+ * export — see lib/export/lesson-chapter-export.ts. Kept separate from
+ * `buildDocxDocument`/`buildMarkdown` above (rather than generalizing them)
+ * so the single-lesson export path, which those two also serve, is
+ * untouched by this addition.
+ */
+export interface ScriptSection {
+  heading: string;
+  scripts: SceneScript[];
+}
+
+/** Serialize multiple lessons' scripts as one Markdown document: title > lesson > scene. */
+export function buildMultiSectionMarkdown(title: string, sections: ScriptSection[]): string {
+  const lines = [`# ${sanitizeMarkdownHeading(title)}`];
+  for (const section of sections) {
+    lines.push('', `## ${sanitizeMarkdownHeading(section.heading)}`);
+    for (const script of section.scripts) {
+      if (!script.text) continue;
+      lines.push('', `### ${sanitizeMarkdownHeading(script.sceneTitle)}`, '');
+      const paragraphs = normalizeLineEndings(script.text)
+        .split(/\n{2,}/)
+        .map((paragraph) => paragraph.replace(/\n/g, ' ').trim())
+        .filter(Boolean);
+      for (const paragraph of paragraphs) {
+        lines.push(paragraph, '');
+      }
+    }
+  }
+  return lines
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function buildMultiSectionDocxDocument(
+  title: string,
+  sections: ScriptSection[],
+  api: DocxApi,
+): InstanceType<DocxApi['Document']> {
+  const children = [new api.Paragraph({ text: title, heading: api.HeadingLevel.HEADING_1 })];
+  for (const section of sections) {
+    children.push(
+      new api.Paragraph({ text: section.heading, heading: api.HeadingLevel.HEADING_2 }),
+    );
+    for (const script of section.scripts) {
+      if (!script.text) continue;
+      children.push(
+        new api.Paragraph({ text: script.sceneTitle, heading: api.HeadingLevel.HEADING_3 }),
+      );
+      for (const raw of normalizeLineEndings(script.text).split(/\n{2,}/)) {
+        const paragraph = raw.trim();
+        if (!paragraph) continue;
+        const lines = paragraph.split('\n');
+        children.push(
+          new api.Paragraph({
+            children: lines.map(
+              (line, index) => new api.TextRun({ text: line, break: index > 0 ? 1 : undefined }),
+            ),
+          }),
+        );
+      }
+    }
+  }
+  return new api.Document({ sections: [{ children }] });
+}
+
+/** Build a genuine OOXML DOCX blob for a multi-lesson (chapter-level) export. */
+export async function buildMultiSectionDocxBlob(
+  title: string,
+  sections: ScriptSection[],
+): Promise<Blob> {
+  const api = await import('docx');
+  const document = buildMultiSectionDocxDocument(title, sections, api);
+  return api.Packer.toBlob(document);
+}
+
+/**
  * Build a safe download file name: `<stem>-script.<ext>`. Illegal filename
  * characters are stripped, whitespace runs collapse to a single `-`, and an
  * empty stem falls back to `script`.
