@@ -2,18 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowUp,
-  Check,
   ChevronDown,
-  Pencil,
   Settings,
   Sun,
   Moon,
   Monitor,
-  ChevronUp,
   Sparkles,
   Loader2,
   GraduationCap,
@@ -27,7 +23,6 @@ import {
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { createLogger } from '@/lib/logger';
-import { Textarea as UITextarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { SettingsDialog } from '@/components/settings';
 import type { SettingsSection } from '@/lib/types/settings';
@@ -49,7 +44,6 @@ import type {
 import { useSettingsStore } from '@/lib/store/settings';
 import { hasUsableLLMProvider } from '@/lib/store/settings-validation';
 import { useUserProfileStore } from '@/lib/store/user-profile';
-import { AvatarPicker } from '@/components/avatar-picker';
 import { RecentSessions } from '@/components/discovery/recent-sessions';
 import { ReturnNudgeBanner } from '@/components/discovery/return-nudge-banner';
 import { toast } from 'sonner';
@@ -148,17 +142,7 @@ function HomePage() {
   const [uploadingTextbook, setUploadingTextbook] = useState(false);
   const textbookInputRef = useRef<HTMLInputElement>(null);
 
-  // Same signed-out gate as handleGenerate: learner_id RLS requires a real
-  // session, so send them to sign in first rather than let the upload fail
-  // with a raw 401. Unlike a text requirement, a picked File can't survive
-  // the redirect — "resume" here means reopening the file picker on return
-  // (see the resume=upload-textbook effect below), not re-submitting bytes
-  // that were never captured.
   const handleUploadTextbookClick = () => {
-    if (!authLoading && !authUser) {
-      router.push(`/auth?mode=sign-up&returnTo=${encodeURIComponent('/?resume=upload-textbook')}`);
-      return;
-    }
     textbookInputRef.current?.click();
   };
 
@@ -208,8 +192,8 @@ function HomePage() {
     if (workbenchEntryEnabled) router.prefetch('/workspace');
   }, [router, workbenchEntryEnabled]);
   // Real Supabase auth/profile state, kept live via onAuthStateChange so the
-  // GreetingBar pill (and the guest sign-in/up CTAs) update immediately after
-  // a sign-in, sign-up, or log-out — not just after a full page reload.
+  // GreetingBar pill updates immediately after a sign-in, sign-up, or
+  // log-out — not just after a full page reload.
   const [authUser, setAuthUser] = useState<{ id: string; email: string | null } | null>(null);
   const [authProfile, setAuthProfile] = useState<{
     displayName: string | null;
@@ -269,11 +253,8 @@ function HomePage() {
   const { cachedValue: cachedRequirement, updateCache: updateRequirementCache } =
     useDraftCache<string>({ key: 'requirementDraft' });
 
-  // Draft cache for Structured Course settings — without this, a signed-out
-  // learner who turns on Structured Course, picks a lesson count, then gets
-  // sent through the sign-in redirect above would resume as a plain ad-hoc
-  // generation on return (only the requirement text survives otherwise):
-  // silently the wrong kind of course, not the one they asked for.
+  // Draft cache for Structured Course settings — survives a reload or
+  // accidental navigation away mid-setup, same as requirementDraft above.
   const { cachedValue: cachedCourseDraft, updateCache: updateCourseDraftCache } =
     useDraftCache<CourseModeDraft>({ key: 'courseModeDraft' });
 
@@ -481,16 +462,6 @@ function HomePage() {
   };
 
   const handleGenerate = async () => {
-    // learning_sessions RLS requires auth.uid() = learner_id — an anonymous
-    // request cannot create a session row at all. Rather than let generation
-    // proceed untracked (createLearningSession previously no-op'd silently
-    // for signed-out visitors), gate the action itself: send them to sign in
-    // first, then automatically resume this exact action on return (see the
-    // `resume=1` effect below) instead of dropping them on a bare login page.
-    if (!authLoading && !authUser) {
-      router.push(`/auth?mode=sign-up&returnTo=${encodeURIComponent('/?resume=1')}`);
-      return;
-    }
     // No model/provider guard here: generation is gated by `canGenerate`
     // (requires a usable provider), and under the #580 invariant a usable
     // provider always has a concrete model. State A (no usable provider)
@@ -624,43 +595,6 @@ function HomePage() {
   };
 
   const canGenerate = !!form.requirement.trim() && hasUsableProvider;
-
-  // Completes the action a signed-out visitor was blocked on above: after
-  // /auth sends them back to `/?resume=1`, re-fire Enter Classroom once
-  // they're actually signed in and their draft requirement has rehydrated
-  // (form.requirement is restored from the requirementDraft cache in a
-  // separate effect, so canGenerate may only flip true a render or two
-  // after mount — this effect re-checks on every relevant dependency change
-  // rather than a one-shot check that could fire too early).
-  const resumeIntentRef = useRef<boolean | null>(null);
-  useEffect(() => {
-    if (resumeIntentRef.current === null) {
-      resumeIntentRef.current = new URLSearchParams(window.location.search).get('resume') === '1';
-      if (resumeIntentRef.current) router.replace('/');
-    }
-    if (!resumeIntentRef.current) return;
-    if (authLoading || !authUser) return;
-    if (!canGenerate || preparingGenerate) return;
-    resumeIntentRef.current = false;
-    void handleGenerate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading, authUser, canGenerate, preparingGenerate, router]);
-
-  // Same pattern, for the "Upload a textbook" gate above: after /auth sends
-  // them back to `/?resume=upload-textbook`, reopen the file picker once
-  // they're actually signed in.
-  const uploadResumeIntentRef = useRef<boolean | null>(null);
-  useEffect(() => {
-    if (uploadResumeIntentRef.current === null) {
-      uploadResumeIntentRef.current =
-        new URLSearchParams(window.location.search).get('resume') === 'upload-textbook';
-      if (uploadResumeIntentRef.current) router.replace('/');
-    }
-    if (!uploadResumeIntentRef.current) return;
-    if (authLoading || !authUser) return;
-    uploadResumeIntentRef.current = false;
-    textbookInputRef.current?.click();
-  }, [authLoading, authUser, router]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -863,31 +797,11 @@ function HomePage() {
             <div className="relative z-20 flex items-start justify-between">
               <div className="flex items-center">
                 <GreetingBar
-                  authLoading={authLoading}
                   authUser={authUser}
                   authProfile={authProfile}
                   onOpenSettings={openSettingsSection}
                   onLogOut={handleLogOut}
                 />
-                {/* Always-visible sign-in/up entry point for guests — not
-                    buried behind the pill's dropdown, per the discoverability
-                    fix (the pill alone wasn't a reachable enough affordance). */}
-                {!authLoading && !authUser && (
-                  <div className="flex items-center gap-1.5 pt-3.5">
-                    <Link
-                      href="/auth?mode=sign-in"
-                      className="text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1.5 rounded-full hover:bg-muted/60"
-                    >
-                      {t('settings.signInLink')}
-                    </Link>
-                    <Link
-                      href="/auth?mode=sign-up"
-                      className="text-[12px] font-medium text-white bg-violet-600 hover:bg-violet-700 transition-colors px-3 py-1.5 rounded-full"
-                    >
-                      {t('auth.signUpCta')}
-                    </Link>
-                  </div>
-                )}
               </div>
               <div className="pr-3 pt-3.5 shrink-0">
                 <AgentBar />
@@ -1161,46 +1075,32 @@ function HomePage() {
   );
 }
 
-// ─── Greeting Bar — avatar + "Hi, Name", click to edit in-place ────
+// ─── Greeting Bar — avatar + "Hi, Name", click to open the profile menu ────
+// Every visitor is signed in by the time this renders (middleware gates the
+// whole app), so this only ever shows the real Supabase profile — no guest
+// fallback branch. `displayName`/`displayAvatar` still degrade gracefully
+// via the `||` chains below during the brief window before authUser/
+// authProfile populate client-side.
 interface GreetingBarProps {
-  authLoading: boolean;
   authUser: { id: string; email: string | null } | null;
   authProfile: { displayName: string | null; avatarUrl: string | null } | null;
   onOpenSettings: (section: SettingsSection) => void;
   onLogOut: () => void;
 }
 
-function GreetingBar({
-  authLoading,
-  authUser,
-  authProfile,
-  onOpenSettings,
-  onLogOut,
-}: GreetingBarProps) {
+function GreetingBar({ authUser, authProfile, onOpenSettings, onLogOut }: GreetingBarProps) {
   const { t } = useI18n();
   const router = useRouter();
-  // Guest-mode local store — the fallback used ONLY for display when there's
-  // no Supabase session. A signed-in pill always reflects the real profiles
-  // row below, never this store, so it never drifts from actual auth state.
+  // Fallback avatar source for a signed-in user who hasn't set a Supabase
+  // avatar_url yet — the same local store components/user-profile.tsx (the
+  // real Profile settings tab) edits.
   const avatar = useUserProfileStore((s) => s.avatar);
-  const nickname = useUserProfileStore((s) => s.nickname);
-  const bio = useUserProfileStore((s) => s.bio);
-  const setAvatar = useUserProfileStore((s) => s.setAvatar);
-  const setNickname = useUserProfileStore((s) => s.setNickname);
-  const setBio = useUserProfileStore((s) => s.setBio);
 
   const [open, setOpen] = useState(false);
-  const [editingName, setEditingName] = useState(false);
-  const [nameDraft, setNameDraft] = useState('');
-  const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
-  const nameInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const signedIn = !authLoading && !!authUser;
-  const displayName = signedIn
-    ? authProfile?.displayName || authUser?.email || t('profile.defaultNickname')
-    : nickname || t('profile.defaultNickname');
-  const displayAvatar = signedIn ? authProfile?.avatarUrl || avatar : avatar;
+  const displayName = authProfile?.displayName || authUser?.email || t('profile.defaultNickname');
+  const displayAvatar = authProfile?.avatarUrl || avatar;
 
   // Click-outside to collapse
   useEffect(() => {
@@ -1208,24 +1108,11 @@ function GreetingBar({
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
-        setEditingName(false);
-        setAvatarPickerOpen(false);
       }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
-
-  const startEditName = () => {
-    setNameDraft(nickname);
-    setEditingName(true);
-    setTimeout(() => nameInputRef.current?.focus(), 50);
-  };
-
-  const commitName = () => {
-    setNickname(nameDraft.trim());
-    setEditingName(false);
-  };
 
   return (
     <div ref={containerRef} className="relative pl-4 pr-2 pt-3.5 pb-1 w-auto">
@@ -1239,11 +1126,6 @@ function GreetingBar({
             <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-border/30 group-hover:ring-violet-400/60 dark:group-hover:ring-violet-400/40 transition-all duration-300">
               <img src={displayAvatar} alt="" className="size-full object-cover" />
             </div>
-            {!signedIn && (
-              <div className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/40 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
-                <Pencil className="size-[7px] text-muted-foreground/70" />
-              </div>
-            )}
           </div>
           <div className="flex-1 min-w-0">
             <Tooltip>
@@ -1256,7 +1138,7 @@ function GreetingBar({
                 </span>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={4}>
-                {signedIn ? t('settings.profile.nav') : t('profile.editTooltip')}
+                {t('settings.profile.nav')}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -1274,184 +1156,61 @@ function GreetingBar({
             className="absolute left-4 top-3.5 z-50 w-64"
           >
             <div className="rounded-2xl bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_8px_-2px_rgba(0,0,0,0.3)] px-2.5 py-2">
-              {signedIn ? (
-                <div className="flex flex-col gap-0.5">
-                  {/* ── Row: avatar + name (read-only — edit via Profile) ── */}
-                  <div className="flex items-center gap-2.5 px-1 pb-2">
-                    <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 shrink-0">
-                      <img src={displayAvatar} alt="" className="size-full object-cover" />
-                    </div>
-                    <span className="text-[13px] font-semibold text-foreground/85 truncate">
-                      {displayName}
-                    </span>
+              <div className="flex flex-col gap-0.5">
+                {/* ── Row: avatar + name (read-only — edit via Profile) ── */}
+                <div className="flex items-center gap-2.5 px-1 pb-2">
+                  <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 shrink-0">
+                    <img src={displayAvatar} alt="" className="size-full object-cover" />
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpen(false);
-                      onOpenSettings('profile');
-                    }}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
-                  >
-                    <UserIcon className="size-3.5 text-muted-foreground" />
-                    {t('settings.profile.nav')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpen(false);
-                      onOpenSettings('progress');
-                    }}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
-                  >
-                    <TrendingUp className="size-3.5 text-muted-foreground" />
-                    {t('settings.progress.nav')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpen(false);
-                      router.push('/history');
-                    }}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
-                  >
-                    <History className="size-3.5 text-muted-foreground" />
-                    {t('history.navLabel')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpen(false);
-                      onLogOut();
-                    }}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left"
-                  >
-                    <LogOut className="size-3.5" />
-                    {t('settings.signOut')}
-                  </button>
+                  <span className="text-[13px] font-semibold text-foreground/85 truncate">
+                    {displayName}
+                  </span>
                 </div>
-              ) : (
-                <>
-                  {/* ── Row: avatar + name ── */}
-                  <div
-                    className="flex items-center gap-2.5 cursor-pointer transition-all duration-200"
-                    onClick={() => {
-                      setOpen(false);
-                      setEditingName(false);
-                      setAvatarPickerOpen(false);
-                    }}
-                  >
-                    {/* Avatar */}
-                    <div
-                      className="shrink-0 relative cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAvatarPickerOpen(!avatarPickerOpen);
-                      }}
-                    >
-                      <div className="size-8 rounded-full overflow-hidden ring-[1.5px] ring-violet-300/70 dark:ring-violet-500/40 transition-all duration-300">
-                        <img src={avatar} alt="" className="size-full object-cover" />
-                      </div>
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-white dark:bg-slate-800 border border-border/60 flex items-center justify-center"
-                      >
-                        <ChevronDown
-                          className={cn(
-                            'size-2 text-muted-foreground/70 transition-transform duration-200',
-                            avatarPickerOpen && 'rotate-180',
-                          )}
-                        />
-                      </motion.div>
-                    </div>
-
-                    {/* Text */}
-                    <div className="flex-1 min-w-0">
-                      {editingName ? (
-                        <div
-                          className="flex items-center gap-1.5"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <input
-                            ref={nameInputRef}
-                            value={nameDraft}
-                            onChange={(e) => setNameDraft(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') commitName();
-                              if (e.key === 'Escape') {
-                                setEditingName(false);
-                              }
-                            }}
-                            onBlur={commitName}
-                            maxLength={20}
-                            placeholder={t('profile.defaultNickname')}
-                            className="flex-1 min-w-0 h-6 bg-transparent border-b border-border/80 text-[13px] font-semibold text-foreground outline-none placeholder:text-muted-foreground/40"
-                          />
-                          <button
-                            onClick={commitName}
-                            className="shrink-0 size-5 rounded flex items-center justify-center text-violet-500 hover:bg-violet-100 dark:hover:bg-violet-900/30"
-                          >
-                            <Check className="size-3" />
-                          </button>
-                        </div>
-                      ) : (
-                        <span
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            startEditName();
-                          }}
-                          className="group/name inline-flex items-center gap-1 cursor-pointer"
-                        >
-                          <span className="text-[13px] font-semibold text-foreground/85 group-hover/name:text-foreground transition-colors">
-                            {displayName}
-                          </span>
-                          <Pencil className="size-2.5 text-muted-foreground/30 opacity-0 group-hover/name:opacity-100 transition-opacity" />
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Collapse arrow */}
-                    <motion.div
-                      initial={{ opacity: 0, y: -2 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="shrink-0 size-6 rounded-full flex items-center justify-center hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
-                    >
-                      <ChevronUp className="size-3.5 text-muted-foreground/50" />
-                    </motion.div>
-                  </div>
-
-                  {/* ── Expandable content ── */}
-                  <div className="pt-2" onClick={(e) => e.stopPropagation()}>
-                    {/* Avatar picker */}
-                    <AnimatePresence>
-                      {avatarPickerOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.15, ease: 'easeInOut' }}
-                          className="overflow-hidden"
-                        >
-                          <div className="p-1 pb-2.5">
-                            <AvatarPicker value={avatar} onChange={setAvatar} />
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    {/* Bio */}
-                    <UITextarea
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      placeholder={t('profile.bioPlaceholder')}
-                      maxLength={200}
-                      rows={2}
-                      className="resize-none border-border/40 bg-transparent min-h-[72px] !text-[13px] !leading-relaxed placeholder:!text-[11px] placeholder:!leading-relaxed focus-visible:ring-1 focus-visible:ring-border/60"
-                    />
-                  </div>
-                </>
-              )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onOpenSettings('profile');
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                >
+                  <UserIcon className="size-3.5 text-muted-foreground" />
+                  {t('settings.profile.nav')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onOpenSettings('progress');
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                >
+                  <TrendingUp className="size-3.5 text-muted-foreground" />
+                  {t('settings.progress.nav')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    router.push('/history');
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-foreground/80 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors text-left"
+                >
+                  <History className="size-3.5 text-muted-foreground" />
+                  {t('history.navLabel')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    onLogOut();
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left"
+                >
+                  <LogOut className="size-3.5" />
+                  {t('settings.signOut')}
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
