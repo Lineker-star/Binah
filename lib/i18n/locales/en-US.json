@@ -2224,7 +2224,9 @@
     "moduleHeading": "Module {{number}}",
     "lessonCount": "Lessons: {{count}}",
     "totalLessonsWithModules": "{{lessons}} lessons across {{modules}} modules, {{chapters}} chapters",
-    "totalLessonsNoModules": "{{lessons}} lessons across {{chapters}} chapters"
+    "totalLessonsNoModules": "{{lessons}} lessons across {{chapters}} chapters",
+    "downloadLesson": "Download lesson",
+    "downloadChapter": "Download chapter"
   },
   "continuousAssessment": {
     "generating": "Generating your assessment…",

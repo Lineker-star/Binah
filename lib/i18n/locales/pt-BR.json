@@ -2224,7 +2224,9 @@
     "moduleHeading": "Módulo {{number}}",
     "lessonCount": "Lições: {{count}}",
     "totalLessonsWithModules": "{{lessons}} aulas em {{modules}} módulos, {{chapters}} capítulos",
-    "totalLessonsNoModules": "{{lessons}} aulas em {{chapters}} capítulos"
+    "totalLessonsNoModules": "{{lessons}} aulas em {{chapters}} capítulos",
+    "downloadLesson": "Baixar aula",
+    "downloadChapter": "Baixar capítulo"
   },
   "continuousAssessment": {
     "generating": "Gerando sua avaliação…",

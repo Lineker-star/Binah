@@ -2224,7 +2224,9 @@
     "moduleHeading": "Модуль {{number}}",
     "lessonCount": "Уроков: {{count}}",
     "totalLessonsWithModules": "{{lessons}} уроков в {{modules}} модулях, {{chapters}} главах",
-    "totalLessonsNoModules": "{{lessons}} уроков в {{chapters}} главах"
+    "totalLessonsNoModules": "{{lessons}} уроков в {{chapters}} главах",
+    "downloadLesson": "Скачать урок",
+    "downloadChapter": "Скачать главу"
   },
   "continuousAssessment": {
     "generating": "Формируем вашу оценку…",

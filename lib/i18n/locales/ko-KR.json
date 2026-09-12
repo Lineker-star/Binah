@@ -2224,7 +2224,9 @@
     "moduleHeading": "모듈 {{number}}",
     "lessonCount": "레슨 수: {{count}}",
     "totalLessonsWithModules": "{{modules}}개 모듈, {{chapters}}개 챕터에 걸쳐 {{lessons}}개 레슨",
-    "totalLessonsNoModules": "{{chapters}}개 챕터에 걸쳐 {{lessons}}개 레슨"
+    "totalLessonsNoModules": "{{chapters}}개 챕터에 걸쳐 {{lessons}}개 레슨",
+    "downloadLesson": "레슨 다운로드",
+    "downloadChapter": "챕터 다운로드"
   },
   "continuousAssessment": {
     "generating": "평가를 생성하는 중…",

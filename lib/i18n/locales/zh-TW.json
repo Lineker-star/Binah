@@ -2224,7 +2224,9 @@
     "moduleHeading": "模組 {{number}}",
     "lessonCount": "課程數：{{count}}",
     "totalLessonsWithModules": "共 {{lessons}} 堂課，涵蓋 {{modules}} 個模組、{{chapters}} 章",
-    "totalLessonsNoModules": "共 {{lessons}} 堂課，涵蓋 {{chapters}} 章"
+    "totalLessonsNoModules": "共 {{lessons}} 堂課，涵蓋 {{chapters}} 章",
+    "downloadLesson": "下載課程",
+    "downloadChapter": "下載章節"
   },
   "continuousAssessment": {
     "generating": "正在產生評估…",

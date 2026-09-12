@@ -2224,7 +2224,9 @@
     "moduleHeading": "模块 {{number}}",
     "lessonCount": "课程数：{{count}}",
     "totalLessonsWithModules": "共 {{lessons}} 节课，涵盖 {{modules}} 个模块、{{chapters}} 章",
-    "totalLessonsNoModules": "共 {{lessons}} 节课，涵盖 {{chapters}} 章"
+    "totalLessonsNoModules": "共 {{lessons}} 节课，涵盖 {{chapters}} 章",
+    "downloadLesson": "下载课程",
+    "downloadChapter": "下载章节"
   },
   "continuousAssessment": {
     "generating": "正在生成评估…",

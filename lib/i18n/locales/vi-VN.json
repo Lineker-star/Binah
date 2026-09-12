@@ -2224,7 +2224,9 @@
     "moduleHeading": "Học phần {{number}}",
     "lessonCount": "Số bài học: {{count}}",
     "totalLessonsWithModules": "{{lessons}} bài học trong {{modules}} học phần, {{chapters}} chương",
-    "totalLessonsNoModules": "{{lessons}} bài học trong {{chapters}} chương"
+    "totalLessonsNoModules": "{{lessons}} bài học trong {{chapters}} chương",
+    "downloadLesson": "Tải bài học",
+    "downloadChapter": "Tải chương"
   },
   "continuousAssessment": {
     "generating": "Đang tạo bài đánh giá…",

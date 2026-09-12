@@ -2224,7 +2224,9 @@
     "moduleHeading": "الوحدة {{number}}",
     "lessonCount": "الدروس: {{count}}",
     "totalLessonsWithModules": "{{lessons}} درسًا موزعة على {{modules}} وحدات و{{chapters}} فصول",
-    "totalLessonsNoModules": "{{lessons}} درسًا موزعة على {{chapters}} فصول"
+    "totalLessonsNoModules": "{{lessons}} درسًا موزعة على {{chapters}} فصول",
+    "downloadLesson": "تنزيل الدرس",
+    "downloadChapter": "تنزيل الفصل"
   },
   "continuousAssessment": {
     "generating": "جارٍ إنشاء التقييم…",
