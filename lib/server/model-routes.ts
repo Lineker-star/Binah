@@ -141,6 +141,7 @@ export const LLM_STAGES = [
   'course-final-assessment',
   'continuous-assessment',
   'exam',
+  'certificate-skills',
   'assessment-recommendation',
   'lecture-notes',
   'textbook-chapter-fallback',
