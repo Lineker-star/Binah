@@ -54,15 +54,15 @@ Return a JSON object with this exact structure:
 
 Only include genuine chapter-level headings. Skip running headers/footers, captions, and anything that repeats on many pages.`;
 
-  const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-    req,
-    {},
-    'textbook-chapter-fallback',
-  );
+  const {
+    model: languageModel,
+    thinkingConfig,
+    fallbackModels,
+  } = await resolveModelFromRequest(req, {}, 'textbook-chapter-fallback');
   const response = await callLLM(
     { model: languageModel, system, prompt: user },
     'textbook-chapter-fallback',
-    undefined,
+    { fallbackModels },
     thinkingConfig,
   );
 

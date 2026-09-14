@@ -43,11 +43,11 @@ export async function POST(req: NextRequest) {
     }
     const title = body.title?.trim() || 'Lecture Notes';
 
-    const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      body,
-      'lecture-notes',
-    );
+    const {
+      model: languageModel,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, body, 'lecture-notes');
 
     const system = `You are a teaching assistant creating lecture notes from a lesson's narration script. Produce a concise, well-organized summary of the lesson's key points -- not a verbatim copy of the narration. Return ONLY valid JSON, no markdown or explanation.`;
     const user = `Lesson: "${title}"
@@ -66,7 +66,7 @@ Return a JSON object with this exact structure:
     const response = await callLLM(
       { model: languageModel, system, prompt: user },
       'lecture-notes',
-      undefined,
+      { fallbackModels },
       thinkingConfig,
     );
 

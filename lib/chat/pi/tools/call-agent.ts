@@ -533,6 +533,8 @@ export function buildCallAgentTool(opts: {
   agentConfigs: AgentConfig[];
   send: SendEvent;
   languageModel: LanguageModel;
+  /** Ordered failover chain — see CallLlmStreamFnOptions.fallbackModels. */
+  fallbackModels?: LanguageModel[];
   onAgentDone: (summary: AgentTurnSummary) => void;
   onActionDone: (record?: WhiteboardActionRecord) => void;
   thinkingConfig: ThinkingConfig;
@@ -772,6 +774,7 @@ export function buildCallAgentTool(opts: {
           nativeResult = await runNativeChild({
             streamFn: createCallLlmStreamFn({
               languageModel: opts.languageModel,
+              fallbackModels: opts.fallbackModels,
               source: 'pi-chat-native-child',
               thinkingConfig: opts.thinkingConfig,
               maxOutputTokens: opts.maxOutputTokens,
@@ -874,6 +877,7 @@ export function buildCallAgentTool(opts: {
       const child = buildAgent({
         streamFn: createCallLlmStreamFn({
           languageModel: opts.languageModel,
+          fallbackModels: opts.fallbackModels,
           source: 'pi-chat-child',
           thinkingConfig: opts.thinkingConfig,
           maxOutputTokens: opts.maxOutputTokens,

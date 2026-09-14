@@ -50,17 +50,17 @@ export async function generateSkillsAcquired(
   try {
     if (topics.length === 0) return null;
 
-    const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      {},
-      'certificate-skills',
-    );
+    const {
+      model: languageModel,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, {}, 'certificate-skills');
 
     const prompt = buildSkillsPrompt(courseTitle, topics, description);
     const response = await callLLM(
       { model: languageModel, system: prompt.system, prompt: prompt.user },
       'certificate-skills',
-      undefined,
+      { fallbackModels },
       thinkingConfig,
     );
 

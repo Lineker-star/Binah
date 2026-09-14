@@ -28,6 +28,12 @@ vi.mock('@/lib/server/provider-config', () => ({
   resolveProxy: () => undefined,
 }));
 
+// No feature-group routing configured for any stage in these tests.
+vi.mock('@/lib/server/llm-feature-groups', () => ({
+  getFeatureGroupForStage: () => undefined,
+  getFeatureGroupConfig: () => undefined,
+}));
+
 describe('resolveModel — client-supplied base URL guard applies in every environment', () => {
   beforeEach(() => {
     vi.resetModules();

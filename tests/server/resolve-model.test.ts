@@ -36,6 +36,14 @@ vi.mock('@/lib/server/ssrf-guard', () => ({
   validateUrlForSSRF: async () => null,
 }));
 
+// No feature-group routing configured for any stage in these tests — this
+// test isolates the pre-existing stage route > x-model > DEFAULT_MODEL order,
+// not the newer admin-configured feature-group layer (covered separately).
+vi.mock('@/lib/server/llm-feature-groups', () => ({
+  getFeatureGroupForStage: () => undefined,
+  getFeatureGroupConfig: () => undefined,
+}));
+
 describe('resolveModel — per-stage resolution order', () => {
   beforeEach(() => {
     vi.resetModules();

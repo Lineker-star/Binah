@@ -88,6 +88,7 @@ export async function POST(req: NextRequest) {
       modelInfo,
       modelString,
       thinkingConfig,
+      fallbackModels,
     } = await resolveModelFromRequest(req, body, 'scene-actions');
     outlineTitle = outline?.title;
     resolvedModelString = modelString;
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest) {
             maxRetries: 0,
           },
           'scene-actions',
-          undefined,
+          { fallbackModels },
           thinkingConfig,
         );
         return result.text;
@@ -130,7 +131,7 @@ export async function POST(req: NextRequest) {
           maxRetries: 0,
         },
         'scene-actions',
-        undefined,
+        { fallbackModels },
         thinkingConfig,
       );
       return result.text;

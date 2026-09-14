@@ -56,7 +56,7 @@ describe('conversation title generator', () => {
     expect(mocks.callLLM).toHaveBeenCalledWith(
       expect.objectContaining({ model: TITLE_MODEL }),
       'conversation-title',
-      undefined,
+      { fallbackModels: undefined },
       { enabled: true, level: 'low' },
     );
   });
@@ -71,7 +71,7 @@ describe('conversation title generator', () => {
     expect(mocks.callLLM).toHaveBeenCalledWith(
       expect.objectContaining({ model: TITLE_MODEL }),
       'conversation-title',
-      undefined,
+      { fallbackModels: undefined },
       { mode: 'disabled' },
     );
   });
@@ -86,7 +86,7 @@ describe('conversation title generator', () => {
     expect(mocks.callLLM).toHaveBeenCalledWith(
       expect.objectContaining({ model: DRIVER_MODEL }),
       'conversation-title',
-      undefined,
+      { fallbackModels: undefined },
       { mode: 'disabled' },
     );
   });
@@ -110,7 +110,7 @@ describe('conversation title generator', () => {
         timeout: 10_000,
       },
       'conversation-title',
-      undefined,
+      { fallbackModels: undefined },
       { mode: 'disabled' },
     );
     const system = mocks.callLLM.mock.calls[0]?.[0]?.system as string;

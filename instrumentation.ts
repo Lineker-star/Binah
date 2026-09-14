@@ -43,8 +43,19 @@ export async function register(): Promise<void> {
     '@/lib/server/system-provider-defaults'
   );
   await hydrateSystemProviderDefaults();
+
+  // Per-feature-group LLM routing (chat / content generation / assessment &
+  // grading / support), each with its own provider/model/key/base URL and
+  // ordered fallback chain. Same lifecycle as the merge above — a separate
+  // in-memory cache (lib/server/llm-feature-groups.ts), not folded into the
+  // one above, since it's keyed by admin-defined stage groupings rather than
+  // provider id and has no YAML/env equivalent to reconcile against.
+  const { hydrateLLMFeatureGroups } = await import('@/lib/server/llm-feature-groups');
+  await hydrateLLMFeatureGroups();
+
   const systemDefaultsInterval = setInterval(() => {
     void hydrateSystemProviderDefaults();
+    void hydrateLLMFeatureGroups();
   }, 2 * 60 * 1000);
 
   let runner: import('@/lib/server/agent-runtime/runner').AgentRunnerHandle | undefined;

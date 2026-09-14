@@ -36,12 +36,15 @@ import {
 } from 'ai';
 import { streamLLM } from '@/lib/ai/llm';
 import { normalizeUsage } from '@/lib/usage/normalize';
+import { createLogger } from '@/lib/logger';
 import type { ThinkingConfig } from '@/lib/types/provider';
 import {
   captureToolCallMetadata,
   emitToolCallProviderOptions,
   type ToolCallProviderMetadata,
 } from './provider-metadata';
+
+const log = createLogger('StreamFn');
 
 /**
  * Local re-implementation of pi-ai's `AssistantMessageEventStream` queue. pi
@@ -139,6 +142,16 @@ export function hasLengthToolCallProvenance(message: AssistantMessage): boolean 
 export interface CallLlmStreamFnOptions {
   /** Resolved Vercel AI SDK model instance (from resolveModelFromRequest). */
   languageModel: LanguageModel;
+  /**
+   * Ordered fallback models (from resolveModelFromRequest's `fallbackModels`
+   * — an admin's per-feature-group failover chain, see lib/server/llm-
+   * feature-groups.ts), tried in order if `languageModel` fails BEFORE any
+   * output part has reached the caller. Once a single part has been handed
+   * to pi's stream, this turn is committed to that model — a mid-stream
+   * splice onto a different provider's continuation isn't safe, so a
+   * failure past that point still settles as an error exactly as before.
+   */
+  fallbackModels?: LanguageModel[];
   maxOutputTokens?: number;
   /**
    * When true, never send a max output tokens cap on the wire, even when pi
@@ -397,45 +410,85 @@ async function pump(
       : opts.maxOutputTokens && requestedMaxTokens
         ? Math.min(opts.maxOutputTokens, requestedMaxTokens)
         : (requestedMaxTokens ?? opts.maxOutputTokens);
-    const result = await streamLLM(
-      {
-        model: opts.languageModel,
-        system: context.systemPrompt,
-        messages: toModelMessages(context.messages, {
-          includeReasoning:
-            typeof opts.languageModel !== 'string' &&
-            opts.languageModel.provider === 'kimi.chat' &&
-            opts.languageModel.modelId === 'kimi-k3',
-        }),
-        tools: toAiTools(context.tools ?? []),
-        toolChoice: 'auto',
-        // pi's loop owns multi-step; one LLM turn per streamFn call.
-        stopWhen: stepCountIs(1),
-        maxOutputTokens,
-        abortSignal: combinedAbort.signal,
-      },
-      opts.source ?? 'maic-agent',
-      opts.thinkingConfig,
-    );
 
-    for await (const part of result.fullStream as AsyncIterable<Record<string, unknown>>) {
-      if (settled) break;
-      if (part.type === 'finish') {
-        settleFinish(
-          part.finishReason as FinishReason | undefined,
-          part.totalUsage as LanguageModelUsage | undefined,
+    // One candidate's full attempt: returns { settled: true } once this turn
+    // has reached a terminal state (finish/abort/error committed, or the
+    // stream simply ended), or { settled: false, error } when the model
+    // failed BEFORE any part reached pi's stream — safe to fail over to the
+    // next candidate, since nothing has been shown to the caller yet. A
+    // failure AFTER real output was handled always settles as an error here
+    // (no silent restart mid-turn — see CallLlmStreamFnOptions.fallbackModels).
+    const attemptCandidate = async (
+      candidateModel: LanguageModel,
+    ): Promise<{ settled: true } | { settled: false; error: unknown }> => {
+      let anyPartHandled = false;
+      const result = await streamLLM(
+        {
+          model: candidateModel,
+          system: context.systemPrompt,
+          messages: toModelMessages(context.messages, {
+            includeReasoning:
+              typeof candidateModel !== 'string' &&
+              candidateModel.provider === 'kimi.chat' &&
+              candidateModel.modelId === 'kimi-k3',
+          }),
+          tools: toAiTools(context.tools ?? []),
+          toolChoice: 'auto',
+          // pi's loop owns multi-step; one LLM turn per streamFn call.
+          stopWhen: stepCountIs(1),
+          maxOutputTokens,
+          abortSignal: combinedAbort.signal,
+        },
+        opts.source ?? 'maic-agent',
+        opts.thinkingConfig,
+      );
+
+      for await (const part of result.fullStream as AsyncIterable<Record<string, unknown>>) {
+        if (settled) return { settled: true };
+        if (part.type === 'finish') {
+          settleFinish(
+            part.finishReason as FinishReason | undefined,
+            part.totalUsage as LanguageModelUsage | undefined,
+          );
+          return { settled: true };
+        }
+        if (part.type === 'abort') {
+          settleError('aborted', part.reason);
+          return { settled: true };
+        }
+        if (part.type === 'error') {
+          if (!anyPartHandled) return { settled: false, error: part.error };
+          settleError('error', part.error);
+          return { settled: true };
+        }
+        anyPartHandled = true;
+        mapper.handle(part);
+      }
+      return { settled: true };
+    };
+
+    const modelCandidates = [opts.languageModel, ...(opts.fallbackModels ?? [])];
+    for (let i = 0; i < modelCandidates.length; i++) {
+      let outcome: { settled: true } | { settled: false; error: unknown };
+      try {
+        outcome = await attemptCandidate(modelCandidates[i]);
+      } catch (error) {
+        if (i < modelCandidates.length - 1) {
+          log.warn(`Candidate ${i} threw before streaming; failing over to the next model...`, error);
+          continue;
+        }
+        throw error;
+      }
+      if (outcome.settled) break;
+      if (i < modelCandidates.length - 1) {
+        log.warn(
+          `Candidate ${i} errored before any output; failing over to the next model...`,
+          outcome.error,
         );
-        break;
+        continue;
       }
-      if (part.type === 'abort') {
-        settleError('aborted', part.reason);
-        break;
-      }
-      if (part.type === 'error') {
-        settleError('error', part.error);
-        break;
-      }
-      mapper.handle(part);
+      settleError('error', outcome.error);
+      break;
     }
     if (!settled) settleError('error', 'LLM stream ended without a terminal event');
   } catch (err) {

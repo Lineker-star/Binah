@@ -29,6 +29,12 @@ vi.mock('@/lib/server/provider-config', () => ({
   resolveProxy: () => undefined,
 }));
 
+// No feature-group routing configured for any stage in these tests.
+vi.mock('@/lib/server/llm-feature-groups', () => ({
+  getFeatureGroupForStage: () => undefined,
+  getFeatureGroupConfig: () => undefined,
+}));
+
 describe('resolveModel — installs the redirect-validating transport on every model', () => {
   beforeEach(() => {
     vi.resetModules();

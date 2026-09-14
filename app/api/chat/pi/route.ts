@@ -95,6 +95,7 @@ export async function POST(req: NextRequest) {
       providerId,
       modelInfo,
       thinkingConfig: resolvedThinkingConfig,
+      fallbackModels,
     } = await resolveModel({
       modelString: body.model,
       stage: 'chat-adapter',
@@ -229,6 +230,7 @@ export async function POST(req: NextRequest) {
           agentConfigs,
           send,
           languageModel,
+          fallbackModels,
           thinkingConfig,
           maxOutputTokens: modelInfo?.outputWindow,
           contextWindow: modelInfo?.contextWindow,

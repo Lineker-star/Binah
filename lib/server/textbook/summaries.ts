@@ -47,15 +47,15 @@ Return a JSON object with this exact structure:
   "summary": "string"
 }`;
 
-  const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-    req,
-    {},
-    'textbook-book-summary',
-  );
+  const {
+    model: languageModel,
+    thinkingConfig,
+    fallbackModels,
+  } = await resolveModelFromRequest(req, {}, 'textbook-book-summary');
   const response = await callLLM(
     { model: languageModel, system, prompt: user },
     'textbook-book-summary',
-    undefined,
+    { fallbackModels },
     thinkingConfig,
   );
 
@@ -89,15 +89,15 @@ Return a JSON object with this exact structure:
   "summary": "string"
 }`;
 
-  const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-    req,
-    {},
-    'textbook-chapter-summary',
-  );
+  const {
+    model: languageModel,
+    thinkingConfig,
+    fallbackModels,
+  } = await resolveModelFromRequest(req, {}, 'textbook-chapter-summary');
   const response = await callLLM(
     { model: languageModel, system, prompt: user },
     'textbook-chapter-summary',
-    undefined,
+    { fallbackModels },
     thinkingConfig,
   );
 

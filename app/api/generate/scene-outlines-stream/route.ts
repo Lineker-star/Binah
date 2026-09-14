@@ -303,6 +303,7 @@ export async function POST(req: NextRequest) {
       modelInfo,
       modelString,
       thinkingConfig,
+      fallbackModels,
     } = await resolveModelFromRequest(req, body, 'scene-outlines-stream');
     resolvedModelString = modelString;
 
@@ -498,28 +499,37 @@ export async function POST(req: NextRequest) {
         try {
           startHeartbeat();
 
-          const streamParams = visionImages?.length
-            ? {
-                model: languageModel,
-                system: prompts.system,
-                messages: [
-                  {
-                    role: 'user' as const,
-                    content: buildVisionUserContent(prompts.user, visionImages),
-                  },
-                ],
-                maxOutputTokens: modelInfo?.outputWindow,
-                // Tear down the upstream LLM request when the client disconnects,
-                // instead of letting it run to completion for a dead connection.
-                abortSignal: req.signal,
-              }
-            : {
-                model: languageModel,
-                system: prompts.system,
-                prompt: prompts.user,
-                maxOutputTokens: modelInfo?.outputWindow,
-                abortSignal: req.signal,
-              };
+          // Ordered failover candidates — an admin's per-feature-group fallback
+          // chain (see lib/server/llm-feature-groups.ts), if one is configured
+          // for this stage. Selected per retry attempt below: attempt 1 uses the
+          // primary, later attempts advance through the chain (and hold on the
+          // last candidate once exhausted) — reusing the SAME single-model retry
+          // this loop already did when there is no fallback chain configured, so
+          // behavior is unchanged for every deployment that hasn't set one up.
+          const modelCandidates = [languageModel, ...(fallbackModels ?? [])];
+          const buildStreamParams = (model: (typeof modelCandidates)[number]) =>
+            visionImages?.length
+              ? {
+                  model,
+                  system: prompts.system,
+                  messages: [
+                    {
+                      role: 'user' as const,
+                      content: buildVisionUserContent(prompts.user, visionImages),
+                    },
+                  ],
+                  maxOutputTokens: modelInfo?.outputWindow,
+                  // Tear down the upstream LLM request when the client disconnects,
+                  // instead of letting it run to completion for a dead connection.
+                  abortSignal: req.signal,
+                }
+              : {
+                  model,
+                  system: prompts.system,
+                  prompt: prompts.user,
+                  maxOutputTokens: modelInfo?.outputWindow,
+                  abortSignal: req.signal,
+                };
 
           let parsedOutlines: SceneOutline[] = [];
           let languageDirective: string | null = null;
@@ -534,8 +544,14 @@ export async function POST(req: NextRequest) {
               languageDirective = null;
               courseTitle = null;
               const usedOutlineIds = new Set<string>();
+              const candidateIndex = Math.min(attempt - 1, modelCandidates.length - 1);
+              if (candidateIndex > 0 && scanFrom === 0) {
+                log.warn(
+                  `[scene-outlines-stream] Failing over to fallback model ${candidateIndex} (attempt ${attempt}).`,
+                );
+              }
               const textStream = streamLLM(
-                streamParams,
+                buildStreamParams(modelCandidates[candidateIndex]),
                 'scene-outlines-stream',
                 thinkingConfig,
               ).textStream;

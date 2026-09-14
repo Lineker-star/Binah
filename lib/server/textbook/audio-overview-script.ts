@@ -85,15 +85,15 @@ export async function generateAudioOverviewScript(
     const system = speaker === 'teacher' ? TEACHER_SYSTEM : CLASSMATE_SYSTEM;
     const user = buildTurnPrompt(bookTitle, wholeBookSummary, turns, i, SPEAKER_ORDER.length);
 
-    const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      {},
-      'audio-overview-script',
-    );
+    const {
+      model: languageModel,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, {}, 'audio-overview-script');
     const response = await callLLM(
       { model: languageModel, system, prompt: user },
       'audio-overview-script',
-      undefined,
+      { fallbackModels },
       thinkingConfig,
     );
 

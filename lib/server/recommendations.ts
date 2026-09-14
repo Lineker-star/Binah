@@ -82,11 +82,11 @@ export async function generateRecommendationForAssessment(
       return;
     }
 
-    const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      {},
-      'assessment-recommendation',
-    );
+    const {
+      model: languageModel,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, {}, 'assessment-recommendation');
 
     const prompt = buildRecommendationPrompt({
       assessmentType: assessment.assessment_type as string,
@@ -99,7 +99,7 @@ export async function generateRecommendationForAssessment(
     const response = await callLLM(
       { model: languageModel, system: prompt.system, prompt: prompt.user },
       'assessment-recommendation',
-      undefined,
+      { fallbackModels },
       thinkingConfig,
     );
 

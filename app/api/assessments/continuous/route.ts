@@ -85,11 +85,12 @@ export async function POST(req: NextRequest) {
       return apiError('INVALID_REQUEST', 400, "This chapter's source text is unavailable.");
     }
 
-    const { model: languageModel, modelInfo, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      body,
-      'continuous-assessment',
-    );
+    const {
+      model: languageModel,
+      modelInfo,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, body, 'continuous-assessment');
 
     const aiCall = async (systemPrompt: string, userPrompt: string): Promise<string> => {
       const result = await callLLM(
@@ -101,7 +102,7 @@ export async function POST(req: NextRequest) {
           maxRetries: 0,
         },
         'continuous-assessment',
-        undefined,
+        { fallbackModels },
         thinkingConfig,
       );
       return result.text;

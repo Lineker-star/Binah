@@ -69,7 +69,7 @@ export async function generateConversationTitle(visibleUserText: string): Promis
         timeout: 10_000,
       },
       STAGE,
-      undefined,
+      { fallbackModels: connection.fallbackModels },
       thinking,
     );
 

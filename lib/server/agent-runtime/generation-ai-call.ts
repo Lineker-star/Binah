@@ -31,7 +31,7 @@ export function createGenerationAiCallFactory(options?: {
           abortSignal: options?.abortSignal,
         },
         stage,
-        undefined,
+        { fallbackModels: resolved.fallbackModels },
         resolved.thinkingConfig,
       );
       return result.text;

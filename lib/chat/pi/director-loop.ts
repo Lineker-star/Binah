@@ -32,6 +32,8 @@ export async function runPiDirectorLoop(opts: {
   agentConfigs: AgentConfig[];
   send: SendEvent;
   languageModel: LanguageModel;
+  /** Ordered failover chain — see CallLlmStreamFnOptions.fallbackModels. */
+  fallbackModels?: LanguageModel[];
   thinkingConfig: ThinkingConfig;
   maxOutputTokens?: number;
   contextWindow?: number;
@@ -117,6 +119,7 @@ export async function runPiDirectorLoop(opts: {
 
   const streamFn = createCallLlmStreamFn({
     languageModel: opts.languageModel,
+    fallbackModels: opts.fallbackModels,
     maxOutputTokens: opts.maxOutputTokens,
     thinkingConfig: opts.thinkingConfig,
     source: 'pi-chat-director',
@@ -140,6 +143,7 @@ export async function runPiDirectorLoop(opts: {
       agentConfigs: opts.agentConfigs,
       send: opts.send,
       languageModel: opts.languageModel,
+      fallbackModels: opts.fallbackModels,
       onAgentDone: (summary) => {
         totalAgents += 1;
         if (summary.contentPreview || summary.actionCount > 0) agentHadContent = true;

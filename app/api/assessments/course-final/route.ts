@@ -187,17 +187,17 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      body,
-      'course-final-assessment',
-    );
+    const {
+      model: languageModel,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, body, 'course-final-assessment');
 
     const prompt = buildSynthesisPrompt(courseTitle, lessons);
     const response = await callLLM(
       { model: languageModel, system: prompt.system, prompt: prompt.user },
       'course-final-assessment',
-      undefined,
+      { fallbackModels },
       thinkingConfig,
     );
 

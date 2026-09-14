@@ -124,11 +124,11 @@ export async function POST(req: NextRequest) {
 
     let aiCall: AICallFn | undefined;
     try {
-      const { model: languageModel, thinkingConfig } = await resolveModelFromRequest(
-        req,
-        body,
-        'web-search-query-rewrite',
-      );
+      const {
+        model: languageModel,
+        thinkingConfig,
+        fallbackModels,
+      } = await resolveModelFromRequest(req, body, 'web-search-query-rewrite');
       aiCall = async (systemPrompt, userPrompt) => {
         const result = await callLLM(
           {
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
             maxOutputTokens: 256,
           },
           'web-search-query-rewrite',
-          undefined,
+          { fallbackModels },
           thinkingConfig,
         );
         return result.text;

@@ -163,6 +163,7 @@ export async function POST(req: NextRequest) {
       model: languageModel,
       modelString: _modelString,
       thinkingConfig,
+      fallbackModels,
     } = await resolveModelFromRequest(req, body, 'agent-profiles');
     modelString = _modelString;
 
@@ -265,7 +266,7 @@ Return a JSON object with this exact structure:
           prompt: userPrompt,
         },
         'agent-profiles',
-        undefined,
+        { fallbackModels },
         thinkingConfig,
       )
     ).text;

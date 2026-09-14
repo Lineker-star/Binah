@@ -271,6 +271,16 @@ export interface LLMRetryOptions {
   /** Custom validation function. Return true to accept the result, false to retry.
    *  Default: checks that response text is non-empty. */
   validate?: (text: string) => boolean;
+  /**
+   * Ordered fallback models, tried in sequence if `params.model` (and its own
+   * `retries`) is fully exhausted — so a faulty/unavailable provider doesn't
+   * interrupt the caller as long as one candidate in the chain succeeds.
+   * Typically `resolveModel(...).fallbackModels` (see lib/server/resolve-
+   * model.ts), which is populated only when an admin configured a per-
+   * feature-group failover chain; omitted or empty means no failover, the
+   * same single-model behavior as before this existed.
+   */
+  fallbackModels?: LanguageModel[];
 }
 
 const DEFAULT_VALIDATE = (text: string) => text.trim().length > 0;
@@ -332,57 +342,96 @@ export async function callLLM<T extends GenerateTextParams>(
   const maxAttempts = (retryOptions?.retries ?? 0) + 1;
   const validate = retryOptions?.validate ?? (maxAttempts > 1 ? DEFAULT_VALIDATE : undefined);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let lastResult: GenerateTextResult<any, any> | undefined;
-  let lastError: unknown;
+  // One model candidate's full attempt loop (its own retries, per
+  // retryOptions). Returns the result on success/exhausted-with-a-result, or
+  // throws the last error so the outer candidate loop can move on.
+  const tryModel = async (
+    model: T['model'],
+    candidateLabel: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<GenerateTextResult<any, any>> => {
+    const modelParams = { ...params, model } as T;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let lastResult: GenerateTextResult<any, any> | undefined;
+    let lastError: unknown;
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      // Resolve effective thinking config: per-call > global env > undefined
-      const effectiveThinking = thinking ?? getGlobalThinkingConfig();
-      const injectedParams = injectProviderOptions(params, effectiveThinking);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        // Resolve effective thinking config: per-call > global env > undefined
+        const effectiveThinking = thinking ?? getGlobalThinkingConfig();
+        const injectedParams = injectProviderOptions(modelParams, effectiveThinking);
 
-      // Wrap in thinkingContext so the custom fetch wrapper in providers.ts
-      // can read the config and inject vendor-specific body params for
-      // OpenAI-compatible providers.
-      const result = await thinkingContext.run(effectiveThinking, () =>
-        generateText(injectedParams),
-      );
-
-      // Record before validating: every attempt that got this far was billed,
-      // including one that fails validation below and one that is handed back
-      // after the retries are exhausted. Recording on the success path only
-      // would drop both.
-      //
-      // `usage` is the LAST step only; on a multi-step tool run (`stopWhen`)
-      // every earlier step would go unaccounted. `totalUsage` aggregates across
-      // steps and equals `usage` for a single-step call. Mirrors streamLLM,
-      // which already prefers the aggregate.
-      recordUsageSafe(result.totalUsage ?? result.usage, buildUsageMeta(params, source));
-
-      // Validate result (only when retries are configured)
-      if (validate && !validate(result.text)) {
-        log.warn(
-          `[${source}] Validation failed (attempt ${attempt}/${maxAttempts}), ${attempt < maxAttempts ? 'retrying...' : 'giving up'}`,
+        // Wrap in thinkingContext so the custom fetch wrapper in providers.ts
+        // can read the config and inject vendor-specific body params for
+        // OpenAI-compatible providers.
+        const result = await thinkingContext.run(effectiveThinking, () =>
+          generateText(injectedParams),
         );
-        lastResult = result;
-        continue;
-      }
 
+        // Record before validating: every attempt that got this far was billed,
+        // including one that fails validation below and one that is handed back
+        // after the retries are exhausted. Recording on the success path only
+        // would drop both.
+        //
+        // `usage` is the LAST step only; on a multi-step tool run (`stopWhen`)
+        // every earlier step would go unaccounted. `totalUsage` aggregates across
+        // steps and equals `usage` for a single-step call. Mirrors streamLLM,
+        // which already prefers the aggregate.
+        recordUsageSafe(
+          result.totalUsage ?? result.usage,
+          buildUsageMeta(modelParams, candidateLabel),
+        );
+
+        // Validate result (only when retries are configured)
+        if (validate && !validate(result.text)) {
+          log.warn(
+            `[${candidateLabel}] Validation failed (attempt ${attempt}/${maxAttempts}), ${attempt < maxAttempts ? 'retrying...' : 'giving up'}`,
+          );
+          lastResult = result;
+          continue;
+        }
+
+        return result;
+      } catch (error) {
+        lastError = error;
+
+        if (attempt < maxAttempts) {
+          log.warn(
+            `[${candidateLabel}] Call failed (attempt ${attempt}/${maxAttempts}), retrying...`,
+            error,
+          );
+          continue;
+        }
+      }
+    }
+
+    // All attempts exhausted for this candidate — return its last result or
+    // throw its last error so the caller can decide whether to fail over.
+    if (lastResult) return lastResult;
+    throw lastError;
+  };
+
+  const candidates: T['model'][] = [params.model, ...(retryOptions?.fallbackModels ?? [])];
+  let lastCandidateError: unknown;
+
+  for (let i = 0; i < candidates.length; i++) {
+    const isFallback = i > 0;
+    const candidateLabel = isFallback ? `${source}:fallback${i}` : source;
+    try {
+      const result = await tryModel(candidates[i], candidateLabel);
+      if (isFallback) {
+        log.warn(`[${source}] Recovered via fallback model ${i} after the primary failed.`);
+      }
       return result;
     } catch (error) {
-      lastError = error;
-
-      if (attempt < maxAttempts) {
-        log.warn(`[${source}] Call failed (attempt ${attempt}/${maxAttempts}), retrying...`, error);
-        continue;
+      lastCandidateError = error;
+      if (i < candidates.length - 1) {
+        log.warn(`[${source}] Candidate ${i} exhausted, failing over to the next model...`, error);
       }
     }
   }
 
-  // All attempts exhausted — return last result or throw last error
-  if (lastResult) return lastResult;
-  throw lastError;
+  throw lastCandidateError;
 }
 
 /**
@@ -421,4 +470,44 @@ export function streamLLM<T extends StreamTextParams>(
   const result = thinkingContext.run(effectiveThinking, () => streamText(injectedParams));
 
   return result;
+}
+
+/**
+ * Run a stream with sequential model failover, for callers that can restart
+ * their own protocol from scratch on failure (the only shape streaming
+ * failover can honestly take: an AI SDK stream, once handed to the caller,
+ * can't be transparently swapped mid-flight the way callLLM swaps a whole
+ * non-streaming call — tokens may already be in front of the user).
+ *
+ * `onCandidate` builds and consumes one attempt: call `streamLLM` (or
+ * `streamText` directly) for the given model, iterate the parts you need,
+ * and return normally on success. Throw to signal this candidate failed —
+ * cheaply (nothing consumed yet) or after partial output, your choice; this
+ * helper doesn't know which, so it's the caller's job to have already
+ * communicated a restart to the client (e.g. an SSE `retry` event, as
+ * app/api/generate/scene-outlines-stream/route.ts already does for its own
+ * single-model retry loop) before throwing, if any output was emitted.
+ *
+ * Mirrors callLLM's fallback semantics: primary first, then each fallback in
+ * order; the first candidate whose `onCandidate` doesn't throw wins.
+ */
+export async function streamLLMWithFailover<TModel, R>(
+  candidates: TModel[],
+  source: string,
+  onCandidate: (model: TModel, attempt: number) => Promise<R>,
+): Promise<R> {
+  let lastError: unknown;
+  for (let i = 0; i < candidates.length; i++) {
+    try {
+      const result = await onCandidate(candidates[i], i);
+      if (i > 0) log.warn(`[${source}] Recovered via fallback model ${i} after the primary failed.`);
+      return result;
+    } catch (error) {
+      lastError = error;
+      if (i < candidates.length - 1) {
+        log.warn(`[${source}] Candidate ${i} exhausted, failing over to the next model...`, error);
+      }
+    }
+  }
+  throw lastError;
 }

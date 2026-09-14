@@ -7,7 +7,8 @@
 
 import type { NextRequest } from 'next/server';
 import { getModel, getProvider, parseModelString, type ModelWithInfo } from '@/lib/ai/providers';
-import type { ProviderType, ThinkingConfig } from '@/lib/types/provider';
+import type { LanguageModel } from 'ai';
+import type { ProviderId, ProviderType, ThinkingConfig } from '@/lib/types/provider';
 import {
   isServerConfiguredProvider,
   resolveApiKey,
@@ -17,6 +18,11 @@ import {
 import { validateUrlForSSRF } from '@/lib/server/ssrf-guard';
 import { fetchWithRedirectValidation } from '@/lib/server/fetch-with-redirect-validation';
 import { getStageRoute, type LlmStage } from '@/lib/server/model-routes';
+import {
+  getFeatureGroupConfig,
+  getFeatureGroupForStage,
+  type LLMCandidate,
+} from '@/lib/server/llm-feature-groups';
 
 export interface ResolvedModel extends ModelWithInfo {
   /** Original model string (e.g. "openai/gpt-4o-mini") */
@@ -31,6 +37,31 @@ export interface ResolvedModel extends ModelWithInfo {
   baseUrl?: string;
   /** Optional per-request thinking configuration from the client. */
   thinkingConfig?: ThinkingConfig;
+  /**
+   * Ordered fallback models to try, in order, if `model` throws — an admin's
+   * saved per-feature-group failover chain (see lib/server/llm-feature-
+   * groups.ts). Present only when this stage's feature group has one
+   * configured; undefined otherwise (unrouted/no-fallback stages behave
+   * exactly as before this existed). Pass straight through to callLLM/
+   * streamLLM's `fallbackModels` option.
+   */
+  fallbackModels?: LanguageModel[];
+}
+
+/** Build a ready-to-use LanguageModel for one feature-group candidate. */
+function buildCandidateModel(candidate: LLMCandidate): LanguageModel {
+  const providerId = candidate.providerId as ProviderId;
+  const apiKey = candidate.apiKey || resolveApiKey(candidate.providerId, undefined);
+  const baseUrl = candidate.baseUrl || resolveBaseUrl(candidate.providerId, undefined);
+  const proxy = resolveProxy(candidate.providerId);
+  return getModel({
+    providerId,
+    modelId: candidate.modelId,
+    apiKey,
+    baseUrl,
+    proxy,
+    fetchImpl: fetchWithRedirectValidation,
+  }).model;
 }
 
 /**
@@ -62,7 +93,22 @@ export async function resolveModel(params: {
   // vendor default.
   const stageRoute = getStageRoute(params.stage);
   const stageModel = stageRoute?.model;
-  const modelString = stageModel || params.modelString || process.env.DEFAULT_MODEL;
+
+  // Admin-configured per-feature-group routing (chat / content generation /
+  // assessment & grading / support) — skipped entirely when the operator has
+  // already pinned this stage via MODEL_ROUTES (file-wins, same precedent as
+  // every other admin-settable default in this app). Sits ABOVE the client's
+  // x-model: a learner has no settings of their own (BB.1) and a parent/
+  // admin's x-model reflects their own feature-agnostic choice, so without
+  // this precedence a feature group could never actually take effect.
+  const featureGroup = stageModel ? undefined : getFeatureGroupForStage(params.stage);
+  const groupConfig = featureGroup ? getFeatureGroupConfig(featureGroup) : undefined;
+  const groupModelString = groupConfig
+    ? `${groupConfig.primary.providerId}:${groupConfig.primary.modelId}`
+    : undefined;
+
+  const modelString =
+    stageModel || groupModelString || params.modelString || process.env.DEFAULT_MODEL;
   if (!modelString) {
     throw new Error(
       'No model could be resolved. Configure DEFAULT_MODEL (and/or a MODEL_ROUTES entry for this stage), or send a model via x-model.',
@@ -70,12 +116,12 @@ export async function resolveModel(params: {
   }
   const { providerId, modelId } = parseModelString(modelString);
 
-  // When a stage route overrides the client's model, the client-sent connection
-  // params (apiKey/baseUrl/providerType) belong to the client's *other* model
-  // and must not bleed onto the routed provider — otherwise e.g. a routed
+  // When a stage route or feature-group override wins, the client-sent
+  // connection params (apiKey/baseUrl/providerType) belong to the client's
+  // *other* model and must not bleed onto this one — otherwise e.g. a routed
   // Anthropic model would be built with the client's OpenAI providerType/key.
-  // A routed model resolves purely from server config, as if no x-model was sent.
-  const routed = Boolean(stageModel);
+  // Resolves purely from server config, as if no x-model was sent.
+  const routed = Boolean(stageModel) || Boolean(groupModelString);
   const clientApiKey = routed ? undefined : params.apiKey;
   const clientProviderType = routed ? undefined : params.providerType;
   const clientBaseUrlParam = routed ? undefined : params.baseUrl;
@@ -113,8 +159,17 @@ export async function resolveModel(params: {
     }
   }
 
-  const apiKey = resolveApiKey(providerId, clientApiKey || '');
-  const baseUrl = resolveBaseUrl(providerId, clientBaseUrl);
+  // A feature-group primary carries its own independent key/base URL (per
+  // the admin-facing design: each feature can point at a wholly separate
+  // vendor account, not just a different model on the shared one) — falls
+  // through to the normal managed/unmanaged resolution only when the admin
+  // left it blank, e.g. deliberately reusing an already-configured provider.
+  const apiKey = groupModelString
+    ? groupConfig!.primary.apiKey || resolveApiKey(providerId, '')
+    : resolveApiKey(providerId, clientApiKey || '');
+  const baseUrl = groupModelString
+    ? groupConfig!.primary.baseUrl || resolveBaseUrl(providerId, undefined)
+    : resolveBaseUrl(providerId, clientBaseUrl);
   const proxy = resolveProxy(providerId);
   const { model, modelInfo } = getModel({
     providerId,
@@ -127,6 +182,10 @@ export async function resolveModel(params: {
     // fetchWithRedirectValidation); the base URL above is checked at origin.
     fetchImpl: fetchWithRedirectValidation,
   });
+  const fallbackModels =
+    groupConfig && groupConfig.fallbacks.length > 0
+      ? groupConfig.fallbacks.map(buildCandidateModel)
+      : undefined;
 
   // Thinking arbitration mirrors model routing — the route carries a full
   // ThinkingConfig (mode/effort/level/enabled/budgetTokens/…) which callLLM
@@ -148,6 +207,7 @@ export async function resolveModel(params: {
     apiKey,
     baseUrl,
     thinkingConfig,
+    fallbackModels,
   };
 }
 

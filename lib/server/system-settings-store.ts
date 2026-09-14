@@ -1,11 +1,12 @@
 import 'server-only';
 import type { createClient } from '@/lib/supabase/server';
 import type { SystemDefaultSection } from './provider-config';
+import type { LLMFeatureGroup } from './llm-feature-groups';
 
 type ServerSupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
 export interface SystemSettingsWriteInput {
-  section: SystemDefaultSection;
+  section: SystemDefaultSection | LLMFeatureGroup;
   /** null = the BB.2 global default row; a user id = that user's own row. */
   ownerId: string | null;
   providerId: string;

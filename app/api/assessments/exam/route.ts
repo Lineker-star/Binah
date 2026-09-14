@@ -120,11 +120,12 @@ export async function POST(req: NextRequest) {
       return apiError('INVALID_REQUEST', 400, "This exam's source text is unavailable.");
     }
 
-    const { model: languageModel, modelInfo, thinkingConfig } = await resolveModelFromRequest(
-      req,
-      body,
-      'exam',
-    );
+    const {
+      model: languageModel,
+      modelInfo,
+      thinkingConfig,
+      fallbackModels,
+    } = await resolveModelFromRequest(req, body, 'exam');
 
     const aiCall = async (systemPrompt: string, userPrompt: string): Promise<string> => {
       const result = await callLLM(
@@ -136,7 +137,7 @@ export async function POST(req: NextRequest) {
           maxRetries: 0,
         },
         'exam',
-        undefined,
+        { fallbackModels },
         thinkingConfig,
       );
       return result.text;
