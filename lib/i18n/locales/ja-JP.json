@@ -2109,7 +2109,10 @@
     "checkEmail": "メールを確認してアカウントを確認し、その後サインインしてください。",
     "signInFailed": "サインインに失敗しました。メールアドレスとパスワードをご確認ください。",
     "signUpFailed": "アカウントの作成に失敗しました。もう一度お試しください。",
-    "backToHome": "ホームに戻る"
+    "backToHome": "ホームに戻る",
+    "continueWithGoogle": "Googleで続ける",
+    "orDivider": "または",
+    "oauthFailed": "Googleでのサインインに失敗しました。もう一度お試しください。"
   },
   "parent": {
     "dashboardTitle": "お子さま",

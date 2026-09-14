@@ -2109,7 +2109,10 @@
     "checkEmail": "Check your email to confirm your account, then sign in.",
     "signInFailed": "Sign in failed. Check your email and password.",
     "signUpFailed": "Sign up failed. Please try again.",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "continueWithGoogle": "Continue with Google",
+    "orDivider": "or",
+    "oauthFailed": "Google sign-in failed. Please try again."
   },
   "parent": {
     "dashboardTitle": "Your children",

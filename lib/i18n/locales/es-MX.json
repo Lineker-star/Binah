@@ -2109,7 +2109,10 @@
     "checkEmail": "Revisa tu correo para confirmar tu cuenta y luego inicia sesión.",
     "signInFailed": "No se pudo iniciar sesión. Verifica tu correo y contraseña.",
     "signUpFailed": "No se pudo crear la cuenta. Inténtalo de nuevo.",
-    "backToHome": "Volver al inicio"
+    "backToHome": "Volver al inicio",
+    "continueWithGoogle": "Continuar con Google",
+    "orDivider": "o",
+    "oauthFailed": "Error al iniciar sesión con Google. Inténtalo de nuevo."
   },
   "parent": {
     "dashboardTitle": "Tus hijos",

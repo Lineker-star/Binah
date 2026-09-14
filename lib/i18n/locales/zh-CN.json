@@ -2109,7 +2109,10 @@
     "checkEmail": "请查收邮件以确认账户，然后登录。",
     "signInFailed": "登录失败，请检查邮箱和密码。",
     "signUpFailed": "创建账户失败，请重试。",
-    "backToHome": "返回首页"
+    "backToHome": "返回首页",
+    "continueWithGoogle": "使用 Google 继续",
+    "orDivider": "或",
+    "oauthFailed": "Google 登录失败,请重试。"
   },
   "parent": {
     "dashboardTitle": "您的孩子",

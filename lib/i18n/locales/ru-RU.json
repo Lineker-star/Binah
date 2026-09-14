@@ -2109,7 +2109,10 @@
     "checkEmail": "Проверьте почту, чтобы подтвердить аккаунт, затем войдите.",
     "signInFailed": "Не удалось войти. Проверьте почту и пароль.",
     "signUpFailed": "Не удалось создать аккаунт. Попробуйте снова.",
-    "backToHome": "На главную"
+    "backToHome": "На главную",
+    "continueWithGoogle": "Продолжить с Google",
+    "orDivider": "или",
+    "oauthFailed": "Не удалось войти через Google. Попробуйте снова."
   },
   "parent": {
     "dashboardTitle": "Ваши дети",

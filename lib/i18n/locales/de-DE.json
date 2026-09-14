@@ -2109,7 +2109,10 @@
     "checkEmail": "Bestätige dein Konto per E-Mail und melde dich anschließend an.",
     "signInFailed": "Anmeldung fehlgeschlagen. Überprüfe E-Mail und Passwort.",
     "signUpFailed": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
-    "backToHome": "Zurück zur Startseite"
+    "backToHome": "Zurück zur Startseite",
+    "continueWithGoogle": "Mit Google fortfahren",
+    "orDivider": "oder",
+    "oauthFailed": "Anmeldung mit Google fehlgeschlagen. Bitte versuche es erneut."
   },
   "parent": {
     "dashboardTitle": "Deine Kinder",

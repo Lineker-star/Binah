@@ -2109,7 +2109,10 @@
     "checkEmail": "Verifique seu e-mail para confirmar sua conta e depois entre.",
     "signInFailed": "Falha ao entrar. Verifique seu e-mail e senha.",
     "signUpFailed": "Falha ao criar a conta. Tente novamente.",
-    "backToHome": "Voltar ao início"
+    "backToHome": "Voltar ao início",
+    "continueWithGoogle": "Continuar com o Google",
+    "orDivider": "ou",
+    "oauthFailed": "Falha ao entrar com o Google. Tente novamente."
   },
   "parent": {
     "dashboardTitle": "Seus filhos",

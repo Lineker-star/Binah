@@ -2109,7 +2109,10 @@
     "checkEmail": "이메일을 확인하여 계정을 인증한 후 로그인하세요.",
     "signInFailed": "로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.",
     "signUpFailed": "계정 생성에 실패했습니다. 다시 시도해 주세요.",
-    "backToHome": "홈으로 돌아가기"
+    "backToHome": "홈으로 돌아가기",
+    "continueWithGoogle": "Google로 계속하기",
+    "orDivider": "또는",
+    "oauthFailed": "Google 로그인에 실패했습니다. 다시 시도해 주세요."
   },
   "parent": {
     "dashboardTitle": "자녀 목록",

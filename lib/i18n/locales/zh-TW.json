@@ -2083,7 +2083,10 @@
     "checkEmail": "請查看您的電子郵件以確認帳戶，然後登入。",
     "signInFailed": "登入失敗，請檢查您的電子郵件和密碼。",
     "signUpFailed": "建立帳戶失敗，請再試一次。",
-    "backToHome": "返回首頁"
+    "backToHome": "返回首頁",
+    "continueWithGoogle": "使用 Google 繼續",
+    "orDivider": "或",
+    "oauthFailed": "Google 登入失敗,請重試。"
   },
   "parent": {
     "dashboardTitle": "您的孩子",

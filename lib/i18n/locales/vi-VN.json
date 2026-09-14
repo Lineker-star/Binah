@@ -2109,7 +2109,10 @@
     "checkEmail": "Kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.",
     "signInFailed": "Đăng nhập thất bại. Vui lòng kiểm tra email và mật khẩu.",
     "signUpFailed": "Tạo tài khoản thất bại. Vui lòng thử lại.",
-    "backToHome": "Về trang chủ"
+    "backToHome": "Về trang chủ",
+    "continueWithGoogle": "Tiếp tục với Google",
+    "orDivider": "hoặc",
+    "oauthFailed": "Đăng nhập bằng Google thất bại. Vui lòng thử lại."
   },
   "parent": {
     "dashboardTitle": "Con của bạn",
