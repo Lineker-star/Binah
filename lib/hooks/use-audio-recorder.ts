@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { ASR_PROVIDERS } from '@/lib/audio/constants';
 import { getASRServerDisabledError } from '@/lib/audio/asr-enablement';
 import { normalizeASRUploadAudio } from '@/lib/audio/wav-utils';
+import { useSettingsStore } from '@/lib/store/settings';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('AudioRecorder');
@@ -99,9 +100,12 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
     if (busyRef.current) return;
     busyRef.current = true;
     try {
-      // Get current ASR configuration
+      // Get current ASR configuration. Read synchronously (no dynamic
+      // import) — the previous `await import(...)` here ran before
+      // getUserMedia() below, opening a real (if usually short) gap
+      // between the click that triggered this and the permission request,
+      // which browsers can treat as no longer gesture-triggered.
       if (typeof window !== 'undefined') {
-        const { useSettingsStore } = await import('@/lib/store/settings');
         const { asrProviderId, asrLanguage, asrProvidersConfig } = useSettingsStore.getState();
 
         // Browser-native ASR never reaches the server route, so enforce the

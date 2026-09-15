@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -72,6 +72,12 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
   const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [testMessage, setTestMessage] = useState('');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  // Synchronous lock — React state (isRecording) is async, so a second click
+  // during the pending-permission window would still see isRecording as
+  // false and re-enter the start path, firing a concurrent getUserMedia()
+  // call (mirrors lib/hooks/use-audio-recorder.ts's busyRef, which exists
+  // for exactly this reason).
+  const busyRef = useRef(false);
 
   // Reset state when provider changes (derived state pattern)
   const [prevProviderId, setPrevProviderId] = useState(selectedProviderId);
@@ -90,6 +96,12 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
       }
       setIsRecording(false);
     } else {
+      // See busyRef's declaration — a second click before the first
+      // getUserMedia()/recognition.start() call has resolved must be a
+      // no-op, not a second concurrent permission request.
+      if (busyRef.current) return;
+      busyRef.current = true;
+
       setASRResult('');
       setTestStatus('testing');
       setTestMessage('');
@@ -98,6 +110,7 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
       // the same server force-off guard as the normal recorder path.
       const serverDisabledError = getASRServerDisabledError(providerConfig);
       if (serverDisabledError) {
+        busyRef.current = false;
         setTestStatus('error');
         setTestMessage(serverDisabledError);
         return;
@@ -108,6 +121,7 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
           (window as unknown as Record<string, unknown>).SpeechRecognition ||
           (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
         if (!SpeechRecognitionCtor) {
+          busyRef.current = false;
           setTestStatus('error');
           setTestMessage(t('settings.asrNotSupported'));
           return;
@@ -126,10 +140,12 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
           setTestMessage(t('settings.asrTestSuccess'));
         };
         recognition.onerror = (event: { error: string }) => {
+          busyRef.current = false;
           setTestStatus('error');
           setTestMessage(t('settings.asrTestFailed') + ': ' + event.error);
         };
         recognition.onend = () => {
+          busyRef.current = false;
           setIsRecording(false);
         };
         recognition.start();
@@ -147,6 +163,7 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
           };
           mediaRecorder.onstop = async () => {
             stream.getTracks().forEach((track) => track.stop());
+            busyRef.current = false;
             setIsProcessing(true);
 
             try {
@@ -206,6 +223,7 @@ export function ASRSettings({ selectedProviderId, isAdmin }: ASRSettingsProps) {
           mediaRecorder.start();
           setIsRecording(true);
         } catch (error) {
+          busyRef.current = false;
           log.error('Failed to access microphone:', error);
           setTestStatus('error');
           setTestMessage(t('settings.microphoneAccessFailed'));
