@@ -2151,11 +2151,6 @@
     "speed": "Tốc độ",
     "language": "Ngôn ngữ"
   },
-  "accessCode": {
-    "title": "Nhập mã truy cập",
-    "placeholder": "Mã truy cập",
-    "error": "Mã truy cập không đúng. Vui lòng thử lại."
-  },
   "proMode": {
     "attach": "Đính kèm tài liệu",
     "mentionCourse": "引用课堂",

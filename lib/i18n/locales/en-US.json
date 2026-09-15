@@ -2169,11 +2169,6 @@
     "launchPlaceholder": "Describe the learning experience you want to create",
     "launchSend": "Start build"
   },
-  "accessCode": {
-    "title": "Enter Access Code",
-    "placeholder": "Access code",
-    "error": "Invalid access code. Please try again."
-  },
   "workbench": {
     "tool": {
       "label": {

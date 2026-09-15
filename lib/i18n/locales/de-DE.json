@@ -2151,11 +2151,6 @@
     "speed": "Geschwindigkeit",
     "language": "Sprache"
   },
-  "accessCode": {
-    "title": "Zugangscode eingeben",
-    "placeholder": "Zugangscode",
-    "error": "Ungültiger Zugangscode. Bitte versuche es erneut."
-  },
   "proMode": {
     "attach": "Attach material",
     "mentionCourse": "引用课堂",

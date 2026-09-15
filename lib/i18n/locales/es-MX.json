@@ -2151,11 +2151,6 @@
     "speed": "Velocidad",
     "language": "Idioma"
   },
-  "accessCode": {
-    "title": "Ingresa el código de acceso",
-    "placeholder": "Código de acceso",
-    "error": "Código de acceso no válido. Inténtalo de nuevo."
-  },
   "proMode": {
     "attach": "Adjuntar material",
     "mentionCourse": "引用课堂",

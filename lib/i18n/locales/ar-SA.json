@@ -2151,11 +2151,6 @@
     "speed": "السرعة",
     "language": "اللغة"
   },
-  "accessCode": {
-    "title": "أدخل رمز الوصول",
-    "placeholder": "رمز الوصول",
-    "error": "رمز الوصول غير صالح. يرجى المحاولة مرة أخرى."
-  },
   "proMode": {
     "attach": "إرفاق مواد",
     "mentionCourse": "引用课堂",

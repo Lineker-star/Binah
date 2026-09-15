@@ -2125,11 +2125,6 @@
     "speed": "語速",
     "language": "語言"
   },
-  "accessCode": {
-    "title": "請輸入課堂碼",
-    "placeholder": "課堂碼",
-    "error": "課堂碼錯誤，請重試。"
-  },
   "classroomComplete": {
     "title": "課程完成",
     "continueToLesson": "繼續第{{number}}課",

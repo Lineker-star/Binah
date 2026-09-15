@@ -2151,11 +2151,6 @@
     "speed": "Vitesse",
     "language": "Langue"
   },
-  "accessCode": {
-    "title": "Saisissez le code d’accès",
-    "placeholder": "Code d’accès",
-    "error": "Code d’accès invalide. Veuillez réessayer."
-  },
   "proMode": {
     "attach": "Joindre un support",
     "mentionCourse": "引用课堂",
