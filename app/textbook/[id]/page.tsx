@@ -290,7 +290,7 @@ export default function TextbookChapterReviewPage() {
         {ingestion.error_message && (
           <div className="text-[12px] text-muted-foreground max-w-md">{ingestion.error_message}</div>
         )}
-        <Link href="/" className="text-[13px] text-primary hover:underline mt-2">
+        <Link href="/app" className="text-[13px] text-primary hover:underline mt-2">
           {t('history.backToHome')}
         </Link>
       </div>
@@ -375,7 +375,7 @@ export default function TextbookChapterReviewPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10 pb-32">
       <Link
-        href="/"
+        href="/app"
         className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors mb-6"
       >
         <ArrowLeft className="size-3.5" />

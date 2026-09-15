@@ -19,11 +19,17 @@ describe('resolveClassroomExit', () => {
   it('goes home for a classic classroom even when browser history exists', () => {
     // The previous history entry is often an entry-time flow (generation-preview)
     // that must never be a return target, so the classic arrow always pushes home.
-    expect(resolveClassroomExit({ searchParams: params() })).toEqual({ kind: 'push', href: '/' });
+    expect(resolveClassroomExit({ searchParams: params() })).toEqual({
+      kind: 'push',
+      href: '/app',
+    });
   });
 
   it('falls back to home for a direct link such as /shared/<token>', () => {
-    expect(resolveClassroomExit({ searchParams: params() })).toEqual({ kind: 'push', href: '/' });
+    expect(resolveClassroomExit({ searchParams: params() })).toEqual({
+      kind: 'push',
+      href: '/app',
+    });
   });
 
   it('prioritizes an explicit workspace source over everything else', () => {
@@ -36,7 +42,7 @@ describe('resolveClassroomExit', () => {
   it('returns to home explicitly instead of reopening Pro through browser history', () => {
     expect(resolveClassroomExit({ searchParams: params('returnTo=home') })).toEqual({
       kind: 'push',
-      href: '/',
+      href: '/app',
     });
   });
 });
@@ -47,7 +53,7 @@ describe('exitClassroom', () => {
 
     exitClassroom(router, params());
 
-    expect(router.push).toHaveBeenCalledWith('/');
+    expect(router.push).toHaveBeenCalledWith('/app');
   });
 
   it('returns to the workspace for a workspace-attached classroom', () => {

@@ -34,16 +34,16 @@ export async function GET(request: NextRequest) {
     if (!error) {
       if (returnTo) return NextResponse.redirect(`${origin}${returnTo}`);
 
-      // No returnTo — land a parent on their dashboard, everyone else on
-      // the homepage, matching the password sign-in path's routeByRole.
+      // No returnTo — land a parent on their dashboard, everyone else in
+      // the app, matching the password sign-in path's routeByRole.
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase.from('profiles').select('role').single();
-        return NextResponse.redirect(`${origin}${profile?.role === 'parent' ? '/parent' : '/'}`);
+        return NextResponse.redirect(`${origin}${profile?.role === 'parent' ? '/parent' : '/app'}`);
       }
-      return NextResponse.redirect(`${origin}/`);
+      return NextResponse.redirect(`${origin}/app`);
     }
     log.warn('Failed to exchange OAuth code for a session:', error);
   }

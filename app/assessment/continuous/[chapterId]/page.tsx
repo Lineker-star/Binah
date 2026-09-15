@@ -62,7 +62,7 @@ export default function ContinuousAssessmentPage() {
         <div className="text-[14px] text-destructive">
           {t('continuousAssessment.generateFailed')}
         </div>
-        <Link href="/" className="text-[13px] text-primary hover:underline mt-2">
+        <Link href="/app" className="text-[13px] text-primary hover:underline mt-2">
           {t('history.backToHome')}
         </Link>
       </div>

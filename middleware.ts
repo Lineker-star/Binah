@@ -11,6 +11,9 @@ import { apiError } from '@/lib/server/api-response';
  * gated — the safer failure mode.
  */
 function isPublicPath(pathname: string): boolean {
+  // The public marketing landing page — exact match only, so the
+  // authenticated app entry point at /app stays gated by the default below.
+  if (pathname === '/') return true;
   // The health probe must work before any visitor identity exists at all.
   if (pathname === '/api/health') return true;
   // The sign-in surface itself, and the two thin redirect-to-/auth stubs.
@@ -23,6 +26,10 @@ function isPublicPath(pathname: string): boolean {
   // (only favicon.ico is) and isn't API-shaped, so the redirect below would
   // otherwise break it for signed-out visitors.
   if (pathname === '/apple-icon.png') return true;
+  // The brand mark, rendered directly on the landing page's own header and
+  // footer — the one `public/` image a signed-out visitor's browser now
+  // requests before any session exists.
+  if (pathname === '/openmaic-mark.png') return true;
   // Fetched unconditionally by a root-layout-mounted component on every
   // page, including /auth itself — must stay public or the sign-in page's
   // own background fetch 401s.

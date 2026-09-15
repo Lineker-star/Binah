@@ -645,7 +645,7 @@ function WorkspaceShellController({ initialPanes }: { readonly initialPanes: Wor
   // lockup stays fixed. `startProSwap` falls back to a plain push where the
   // browser has no View Transitions or the user asked for less motion, and
   // swallows a second click while one swap is already running.
-  const exitPro = () => startProSwap('/', (href) => router.push(href));
+  const exitPro = () => startProSwap('/app', (href) => router.push(href));
   /**
    * Back to the bare workspace: both panes dropped, the composer refocused.
    *

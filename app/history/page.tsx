@@ -290,7 +290,7 @@ export default function HistoryPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <Link
-        href="/"
+        href="/app"
         className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground transition-colors mb-6"
       >
         <ArrowLeft className="size-3.5" />

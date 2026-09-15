@@ -54,13 +54,13 @@ export default function ExamPage() {
     setDone(true);
   };
 
-  const backHref = exam ? `/textbook/${exam.ingestionId}` : '/';
+  const backHref = exam ? `/textbook/${exam.ingestionId}` : '/app';
 
   if (error) {
     return (
       <div className="max-w-xl mx-auto px-6 py-24 flex flex-col items-center gap-3 text-center">
         <div className="text-[14px] text-destructive">{t('exam.generateFailed')}</div>
-        <Link href="/" className="text-[13px] text-primary hover:underline mt-2">
+        <Link href="/app" className="text-[13px] text-primary hover:underline mt-2">
           {t('history.backToHome')}
         </Link>
       </div>

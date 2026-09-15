@@ -14,7 +14,7 @@ export default async function ParentLayout({ children }: { children: React.React
   if (!user) redirect('/auth');
 
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
-  if (profile?.role !== 'parent') redirect('/');
+  if (profile?.role !== 'parent') redirect('/app');
 
   return <div className="min-h-screen bg-background">{children}</div>;
 }

@@ -110,13 +110,13 @@ export function WorkspaceHome({
           className="ws-home-first relative mx-auto w-full max-w-[760px]"
           data-testid="pro-workspace-first-screen"
         >
-          {/* Beat one: the lockup. Same structure as `app/page.tsx` — the badge
-              hangs off the wordmark's right edge absolutely, so it never
-              shifts the logo off the column's centre line.
+          {/* Beat one: the lockup. Same structure as `app/app/page.tsx` — the
+              badge hangs off the wordmark's right edge absolutely, so it
+              never shifts the logo off the column's centre line.
 
-              `data-pro-morph` names it for the Pro swap: this box and `/`'s
-              equivalent are the fixed anchor while the two surfaces fade.
-              The name sits on the lockup itself, not on the `ws-enter`
+              `data-pro-morph` names it for the Pro swap: this box and
+              `/app`'s equivalent are the fixed anchor while the two surfaces
+              fade. The name sits on the lockup itself, not on the `ws-enter`
               wrapper, so the entrance animation is never captured. */}
           <div className={cn('flex flex-col items-center', !swapped && 'ws-enter ws-d1')}>
             <div

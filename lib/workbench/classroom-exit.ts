@@ -1,4 +1,7 @@
-export type ClassroomExitDecision = { readonly kind: 'push'; readonly href: '/workspace' | '/' };
+export type ClassroomExitDecision = {
+  readonly kind: 'push';
+  readonly href: '/workspace' | '/app';
+};
 
 interface ClassroomExitContext {
   readonly searchParams: Pick<URLSearchParams, 'get'>;
@@ -12,8 +15,9 @@ interface ClassroomExitRouter {
  * Resolve where a standalone classroom should exit without depending on
  * browser globals, so direct links and SSR callers get the same safe default.
  *
- * A classic classroom always exits to home. The previous history entry is
- * often an entry-time flow (generation-preview) that is not a return target —
+ * A classic classroom always exits to the app (the composer at `/app`, not
+ * the public marketing page at `/`). The previous history entry is often an
+ * entry-time flow (generation-preview) that is not a return target —
  * backing into it shows a dead "no generation in progress" page — so browser
  * history is never used for the classic arrow, which is labeled "back to
  * home" anyway. Only workbench-attached classrooms get a different
@@ -33,9 +37,9 @@ export function resolveClassroomExit({
   // return contract. Browser history still contains the Pro workspace, so
   // without this rule the home arrow would contradict the workspace link.
   if (searchParams.get('returnTo') === 'home') {
-    return { kind: 'push', href: '/' };
+    return { kind: 'push', href: '/app' };
   }
-  return { kind: 'push', href: '/' };
+  return { kind: 'push', href: '/app' };
 }
 
 /** Resolve against the current browser, then perform the selected exit. */

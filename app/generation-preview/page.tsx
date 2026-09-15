@@ -1177,7 +1177,7 @@ function GenerationPreviewContent() {
     clearOutlineReviewTimer();
     outlineReviewIntentRef.current = false;
     sessionStorage.removeItem('generationSession');
-    router.push('/');
+    router.push('/app');
   };
 
   // Triggered when the user clicks the streaming outline card mid-stream.
@@ -1310,7 +1310,7 @@ function GenerationPreviewContent() {
             <AlertCircle className="size-12 text-muted-foreground mx-auto" />
             <h2 className="text-xl font-semibold">{t('generation.sessionNotFound')}</h2>
             <p className="text-sm text-muted-foreground">{t('generation.sessionNotFoundDesc')}</p>
-            <Button onClick={() => router.push('/')} className="w-full">
+            <Button onClick={() => router.push('/app')} className="w-full">
               <ArrowLeft className="size-4 mr-2" />
               {t('generation.backToHome')}
             </Button>
