@@ -2282,5 +2282,46 @@
     "labelIssued": "頒發日期",
     "notFoundHeading": "找不到證書",
     "notFoundSubtitle": "無法使用此代碼驗證證書。請檢查代碼後重試。"
+  },
+  "landing": {
+    "hero": {
+      "headline": "智慧課堂。",
+      "subheadline": "無論是一個主題、一個問題,還是你上傳的教材,Binah 都能將其轉化為一套完整的 AI 授課課程——配備老師、同學、測驗和結業證書,幾秒鐘生成,並按你的步調推進。",
+      "getStarted": "開始使用"
+    },
+    "features": {
+      "heading": "課堂擁有的一切,無需等待。",
+      "subheading": "以下每一項功能都是 Binah 中真實可用的功能,而不是未來計畫。",
+      "teacherTitle": "AI 老師與 AI 同學",
+      "teacherDesc": "AI 老師主導每一堂課,AI 同學讓課堂充滿互動——提問、接受測驗,像在真實課堂中一樣開口學習。",
+      "coursesTitle": "多課時結構化課程",
+      "coursesDesc": "把一句話變成一整套課程。Binah 會規劃課時,並隨著你的學習進度逐課生成,課程與你同步成長,而不是一次性丟給你。",
+      "textbookTitle": "上傳教材",
+      "textbookDesc": "上傳 PDF,Binah 會讀取其結構——章節自動轉化為模組,還附帶可在開始前收聽的音訊概覽。",
+      "assessmentTitle": "測驗、考試、真實評分",
+      "assessmentDesc": "隨堂評測在學習過程中檢驗理解程度;完整考試則從頭到尾全面檢測——兩者都由 AI 根據你的真實作答評分。",
+      "certificateTitle": "可驗證的結業證書",
+      "certificateDesc": "完成課程即可獲得帶有專屬驗證頁面的證書——證明你學到了什麼,而不只是證明你參加過。",
+      "progressTitle": "看得見的學習進度",
+      "progressDesc": "圖表記錄你學過的內容、你的強項以及值得複習的部分,讓你每次回來都能從上次停下的地方繼續。"
+    },
+    "howItWorks": {
+      "heading": "按照真實的學習方式打造",
+      "subheading": "如今學習者和學校正在使用 Binah 的三種真實場景。",
+      "learnerTitle": "獨自學習新知識",
+      "learnerDesc": "輸入你想學的內容。Binah 會生成課程,由 AI 老師和 AI 同學一起授課,並在進入下一步前對你進行測驗。",
+      "schoolTitle": "把教材變成課程",
+      "schoolDesc": "上傳課堂已在使用的 PDF。Binah 會擷取其中的章節,將其轉化為按課時組織的結構化課程。",
+      "examTitle": "備考複習",
+      "examDesc": "根據你的學習資料生成隨堂評測或完整考試,獲得真實評分,精準了解哪些內容還需要再複習一遍。"
+    },
+    "cta": {
+      "heading": "立即開始與 Binah 一起學習",
+      "subheading": "免費開始——無需信用卡,無需排隊等待。只需告訴 Binah 你想學什麼。",
+      "button": "開始使用"
+    },
+    "footer": {
+      "tagline": "Binah —— 開源專案"
+    }
   }
 }

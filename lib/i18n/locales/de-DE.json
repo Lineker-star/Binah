@@ -2282,5 +2282,46 @@
     "labelIssued": "Ausgestellt am",
     "notFoundHeading": "Zertifikat nicht gefunden",
     "notFoundSubtitle": "Wir konnten mit diesem Code kein Zertifikat verifizieren. Überprüfe den Code und versuche es erneut."
+  },
+  "landing": {
+    "hero": {
+      "headline": "Das intelligente Klassenzimmer.",
+      "subheadline": "Binah verwandelt jedes Thema, jede Frage oder jedes hochgeladene Lehrbuch in einen vollständigen, KI-unterrichteten Kurs – mit Lehrer, Mitschülern, Quiz und Zertifikat, in Sekunden erstellt und in deinem Tempo.",
+      "getStarted": "Loslegen"
+    },
+    "features": {
+      "heading": "Alles, was ein Klassenzimmer hat. Ohne Warten.",
+      "subheading": "Jede Funktion unten ist bereits real in Binah eingebaut – keine Zukunftsmusik.",
+      "teacherTitle": "KI-Lehrer & Mitschüler",
+      "teacherDesc": "Ein KI-Lehrer leitet jede Lektion, und KI-Mitschüler halten den Raum lebendig – stelle Fragen, werde abgefragt und lerne so, wie ein echtes Klassenzimmer unterrichtet: laut.",
+      "coursesTitle": "Mehrteilige Kurse",
+      "coursesDesc": "Aus einer einzigen Eingabe wird ein vollständiger Kurs. Binah plant die Lektionen und baut jede einzelne, während du vorankommst – der Kurs wächst mit dir, statt auf einen Schlag zu kommen.",
+      "textbookTitle": "Lehrbuch hochladen",
+      "textbookDesc": "Lade ein PDF hoch, und Binah liest dessen Struktur – Kapitel werden automatisch zu Modulen, inklusive Audio-Überblick zum Reinhören vor dem Start.",
+      "assessmentTitle": "Quiz, Prüfungen, echte Bewertung",
+      "assessmentDesc": "Die fortlaufende Bewertung prüft das Verständnis unterwegs; eine vollständige Prüfung testet es von Anfang bis Ende – beide von der KI anhand deiner tatsächlichen Antworten bewertet.",
+      "certificateTitle": "Überprüfbare Zertifikate",
+      "certificateDesc": "Schließe einen Kurs ab und erhalte ein Zertifikat mit eigener Verifizierungsseite – Beweis dafür, was du gelernt hast, nicht nur, dass du anwesend warst.",
+      "progressTitle": "Sichtbarer Fortschritt",
+      "progressDesc": "Diagramme zeigen, was du gelernt hast, wo du stark bist und was sich zu wiederholen lohnt – so knüpfst du immer genau dort an, wo du aufgehört hast."
+    },
+    "howItWorks": {
+      "heading": "Gemacht dafür, wie Menschen wirklich lernen",
+      "subheading": "Drei reale Arten, wie Lernende und Schulen Binah heute nutzen.",
+      "learnerTitle": "Alleine etwas Neues lernen",
+      "learnerDesc": "Schreib, was du lernen willst. Binah erstellt die Lektion, unterrichtet sie mit KI-Lehrer und Mitschülern und prüft dich, bevor es weitergeht.",
+      "schoolTitle": "Ein Lehrbuch in einen Kurs verwandeln",
+      "schoolDesc": "Lade das PDF hoch, das deine Klasse bereits nutzt. Binah extrahiert die Kapitel und macht daraus einen strukturierten Kurs, Lektion für Lektion.",
+      "examTitle": "Für eine Prüfung lernen",
+      "examDesc": "Erstelle aus deinem Material eine fortlaufende Bewertung oder eine vollständige Prüfung, erhalte eine echte Bewertung und sieh genau, was noch einmal dran muss."
+    },
+    "cta": {
+      "heading": "Jetzt mit Binah lernen",
+      "subheading": "Kostenlos starten – keine Kreditkarte, keine Warteliste. Sag Binah einfach, was du lernen willst.",
+      "button": "Loslegen"
+    },
+    "footer": {
+      "tagline": "Binah – Open-Source-Projekt"
+    }
   }
 }

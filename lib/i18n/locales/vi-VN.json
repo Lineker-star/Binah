@@ -2282,5 +2282,46 @@
     "labelIssued": "Ngày cấp",
     "notFoundHeading": "Không tìm thấy chứng chỉ",
     "notFoundSubtitle": "Chúng tôi không thể xác minh chứng chỉ với mã này. Vui lòng kiểm tra lại mã và thử lại."
+  },
+  "landing": {
+    "hero": {
+      "headline": "Lớp học thông minh.",
+      "subheadline": "Binah biến bất kỳ chủ đề, câu hỏi hay sách giáo khoa nào bạn tải lên thành một khóa học hoàn chỉnh do AI giảng dạy — có giáo viên, bạn học, bài kiểm tra và chứng chỉ, được tạo trong vài giây và theo đúng nhịp độ của bạn.",
+      "getStarted": "Bắt đầu"
+    },
+    "features": {
+      "heading": "Mọi thứ một lớp học có. Không cần chờ đợi.",
+      "subheading": "Mọi tính năng dưới đây đều đang hoạt động thật trong Binah — không phải kế hoạch tương lai.",
+      "teacherTitle": "Giáo viên & bạn học AI",
+      "teacherDesc": "Một giáo viên AI dẫn dắt từng bài học, và các bạn học AI giữ cho lớp học luôn sôi nổi — đặt câu hỏi, làm bài kiểm tra, và học theo đúng cách một lớp học thật dạy: nói thành lời.",
+      "coursesTitle": "Khóa học nhiều bài",
+      "coursesDesc": "Biến một yêu cầu thành cả khóa học. Binah lên kế hoạch các bài học và xây dựng từng bài khi bạn tiến bộ, để khóa học lớn dần cùng bạn thay vì đến cùng một lúc.",
+      "textbookTitle": "Tải lên sách giáo khoa",
+      "textbookDesc": "Tải lên một PDF và Binah sẽ đọc cấu trúc của nó — các chương tự động trở thành các mô-đun, kèm bản tóm tắt âm thanh để nghe trước khi bắt đầu.",
+      "assessmentTitle": "Bài kiểm tra, kỳ thi, chấm điểm thật",
+      "assessmentDesc": "Đánh giá liên tục kiểm tra mức độ hiểu bài trong suốt quá trình học; Kỳ thi đầy đủ kiểm tra toàn bộ — cả hai đều được AI chấm dựa trên câu trả lời thật của bạn.",
+      "certificateTitle": "Chứng chỉ có thể xác minh",
+      "certificateDesc": "Hoàn thành một khóa học và nhận chứng chỉ có trang xác minh riêng — bằng chứng cho những gì bạn đã học, không chỉ là bạn đã tham gia.",
+      "progressTitle": "Tiến độ bạn có thể thấy",
+      "progressDesc": "Biểu đồ theo dõi những gì bạn đã học, điểm mạnh của bạn và những gì đáng ôn lại, để mỗi lần quay lại bạn luôn tiếp tục đúng chỗ đã dừng."
+    },
+    "howItWorks": {
+      "heading": "Được xây dựng theo cách con người thực sự học",
+      "subheading": "Ba cách thực tế mà người học và trường học đang dùng Binah ngay hôm nay.",
+      "learnerTitle": "Tự học một điều gì đó mới",
+      "learnerDesc": "Gõ ra điều bạn muốn học. Binah xây dựng bài học, giảng dạy cùng giáo viên và bạn học AI, rồi kiểm tra bạn trước khi chuyển tiếp.",
+      "schoolTitle": "Biến sách giáo khoa thành khóa học",
+      "schoolDesc": "Tải lên file PDF lớp bạn đang dùng. Binah trích xuất các chương và biến chúng thành khóa học có cấu trúc, từng bài một.",
+      "examTitle": "Ôn thi",
+      "examDesc": "Tạo một bài Đánh giá liên tục hoặc một Kỳ thi đầy đủ từ tài liệu của bạn, được chấm điểm như thật, và biết chính xác điều gì cần ôn lại."
+    },
+    "cta": {
+      "heading": "Bắt đầu học cùng Binah",
+      "subheading": "Miễn phí để bắt đầu — không cần thẻ tín dụng, không cần chờ đợi. Chỉ cần cho Binah biết bạn muốn học gì.",
+      "button": "Bắt đầu"
+    },
+    "footer": {
+      "tagline": "Binah — Dự án mã nguồn mở"
+    }
   }
 }

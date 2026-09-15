@@ -2282,5 +2282,46 @@
     "labelIssued": "Issued",
     "notFoundHeading": "Certificate not found",
     "notFoundSubtitle": "We couldn't verify a certificate with this code. Double-check the code and try again."
+  },
+  "landing": {
+    "hero": {
+      "headline": "The Intelligent Classroom.",
+      "subheadline": "Binah turns any topic, question, or textbook into a complete AI-taught course — a teacher, classmates, quizzes, and a certificate, built in seconds and paced to you.",
+      "getStarted": "Get Started"
+    },
+    "features": {
+      "heading": "Everything a classroom has. None of the waiting.",
+      "subheading": "Every feature below is real and working in Binah — not a roadmap.",
+      "teacherTitle": "AI Teacher & Classmates",
+      "teacherDesc": "An AI teacher leads every lesson, and AI classmates keep the room alive — ask questions, get quizzed, and learn the way a real classroom teaches: out loud.",
+      "coursesTitle": "Multi-Lesson Courses",
+      "coursesDesc": "Turn one prompt into a full course. Binah plans the lessons and builds each one as you advance, so the course grows with you instead of arriving all at once.",
+      "textbookTitle": "Upload a Textbook",
+      "textbookDesc": "Drop in a PDF and Binah reads its structure — chapters become modules automatically, with an Audio Overview you can listen to before you dive in.",
+      "assessmentTitle": "Quizzes, Exams, Real Grading",
+      "assessmentDesc": "Continuous Assessment checks understanding as you go; a full Exam tests it end-to-end — both graded by AI against your actual answers.",
+      "certificateTitle": "Certificates You Can Verify",
+      "certificateDesc": "Finish a course and earn a certificate with its own verification page — proof of what you learned, not just that you showed up.",
+      "progressTitle": "Progress You Can See",
+      "progressDesc": "Charts track what you've studied, where you're strong, and what's worth reviewing next, so coming back always picks up where you left off."
+    },
+    "howItWorks": {
+      "heading": "Built for how people actually learn",
+      "subheading": "Three real ways learners and schools use Binah today.",
+      "learnerTitle": "Learning something new, on your own",
+      "learnerDesc": "Type what you want to learn. Binah builds the lesson, teaches it with an AI teacher and classmates, and quizzes you before moving on.",
+      "schoolTitle": "Turning a textbook into a course",
+      "schoolDesc": "Upload the PDF your class already uses. Binah extracts its chapters and turns them into a structured course, lesson by lesson.",
+      "examTitle": "Studying for an exam",
+      "examDesc": "Generate a Continuous Assessment or a full Exam from your material, get graded like the real thing, and see exactly what needs another pass."
+    },
+    "cta": {
+      "heading": "Start learning with Binah",
+      "subheading": "Free to start — no credit card, no waiting room. Just tell Binah what you want to learn.",
+      "button": "Get Started"
+    },
+    "footer": {
+      "tagline": "Binah — Open Source Project"
+    }
   }
 }

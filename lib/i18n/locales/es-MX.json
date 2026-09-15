@@ -2282,5 +2282,46 @@
     "labelIssued": "Fecha de emisión",
     "notFoundHeading": "Certificado no encontrado",
     "notFoundSubtitle": "No pudimos verificar un certificado con este código. Revisa el código e inténtalo de nuevo."
+  },
+  "landing": {
+    "hero": {
+      "headline": "El aula inteligente.",
+      "subheadline": "Binah convierte cualquier tema, pregunta o libro de texto en un curso completo impartido por IA: un profesor, compañeros de clase, cuestionarios y un certificado, listo en segundos y a tu propio ritmo.",
+      "getStarted": "Comenzar"
+    },
+    "features": {
+      "heading": "Todo lo que tiene un salón de clases. Sin la espera.",
+      "subheading": "Cada elemento de abajo ya funciona en Binah — no es una promesa futura.",
+      "teacherTitle": "Profesor y compañeros con IA",
+      "teacherDesc": "Un profesor de IA guía cada lección, y compañeros de IA mantienen viva la clase: haz preguntas, responde cuestionarios y aprende como en un salón real: en voz alta.",
+      "coursesTitle": "Cursos de varias lecciones",
+      "coursesDesc": "Convierte una sola indicación en un curso completo. Binah planea las lecciones y construye cada una a medida que avanzas, para que el curso crezca contigo en vez de llegar todo de golpe.",
+      "textbookTitle": "Sube un libro de texto",
+      "textbookDesc": "Sube un PDF y Binah lee su estructura: los capítulos se convierten en módulos automáticamente, con un resumen en audio que puedes escuchar antes de empezar.",
+      "assessmentTitle": "Cuestionarios, exámenes, calificación real",
+      "assessmentDesc": "La Evaluación Continua revisa tu comprensión sobre la marcha; un Examen completo la pone a prueba de principio a fin — ambos calificados por IA con tus respuestas reales.",
+      "certificateTitle": "Certificados verificables",
+      "certificateDesc": "Termina un curso y obtén un certificado con su propia página de verificación: prueba de lo que aprendiste, no solo de que asististe.",
+      "progressTitle": "Progreso que puedes ver",
+      "progressDesc": "Gráficas muestran lo que has estudiado, en qué eres fuerte y qué vale la pena repasar, para que siempre retomes justo donde lo dejaste."
+    },
+    "howItWorks": {
+      "heading": "Diseñado para cómo se aprende de verdad",
+      "subheading": "Tres formas reales en que estudiantes y escuelas usan Binah hoy.",
+      "learnerTitle": "Aprender algo nuevo por tu cuenta",
+      "learnerDesc": "Escribe qué quieres aprender. Binah crea la lección, la enseña con un profesor y compañeros de IA, y te evalúa antes de continuar.",
+      "schoolTitle": "Convertir un libro de texto en curso",
+      "schoolDesc": "Sube el PDF que tu clase ya usa. Binah extrae sus capítulos y los convierte en un curso estructurado, lección por lección.",
+      "examTitle": "Estudiar para un examen",
+      "examDesc": "Genera una Evaluación Continua o un Examen completo a partir de tu material, recibe una calificación real y ve exactamente qué repasar de nuevo."
+    },
+    "cta": {
+      "heading": "Empieza a aprender con Binah",
+      "subheading": "Gratis para comenzar, sin tarjeta de crédito ni listas de espera. Solo dile a Binah qué quieres aprender.",
+      "button": "Comenzar"
+    },
+    "footer": {
+      "tagline": "Binah — Proyecto de código abierto"
+    }
   }
 }

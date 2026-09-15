@@ -2282,5 +2282,46 @@
     "labelIssued": "颁发日期",
     "notFoundHeading": "未找到证书",
     "notFoundSubtitle": "无法使用此代码验证证书。请检查代码后重试。"
+  },
+  "landing": {
+    "hero": {
+      "headline": "智能课堂。",
+      "subheadline": "无论是一个主题、一个问题,还是你上传的教材,Binah 都能将其转化为一套完整的 AI 授课课程——配备老师、同学、测验和结业证书,几秒钟生成,并按你的节奏推进。",
+      "getStarted": "开始使用"
+    },
+    "features": {
+      "heading": "课堂拥有的一切,无需等待。",
+      "subheading": "以下每一项功能都是 Binah 中真实可用的功能,而不是未来计划。",
+      "teacherTitle": "AI 老师与 AI 同学",
+      "teacherDesc": "AI 老师主导每一堂课,AI 同学让课堂充满互动——提问、接受测验,像在真实课堂中一样开口学习。",
+      "coursesTitle": "多课时结构化课程",
+      "coursesDesc": "把一句话变成一整套课程。Binah 会规划课时,并随着你的学习进度逐课生成,课程与你同步成长,而不是一次性堆给你。",
+      "textbookTitle": "上传教材",
+      "textbookDesc": "上传 PDF,Binah 会读取其结构——章节自动转化为模块,还附带可在开始前收听的音频概览。",
+      "assessmentTitle": "测验、考试、真实评分",
+      "assessmentDesc": "随堂评测在学习过程中检验理解程度;完整考试则从头到尾全面检测——两者都由 AI 根据你的真实作答评分。",
+      "certificateTitle": "可验证的结业证书",
+      "certificateDesc": "完成课程即可获得带有专属验证页面的证书——证明你学到了什么,而不只是证明你参加过。",
+      "progressTitle": "看得见的学习进度",
+      "progressDesc": "图表记录你学过的内容、你的强项以及值得复习的部分,让你每次回来都能从上次停下的地方继续。"
+    },
+    "howItWorks": {
+      "heading": "按照真实的学习方式打造",
+      "subheading": "如今学习者和学校正在使用 Binah 的三种真实场景。",
+      "learnerTitle": "独自学习新知识",
+      "learnerDesc": "输入你想学的内容。Binah 会生成课程,由 AI 老师和 AI 同学一起授课,并在进入下一步前对你进行测验。",
+      "schoolTitle": "把教材变成课程",
+      "schoolDesc": "上传课堂已在使用的 PDF。Binah 会提取其中的章节,将其转化为按课时组织的结构化课程。",
+      "examTitle": "备考复习",
+      "examDesc": "根据你的学习资料生成随堂评测或完整考试,获得真实评分,精准了解哪些内容还需要再复习一遍。"
+    },
+    "cta": {
+      "heading": "立即开始与 Binah 一起学习",
+      "subheading": "免费开始——无需信用卡,无需排队等待。只需告诉 Binah 你想学什么。",
+      "button": "开始使用"
+    },
+    "footer": {
+      "tagline": "Binah —— 开源项目"
+    }
   }
 }
