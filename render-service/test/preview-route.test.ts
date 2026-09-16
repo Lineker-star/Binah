@@ -57,7 +57,7 @@ function previewPayload() {
 function previewRequest(payload: unknown = previewPayload(), identity = 'preview-user'): Request {
   return new Request('http://test/preview', {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-openmaic-client': identity },
+    headers: { 'content-type': 'application/json', 'x-binah-client': identity },
     body: JSON.stringify(payload),
   });
 }
@@ -344,7 +344,7 @@ describe('POST /preview', () => {
     });
     const request = new Request('http://test/preview', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-openmaic-client': 'rejected' },
+      headers: { 'content-type': 'application/json', 'x-binah-client': 'rejected' },
       body,
       duplex: 'half',
     } as RequestInit);
@@ -500,7 +500,7 @@ describe('POST /preview', () => {
     });
     const secondRequest = new Request('http://test/preview', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-openmaic-client': 'second' },
+      headers: { 'content-type': 'application/json', 'x-binah-client': 'second' },
       body: secondBody,
       duplex: 'half',
     } as RequestInit);
@@ -534,7 +534,7 @@ describe('POST /preview', () => {
     const coordinator = new RenderCoordinator(executor, jobs, artifacts, { maxConcurrency: 1 });
     const videoId = await coordinator.submit(
       coordinator.reserve('video-user'),
-      '/tmp/openmaic-preview-route-video-test',
+      '/tmp/binah-preview-route-video-test',
       { fps: 30, quality: 'standard', format: 'mp4' },
     );
     await videoStarted.promise;

@@ -5,7 +5,7 @@ import { extractDocument } from '@/lib/document';
 describe('plain text document extractor', () => {
   it('extracts TXT content locally', async () => {
     const artifact = await extractDocument({
-      buffer: Buffer.from('Hello OpenMAIC\nLine 2', 'utf-8'),
+      buffer: Buffer.from('Hello Binah\nLine 2', 'utf-8'),
       fileName: 'test.txt',
       fileSize: 20,
       mimeType: 'text/plain',
@@ -21,7 +21,7 @@ describe('plain text document extractor', () => {
       {
         id: 'text_1',
         type: 'text',
-        text: 'Hello OpenMAIC\nLine 2',
+        text: 'Hello Binah\nLine 2',
       },
     ]);
   });

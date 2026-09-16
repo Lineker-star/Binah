@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useCanvasStore } from '@/lib/store';
 import { getElementListRange } from '@/lib/utils/element';
-import type { PPTElement } from '@openmaic/dsl';
+import type { PPTElement } from '@binah/dsl';
 import type { ViewportStyles } from './hooks/useViewportSize';
 
 interface RulerProps {

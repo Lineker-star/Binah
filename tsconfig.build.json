@@ -11,6 +11,6 @@
     "render-service",
     "tests",
     "eval",
-    "packages/@openmaic/*/test"
+    "packages/@binah/*/test"
   ]
 }

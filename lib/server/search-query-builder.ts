@@ -1,6 +1,6 @@
-import { parseJsonResponse } from '@openmaic/generation';
+import { parseJsonResponse } from '@binah/generation';
 import { PROMPT_IDS, buildPrompt } from '@/lib/prompts';
-import type { AICallFn } from '@openmaic/generation';
+import type { AICallFn } from '@binah/generation';
 import { createLogger } from '@/lib/logger';
 
 const log = createLogger('SearchQueryBuilder');

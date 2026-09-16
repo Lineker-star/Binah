@@ -7,7 +7,7 @@
 # We enforce that here: block all egress except loopback and replies on already
 # established (app-initiated) connections. This is the boundary that stops the
 # untrusted page from initiating connections back to the app (e.g. the compose
-# `openmaic` service) or anywhere else, even though both share a Docker network.
+# `binah` service) or anywhere else, even though both share a Docker network.
 #
 # Requires the container to start as root with CAP_NET_ADMIN (compose:
 # `cap_add: [NET_ADMIN]`). We install the rules as root, then drop to the
@@ -34,7 +34,7 @@ fi
 lockdown() {
   # ESTABLISHED,RELATED lets the Hono API respond to the app's inbound requests;
   # loopback lets the producer's file server + Chromium talk locally. Everything
-  # else outbound (new connections, DNS to resolve `openmaic`, etc.) is dropped.
+  # else outbound (new connections, DNS to resolve `binah`, etc.) is dropped.
   # IPv4 rules must all succeed; IPv6 is best-effort (the stack/table may be
   # absent), but when present we still default-drop so v6 can't be an escape.
   iptables -A OUTPUT -o lo -j ACCEPT || return 1

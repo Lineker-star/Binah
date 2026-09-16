@@ -95,21 +95,21 @@ function PBLV2Container({
   // from Completion) stays docked instead of re-expanding.
   const [autoExpand, setAutoExpand] = useState(false);
   // The web-fullscreen frame is portaled OUT of the scene subtree. It must
-  // live inside whatever element is natively fullscreened — OpenMAIC fullscreens
+  // live inside whatever element is natively fullscreened — Binah fullscreens
   // the stage via stageRef.requestFullscreen(), and the browser only paints the
   // fullscreened element's own subtree, so a frame portaled to <body> would go
   // blank during native fullscreen. Default to <body> (classroom is an
   // immersive, full-viewport route, so a fixed overlay there already covers
   // everything); follow the active fullscreen element while native fullscreen
-  // is on. NOTE: this never reads/writes OpenMAIC code — it only chooses this
+  // is on. NOTE: this never reads/writes Binah code — it only chooses this
   // component's own portal host.
   const [fsRoot, setFsRoot] = useState<HTMLElement | null>(() =>
     typeof document !== 'undefined'
       ? ((document.fullscreenElement as HTMLElement | null) ?? document.body)
       : null,
   );
-  // True while the browser is in native (OS) fullscreen — OpenMAIC enters it
-  // on the stage via `stageRef.requestFullscreen()`. In that mode OpenMAIC's
+  // True while the browser is in native (OS) fullscreen — Binah enters it
+  // on the stage via `stageRef.requestFullscreen()`. In that mode Binah's
   // own exit affordance (its bottom control bar) is hidden for PBL, so the
   // workspace must offer its own exit button (see the layer).
   const [nativeFullscreen, setNativeFullscreen] = useState(false);
@@ -256,7 +256,7 @@ function PBLV2Container({
           // remount — a state-valued host made framer drop the one-time
           // `initial` animation. Only follow the natively-fullscreened element
           // while native fullscreen is actually on (it never coincides with the
-          // launch), so OpenMAIC's native fullscreen still shows the workspace.
+          // launch), so Binah's native fullscreen still shows the workspace.
           nativeFullscreen ? (fsRoot ?? document.body) : document.body,
         )}
     </div>
@@ -470,12 +470,12 @@ function PBLV2WorkspaceLayer({
         animate={{ ...(expanded ? fullscreenStyle : dockedStyle), opacity: 1 }}
         transition={transition}
       >
-        {/* Native (OS) fullscreen takes over the top-right slot: OpenMAIC's
+        {/* Native (OS) fullscreen takes over the top-right slot: Binah's
             own exit bar is hidden for PBL, so this is the only click target
-            to leave true fullscreen (Esc still works, handled by OpenMAIC).
-            `document.exitFullscreen()` triggers OpenMAIC's own fullscreenchange
-            cleanup (keyboard unlock etc.) — we never touch OpenMAIC code. The
-            violet, borderless-ish treatment mirrors OpenMAIC's native control
+            to leave true fullscreen (Esc still works, handled by Binah).
+            `document.exitFullscreen()` triggers Binah's own fullscreenchange
+            cleanup (keyboard unlock etc.) — we never touch Binah code. The
+            violet, borderless-ish treatment mirrors Binah's native control
             so it reads differently from the neutral web-fullscreen buttons. */}
         {nativeFullscreen ? (
           <button

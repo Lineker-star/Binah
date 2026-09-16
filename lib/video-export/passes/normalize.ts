@@ -9,8 +9,8 @@
  *
  * Pure: no IO, deterministic; does not mutate its input.
  */
-import type { Action } from '@openmaic/dsl';
-import { isActionType } from '@openmaic/dsl';
+import type { Action } from '@binah/dsl';
+import { isActionType } from '@binah/dsl';
 import type { CompilerScene } from '../deps';
 import { type Diagnostic, VideoTimelineCompileError } from '../ir';
 

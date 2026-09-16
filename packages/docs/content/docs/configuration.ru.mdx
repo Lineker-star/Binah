@@ -3,7 +3,7 @@ title: Конфигурация
 description: LLM провайдеры, генерация медиа, разбор документов, TTS, ASR, контроль доступа и feature flags.
 ---
 
-OpenMAIC читает переменные окружения при запуске сервера. Все параметры необязательны — включайте только нужные. Пример env vars смотрите в репозитории в файле [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example). Встроенные ID моделей — в разделе [Поддерживаемые модели](./supported-models.mdx).
+Binah читает переменные окружения при запуске сервера. Все параметры необязательны — включайте только нужные. Пример env vars смотрите в репозитории в файле [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example). Встроенные ID моделей — в разделе [Поддерживаемые модели](./supported-models.mdx).
 
 Помимо env vars, можно использовать файл `server-providers.yml` в корне проекта для конфигурации зарегистрированных в коде серверных провайдеров. Переменные окружения по отдельным полям переопределяют соответствующие настройки в YAML. Кастомные OpenAI-совместимые провайдеры LLM можно добавить только через настройки, нельзя регистрировать их через произвольные префиксы env vars или неизвестные ID в YAML.
 
@@ -129,7 +129,7 @@ Lemonade — локальный сервис, не требует ключа:
 IMAGE_LEMONADE_BASE_URL=http://localhost:13305/v1
 ```
 
-ComfyUI Image не требует API key, по умолчанию подключается к `http://localhost:8188`. В настройках укажите ComfyUI Base URL и положите экспортированный в формате API workflow JSON в папку `public/` OpenMAIC; имя файла должно соответствовать `comfyui-*.json` или содержать `workflow`. Настройки автоматически обнаружат эти файлы и предложат их как опции workflow. При Docker-деплое нужно добавить workflow в образ или смонтировать отдельный файл в `/app/public/`. Поскольку `comfyui-image` — не серверный провайдер, в продакшене для подключения к ComfyUI на хосте нужно установить `ALLOW_LOCAL_NETWORKS=true`.
+ComfyUI Image не требует API key, по умолчанию подключается к `http://localhost:8188`. В настройках укажите ComfyUI Base URL и положите экспортированный в формате API workflow JSON в папку `public/` Binah; имя файла должно соответствовать `comfyui-*.json` или содержать `workflow`. Настройки автоматически обнаружат эти файлы и предложат их как опции workflow. При Docker-деплое нужно добавить workflow в образ или смонтировать отдельный файл в `/app/public/`. Поскольку `comfyui-image` — не серверный провайдер, в продакшене для подключения к ComfyUI на хосте нужно установить `ALLOW_LOCAL_NETWORKS=true`.
 
 ## Провайдеры генерации видео
 
@@ -158,7 +158,7 @@ ALIDOCMIND_ACCESS_KEY_SECRET=
 ALIDOCMIND_BASE_URL=       # опциональное переопределение
 ```
 
-`unpdf` встроен в OpenMAIC и подходит для базового разбора PDF. Для Office-документов, изображений и материалов с OCR, таблицами, формулами или сложной версткой рекомендуется MinerU или AliDocMind.
+`unpdf` встроен в Binah и подходит для базового разбора PDF. Для Office-документов, изображений и материалов с OCR, таблицами, формулами или сложной версткой рекомендуется MinerU или AliDocMind.
 
 AliDocMind поддерживает PDF, DOCX, PPTX, XLSX, а также PNG, JPG/JPEG, BMP, GIF. Текущая поддержка аудио/видео через AliDocMind: видео форматы MP4, MOV, AVI, MKV, WMV; аудио MP3, WAV, AAC. M4A не поддерживается.
 
@@ -206,7 +206,7 @@ ACCESS_CODE=your-secret-code
 DEFAULT_MODEL=openai:gpt-5.5
 ```
 
-Можно использовать `MODEL_ROUTES` для назначения моделей на разные этапы генерации; этапы без настройки используют клиентскую модель или `DEFAULT_MODEL`. Это JSON-объект, где ключ — этап генерации, значение — строка модели или объект с полями `model` и `thinking`. Полный список этапов и примеры — в [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example).
+Можно использовать `MODEL_ROUTES` для назначения моделей на разные этапы генерации; этапы без настройки используют клиентскую модель или `DEFAULT_MODEL`. Это JSON-объект, где ключ — этап генерации, значение — строка модели или объект с полями `model` и `thinking`. Полный список этапов и примеры — в [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example).
 
 ## Feature flags
 
@@ -220,7 +220,7 @@ NEXT_PUBLIC_MAIC_EDITOR_ENABLED=true
 NEXT_PUBLIC_PI_CHAT_ENABLED=true
 
 # Профессиональное образование (серверный флаг)
-OPENMAIC_ENABLE_VOCATIONAL=true
+BINAH_ENABLE_VOCATIONAL=true
 
 # Отображение UI для тестов профессионального образования
 NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=true

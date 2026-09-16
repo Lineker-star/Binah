@@ -2,12 +2,12 @@
  * PBL v2 — Prompt loader
  *
  * Loads markdown prompts from `lib/pbl/v2/prompts/*.md` and applies
- * `{{variable}}` substitutions via the existing OpenMAIC interpolator.
+ * `{{variable}}` substitutions via the existing Binah interpolator.
  *
  * Kept separate from the main `lib/prompts/` system because that one
  * tracks every prompt id in a fixed TS union (`PromptId`). Adding
  * PBL v2 prompts there would touch a core type that is shared across
- * all of OpenMAIC's generation surfaces, expanding the v2 PR diff
+ * all of Binah's generation surfaces, expanding the v2 PR diff
  * without need. The PBL v2 prompts live in their own loader.
  */
 

@@ -544,7 +544,7 @@ export async function extractMediaMaterial(
   const deadline = new MediaJobDeadline(dependencies.jobTimeoutMs ?? MEDIA_JOB_TIMEOUT_MS);
   const commands = dependencies.commands ?? defaultMediaCommands;
   const transcribe = dependencies.transcribe ?? transcribeAudio;
-  const sessionDir = await deadline.beforeAwait(() => mkdtemp(join(tmpdir(), 'openmaic-media-')));
+  const sessionDir = await deadline.beforeAwait(() => mkdtemp(join(tmpdir(), 'binah-media-')));
   const sourcePath = join(sessionDir, `source${sourceExtension(input.mimeType)}`);
   try {
     await deadline.beforeAwait(() => writeFile(sourcePath, input.buffer));

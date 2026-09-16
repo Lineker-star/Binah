@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useCanvasStore } from '@/lib/store/canvas';
 import { ScreenElement } from '@/components/slide-renderer/Editor/ScreenElement';
 import { normalizeWhiteboardViewportRatio } from '@/lib/whiteboard/viewport';
-import type { PPTElement, Whiteboard } from '@openmaic/dsl';
+import type { PPTElement, Whiteboard } from '@binah/dsl';
 import { useI18n } from '@/lib/hooks/use-i18n';
 
 export type WhiteboardCanvasHandle = {

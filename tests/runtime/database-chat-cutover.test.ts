@@ -1,7 +1,7 @@
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { DSL_VERSION } from '@openmaic/dsl';
-import { BrowserRuntimeStore, type KVStore, type RuntimeStore } from '@openmaic/storage';
+import { DSL_VERSION } from '@binah/dsl';
+import { BrowserRuntimeStore, type KVStore, type RuntimeStore } from '@binah/storage';
 
 import type { ChatSession } from '@/lib/types/chat';
 import type { ChatStorageSnapshot } from '@/lib/utils/chat-storage';
@@ -733,7 +733,7 @@ describe('database runtime chat integration', () => {
     const { db } = await import('@/lib/utils/database');
     const { getDocumentStore } = await import('@/lib/document-store');
     const { loadStageData } = await import('@/lib/utils/stage-storage');
-    const kv = new (await import('@openmaic/storage')).BrowserKVStore();
+    const kv = new (await import('@binah/storage')).BrowserKVStore();
     await getDocumentStore().saveDocument({
       stage: {
         id: 'stage-divergent-snapshot',
@@ -1484,9 +1484,9 @@ describe('database runtime chat integration', () => {
     await loadChatSessions('stage-compatible-lock', { store: runtimeStore, learnerKey });
 
     expect(requested).toEqual([
-      'openmaic:chat-storage:all',
-      `openmaic:chat-storage:${encodeURIComponent('stage-compatible-lock')}`,
-      `openmaic:chat-storage:${encodeURIComponent(`stage-compatible-lock\0${learnerKey}`)}`,
+      'binah:chat-storage:all',
+      `binah:chat-storage:${encodeURIComponent('stage-compatible-lock')}`,
+      `binah:chat-storage:${encodeURIComponent(`stage-compatible-lock\0${learnerKey}`)}`,
     ]);
   });
 

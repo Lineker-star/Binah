@@ -21,7 +21,7 @@ import type { Course } from '@/lib/supabase/courses';
  * free-form instruction text (`requirements.requirement`), rather than
  * reusing `researchContext` (which the route/prompt template already give
  * a distinct meaning: web-search findings) or adding a new field to that
- * route or to @openmaic/generation's buildOutlinePrompt.
+ * route or to @binah/generation's buildOutlinePrompt.
  */
 export function buildLessonRequirement(
   course: Pick<Course, 'title' | 'description' | 'planned_lesson_count'>,

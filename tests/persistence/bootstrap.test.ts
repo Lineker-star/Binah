@@ -39,8 +39,8 @@ describe('persistence client bootstrap', () => {
     vi.stubGlobal('window', {});
     vi.stubGlobal('localStorage', memoryStorage());
 
-    const { HttpDocumentStore } = await import('@openmaic/storage');
-    const { HttpRuntimeStore } = await import('@openmaic/storage/runtime/http');
+    const { HttpDocumentStore } = await import('@binah/storage');
+    const { HttpRuntimeStore } = await import('@binah/storage/runtime/http');
     // Importing either seam must structurally run bootstrap before the seam can
     // resolve its default store.
     const runtime = await import('@/lib/runtime/store');

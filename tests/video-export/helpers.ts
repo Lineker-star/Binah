@@ -1,4 +1,4 @@
-import type { Action, PPTElement } from '@openmaic/dsl';
+import type { Action, PPTElement } from '@binah/dsl';
 import type {
   AssetMeta,
   AssetSource,

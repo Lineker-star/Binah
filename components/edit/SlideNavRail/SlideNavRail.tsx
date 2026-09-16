@@ -390,7 +390,7 @@ export function SlideNavRail() {
         </button>
       )}
 
-      {/* Header band — mirrors playback `SceneSidebar`: OpenMAIC logo on
+      {/* Header band — mirrors playback `SceneSidebar`: Binah logo on
           the left (click → home). Height (h-10 + mt-3 + mb-1 = ~56px)
           matches playback so the chrome top edge stays at the same screen
           pixel across the mode swap. Inside the workbench panel the band

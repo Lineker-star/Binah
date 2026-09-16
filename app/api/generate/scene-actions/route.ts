@@ -14,7 +14,7 @@ import {
   buildVisionUserContent,
   type SceneGenerationContext,
   type AgentInfo,
-} from '@openmaic/generation';
+} from '@binah/generation';
 import type { SceneOutline } from '@/lib/types/generation';
 import type {
   GeneratedSlideContent,

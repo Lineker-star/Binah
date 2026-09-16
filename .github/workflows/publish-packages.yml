@@ -1,6 +1,6 @@
-name: Publish @openmaic packages
+name: Publish @binah packages
 
-# Publishes the @openmaic/* package family (dsl, generation, storage, renderer, editor, importer) to npm.
+# Publishes the @binah/* package family (dsl, generation, storage, renderer, editor, importer) to npm.
 #
 # Scope is pinned to those five packages by name on purpose: the workspace also
 # contains vendored forks (mathml2omml, pptxgenjs) whose names we do NOT own, so
@@ -14,23 +14,23 @@ name: Publish @openmaic packages
 # one source of truth, puts every release through pull request review and CI,
 # and is the only shape a branch protection rule can actually guard.
 #
-# `@openmaic/<name>@<version>` tags are an OUTPUT of a release, written after a
+# `@binah/<name>@<version>` tags are an OUTPUT of a release, written after a
 # package lands on the registry. They are markers, not triggers: a tag cannot
 # start a publish, because tags can be created by anyone with write access on
 # any commit, including commits that never reached main.
 #
 # Triggers:
-#   - push to `main` touching one of the @openmaic/* package manifests
+#   - push to `main` touching one of the @binah/* package manifests
 #     (real publish; the normal path)
 #   - manual run via the Actions tab. Validation runs from any ref; unchecking
 #     `dry_run` performs a real publish and is therefore restricted to `main` by
 #     the `release` environment.
 #
 # REQUIRED REPOSITORY SETUP:
-#   - npm org `openmaic` created and owning the `@openmaic` scope
+#   - npm org `binah` created and owning the `@binah` scope
 #   - a GitHub Environment named `release` whose deployment branch rule allows
 #     ONLY `main`, holding NPM_TOKEN (an automation/granular token with publish
-#     rights to @openmaic/*, 2FA set to "auth only")
+#     rights to @binah/*, 2FA set to "auth only")
 #   - NPM_TOKEN must NOT also exist as a repository secret. A repository secret
 #     is readable by a workflow on any branch, which would let a branch-local
 #     edit of this file collect the token without the environment.
@@ -39,12 +39,12 @@ on:
   push:
     branches: [main]
     paths:
-      - "packages/@openmaic/dsl/package.json"
-      - "packages/@openmaic/generation/package.json"
-      - "packages/@openmaic/storage/package.json"
-      - "packages/@openmaic/renderer/package.json"
-      - "packages/@openmaic/editor/package.json"
-      - "packages/@openmaic/importer/package.json"
+      - "packages/@binah/dsl/package.json"
+      - "packages/@binah/generation/package.json"
+      - "packages/@binah/storage/package.json"
+      - "packages/@binah/renderer/package.json"
+      - "packages/@binah/editor/package.json"
+      - "packages/@binah/importer/package.json"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -56,7 +56,7 @@ on:
 # would let two runs race for the same version, each deciding independently that
 # the version is unpublished.
 concurrency:
-  group: publish-openmaic
+  group: publish-binah
   cancel-in-progress: false
 
 jobs:
@@ -86,12 +86,12 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: openmaic
+          POSTGRES_DB: binah
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d openmaic"
+          --health-cmd "pg_isready -U postgres -d binah"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -117,16 +117,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       # Build in dependency order (dsl first); generation/storage/renderer/editor/importer
-      # resolve @openmaic/dsl through the workspace link.
-      - name: Build @openmaic packages
+      # resolve @binah/dsl through the workspace link.
+      - name: Build @binah packages
         run: >-
           pnpm -r
-          --filter "@openmaic/dsl"
-          --filter "@openmaic/generation"
-          --filter "@openmaic/storage"
-          --filter "@openmaic/renderer"
-          --filter "@openmaic/editor"
-          --filter "@openmaic/importer"
+          --filter "@binah/dsl"
+          --filter "@binah/generation"
+          --filter "@binah/storage"
+          --filter "@binah/renderer"
+          --filter "@binah/editor"
+          --filter "@binah/importer"
           run build
 
       # Some packages generate tracked, publishable files as part of `build`
@@ -166,13 +166,13 @@ jobs:
       # pack does not accept --ignore-scripts).
       - name: Pack release artifacts and record digests
         env:
-          RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
+          RELEASE_ARTIFACTS: ${{ runner.temp }}/binah-package-tarballs
         run: |
           set -euo pipefail
           mkdir "$RELEASE_ARTIFACTS"
           for pkg in dsl generation storage renderer editor importer; do
-            echo "::group::@openmaic/$pkg"
-            ( cd "packages/@openmaic/$pkg" \
+            echo "::group::@binah/$pkg"
+            ( cd "packages/@binah/$pkg" \
               && pnpm pack --config.ignore-scripts=true --pack-destination "$RELEASE_ARTIFACTS" )
             echo "::endgroup::"
           done
@@ -180,7 +180,7 @@ jobs:
 
       - name: Verify freshly packed release artifacts
         env:
-          RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
+          RELEASE_ARTIFACTS: ${{ runner.temp }}/binah-package-tarballs
         run: node scripts/verify-package-artifacts.mjs "$RELEASE_ARTIFACTS"
 
       # actions/upload-artifact v4 artifacts cannot be modified after upload.
@@ -188,8 +188,8 @@ jobs:
       # this already-uploaded snapshot only after the whole validate job passes.
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: openmaic-package-tarballs-${{ github.sha }}
-          path: ${{ runner.temp }}/openmaic-package-tarballs
+          name: binah-package-tarballs-${{ github.sha }}
+          path: ${{ runner.temp }}/binah-package-tarballs
           if-no-files-found: error
           overwrite: true
           retention-days: 7
@@ -204,25 +204,25 @@ jobs:
       # the tests for exactly that reason.
       - name: Test & typecheck
         env:
-          PG_CONTRACT_URL: postgresql://postgres:postgres@localhost:5432/openmaic
+          PG_CONTRACT_URL: postgresql://postgres:postgres@localhost:5432/binah
           STORAGE_PG_CONTRACT_REQUIRED: "1"
           STORAGE_VITEST_RESULTS: ${{ runner.temp }}/storage-vitest.json
           STORAGE_PG_BASELINE: ${{ runner.temp }}/storage-pg-baseline.json
         run: |
           set -euo pipefail
-          pnpm --filter "@openmaic/dsl" \
-            --filter "@openmaic/generation" --filter "@openmaic/renderer" \
-            --filter "@openmaic/editor" \
-            --filter "@openmaic/importer" run test
+          pnpm --filter "@binah/dsl" \
+            --filter "@binah/generation" --filter "@binah/renderer" \
+            --filter "@binah/editor" \
+            --filter "@binah/importer" run test
           node scripts/assert-pg-contract-suites.mjs --capture-baseline "$STORAGE_PG_BASELINE"
-          pnpm --filter "@openmaic/storage" exec \
+          pnpm --filter "@binah/storage" exec \
             vitest run --reporter=default --reporter=json \
             --outputFile.json="$STORAGE_VITEST_RESULTS"
           node scripts/assert-pg-contract-suites.mjs "$STORAGE_VITEST_RESULTS" \
             --baseline "$STORAGE_PG_BASELINE"
-          pnpm --filter "@openmaic/dsl" --filter "@openmaic/generation" \
-            --filter "@openmaic/storage" --filter "@openmaic/renderer" \
-            --filter "@openmaic/editor" run typecheck
+          pnpm --filter "@binah/dsl" --filter "@binah/generation" \
+            --filter "@binah/storage" --filter "@binah/renderer" \
+            --filter "@binah/editor" run typecheck
 
       # KNOWN LIMITATION: this smoke test reads the writable local directory,
       # not the uploaded snapshot. Because upload already happened, a test
@@ -233,7 +233,7 @@ jobs:
       # closing it requires a separate packing-only job that runs no tests.
       - name: Smoke-test publishable tarballs
         env:
-          RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
+          RELEASE_ARTIFACTS: ${{ runner.temp }}/binah-package-tarballs
         run: pnpm test:package-tarballs -- "$RELEASE_ARTIFACTS"
 
   # The only job that can reach NPM_TOKEN. It is separate so the environment,
@@ -267,13 +267,13 @@ jobs:
       - name: Download validated package tarballs
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: openmaic-package-tarballs-${{ github.sha }}
-          path: ${{ runner.temp }}/openmaic-package-tarballs
+          name: binah-package-tarballs-${{ github.sha }}
+          path: ${{ runner.temp }}/binah-package-tarballs
 
       - name: Verify validated package tarballs
         run: node scripts/verify-package-artifacts.mjs "$RELEASE_ARTIFACTS"
         env:
-          RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
+          RELEASE_ARTIFACTS: ${{ runner.temp }}/binah-package-tarballs
 
       # The environment's branch rule is the real boundary; this is defence in
       # depth, and it catches the case the rule cannot see. First-parent only:
@@ -362,7 +362,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
           RELEASE_PLAN_PATH: ${{ runner.temp }}/release-plan.json
-          RELEASE_ARTIFACTS: ${{ runner.temp }}/openmaic-package-tarballs
+          RELEASE_ARTIFACTS: ${{ runner.temp }}/binah-package-tarballs
         run: |
           set -euo pipefail
           published_versions=""
@@ -374,8 +374,8 @@ jobs:
 
           node scripts/check-package-version-bumps.mjs --release
           for pkg in dsl generation storage renderer editor importer; do
-            name="@openmaic/$pkg"
-            version="$(node -p "require('./packages/@openmaic/$pkg/package.json').version")"
+            name="@binah/$pkg"
+            version="$(node -p "require('./packages/@binah/$pkg/package.json').version")"
             planned="$(node -e 'const plan = require(process.env.RELEASE_PLAN_PATH);
               const [name, version] = process.argv.slice(1);
               process.stdout.write(plan.some((e) => e.package === name && e.version === version) ? "yes" : "no");' \
@@ -384,7 +384,7 @@ jobs:
               echo "Skipping $name@$version: already on the registry."
               continue
             fi
-            filename="openmaic-$pkg-$version.tgz"
+            filename="binah-$pkg-$version.tgz"
             tarball="$RELEASE_ARTIFACTS/$filename"
             expected_digest="$(
               printf '%s\n' "$trusted_digests" | awk -v filename="$filename" \
@@ -445,8 +445,8 @@ jobs:
         run: |
           set -euo pipefail
           for pkg in dsl generation storage renderer editor importer; do
-            name="@openmaic/$pkg"
-            version="$(node -p "require('./packages/@openmaic/$pkg/package.json').version")"
+            name="@binah/$pkg"
+            version="$(node -p "require('./packages/@binah/$pkg/package.json').version")"
             tag="$name@$version"
             if [[ ",$PUBLISHED_VERSIONS," == *",$tag,"* ]]; then
               echo "Published $tag in this run; registry propagation is not required."

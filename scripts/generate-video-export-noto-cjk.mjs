@@ -8,14 +8,14 @@ const faces = [
   {
     package: 'noto-sans-sc',
     subset: 'chinese-simplified',
-    family: 'OpenMAIC Noto Sans SC',
+    family: 'Binah Noto Sans SC',
     licenseExport: 'NOTO_SANS_SC_OFL_LICENSE',
     filename: 'noto-sans-sc-chinese-simplified-400-normal.woff2',
   },
   {
     package: 'noto-sans-kr',
     subset: 'korean',
-    family: 'OpenMAIC Noto Sans KR',
+    family: 'Binah Noto Sans KR',
     licenseExport: 'NOTO_SANS_KR_OFL_LICENSE',
     filename: 'noto-sans-kr-korean-400-normal.woff2',
   },
@@ -49,7 +49,7 @@ for (const face of faces) {
   totalBytes += font.byteLength;
   copyFileSync(fontPath, path.join(publicFontDir, face.filename));
   css.push(
-    `@font-face{font-family:"${face.family}";font-style:normal;font-weight:400;font-display:block;src:url("__OPENMAIC_QUIZ_FONT_BASE__/${face.filename}") format("woff2")}`,
+    `@font-face{font-family:"${face.family}";font-style:normal;font-weight:400;font-display:block;src:url("__BINAH_QUIZ_FONT_BASE__/${face.filename}") format("woff2")}`,
   );
   assets.push({
     path: `${exportFontBase}/${face.filename}`,
@@ -67,11 +67,11 @@ const output = `/**
  */
 const NOTO_CJK_CSS_TEMPLATE = ${singleQuoted(css.join('\n'))};
 export const NOTO_CJK_MEASUREMENT_CSS = NOTO_CJK_CSS_TEMPLATE.replaceAll(
-  '__OPENMAIC_QUIZ_FONT_BASE__',
+  '__BINAH_QUIZ_FONT_BASE__',
   ${singleQuoted(publicFontBase)},
 );
 export const NOTO_CJK_EXPORT_CSS = NOTO_CJK_CSS_TEMPLATE.replaceAll(
-  '__OPENMAIC_QUIZ_FONT_BASE__',
+  '__BINAH_QUIZ_FONT_BASE__',
   ${singleQuoted(exportFontBase)},
 );
 export const NOTO_CJK_FONT_ASSETS = ${JSON.stringify(assets)} as const;

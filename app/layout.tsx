@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import './globals.css';
-import '@openmaic/renderer/fonts.css';
+import '@binah/renderer/fonts.css';
 import 'animate.css';
 import 'katex/dist/katex.min.css';
 import { ThemeProvider } from '@/lib/hooks/use-theme';

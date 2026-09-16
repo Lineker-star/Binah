@@ -75,7 +75,7 @@ export interface ThinkingCapability {
   control?: ThinkingControlType;
   /** Which provider-specific adapter maps the unified config to request params. */
   requestAdapter?: ThinkingRequestAdapter;
-  /** Default mode when OpenMAIC does not send an explicit config. */
+  /** Default mode when Binah does not send an explicit config. */
   defaultMode?: ThinkingMode;
   /** Allowed effort values for effort-based models. */
   effortValues?: ThinkingEffort[];

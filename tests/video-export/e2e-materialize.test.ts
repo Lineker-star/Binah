@@ -242,7 +242,7 @@ const COMPLETE_PROJECT_FILES = [
   'README.md',
   'assets/vendor/gsap.min.js',
   'index.html',
-  'openmaic-video-manifest.json',
+  'binah-video-manifest.json',
   'subtitles.srt',
   'subtitles.vtt',
 ].sort();

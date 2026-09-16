@@ -395,7 +395,7 @@ describe('Native Child production consumer', () => {
     );
   });
 
-  it('runs Spotlight and continuation in one Child through the shared OpenMAIC transport', async () => {
+  it('runs Spotlight and continuation in one Child through the shared Binah transport', async () => {
     useResponses([
       [spotlightCall(), finish('tool-calls')],
       [{ type: 'text-delta', text: 'This is the key idea.' }, finish('stop')],

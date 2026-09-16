@@ -10,7 +10,7 @@
  *
  * Robustness we explicitly handle:
  *  - LLM emits fenced JSON, naked JSON, or prose + JSON → reuse the
- *    shared OpenMAIC generation JSON repair parser
+ *    shared Binah generation JSON repair parser
  *  - LLM emits malformed JSON inside the fence → reuse shared repair;
  *    return null only if no object can be recovered
  *  - LLM emits `stars: "4/5"` / `"good"` / `null` / `8.7` / `NaN`
@@ -23,7 +23,7 @@
  * we encode them all up front here.
  */
 
-import { parseJsonResponse } from '@openmaic/generation';
+import { parseJsonResponse } from '@binah/generation';
 
 const FENCED_JSON_RE = /```json\s*\n([\s\S]*?)\n\s*```/g;
 const ANY_FENCED_JSON_RE = /```(?:json)?\s*([\s\S]*?)```/g;

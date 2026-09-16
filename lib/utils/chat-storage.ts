@@ -6,9 +6,9 @@
  * the current message window and mutable chat metadata.
  */
 
-import type { RuntimeSession } from '@openmaic/dsl';
-import type { KVStore, RuntimeStore } from '@openmaic/storage';
-import { HttpRuntimeStoreError } from '@openmaic/storage/runtime/http';
+import type { RuntimeSession } from '@binah/dsl';
+import type { KVStore, RuntimeStore } from '@binah/storage';
+import { HttpRuntimeStoreError } from '@binah/storage/runtime/http';
 import { isEqual } from 'lodash';
 import { nanoid } from 'nanoid';
 

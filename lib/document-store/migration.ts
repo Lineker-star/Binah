@@ -1,5 +1,5 @@
-import { DSL_VERSION, migrate } from '@openmaic/dsl';
-import { BrowserKVStore, type DocumentStore, type KVStore } from '@openmaic/storage';
+import { DSL_VERSION, migrate } from '@binah/dsl';
+import { BrowserKVStore, type DocumentStore, type KVStore } from '@binah/storage';
 import isEqual from 'lodash/isEqual';
 
 import type { AppScene } from '@/lib/types/stage';
@@ -228,7 +228,7 @@ function resolveLocks(deps: DocumentMigrationDeps): LockManager | undefined {
 }
 
 export function documentLockName(stageId: string): string {
-  return `openmaic:document:${encodeURIComponent(stageId)}`;
+  return `binah:document:${encodeURIComponent(stageId)}`;
 }
 
 /** Cross-realm serialization for migration and aggregate read-modify-write. */
@@ -321,7 +321,7 @@ function assertValidDestination(stageId: string, document: AppDocument): void {
  * shape and are expected to key on `scene.type` and pass app kinds through
  * untouched. This is the deliberate asymmetry with `outline`, which the DSL owns
  * no contract for at all.
- * This mirrors `@openmaic/storage`'s private `migrateDocument` in
+ * This mirrors `@binah/storage`'s private `migrateDocument` in
  * `document/browser.ts`; changes must be kept in sync.
  */
 export function migrateDocumentForVerification(

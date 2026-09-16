@@ -16,13 +16,13 @@
  */
 import type { AgentEvent, AgentMessage } from '@earendil-works/pi-agent-core';
 import { InMemorySessionRepo, Session } from '@earendil-works/pi-agent-core';
-import type { ClaimedAgentSession } from '@openmaic/storage';
+import type { ClaimedAgentSession } from '@binah/storage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /** Point the real skill loader at a temp directory BEFORE config.ts loads. */
 const fixture = vi.hoisted(() => {
   /* eslint-disable @typescript-eslint/no-require-imports -- vi.hoisted runs before
-     module imports, and OPENMAIC_AGENT_SKILLS_DIR must be set before config.ts loads. */
+     module imports, and BINAH_AGENT_SKILLS_DIR must be set before config.ts loads. */
   const { mkdtempSync, mkdirSync, writeFileSync } = require('node:fs') as typeof import('node:fs');
   const { tmpdir } = require('node:os') as typeof import('node:os');
   const { join } = require('node:path') as typeof import('node:path');
@@ -39,7 +39,7 @@ const fixture = vi.hoisted(() => {
       'utf8',
     );
   }
-  process.env.OPENMAIC_AGENT_SKILLS_DIR = root;
+  process.env.BINAH_AGENT_SKILLS_DIR = root;
   return { root };
 });
 
@@ -391,6 +391,6 @@ describe('skills runner registration', () => {
   });
 
   it('reuses the fixture temp dir so the loader reads real files', () => {
-    expect(fixture.root).toBe(process.env.OPENMAIC_AGENT_SKILLS_DIR);
+    expect(fixture.root).toBe(process.env.BINAH_AGENT_SKILLS_DIR);
   });
 });

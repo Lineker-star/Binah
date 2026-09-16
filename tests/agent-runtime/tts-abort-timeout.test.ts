@@ -70,7 +70,7 @@ describe('TTS abort propagation and per-request timeout', () => {
     mocks.providers.mockReset();
     mocks.persist.mockReset();
     mocks.providers.mockReturnValue({ 'openai-tts': { disabled: false } });
-    mocks.persist.mockResolvedValue('https://openmaic.test/audio.mp3');
+    mocks.persist.mockResolvedValue('https://binah.test/audio.mp3');
   });
 
   afterEach(() => {

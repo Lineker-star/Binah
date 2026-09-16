@@ -1,4 +1,4 @@
-const CHAT_STORAGE_GLOBAL_LOCK = 'openmaic:chat-storage:all';
+const CHAT_STORAGE_GLOBAL_LOCK = 'binah:chat-storage:all';
 const DEFAULT_EXCLUSIVE_ACQUIRE_TIMEOUT_MS = 5_000;
 type FallbackLockMode = 'shared' | 'exclusive';
 interface FallbackLockWaiter {
@@ -11,7 +11,7 @@ let fallbackReaders = 0;
 let fallbackWriter = false;
 
 export function chatStoragePartitionLockName(key: string): string {
-  const name = `openmaic:chat-storage:${encodeURIComponent(key)}`;
+  const name = `binah:chat-storage:${encodeURIComponent(key)}`;
   return name === CHAT_STORAGE_GLOBAL_LOCK ? `${name}:partition` : name;
 }
 

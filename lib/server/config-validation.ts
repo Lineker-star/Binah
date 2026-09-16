@@ -161,7 +161,7 @@ function validateAgentRuntime(): void {
   if (!isAgentRuntimeEnabled()) return;
   if (!process.env.DATABASE_URL?.trim()) {
     warn(
-      'OPENMAIC_AGENT_RUNTIME_ENABLED is set but DATABASE_URL is not — the agent runtime is enabled but unusable: its probe reports disabled, its routes answer 404, and no runner starts. Set DATABASE_URL or disable the flag.',
+      'BINAH_AGENT_RUNTIME_ENABLED is set but DATABASE_URL is not — the agent runtime is enabled but unusable: its probe reports disabled, its routes answer 404, and no runner starts. Set DATABASE_URL or disable the flag.',
     );
   }
 }

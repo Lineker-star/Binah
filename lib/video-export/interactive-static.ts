@@ -7,7 +7,7 @@ export const INTERACTIVE_READY_TIMEOUT_MS = 8_000;
 export const INTERACTIVE_SETTLE_MS = 250;
 
 /** postMessage discriminator shared by the packaged child page and parent composition. */
-export const INTERACTIVE_STATIC_MESSAGE_FLAG = '__openmaicInteractiveStatic';
+export const INTERACTIVE_STATIC_MESSAGE_FLAG = '__binahInteractiveStatic';
 
 /** Stable preparation failures recorded by the browser-side adapter. */
 export type InteractiveHtmlFailure =

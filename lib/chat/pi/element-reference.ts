@@ -7,7 +7,7 @@ import {
   type PPTElement,
   type ShapePathFormulasKeys,
   type TextType,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 import type { SlideElementReference, StatelessChatRequest } from '@/lib/types/chat';
 
 const ID_LIMIT = 256;
@@ -26,7 +26,7 @@ const CHART_LEGEND_LIMIT = 20;
 const CHART_SERIES_LIMIT = 20;
 const CHART_POINT_LIMIT = 100;
 
-export const ELEMENT_REFERENCE_ACCEPTED_HEADER = 'X-OpenMAIC-Element-Reference-Accepted';
+export const ELEMENT_REFERENCE_ACCEPTED_HEADER = 'X-Binah-Element-Reference-Accepted';
 
 export type MediaReferenceKind = 'absent' | 'embedded' | 'local' | 'external' | 'reference';
 

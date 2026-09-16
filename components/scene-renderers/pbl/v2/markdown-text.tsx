@@ -4,7 +4,7 @@
  * PBL v2 — Markdown text renderer.
  *
  * Thin wrapper around `streamdown` (the same markdown renderer
- * OpenMAIC uses for AI-element messages) so Instructor replies,
+ * Binah uses for AI-element messages) so Instructor replies,
  * milestone scripts, and document content render with consistent
  * typography and code formatting.
  */

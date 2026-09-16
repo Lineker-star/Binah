@@ -53,7 +53,7 @@ describe('POST /api/classroom — id validation before persistence', () => {
 
     const res = await POST(
       postClassroom({
-        id: '../../../../tmp/openmaic-escape',
+        id: '../../../../tmp/binah-escape',
         title: 'Lesson',
       }),
     );

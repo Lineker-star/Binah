@@ -1,13 +1,13 @@
 ---
 title: Deployment
-description: Deploy OpenMAIC to Vercel, Docker, or your own host.
+description: Deploy Binah to Vercel, Docker, or your own host.
 ---
 
-OpenMAIC is a standard Next.js application. It runs anywhere Next.js runs.
+Binah is a standard Next.js application. It runs anywhere Next.js runs.
 
 ## Vercel (one click)
 
-The fastest path is the Deploy button in the [repository README](https://github.com/THU-MAIC/OpenMAIC). Fork the repository and enter an API key for at least one LLM when prompted.
+The fastest path is the Deploy button in the [repository README](https://github.com/Lineker-star/binah). Fork the repository and enter an API key for at least one LLM when prompted.
 
 Vercel rebuilds and deploys the Next.js application after every commit. Configure at least one LLM provider in the project settings for deployment.
 
@@ -18,9 +18,9 @@ Vercel deployments use browser-side persistence by default. For server-side pers
 The repository includes a production-ready `Dockerfile`. The image uses Node.js 22 internally. Build and run it with:
 
 ```bash
-docker build -t openmaic .
+docker build -t binah .
 
-docker run --env-file .env.local -p 3000:3000 openmaic
+docker run --env-file .env.local -p 3000:3000 binah
 ```
 
 We recommend the repository's Docker Compose configuration:
@@ -31,7 +31,7 @@ cp .env.example .env.local
 docker compose up --build
 ```
 
-The default Compose deployment starts the OpenMAIC app and mounts the `openmaic-data` volume. Configure other providers and features as needed; see [Configuration](./configuration.mdx).
+The default Compose deployment starts the Binah app and mounts the `binah-data` volume. Configure other providers and features as needed; see [Configuration](./configuration.mdx).
 
 `NEXT_PUBLIC_*` feature flags are injected at Docker build time and cannot be set only in the runtime `.env.local`. For example, to enable video export and experimental PPTX import:
 
@@ -47,12 +47,12 @@ To use a server-side provider configuration, mount the file at its fixed contain
 
 ```yaml
 services:
-  openmaic:
+  binah:
     volumes:
       - ./server-providers.yml:/app/server-providers.yml:ro
 ```
 
-Inside a Docker container, `localhost` refers to the container itself. If Ollama, Lemonade, VoxCPM, or ComfyUI runs on the host, use `host.docker.internal`, for example `http://host.docker.internal:11434/v1` or `http://host.docker.internal:8188`. Linux Docker usually also requires `extra_hosts: ["host.docker.internal:host-gateway"]` on the `openmaic` service. Because ComfyUI is not currently a server-managed provider, production deployments must also set `ALLOW_LOCAL_NETWORKS=true`, or the SSRF guard will reject the address.
+Inside a Docker container, `localhost` refers to the container itself. If Ollama, Lemonade, VoxCPM, or ComfyUI runs on the host, use `host.docker.internal`, for example `http://host.docker.internal:11434/v1` or `http://host.docker.internal:8188`. Linux Docker usually also requires `extra_hosts: ["host.docker.internal:host-gateway"]` on the `binah` service. Because ComfyUI is not currently a server-managed provider, production deployments must also set `ALLOW_LOCAL_NETWORKS=true`, or the SSRF guard will reject the address.
 
 ## Self-host on a VM
 
@@ -68,26 +68,26 @@ Put nginx or Caddy in front for TLS termination. By default, classroom state is 
 
 ## Server-side persistence (PostgreSQL)
 
-The repository's `server-persistence` profile starts OpenMAIC and PostgreSQL in two containers. The persistence HTTP API is embedded in OpenMAIC; no separate persistence service is required.
+The repository's `server-persistence` profile starts Binah and PostgreSQL in two containers. The persistence HTTP API is embedded in Binah; no separate persistence service is required.
 
 First add the database connection and development token to `.env.local`:
 
 ```bash
-DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
-PERSISTENCE_DEV_TOKEN=openmaic-local-dev
+DATABASE_URL=postgres://binah:binah-dev@postgres:5432/binah
+PERSISTENCE_DEV_TOKEN=binah-local-dev
 ```
 
 Then start the profile:
 
 ```bash
 NEXT_PUBLIC_PERSISTENCE=1 \
-NEXT_PUBLIC_PERSISTENCE_TOKEN=openmaic-local-dev \
+NEXT_PUBLIC_PERSISTENCE_TOKEN=binah-local-dev \
 docker compose --profile server-persistence up --build
 ```
 
 `NEXT_PUBLIC_PERSISTENCE` and `NEXT_PUBLIC_PERSISTENCE_TOKEN` are build-time variables and must match the server-side runtime configuration. `PERSISTENCE_DEV_TOKEN` is suitable only for local or trusted private-network deployments. It does not provide real user isolation and must not be used directly as authentication for a public production deployment.
 
-PostgreSQL data is stored in the `openmaic-postgres` volume. `PERSISTENCE_POSTGRES_PASSWORD` sets the password only when the database directory is first initialized. Changing the environment variable later does not automatically change the existing database user's password.
+PostgreSQL data is stored in the `binah-postgres` volume. `PERSISTENCE_POSTGRES_PASSWORD` sets the password only when the database directory is first initialized. Changing the environment variable later does not automatically change the existing database user's password.
 
 Leave `NEXT_PUBLIC_PERSISTENCE` unset to keep the original browser-side persistence behavior.
 
@@ -101,7 +101,7 @@ Enable the `video-export` profile:
 docker compose --profile video-export up --build
 ```
 
-Compose connects OpenMAIC to the rendering service through `RENDER_SERVICE_URL`. If the profile is disabled or the rendering service is unavailable, export falls back to downloading the project ZIP for rendering with the local CLI. The rendering service uses an isolated network and requires the `NET_ADMIN` capability at startup. See [`render-service/README.md`](https://github.com/THU-MAIC/OpenMAIC/blob/main/render-service/README.md) for more limitations and standalone deployment instructions.
+Compose connects Binah to the rendering service through `RENDER_SERVICE_URL`. If the profile is disabled or the rendering service is unavailable, export falls back to downloading the project ZIP for rendering with the local CLI. The rendering service uses an isolated network and requires the `NET_ADMIN` capability at startup. See [`render-service/README.md`](https://github.com/Lineker-star/binah/blob/main/render-service/README.md) for more limitations and standalone deployment instructions.
 
 ## Environment variables
 

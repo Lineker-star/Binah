@@ -1,4 +1,4 @@
-import type { PPTElement } from '@openmaic/dsl';
+import type { PPTElement } from '@binah/dsl';
 
 /**
  * The single selected slide element — `undefined` unless exactly one element is

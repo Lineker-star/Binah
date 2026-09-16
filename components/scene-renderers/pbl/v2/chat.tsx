@@ -1136,7 +1136,7 @@ function InstructorMessageBubble({
 
 /** PBL v2 instructor avatar — a PBL-owned asset, intentionally NOT
  *  roundtable's `DEFAULT_TEACHER_AVATAR`, so the instructor's face is
- *  decoupled from the OpenMAIC classroom teacher avatar; changing one
+ *  decoupled from the Binah classroom teacher avatar; changing one
  *  never affects the other. */
 const PBL_INSTRUCTOR_AVATAR = '/avatars/instructor.png';
 

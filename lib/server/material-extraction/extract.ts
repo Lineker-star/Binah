@@ -2,7 +2,7 @@ import {
   createMaterialId,
   type ClaimedMaterialExtraction,
   type CompleteMaterialExtractionInput,
-} from '@openmaic/storage';
+} from '@binah/storage';
 
 import {
   getDocumentExtractorProviders,

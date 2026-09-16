@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { AssetManifestEntry } from '@openmaic/dsl';
+import type { AssetManifestEntry } from '@binah/dsl';
 
 const mocks = vi.hoisted(() => ({
   rows: new Map<string, { id: string; stageId: string; blob: Blob; mimeType?: string }>(),

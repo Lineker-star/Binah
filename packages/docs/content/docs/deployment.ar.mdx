@@ -1,13 +1,13 @@
 ---
 title: النشر
-description: نشر OpenMAIC إلى Vercel، Docker، أو مضيفك الخاص.
+description: نشر Binah إلى Vercel، Docker، أو مضيفك الخاص.
 ---
 
-OpenMAIC هو تطبيق Next.js قياسي، حيث يمكن تشغيله في أي مكان يدعم Next.js.
+Binah هو تطبيق Next.js قياسي، حيث يمكن تشغيله في أي مكان يدعم Next.js.
 
 ## Vercel (بنقرة واحدة)
 
-أسرع مسار. اضغط على زر النشر في [README المستودع](https://github.com/THU-MAIC/OpenMAIC)، قم بعمل fork للمستودع، واملأ مفتاح API لموفر LLM واحد على الأقل حسب التعليمات.
+أسرع مسار. اضغط على زر النشر في [README المستودع](https://github.com/Lineker-star/binah)، قم بعمل fork للمستودع، واملأ مفتاح API لموفر LLM واحد على الأقل حسب التعليمات.
 
 يقوم Vercel بإعادة بناء ونشر تطبيق Next.js مع كل commit. عند النشر، يجب تكوين مزود LLM واحد على الأقل في إعدادات المشروع.
 
@@ -18,9 +18,9 @@ OpenMAIC هو تطبيق Next.js قياسي، حيث يمكن تشغيله في 
 يحتوي المستودع على `Dockerfile` مناسب للإنتاج. يستخدم داخل الصورة Node.js 22، قم بالبناء والتشغيل:
 
 ```bash
-docker build -t openmaic .
+docker build -t binah .
 
-docker run --env-file .env.local -p 3000:3000 openmaic
+docker run --env-file .env.local -p 3000:3000 binah
 ```
 
 يوصى باستخدام تكوين Docker Compose الموجود في المستودع:
@@ -31,7 +31,7 @@ cp .env.example .env.local
 docker compose up --build
 ```
 
-يبدأ نشر Compose الافتراضي تطبيق OpenMAIC ويربط مجلد البيانات `openmaic-data`. يمكن تكوين مزودين ووظائف أخرى حسب الحاجة، راجع [شرح الإعدادات](./configuration.mdx).
+يبدأ نشر Compose الافتراضي تطبيق Binah ويربط مجلد البيانات `binah-data`. يمكن تكوين مزودين ووظائف أخرى حسب الحاجة، راجع [شرح الإعدادات](./configuration.mdx).
 
 تُحقن مفاتيح التكوين `NEXT_PUBLIC_*` أثناء بناء Docker، ولا يمكن الاعتماد فقط على `.env.local` وقت التشغيل. على سبيل المثال، لتمكين تصدير الفيديو واستيراد PPTX التجريبي:
 
@@ -47,12 +47,12 @@ docker compose --profile video-export up --build
 
 ```yaml
 services:
-  openmaic:
+  binah:
     volumes:
       - ./server-providers.yml:/app/server-providers.yml:ro
 ```
 
-يشير `localhost` داخل حاوية Docker إلى الحاوية نفسها. إذا كانت خدمات مثل Ollama أو Lemonade أو VoxCPM أو ComfyUI تعمل على المضيف، فاستخدم `host.docker.internal`، مثل `http://host.docker.internal:11434/v1` أو `http://host.docker.internal:8188`. على Linux، عادةً ما تحتاج إلى إضافة `extra_hosts: ["host.docker.internal:host-gateway"]` لخدمة `openmaic`. ComfyUI ليست مزودًا مُدارًا من الخادم، لذا في بيئة الإنتاج يجب تعيين `ALLOW_LOCAL_NETWORKS=true` لتجنب رفض الحماية من SSRF لهذا العنوان.
+يشير `localhost` داخل حاوية Docker إلى الحاوية نفسها. إذا كانت خدمات مثل Ollama أو Lemonade أو VoxCPM أو ComfyUI تعمل على المضيف، فاستخدم `host.docker.internal`، مثل `http://host.docker.internal:11434/v1` أو `http://host.docker.internal:8188`. على Linux، عادةً ما تحتاج إلى إضافة `extra_hosts: ["host.docker.internal:host-gateway"]` لخدمة `binah`. ComfyUI ليست مزودًا مُدارًا من الخادم، لذا في بيئة الإنتاج يجب تعيين `ALLOW_LOCAL_NETWORKS=true` لتجنب رفض الحماية من SSRF لهذا العنوان.
 
 ## الاستضافة الذاتية على جهاز افتراضي
 
@@ -68,26 +68,26 @@ pnpm start      # يستمع على المنفذ 3000 افتراضياً
 
 ## التخزين الدائم على الخادم (PostgreSQL)
 
-يبدأ ملف تعريف `server-persistence` في المستودع حاويتين: OpenMAIC وPostgreSQL. واجهة برمجة التطبيقات للتخزين الدائم مضمنة في OpenMAIC ولا تحتاج إلى خدمة تخزين منفصلة.
+يبدأ ملف تعريف `server-persistence` في المستودع حاويتين: Binah وPostgreSQL. واجهة برمجة التطبيقات للتخزين الدائم مضمنة في Binah ولا تحتاج إلى خدمة تخزين منفصلة.
 
 أضف اتصال قاعدة البيانات ورمز التطوير في `.env.local`:
 
 ```bash
-DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
-PERSISTENCE_DEV_TOKEN=openmaic-local-dev
+DATABASE_URL=postgres://binah:binah-dev@postgres:5432/binah
+PERSISTENCE_DEV_TOKEN=binah-local-dev
 ```
 
 ثم شغّل ملف التعريف:
 
 ```bash
 NEXT_PUBLIC_PERSISTENCE=1 \
-NEXT_PUBLIC_PERSISTENCE_TOKEN=openmaic-local-dev \
+NEXT_PUBLIC_PERSISTENCE_TOKEN=binah-local-dev \
 docker compose --profile server-persistence up --build
 ```
 
 `NEXT_PUBLIC_PERSISTENCE` و`NEXT_PUBLIC_PERSISTENCE_TOKEN` هما متغيرات بناء ويجب أن تتطابق مع إعدادات الخادم وقت التشغيل. رمز التطوير `PERSISTENCE_DEV_TOKEN` مناسب فقط للنشر المحلي أو الشبكات الموثوقة، ولا يوفر عزلاً حقيقياً للمستخدمين، ولا ينبغي استخدامه كآلية مصادقة في بيئة الإنتاج العامة.
 
-يتم حفظ بيانات PostgreSQL في مجلد `openmaic-postgres`. يتم تعيين كلمة مرور `PERSISTENCE_POSTGRES_PASSWORD` فقط عند التهيئة الأولى لقاعدة البيانات، ولا يتم تعديلها تلقائياً عند تغيير متغير البيئة لاحقاً.
+يتم حفظ بيانات PostgreSQL في مجلد `binah-postgres`. يتم تعيين كلمة مرور `PERSISTENCE_POSTGRES_PASSWORD` فقط عند التهيئة الأولى لقاعدة البيانات، ولا يتم تعديلها تلقائياً عند تغيير متغير البيئة لاحقاً.
 
 إذا لم يتم تعيين `NEXT_PUBLIC_PERSISTENCE`, فسيستمر التطبيق في استخدام التخزين الدائم على جانب المتصفح كما كان.
 
@@ -101,7 +101,7 @@ docker compose --profile server-persistence up --build
 docker compose --profile video-export up --build
 ```
 
-يتيح Compose لـ OpenMAIC الاتصال بخدمة التصيير عبر `RENDER_SERVICE_URL`. إذا لم يتم تفعيل هذا الملف التعريفي أو كانت خدمة التصيير غير متاحة، يتحول التصدير إلى تنزيل مشروع ZIP للتصيير المحلي عبر CLI. تستخدم خدمة التصيير شبكة معزولة وتتطلب قدرة `NET_ADMIN` عند التشغيل؛ لمزيد من القيود وطرق النشر المستقلة، راجع [`render-service/README.md`](https://github.com/THU-MAIC/OpenMAIC/blob/main/render-service/README.md).
+يتيح Compose لـ Binah الاتصال بخدمة التصيير عبر `RENDER_SERVICE_URL`. إذا لم يتم تفعيل هذا الملف التعريفي أو كانت خدمة التصيير غير متاحة، يتحول التصدير إلى تنزيل مشروع ZIP للتصيير المحلي عبر CLI. تستخدم خدمة التصيير شبكة معزولة وتتطلب قدرة `NET_ADMIN` عند التشغيل؛ لمزيد من القيود وطرق النشر المستقلة، راجع [`render-service/README.md`](https://github.com/Lineker-star/binah/blob/main/render-service/README.md).
 
 ## متغيرات البيئة
 

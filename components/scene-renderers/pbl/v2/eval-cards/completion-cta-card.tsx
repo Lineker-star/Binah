@@ -8,7 +8,7 @@
  * report.
  *
  * Why a CTA in chat rather than auto-navigating: the user
- * explicitly asked for this in the refactor/openmaic-pbl repo —
+ * explicitly asked for this in the refactor/binah-pbl repo —
  * forcibly navigating away robbed them of the chance to scroll
  * back through the milestone reflections. We respect that.
  *

@@ -266,7 +266,7 @@ const SCRIPT_FONT_MATRIX = [
   {
     name: 'Cyrillic',
     locale: 'ru-RU' as Locale,
-    family: 'OpenMAIC Noto Sans Cyrillic',
+    family: 'Binah Noto Sans Cyrillic',
     text: 'Привет Ёж Ԁ',
     expectedFontFiles: [
       'noto-sans-cyrillic-400-normal.woff2',
@@ -276,7 +276,7 @@ const SCRIPT_FONT_MATRIX = [
   {
     name: 'Arabic',
     locale: 'ar-SA' as Locale,
-    family: 'OpenMAIC Noto Sans Arabic',
+    family: 'Binah Noto Sans Arabic',
     text: 'العربية',
     expectedFontFiles: ['noto-sans-arabic-arabic-400-normal.woff2'],
   },
@@ -394,7 +394,7 @@ async function loadEmittedHtml(page: Page, html: string): Promise<void> {
       return {
         gsap: typeof globals.gsap,
         timelineKeys: Object.keys(globals.__timelines ?? {}),
-        openmaicTimeline: typeof globals.__timelines?.openmaic?.duration === 'function',
+        binahTimeline: typeof globals.__timelines?.binah?.duration === 'function',
       };
     });
 
@@ -402,8 +402,8 @@ async function loadEmittedHtml(page: Page, html: string): Promise<void> {
     expect(gsapRequests).toEqual(['http://cover-layout.test/assets/vendor/gsap.min.js']);
     expect(runtime).toEqual({
       gsap: 'object',
-      timelineKeys: ['openmaic'],
-      openmaicTimeline: true,
+      timelineKeys: ['binah'],
+      binahTimeline: true,
     });
   } finally {
     page.off('pageerror', recordPageError);
@@ -1036,7 +1036,7 @@ describe('Quiz/PBL cover cards in a real browser', () => {
                       { time(value: number, suppressEvents?: boolean): unknown }
                     >;
                   }
-                ).__timelines.openmaic;
+                ).__timelines.binah;
                 const content = document.querySelector<HTMLElement>('.quiz-list-content')!;
                 const viewport = document.querySelector<HTMLElement>('.quiz-list-viewport')!;
                 const cards = document.querySelectorAll<HTMLElement>('.quiz-list-question');
@@ -1242,7 +1242,7 @@ describe('Quiz/PBL cover cards in a real browser', () => {
       });
       expect(surface.requiredFontLoads).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ family: 'OpenMAIC Noto Sans Cyrillic' }),
+          expect.objectContaining({ family: 'Binah Noto Sans Cyrillic' }),
         ]),
       );
       await page.setViewportSize(frame);
@@ -1293,9 +1293,9 @@ describe('Quiz/PBL cover cards in a real browser', () => {
     await page.setViewportSize(frame);
     await page.goto(HARNESS_URL, { waitUntil: 'load' });
     for (const { character, family } of [
-      { character: '\u1d2b', family: 'OpenMAIC Noto Sans Cyrillic' },
-      { character: '\u1c89', family: 'OpenMAIC Noto Sans Cyrillic' },
-      { character: '\u0897', family: 'OpenMAIC Noto Sans Arabic' },
+      { character: '\u1d2b', family: 'Binah Noto Sans Cyrillic' },
+      { character: '\u1c89', family: 'Binah Noto Sans Cyrillic' },
+      { character: '\u0897', family: 'Binah Noto Sans Arabic' },
     ]) {
       const surface = createQuizQuestionListMeasurementSurface({
         content: {
@@ -1382,12 +1382,12 @@ describe('Quiz/PBL cover cards in a real browser', () => {
     expect(measured.value).toEqual(QUIZ_SCROLL_LAYOUT_720P);
     expect(surface.css).not.toMatch(/url\(["']?https?:\/\//);
     expect(
-      await page.evaluate(() => document.fonts.check('16px "OpenMAIC Noto Sans SC"', '中文')),
+      await page.evaluate(() => document.fonts.check('16px "Binah Noto Sans SC"', '中文')),
     ).toBe(true);
     const cjkCoverage = await page.evaluate(async () => {
       await Promise.all([
-        document.fonts.load('40px "OpenMAIC Noto Sans SC"', '漢字あア'),
-        document.fonts.load('40px "OpenMAIC Noto Sans KR"', '한글'),
+        document.fonts.load('40px "Binah Noto Sans SC"', '漢字あア'),
+        document.fonts.load('40px "Binah Noto Sans KR"', '한글'),
       ]);
       const signature = (text: string, font: string): number => {
         const canvas = document.createElement('canvas');
@@ -1406,9 +1406,9 @@ describe('Quiz/PBL cover cards in a real browser', () => {
       const covered = (text: string, family: string): boolean =>
         signature(text, `"${family}", monospace`) !== signature(text, 'monospace');
       return {
-        han: covered('漢字', 'OpenMAIC Noto Sans SC'),
-        kana: covered('あア', 'OpenMAIC Noto Sans SC'),
-        hangul: covered('한글', 'OpenMAIC Noto Sans KR'),
+        han: covered('漢字', 'Binah Noto Sans SC'),
+        kana: covered('あア', 'Binah Noto Sans SC'),
+        hangul: covered('한글', 'Binah Noto Sans KR'),
       };
     });
     expect(cjkCoverage).toEqual({ han: true, kana: true, hangul: true });
@@ -1420,7 +1420,7 @@ describe('Quiz/PBL cover cards in a real browser', () => {
         window as typeof window & {
           __timelines: Record<string, { time(value: number, suppressEvents?: boolean): unknown }>;
         }
-      ).__timelines.openmaic;
+      ).__timelines.binah;
       const cover = document.querySelector<HTMLElement>('#scene-1-visual-1')!;
       const list = document.querySelector<HTMLElement>('#scene-1-visual-2')!;
       const content = document.querySelector<HTMLElement>('.quiz-list-content')!;

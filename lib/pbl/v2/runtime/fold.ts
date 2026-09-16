@@ -1,4 +1,4 @@
-import type { RuntimeRecord } from '@openmaic/dsl';
+import type { RuntimeRecord } from '@binah/dsl';
 
 import type {
   PBLEngagementEvent,

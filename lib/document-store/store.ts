@@ -1,6 +1,6 @@
 import '@/lib/persistence/bootstrap';
 
-import { BrowserDocumentStore, type DocumentStore } from '@openmaic/storage';
+import { BrowserDocumentStore, type DocumentStore } from '@binah/storage';
 
 import type { AppScene } from '@/lib/types/stage';
 

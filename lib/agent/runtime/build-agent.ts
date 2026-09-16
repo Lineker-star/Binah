@@ -2,7 +2,7 @@
  * MAIC Agent — agent runtime construction.
  *
  * Stands up a pi `Agent` with:
- * - injected StreamFn (-> OpenMAIC connector),
+ * - injected StreamFn (-> Binah connector),
  * - request-scoped tools supplied by the route,
  * - a caller-supplied `beforeToolCall` allowlist gate,
  * - a `afterToolCall` quota hook (v0 stub: unlimited).
@@ -23,7 +23,7 @@ import { hasLengthToolCallProvenance } from './stream-fn';
 import { withAgentToolTimeout } from './tool-timeout';
 
 // pi needs *a* model object on state; the injected StreamFn ignores it and uses
-// OpenMAIC's resolved model, so this is a metadata stub (high contextWindow so
+// Binah's resolved model, so this is a metadata stub (high contextWindow so
 // the harness never tries to compact).
 const STUB_MODEL = {
   id: 'maic-connector',

@@ -4,8 +4,8 @@ import type {
   RuntimeRecord,
   RuntimeRecordInit,
   RuntimeSession,
-} from '@openmaic/dsl';
-import type { KVScope, KVStore, RuntimeSessionInit, RuntimeStore } from '@openmaic/storage';
+} from '@binah/dsl';
+import type { KVScope, KVStore, RuntimeSessionInit, RuntimeStore } from '@binah/storage';
 
 const { saveStageDataMock, saveStageDataIncrementalMock } = vi.hoisted(() => ({
   saveStageDataMock: vi.fn().mockResolvedValue(undefined),

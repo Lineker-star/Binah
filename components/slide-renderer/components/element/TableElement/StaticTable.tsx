@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { PPTTableElement } from '@openmaic/dsl';
+import type { PPTTableElement } from '@binah/dsl';
 import { getTableSubThemeColor } from '@/lib/utils/element';
 import { getTextStyle, formatText, getHiddenCells } from './tableUtils';
 

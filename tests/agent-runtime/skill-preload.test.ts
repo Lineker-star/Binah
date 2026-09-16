@@ -43,7 +43,7 @@ const userSkill = (id: string, name: string, body: string): LoadedSkill => ({
   title: name,
   description: `${name} guidance`,
   content: body,
-  filePath: `/__openmaic_user_skills__/${id}/SKILL.md`,
+  filePath: `/__binah_user_skills__/${id}/SKILL.md`,
   virtualFileContent: [
     '---',
     `name: ${JSON.stringify(name)}`,

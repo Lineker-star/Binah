@@ -5,13 +5,13 @@ import { CLASSROOMS_DIR, resolveClassroomFilePath } from '@/lib/server/classroom
 
 describe('resolveClassroomFilePath — containment inside CLASSROOMS_DIR', () => {
   it('throws for a traversal-style id', () => {
-    expect(() => resolveClassroomFilePath('../../../../tmp/openmaic-escape')).toThrow(
+    expect(() => resolveClassroomFilePath('../../../../tmp/binah-escape')).toThrow(
       /outside the classrooms directory/,
     );
   });
 
   it('throws for an absolute-style id', () => {
-    expect(() => resolveClassroomFilePath('/tmp/openmaic-escape')).toThrow(
+    expect(() => resolveClassroomFilePath('/tmp/binah-escape')).toThrow(
       /outside the classrooms directory/,
     );
   });

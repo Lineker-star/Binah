@@ -1,8 +1,8 @@
-import { BrowserAssetStore } from '@openmaic/storage';
+import { BrowserAssetStore } from '@binah/storage';
 import { IDBFactory } from 'fake-indexeddb';
 import JSZip from 'jszip';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Slide } from '@openmaic/dsl';
+import type { Slide } from '@binah/dsl';
 import type { ClassroomManifest } from '@/lib/export/classroom-zip-types';
 import { expectDocumentAssetOwnership } from '../media/assert-stage-asset-ownership';
 

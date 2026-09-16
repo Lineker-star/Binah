@@ -1,6 +1,6 @@
-# @openmaic/render-service
+# @binah/render-service
 
-Isolated MP4 render service for OpenMAIC's classroom video export (issue #866).
+Isolated MP4 render service for Binah's classroom video export (issue #866).
 
 The main app compiles a classroom to a self-contained Hyperframes project ZIP
 (`index.html` + `assets/` + vendored GSAP) entirely in the browser. This service
@@ -101,7 +101,7 @@ caller-side preparation (tracked separately).
 | `RENDER_MAX_EXPANDED_BYTES`              | `536870912`                 | Max total expanded size across all entries (512 MB).                                                                                                                                                                                                                                                                                                                |
 | `RENDER_MAX_COMPRESSION_RATIO`           | `200`                       | Max expanded:compressed ratio per entry (ZIP-bomb guard).                                                                                                                                                                                                                                                                                                           |
 | `RENDER_EGRESS_LOCKDOWN`                 | `true`                      | Install the iptables egress lockdown at startup (needs root + `CAP_NET_ADMIN`); **fails closed** — the container exits if the rules can't be applied. Set `false` to run unisolated.                                                                                                                                                                                |
-| `PRODUCER_TMP_PROJECT_DIR`               | `/tmp/openmaic-renders`     | Scratch dir for unzipped projects + outputs.                                                                                                                                                                                                                                                                                                                        |
+| `PRODUCER_TMP_PROJECT_DIR`               | `/tmp/binah-renders`     | Scratch dir for unzipped projects + outputs.                                                                                                                                                                                                                                                                                                                        |
 | `PRODUCER_BROWSER_GPU_MODE`              | profile-controlled          | Both profiles use the software/SwiftShader selector; `standard` keeps BeginFrame eligible with `PRODUCER_FORCE_SCREENSHOT=false`, while `low-memory` forces screenshot capture. This is not a host GPU requirement. Do not override it directly.                                                                                                            |
 | `PRODUCER_LOW_MEMORY_MODE`               | profile-controlled          | Explicitly `false` for `standard` and `true` for `low-memory`; cgroup heuristics cannot silently switch the selected profile.                                                                                                                                                                                                                                        |
 | `PRODUCER_MAX_WORKERS`                   | profile: `1`                | Explicit for both supported profiles so producer auto-sizing cannot raise the worker count.                                                                                                                                                                                                                                                                        |
@@ -109,7 +109,7 @@ caller-side preparation (tracked separately).
 | `PRODUCER_HEADLESS_SHELL_PATH`           | `/usr/bin/chromium-headless-shell` (container) | Chromium **headless shell** executable used by producer's beginFrame resolver. Regular Chromium is not equivalent: it may resolve as beginFrame-capable and then reject `HeadlessExperimental.beginFrame`, causing a screenshot fallback.                                                                                                                                |
 | `RENDER_REQUIRE_BEGINFRAME`              | profile-controlled          | `false` for both supported profiles. `standard` requests BeginFrame but accepts producer compatibility fallback; `low-memory` forces screenshot. This internal compatibility knob must not be overridden independently.                                                                                                                                            |
 | `PRODUCER_PUPPETEER_PROTOCOL_TIMEOUT_MS` | `900000` (set in Compose)   | CDP timeout headroom for long frame ranges. The producer default of 300 seconds caused long jobs to fall back from four workers to two.                                                                                                                                                                                                                             |
-| `HF_STATIC_DEDUP`                        | `false` (set in Compose)    | Temporary OpenMAIC-export workaround: these long slide compositions currently exhaust producer's 15-second verification budget and disable dedup anyway. Skipping the doomed verification removes the fixed startup cost without changing frames.                                                                                                                   |
+| `HF_STATIC_DEDUP`                        | `false` (set in Compose)    | Temporary Binah-export workaround: these long slide compositions currently exhaust producer's 15-second verification budget and disable dedup anyway. Skipping the doomed verification removes the fixed startup cost without changing frames.                                                                                                                   |
 | `RENDER_HOME`                            | `/app`                      | Writable home used after the entrypoint drops privileges. Producer font caches live under `$RENDER_HOME/.cache`, never `/root/.cache`.                                                                                                                                                                                                                              |
 | `PUPPETEER_EXECUTABLE_PATH`              | `/usr/bin/chromium-headless-shell` | System Chromium headless shell (set in the image).                                                                                                                                                                                                                                                                                                                   |
 
@@ -118,7 +118,7 @@ producer worker per chunk and four concurrent chunks; low-memory allows one of
 each. Values above the selected profile limit fail startup rather than
 silently multiplying browser, FFmpeg, and temporary-disk usage.
 
-Client identity for the per-user guard is taken from the `x-openmaic-client`
+Client identity for the per-user guard is taken from the `x-binah-client`
 header, which the app's proxy sets. A client-supplied `userId` form field is
 ignored. The app derives that header from `x-forwarded-for`/`x-real-ip` **only
 when the operator sets `TRUST_PROXY_HEADERS=true`** (and a real reverse proxy
@@ -136,7 +136,7 @@ forwarding headers.
 > proxy that supplies a real per-user identity.
 >
 > Preview callers are different: the app sends the durable session owner id in
-> `x-openmaic-client`, so `RENDER_PREVIEW_MAX_PER_USER` stays enabled and
+> `x-binah-client`, so `RENDER_PREVIEW_MAX_PER_USER` stays enabled and
 > defaults to 2. Set it to 0 only for deployments that call `/preview` without
 > an owner identity.
 

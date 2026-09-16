@@ -7,7 +7,7 @@
  */
 import { NextRequest } from 'next/server';
 import { callLLM } from '@/lib/ai/llm';
-import { parseJsonResponse } from '@openmaic/generation';
+import { parseJsonResponse } from '@binah/generation';
 import { createLogger } from '@/lib/logger';
 import { resolveModelFromRequest } from '@/lib/server/resolve-model';
 

@@ -102,7 +102,7 @@ import type { SceneOutline } from '@/lib/types/generation';
 import type { PBLMilestone } from '@/lib/pbl/v2/types';
 import type { PBLPlannerV2Input, PBLProjectV2 } from '@/lib/pbl/v2/types';
 
-// A minimal outline that mimics what the OpenMAIC outline-generator
+// A minimal outline that mimics what the Binah outline-generator
 // produces for a PBL scene. Only fields the Planner reads are filled
 // in — `pblConfig` is the contract surface.
 function pblOutline(overrides?: Partial<SceneOutline>): SceneOutline {

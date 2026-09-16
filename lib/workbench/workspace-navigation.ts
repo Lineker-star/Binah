@@ -51,7 +51,7 @@ export function currentPageIndex(
 export const RAIL_WIDTH_DEFAULT = 252;
 export const RAIL_WIDTH_MIN = 200;
 export const RAIL_WIDTH_MAX = 360;
-export const RAIL_WIDTH_STORAGE_KEY = 'openmaic:workspace:rail-width';
+export const RAIL_WIDTH_STORAGE_KEY = 'binah:workspace:rail-width';
 
 /** Clamp to the supported range; anything non-finite falls back to the default. */
 export function clampRailWidth(width: number): number {

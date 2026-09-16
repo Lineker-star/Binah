@@ -40,7 +40,7 @@ describe('Quiz script-font plan', () => {
     const plan = planQuizScriptFonts(['<article>Решите уравнение Ёж</article>']);
 
     expect(plan.scripts).toEqual(['cyrillic']);
-    expect(plan.measurementCss).toContain('font-family:"OpenMAIC Noto Sans Cyrillic"');
+    expect(plan.measurementCss).toContain('font-family:"Binah Noto Sans Cyrillic"');
     expect(plan.measurementCss).toContain('/vendor/video-export/fonts/');
     expect(plan.exportCss).toContain('assets/fonts/');
     expect(plan.assets.map(({ path }) => path)).toEqual([
@@ -49,7 +49,7 @@ describe('Quiz script-font plan', () => {
     ]);
     expect(plan.licenses.map(({ path }) => path)).toEqual(['LICENSES/Noto-Sans-OFL-1.1.txt']);
     expect(plan.requiredFontLoads).toEqual([
-      { family: 'OpenMAIC Noto Sans Cyrillic', text: 'Привет Ёж Ԁ' },
+      { family: 'Binah Noto Sans Cyrillic', text: 'Привет Ёж Ԁ' },
     ]);
     expect(plan.requiredFontLoads[0].text).toMatch(/[\u0500-\u052f]/u);
   });
@@ -58,7 +58,7 @@ describe('Quiz script-font plan', () => {
     const plan = planQuizScriptFonts(['<article dir="rtl">حل المسألة</article>']);
 
     expect(plan.scripts).toEqual(['arabic']);
-    expect(plan.measurementCss).toContain('font-family:"OpenMAIC Noto Sans Arabic"');
+    expect(plan.measurementCss).toContain('font-family:"Binah Noto Sans Arabic"');
     expect(plan.measurementCss).toContain('/vendor/video-export/fonts/');
     expect(plan.exportCss).toContain('assets/fonts/');
     expect(plan.assets.map(({ path }) => path)).toEqual([
@@ -68,7 +68,7 @@ describe('Quiz script-font plan', () => {
       'LICENSES/Noto-Sans-Arabic-OFL-1.1.txt',
     ]);
     expect(plan.requiredFontLoads).toEqual([
-      { family: 'OpenMAIC Noto Sans Arabic', text: 'العربية' },
+      { family: 'Binah Noto Sans Arabic', text: 'العربية' },
     ]);
   });
 
@@ -93,21 +93,21 @@ describe('Quiz script-font plan', () => {
       name: 'outside the declared Cyrillic ranges',
       character: '\u1d2b',
       script: 'cyrillic',
-      family: 'OpenMAIC Noto Sans Cyrillic',
+      family: 'Binah Noto Sans Cyrillic',
       sample: 'Привет Ёж Ԁ',
     },
     {
       name: 'declared by Fontsource metadata but absent from the Cyrillic WOFF2 cmap',
       character: '\u1c89',
       script: 'cyrillic',
-      family: 'OpenMAIC Noto Sans Cyrillic',
+      family: 'Binah Noto Sans Cyrillic',
       sample: 'Привет Ёж Ԁ',
     },
     {
       name: 'declared by Fontsource metadata but absent from the Arabic WOFF2 cmap',
       character: '\u0897',
       script: 'arabic',
-      family: 'OpenMAIC Noto Sans Arabic',
+      family: 'Binah Noto Sans Arabic',
       sample: 'العربية',
     },
   ] as const)('adds a fail-closed load for $name', ({ character, script, family, sample }) => {

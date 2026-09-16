@@ -32,7 +32,7 @@ describe('MiniMax video resolution mapping', () => {
     ['720p', '768P'],
     ['1080p', '1080P'],
     [undefined, '768P'],
-  ])('maps OpenMAIC %s to MiniMax %s in the submit body', async (input, expected) => {
+  ])('maps Binah %s to MiniMax %s in the submit body', async (input, expected) => {
     vi.stubGlobal('fetch', fetchMock);
     // Submit returns a task_id; the first poll reports Success with a file, and
     // the file-retrieve returns a url — a clean single-pass generation so we can

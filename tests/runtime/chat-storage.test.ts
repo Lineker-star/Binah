@@ -4,9 +4,9 @@ import {
   BrowserRuntimeStore,
   RuntimeAppendConflictError,
   type RuntimeStore,
-} from '@openmaic/storage';
-import { HttpRuntimeStoreError } from '@openmaic/storage/runtime/http';
-import type { RuntimeRecord } from '@openmaic/dsl';
+} from '@binah/storage';
+import { HttpRuntimeStoreError } from '@binah/storage/runtime/http';
+import type { RuntimeRecord } from '@binah/dsl';
 import type { UIMessage } from 'ai';
 
 import {
@@ -989,11 +989,11 @@ describe('chat RuntimeStore cutover', () => {
   it.each([
     [
       'pre-append status check',
-      `@openmaic/storage: cannot append to session "chat:stage-chat:anon%3Achat-test:session-1" with status 'completed' — records may only be appended to an active session`,
+      `@binah/storage: cannot append to session "chat:stage-chat:anon%3Achat-test:session-1" with status 'completed' — records may only be appended to an active session`,
     ],
     [
       'post-race reclassification',
-      `@openmaic/storage: session "chat:stage-chat:anon%3Achat-test:session-1" is no longer active; its current status is 'completed'`,
+      `@binah/storage: session "chat:stage-chat:anon%3Achat-test:session-1" is no longer active; its current status is 'completed'`,
     ],
   ])('retries the %s inactive-session append race with backoff', async (_label, message) => {
     const backing = makeRuntimeStore();
@@ -1034,7 +1034,7 @@ describe('chat RuntimeStore cutover', () => {
     const appendError = new HttpRuntimeStoreError(
       422,
       'VALIDATION_FAILED',
-      `@openmaic/storage: cannot append to session "chat:stage-chat:anon%3Achat-test:session-1" with status 'completed' — records may only be appended to an active session`,
+      `@binah/storage: cannot append to session "chat:stage-chat:anon%3Achat-test:session-1" with status 'completed' — records may only be appended to an active session`,
     );
     let appendCalls = 0;
     const store = new Proxy(backing, {

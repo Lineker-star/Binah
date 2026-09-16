@@ -3,7 +3,7 @@ import {
   type CodeLine,
   type RuntimeRecord,
   type Whiteboard,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 
 import { normalizeWhiteboardViewportRatio } from '@/lib/whiteboard/viewport';
 
@@ -38,7 +38,7 @@ function immutableClone<T>(value: T): T {
   return cloned;
 }
 
-const RUNTIME_WHITEBOARD_ID_NAMESPACE = 'openmaic.whiteboard-runtime-board.v1';
+const RUNTIME_WHITEBOARD_ID_NAMESPACE = 'binah.whiteboard-runtime-board.v1';
 
 async function deriveRuntimeWhiteboardId(sessionId: string): Promise<string> {
   const digest = await sha256Canonical({

@@ -128,7 +128,7 @@ class PosixNormalizingEnv extends NodeExecutionEnv {
   }
 }
 
-const USER_SKILL_VIRTUAL_ROOT = '/__openmaic_user_skills__';
+const USER_SKILL_VIRTUAL_ROOT = '/__binah_user_skills__';
 
 /**
  * The de-prioritisation preamble user-authored skill text is wrapped in.

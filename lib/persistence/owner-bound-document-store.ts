@@ -1,9 +1,9 @@
-import type { Scene, Stage } from '@openmaic/dsl';
+import type { Scene, Stage } from '@binah/dsl';
 import {
   PgDocumentStore,
   type Queryable,
   type WithTransaction,
-} from '@openmaic/storage/document/pg';
+} from '@binah/storage/document/pg';
 import type {
   DocumentFolder,
   DocumentFolderStore,
@@ -13,7 +13,7 @@ import type {
   SceneLike,
   SceneValidator,
   StageValidator,
-} from '@openmaic/storage';
+} from '@binah/storage';
 
 import { claimStageMeta, StageAccessError, tombstoneStageMeta } from './stage-meta';
 

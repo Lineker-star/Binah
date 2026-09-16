@@ -36,7 +36,7 @@ import type {
   WidgetAnnotationAction,
   WidgetRevealAction,
 } from '@/lib/types/action';
-import type { CodeLine, PPTVideoElement } from '@openmaic/dsl';
+import type { CodeLine, PPTVideoElement } from '@binah/dsl';
 import {
   resolveVideoMediaForElement,
   type VideoMediaTaskResolution,

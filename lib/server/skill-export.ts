@@ -4,9 +4,9 @@ import { join, relative } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import JSZip from 'jszip';
 import { dump as dumpYaml, load as loadYaml } from 'js-yaml';
-import { UserSkillError, validateUserSkillInput, type UserSkillFields } from '@openmaic/storage';
+import { UserSkillError, validateUserSkillInput, type UserSkillFields } from '@binah/storage';
 
-export const openClawSkillDir = join(process.cwd(), 'skills', 'openmaic');
+export const openClawSkillDir = join(process.cwd(), 'skills', 'binah');
 export const builtinSkillsDir = join(process.cwd(), 'skills', 'agent-runtime');
 
 /** A download id may name only one entry below a known skill root. */
@@ -46,7 +46,7 @@ export async function buildSkillDirZip(dir: string, root: string): Promise<Buffe
 }
 
 export function buildOpenClawSkillZip(): Promise<Buffer | null> {
-  return buildSkillDirZip(openClawSkillDir, 'openmaic');
+  return buildSkillDirZip(openClawSkillDir, 'binah');
 }
 
 export function buildBuiltinSkillZip(id: string): Promise<Buffer | null> {

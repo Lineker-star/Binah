@@ -31,7 +31,7 @@
  * reader and nothing else: the runner keeps running, and its events keep
  * landing in the log.
  */
-import type { PersistedAgentSessionEvent } from '@openmaic/storage';
+import type { PersistedAgentSessionEvent } from '@binah/storage';
 import type { NextRequest } from 'next/server';
 
 import { HOST_AGENT_LIFECYCLE as LIFECYCLE } from '@/lib/agent-runtime/lifecycle';

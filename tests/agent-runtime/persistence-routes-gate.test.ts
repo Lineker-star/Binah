@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 
-import type { AgentSessionMaterial } from '@openmaic/storage';
+import type { AgentSessionMaterial } from '@binah/storage';
 
 import { createFakeDocumentStore } from './_fake-document-store';
 import { makeDocument, makeSlideScene } from './_stage-fixtures';
@@ -21,7 +21,7 @@ import { makeDocument, makeSlideScene } from './_stage-fixtures';
  * "serves" row is exercised hermetically. A future route added to the wrong
  * gate fails the middle row — the row that used to 500.
  */
-const ENV_KEYS = ['OPENMAIC_AGENT_RUNTIME_ENABLED', 'DATABASE_URL'] as const;
+const ENV_KEYS = ['BINAH_AGENT_RUNTIME_ENABLED', 'DATABASE_URL'] as const;
 
 const STAGE_ID = 'stage-1';
 const SESSION_ID = 'session-1';
@@ -367,7 +367,7 @@ for (const state of STATES) {
         delete process.env[key];
       }
       if (state.runtimeFlag !== undefined)
-        process.env.OPENMAIC_AGENT_RUNTIME_ENABLED = state.runtimeFlag;
+        process.env.BINAH_AGENT_RUNTIME_ENABLED = state.runtimeFlag;
       if (state.databaseUrl !== undefined) process.env.DATABASE_URL = state.databaseUrl;
 
       vi.clearAllMocks();

@@ -3,7 +3,7 @@ import { isWorkbenchEntryEnabled } from '@/lib/workbench/entry-gate';
 
 const FLAGS = [
   'NEXT_PUBLIC_PRO_WORKBENCH_ENABLED',
-  'OPENMAIC_AGENT_RUNTIME_ENABLED',
+  'BINAH_AGENT_RUNTIME_ENABLED',
   'DATABASE_URL',
 ] as const;
 
@@ -34,7 +34,7 @@ describe('workbench entry gate', () => {
     ['the database URL is blank', 'true', 'true', '   '],
   ])('keeps both entry routes closed when %s', (_case, publicFlag, runtimeFlag, databaseUrl) => {
     if (publicFlag !== undefined) process.env.NEXT_PUBLIC_PRO_WORKBENCH_ENABLED = publicFlag;
-    if (runtimeFlag !== undefined) process.env.OPENMAIC_AGENT_RUNTIME_ENABLED = runtimeFlag;
+    if (runtimeFlag !== undefined) process.env.BINAH_AGENT_RUNTIME_ENABLED = runtimeFlag;
     if (databaseUrl !== undefined) process.env.DATABASE_URL = databaseUrl;
 
     expect(isWorkbenchEntryEnabled()).toBe(false);
@@ -42,7 +42,7 @@ describe('workbench entry gate', () => {
 
   it('opens both entry routes only for an enabled, configured runtime', () => {
     process.env.NEXT_PUBLIC_PRO_WORKBENCH_ENABLED = 'true';
-    process.env.OPENMAIC_AGENT_RUNTIME_ENABLED = 'true';
+    process.env.BINAH_AGENT_RUNTIME_ENABLED = 'true';
     process.env.DATABASE_URL = 'postgres://runtime';
 
     expect(isWorkbenchEntryEnabled()).toBe(true);

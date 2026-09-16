@@ -48,7 +48,7 @@ import {
   resolvePDFBaseUrl,
 } from '@/lib/server/provider-config';
 import { assertSafeIp, normalizeUrlForStrictFetch } from '@/lib/server/ssrf-guard';
-import type { AgentSessionMaterial } from '@openmaic/storage';
+import type { AgentSessionMaterial } from '@binah/storage';
 
 import { createWebMaterial } from './session-materials';
 import { isSessionUrlAllowed } from './session-urls';

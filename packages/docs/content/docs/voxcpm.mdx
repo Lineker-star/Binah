@@ -3,7 +3,7 @@ title: VoxCPM2
 description: Self-hosted TTS and voice cloning. Backend selection, configuration, and voice management.
 ---
 
-[VoxCPM2](https://github.com/OpenBMB/VoxCPM) is an open-source TTS model from OpenBMB with voice cloning support. OpenMAIC includes an adapter, so you only need to run VoxCPM on your own machine and connect it.
+[VoxCPM2](https://github.com/OpenBMB/VoxCPM) is an open-source TTS model from OpenBMB with voice cloning support. Binah includes an adapter, so you only need to run VoxCPM on your own machine and connect it.
 
 ## When to use VoxCPM2
 
@@ -15,7 +15,7 @@ If you only need one default voice, the built-in **Doubao** or **OpenAI-compatib
 
 ## 1. Run a VoxCPM backend
 
-OpenMAIC supports three deployment modes. All three use the same OpenMAIC adapter; select the corresponding backend type in Settings.
+Binah supports three deployment modes. All three use the same Binah adapter; select the corresponding backend type in Settings.
 
 | Backend        | Endpoint           | Best for                                      |
 | -------------- | ------------------ | --------------------------------------------- |
@@ -32,13 +32,13 @@ python -m vllm_omni.server --model openbmb/VoxCPM2 --port 8000
 # endpoint at http://localhost:8000/v1
 ```
 
-## 2. Point OpenMAIC at it
+## 2. Point Binah at it
 
 Choose one of the following methods.
 
 ### A. Per-user (Settings UI, no server change)
 
-Open **Settings → Text to speech → VoxCPM2**, choose the backend type, and paste the Base URL. The Request URL preview below shows the actual address OpenMAIC will call.
+Open **Settings → Text to speech → VoxCPM2**, choose the backend type, and paste the Base URL. The Request URL preview below shows the actual address Binah will call.
 
 This is suitable for personal testing and per-browser overrides, and does not affect other users.
 
@@ -58,7 +58,7 @@ VoxCPM2 has three voice modes under **Settings → Text to speech → VoxCPM2 �
 
 ### Auto Voice (default)
 
-During synthesis, OpenMAIC dynamically generates a voice prompt from each Agent's persona. No configuration is required; this is what you get by doing nothing.
+During synthesis, Binah dynamically generates a voice prompt from each Agent's persona. No configuration is required; this is what you get by doing nothing.
 
 ### Prompt voice
 

@@ -1,6 +1,6 @@
 'use client';
 
-import type { PPTTextElement } from '@openmaic/dsl';
+import type { PPTTextElement } from '@binah/dsl';
 import { useElementShadow } from '../hooks/useElementShadow';
 import { ElementOutline } from '../ElementOutline';
 

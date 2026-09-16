@@ -60,8 +60,8 @@ FROM base AS runner
 # Non-root: Chromium must run with --no-sandbox in a container, so drop privileges.
 RUN groupadd --system --gid 1001 render \
   && useradd --system --uid 1001 --gid render --home-dir /app render \
-  && mkdir -p /tmp/openmaic-renders /app/.cache \
-  && chown -R render:render /app /tmp/openmaic-renders
+  && mkdir -p /tmp/binah-renders /app/.cache \
+  && chown -R render:render /app /tmp/binah-renders
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --chown=render:render package.json tsconfig.json ./
@@ -76,7 +76,7 @@ RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh \
     && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV PORT=9000 \
-    PRODUCER_TMP_PROJECT_DIR=/tmp/openmaic-renders \
+    PRODUCER_TMP_PROJECT_DIR=/tmp/binah-renders \
     HOME=/app \
     XDG_CACHE_HOME=/app/.cache \
     PRODUCER_HEADLESS_SHELL_PATH=/usr/bin/chromium-headless-shell \

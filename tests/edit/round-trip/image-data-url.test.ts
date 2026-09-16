@@ -14,7 +14,7 @@ import {
 
 /**
  * 1×1 transparent PNG as a data URL — the canonical output of a local-file
- * upload when OpenMAIC has no upload backend.
+ * upload when Binah has no upload backend.
  */
 const DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';

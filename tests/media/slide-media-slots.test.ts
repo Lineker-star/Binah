@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { slideMediaSlotDescriptors, type Slide } from '@openmaic/dsl';
+import { slideMediaSlotDescriptors, type Slide } from '@binah/dsl';
 import { slideMediaReferenceSlots } from '@/lib/media/slide-media-slots';
 
 describe('slide media slot parity', () => {

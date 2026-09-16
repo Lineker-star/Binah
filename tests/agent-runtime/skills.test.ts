@@ -118,7 +118,7 @@ describe('pi-native skills', () => {
   });
 
   it('activates a skill only after its SKILL.md is read successfully', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'openmaic-native-skill-'));
+    const root = mkdtempSync(join(tmpdir(), 'binah-native-skill-'));
     try {
       const skillDir = join(root, 'deep-interactive');
       const skillFile = join(skillDir, 'SKILL.md');
@@ -140,7 +140,7 @@ describe('pi-native skills', () => {
   });
 
   it('does not let the skill read tool escape installed skill directories', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'openmaic-native-skill-'));
+    const root = mkdtempSync(join(tmpdir(), 'binah-native-skill-'));
     try {
       const skillDir = join(root, 'deep-interactive');
       const skillFile = join(skillDir, 'SKILL.md');
@@ -265,7 +265,7 @@ describe('shipped skill constraints', () => {
     }
   });
 
-  it('ships the K-12 core-literacy skill as an OpenMAIC-native classroom flow', async () => {
+  it('ships the K-12 core-literacy skill as an Binah-native classroom flow', async () => {
     const root = join(process.cwd(), 'skills/agent-runtime/k12-core-literacy-planning');
     const md = readFileSync(join(root, 'SKILL.md'), 'utf8');
     const skill = (await listSkills()).find(
@@ -1337,29 +1337,29 @@ describe('toPosixPath', () => {
   });
 
   it('converts Windows backslashes to forward slashes', () => {
-    const windowsPath = 'C:\\repo\\OpenMAIC\\skills\\agent-runtime\\build-personal-skill';
+    const windowsPath = 'C:\\repo\\Binah\\skills\\agent-runtime\\build-personal-skill';
     const posix = windowsPath.split('\\').join('/');
-    expect(posix).toBe('C:/repo/OpenMAIC/skills/agent-runtime/build-personal-skill');
+    expect(posix).toBe('C:/repo/Binah/skills/agent-runtime/build-personal-skill');
   });
 
   it('handles mixed separators', () => {
-    const mixed = 'C:\\repo/OpenMAIC\\skills/SKILL.md';
+    const mixed = 'C:\\repo/Binah\\skills/SKILL.md';
     const posix = mixed.split('\\').join('/');
-    expect(posix).toBe('C:/repo/OpenMAIC/skills/SKILL.md');
+    expect(posix).toBe('C:/repo/Binah/skills/SKILL.md');
   });
 });
 
 describe('normalizeSkillFileInfo', () => {
   it('normalizes both path and name from a Windows-shaped FileInfo', () => {
     const info = {
-      name: 'C:\\repo\\OpenMAIC\\skills\\agent-runtime\\quiz\\SKILL.md',
-      path: 'C:\\repo\\OpenMAIC\\skills\\agent-runtime\\quiz\\SKILL.md',
+      name: 'C:\\repo\\Binah\\skills\\agent-runtime\\quiz\\SKILL.md',
+      path: 'C:\\repo\\Binah\\skills\\agent-runtime\\quiz\\SKILL.md',
       isFile: true,
       isDirectory: false,
       size: 1024,
     };
     const result = normalizeSkillFileInfo(info);
-    expect(result.path).toBe('C:/repo/OpenMAIC/skills/agent-runtime/quiz/SKILL.md');
+    expect(result.path).toBe('C:/repo/Binah/skills/agent-runtime/quiz/SKILL.md');
     expect(result.name).toBe('SKILL.md');
   });
 

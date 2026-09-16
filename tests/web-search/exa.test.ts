@@ -20,8 +20,8 @@ describe('searchWithExa', () => {
           requestId: 'req-1',
           results: [
             {
-              title: 'OpenMAIC',
-              url: 'https://github.com/THU-MAIC/OpenMAIC',
+              title: 'Binah',
+              url: 'https://github.com/Lineker-star/binah',
               highlights: ['First relevant excerpt.', 'Second relevant excerpt.'],
               score: 0.94,
             },
@@ -42,7 +42,7 @@ describe('searchWithExa', () => {
     );
 
     const result = await searchWithExa({
-      query: '  OpenMAIC web search  ',
+      query: '  Binah web search  ',
       apiKey: 'exa-key',
       maxResults: 5,
     });
@@ -56,7 +56,7 @@ describe('searchWithExa', () => {
           Authorization: 'Bearer exa-key',
         },
         body: JSON.stringify({
-          query: 'OpenMAIC web search',
+          query: 'Binah web search',
           type: 'auto',
           numResults: 5,
           contents: { highlights: true },
@@ -65,11 +65,11 @@ describe('searchWithExa', () => {
     );
     expect(result).toMatchObject({
       answer: '',
-      query: 'OpenMAIC web search',
+      query: 'Binah web search',
       sources: [
         {
-          title: 'OpenMAIC',
-          url: 'https://github.com/THU-MAIC/OpenMAIC',
+          title: 'Binah',
+          url: 'https://github.com/Lineker-star/binah',
           content: 'First relevant excerpt.\n\nSecond relevant excerpt.',
           score: 0.94,
         },

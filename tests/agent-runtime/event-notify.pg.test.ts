@@ -27,7 +27,7 @@ import {
   ensureAgentSessionSchema,
   type Queryable,
   type WithTransaction,
-} from '../../packages/@openmaic/storage/src/agent-session/pg';
+} from '../../packages/@binah/storage/src/agent-session/pg';
 
 const contractUrl = process.env.PG_CONTRACT_URL;
 
@@ -55,7 +55,7 @@ function transactionFor(pool: Pool): WithTransaction {
 }
 
 describe.skipIf(!contractUrl)('agent event NOTIFY delivery', () => {
-  const CONTRACT_DB = `openmaic_event_notify_${process.pid}`;
+  const CONTRACT_DB = `binah_event_notify_${process.pid}`;
   const url = contractUrl!;
   let pool: Pool;
   let store: PgAgentSessionStore;

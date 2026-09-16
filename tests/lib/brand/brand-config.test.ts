@@ -5,7 +5,7 @@ describe('DEFAULT_BRAND (single-brand build)', () => {
   it('uses the original product identity for full chrome', () => {
     expect(DEFAULT_BRAND.productName).toBe('Binah');
     expect(DEFAULT_BRAND.shortName).toBe('Binah');
-    expect(DEFAULT_BRAND.markSrc).toBe('/openmaic-mark.png');
+    expect(DEFAULT_BRAND.markSrc).toBe('/binah-mark.png');
     expect(DEFAULT_BRAND.themeColor).toBe('#4F46E5');
   });
 

@@ -143,11 +143,11 @@ export interface EmitHyperframesOptions {
   width?: number;
   /** Render height in px. Default derived from `width` at 16:9. */
   height?: number;
-  /** Composition id used for the root `data-composition-id` and the timeline key. Default `openmaic`. */
+  /** Composition id used for the root `data-composition-id` and the timeline key. Default `binah`. */
   compositionId?: string;
   /** Relative path the emitted HTML loads GSAP from. Default `assets/vendor/gsap.min.js`. */
   gsapVendorPath?: string;
-  /** Manifest filename. Default `openmaic-video-manifest.json`. */
+  /** Manifest filename. Default `binah-video-manifest.json`. */
   manifestPath?: string;
   /** Cover-card chrome; each omitted key falls back to its `en-US` default. */
   labels?: VideoExportLabelOverrides;
@@ -186,7 +186,7 @@ export interface EmittedProject {
 
 const DEFAULT_WIDTH = 1920;
 const DEFAULT_GSAP_PATH = 'assets/vendor/gsap.min.js';
-const DEFAULT_MANIFEST = 'openmaic-video-manifest.json';
+const DEFAULT_MANIFEST = 'binah-video-manifest.json';
 const DEFAULT_LOCALE = 'en-US';
 
 /** Language subtags written right-to-left; everything else renders LTR. */
@@ -315,19 +315,19 @@ function interactiveStaticBridgeScript(labels: InteractiveFallbackLabels): strin
   const localized = JSON.stringify(labels);
   const diagnosticCodes = JSON.stringify(RUNTIME_DIAGNOSTIC_CODES);
   return `
-function initializeOpenMaicInteractiveStaticFrames() {
+function initializeBinahInteractiveStaticFrames() {
   var hosts = Array.from(document.querySelectorAll('[data-interactive-static-host]'));
-  window.__openmaicVideoDiagnostics = window.__openmaicVideoDiagnostics || [];
-  window.__openmaicVideoManifest = window.__openmaicVideoManifest || { runtimeDiagnostics: [] };
+  window.__binahVideoDiagnostics = window.__binahVideoDiagnostics || [];
+  window.__binahVideoManifest = window.__binahVideoManifest || { runtimeDiagnostics: [] };
   var labels = ${localized};
   var diagnosticCodes = new Set(${diagnosticCodes});
-  var runtimeReport = document.querySelector('[data-openmaic-runtime-diagnostics]');
+  var runtimeReport = document.querySelector('[data-binah-runtime-diagnostics]');
   function record(sceneId, code, message) {
     var normalizedCode = diagnosticCodes.has(code) ? code : 'interactive-ready-failure';
     var diagnostic = { sceneId: sceneId, code: normalizedCode, message: String(message || '').slice(0, 1200) };
-    window.__openmaicVideoDiagnostics.push(diagnostic);
-    window.__openmaicVideoManifest.runtimeDiagnostics = window.__openmaicVideoDiagnostics.slice();
-    if (runtimeReport) runtimeReport.textContent = JSON.stringify(window.__openmaicVideoDiagnostics);
+    window.__binahVideoDiagnostics.push(diagnostic);
+    window.__binahVideoManifest.runtimeDiagnostics = window.__binahVideoDiagnostics.slice();
+    if (runtimeReport) runtimeReport.textContent = JSON.stringify(window.__binahVideoDiagnostics);
     console.error('interactive-static-diagnostic', diagnostic);
   }
   function messageFor(code, detail) {
@@ -1168,7 +1168,7 @@ folder — no network access, no CDN.
 
 - \`index.html\` — the composition (one data-composition-id=${optionValue(project.compositionId)} stage, one paused GSAP timeline on \`window.__timelines\`).
 - ${optionValue(project.manifestPath)} — the \`VideoTimeline\` manifest / export report (scenes, timing, assets, diagnostics).
-- Runtime interactive diagnostics are exposed live through \`window.__openmaicVideoManifest.runtimeDiagnostics\` and the machine-readable DOM report in \`index.html\`.
+- Runtime interactive diagnostics are exposed live through \`window.__binahVideoManifest.runtimeDiagnostics\` and the machine-readable DOM report in \`index.html\`.
 - \`subtitles.srt\` / \`subtitles.vtt\` — narration subtitles.
 - \`assets/frames\`, \`assets/audio\`, \`assets/media\`, \`assets/interactive\` — slide snapshots, narration audio, embedded video clips, frozen interactive pages.
 - ${optionValue(project.gsapVendorPath)} — vendored GSAP (determinism: no CDN at render time).
@@ -1233,7 +1233,7 @@ export function emitHyperframes(
   const width = options.width ?? DEFAULT_WIDTH;
   const height =
     options.height ?? Math.round(width * (ir.canvas.pixelBase.height / ir.canvas.pixelBase.width));
-  const compositionId = options.compositionId ?? 'openmaic';
+  const compositionId = options.compositionId ?? 'binah';
   const gsapVendorPath = options.gsapVendorPath ?? DEFAULT_GSAP_PATH;
   const manifestPath = options.manifestPath ?? DEFAULT_MANIFEST;
   const labels: VideoExportLabels = {
@@ -1327,20 +1327,20 @@ ${coverCardCss(width)}${hasQuizQuestionList ? `\n${quizQuestionListCss(width)}` 
 ${sceneHtml.filter(Boolean).join('\n')}
 ${effectHtml.join('\n')}
 ${subtitles.html}
-<script type="application/json" data-openmaic-runtime-diagnostics>[]</script>
+<script type="application/json" data-binah-runtime-diagnostics>[]</script>
 </div>
 <script src="${escapeHtml(gsapVendorPath)}"></script>
 <script>
 ${EASE_DEFS}
 var tl = gsap.timeline({ paused: true });
 ${statements.join('\n')}
-window.__openmaicVideoManifest = { runtimeDiagnostics: [], manifestPath: ${JSON.stringify(manifestPath)} };
+window.__binahVideoManifest = { runtimeDiagnostics: [], manifestPath: ${JSON.stringify(manifestPath)} };
 window.__timelines = window.__timelines || {};
 ${
   hasInteractiveHtml
     ? `${interactiveStaticBridgeScript(labels.interactive)}
-window.__openmaicInteractiveReady = initializeOpenMaicInteractiveStaticFrames();
-window.__openmaicInteractiveReady.then(function () {
+window.__binahInteractiveReady = initializeBinahInteractiveStaticFrames();
+window.__binahInteractiveReady.then(function () {
   window.__timelines[${JSON.stringify(compositionId)}] = tl;
 });`
     : `window.__timelines[${JSON.stringify(compositionId)}] = tl;`

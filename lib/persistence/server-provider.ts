@@ -1,10 +1,10 @@
-import { PgAssetStore, ensureAssetSchema } from '@openmaic/storage/asset/pg';
-import { PgDocumentStore, ensureDocumentSchema } from '@openmaic/storage/document/pg';
-import { PgRuntimeStore, ensureSchema } from '@openmaic/storage/runtime/pg';
+import { PgAssetStore, ensureAssetSchema } from '@binah/storage/asset/pg';
+import { PgDocumentStore, ensureDocumentSchema } from '@binah/storage/document/pg';
+import { PgRuntimeStore, ensureSchema } from '@binah/storage/runtime/pg';
 import {
   nodePostgresTransaction,
   type ConnectableQueryable,
-} from '@openmaic/storage/server/reference';
+} from '@binah/storage/server/reference';
 import { Pool } from 'pg';
 
 import { validateAppScene, validateAppStage } from '@/lib/document-store/validators';
@@ -27,7 +27,7 @@ interface ProviderState {
   providerPromise?: Promise<ServerPersistenceProvider>;
 }
 
-const PROVIDER_STATE_KEY = Symbol.for('openmaic.persistence.provider');
+const PROVIDER_STATE_KEY = Symbol.for('binah.persistence.provider');
 const globalState = globalThis as typeof globalThis & {
   [key: symbol]: ProviderState | undefined;
 };

@@ -12,7 +12,7 @@ const runtimeVersions: RuntimeVersions = {
   chromiumPath: '/usr/bin/chromium-headless-shell',
   ffmpeg: 'ffmpeg version 5.1.9-0+deb12u1',
   ffmpegPath: '/usr/bin/ffmpeg',
-  containerImage: 'openmaic/render-service:test',
+  containerImage: 'binah/render-service:test',
 };
 
 function request(overrides: Partial<RenderExecutionRequest> = {}): RenderExecutionRequest {

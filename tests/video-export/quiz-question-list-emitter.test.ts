@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { Action } from '@openmaic/dsl';
+import type { Action } from '@binah/dsl';
 import {
   compileVideoTimeline,
   emitHyperframes,
@@ -129,7 +129,7 @@ describe('Quiz question-list Hyperframes emission', () => {
     expect(html).toContain('url("assets/fonts/noto-sans-sc-chinese-simplified-400-normal.woff2")');
     expect(html).toContain('url("assets/fonts/noto-sans-kr-korean-400-normal.woff2")');
     expect(html).toContain(
-      'font-family:"OpenMAIC Noto Sans Cyrillic","OpenMAIC Noto Sans Arabic",Inter,"OpenMAIC Noto Sans SC","OpenMAIC Noto Sans KR",sans-serif',
+      'font-family:"Binah Noto Sans Cyrillic","Binah Noto Sans Arabic",Inter,"Binah Noto Sans SC","Binah Noto Sans KR",sans-serif',
     );
   });
 

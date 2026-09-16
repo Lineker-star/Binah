@@ -1,4 +1,4 @@
-import type { LinePoint, LineStyleType } from '@openmaic/dsl';
+import type { LinePoint, LineStyleType } from '@binah/dsl';
 
 export interface LinePoolItem {
   path: string;

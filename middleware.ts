@@ -29,7 +29,7 @@ function isPublicPath(pathname: string): boolean {
   // The brand mark, rendered directly on the landing page's own header and
   // footer — the one `public/` image a signed-out visitor's browser now
   // requests before any session exists.
-  if (pathname === '/openmaic-mark.png') return true;
+  if (pathname === '/binah-mark.png') return true;
   // Fetched unconditionally by a root-layout-mounted component on every
   // page, including /auth itself — must stay public or the sign-in page's
   // own background fetch 401s.

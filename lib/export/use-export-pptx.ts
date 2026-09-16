@@ -17,7 +17,7 @@ import {
   type PPTElementOutline,
   type PPTElementShadow,
   type PPTElementLink,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 import type { Scene, SlideContent } from '@/lib/types/stage';
 import type { SpeechAction } from '@/lib/types/action';
 import { getElementRange, getLineElementPath, getTableSubThemeColor } from '@/lib/utils/element';

@@ -1,9 +1,9 @@
 ---
 title: البدء السريع
-description: تشغيل OpenMAIC محليًا خلال خمس دقائق.
+description: تشغيل Binah محليًا خلال خمس دقائق.
 ---
 
-OpenMAIC هو تطبيق Next.js يمكن تشغيله على جهازك الخاص. تحتاج إلى إعداد مزود LLM واحد على الأقل: عادةً ما تتطلب المزودات السحابية مفتاح API؛ أما Ollama أو Lemonade المحليان فلا يحتاجان إلى مفتاح API.
+Binah هو تطبيق Next.js يمكن تشغيله على جهازك الخاص. تحتاج إلى إعداد مزود LLM واحد على الأقل: عادةً ما تتطلب المزودات السحابية مفتاح API؛ أما Ollama أو Lemonade المحليان فلا يحتاجان إلى مفتاح API.
 
 ## المتطلبات المسبقة
 
@@ -16,8 +16,8 @@ OpenMAIC هو تطبيق Next.js يمكن تشغيله على جهازك الخ�
 استنسخ المستودع وثبّت الاعتماديات:
 
 ```bash
-git clone https://github.com/THU-MAIC/OpenMAIC.git
-cd OpenMAIC
+git clone https://github.com/Lineker-star/binah.git
+cd Binah
 pnpm install
 ```
 
@@ -51,7 +51,7 @@ OLLAMA_BASE_URL=http://localhost:11434/v1
 pnpm dev
 ```
 
-افتح [http://localhost:3000](http://localhost:3000)، وسترى منشئ الدروس في OpenMAIC. أدخل موضوعًا أو ارفع مواد تعليمية، ثم اضغط على "Generate". سيقوم المعلم الذكي ببناء درس كامل متعدد المشاهد. تعتمد صيغ المواد المدعومة على المحلل المختار، وتشمل عادةً PDF، ومستندات Office، وMarkdown/نص عادي، وصور، وبعض ملفات الصوت/الفيديو؛ ويعتمد ذلك على دعم المحلل.
+افتح [http://localhost:3000](http://localhost:3000)، وسترى منشئ الدروس في Binah. أدخل موضوعًا أو ارفع مواد تعليمية، ثم اضغط على "Generate". سيقوم المعلم الذكي ببناء درس كامل متعدد المشاهد. تعتمد صيغ المواد المدعومة على المحلل المختار، وتشمل عادةً PDF، ومستندات Office، وMarkdown/نص عادي، وصور، وبعض ملفات الصوت/الفيديو؛ ويعتمد ذلك على دعم المحلل.
 
 ## بناء الإنتاج
 
@@ -66,4 +66,4 @@ pnpm start
 
 - [إعداد المزودات، TTS، و ACCESS_CODE →](./configuration.mdx)
 - [النشر على Vercel أو Docker →](./deployment.mdx)
-- للاطلاع على البنية أو المساهمة في الكود، يرجى زيارة [GitHub](https://github.com/THU-MAIC/OpenMAIC#-contributing)
+- للاطلاع على البنية أو المساهمة في الكود، يرجى زيارة [GitHub](https://github.com/Lineker-star/binah#-contributing)

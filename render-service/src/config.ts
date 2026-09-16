@@ -95,7 +95,7 @@ export const config = {
   /** Max JSON request size for a synchronous preview (bytes). */
   previewMaxJsonBytes: intEnv('RENDER_PREVIEW_MAX_JSON_BYTES', 32 * MB),
   /** Root dir for unzipped projects and rendered outputs. */
-  tmpDir: process.env.PRODUCER_TMP_PROJECT_DIR || '/tmp/openmaic-renders',
+  tmpDir: process.env.PRODUCER_TMP_PROJECT_DIR || '/tmp/binah-renders',
 
   // ---- Archive limits (ZIP-bomb / DoS guards, enforced before extraction) ----
   /** Max compressed upload size accepted (bytes). */

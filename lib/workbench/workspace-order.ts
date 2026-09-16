@@ -21,9 +21,9 @@
  *    worst a corrupt entry can do is give the shipped order back.
  */
 
-/** localStorage keys. Same `openmaic:workspace:` namespace as the rail width. */
-export const COURSE_ORDER_STORAGE_KEY = 'openmaic:workspace:course-order';
-export const SESSION_ORDER_STORAGE_KEY = 'openmaic:workspace:session-order';
+/** localStorage keys. Same `binah:workspace:` namespace as the rail width. */
+export const COURSE_ORDER_STORAGE_KEY = 'binah:workspace:course-order';
+export const SESSION_ORDER_STORAGE_KEY = 'binah:workspace:session-order';
 
 /** Where a dragged row is being dropped, relative to the row under the pointer. */
 export type DropTarget = { readonly before: string } | { readonly after: string };

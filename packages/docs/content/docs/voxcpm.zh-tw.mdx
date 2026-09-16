@@ -3,7 +3,7 @@ title: VoxCPM2
 description: 自託管 TTS 與聲音複製。後端選擇、設定和聲音管理。
 ---
 
-[VoxCPM2](https://github.com/OpenBMB/VoxCPM) 是 OpenBMB 開源的 TTS 模型，支援聲音複製。OpenMAIC 內建適配器，只要在自己的機器上執行 VoxCPM 即可對接。
+[VoxCPM2](https://github.com/OpenBMB/VoxCPM) 是 OpenBMB 開源的 TTS 模型，支援聲音複製。Binah 內建適配器，只要在自己的機器上執行 VoxCPM 即可對接。
 
 ## 什麼時候使用 VoxCPM2
 
@@ -15,7 +15,7 @@ description: 自託管 TTS 與聲音複製。後端選擇、設定和聲音管�
 
 ## 1. 啟動 VoxCPM 後端
 
-OpenMAIC 支援三種部署形態，三種都使用同一個 OpenMAIC 適配器。你只需要在設定中切換對應的後端類型即可。
+Binah 支援三種部署形態，三種都使用同一個 Binah 適配器。你只需要在設定中切換對應的後端類型即可。
 
 | 後端           | 端點               | 適用場景                                     |
 | -------------- | ------------------ | -------------------------------------------- |
@@ -32,13 +32,13 @@ python -m vllm_omni.server --model openbmb/VoxCPM2 --port 8000
 # 端點位於 http://localhost:8000/v1
 ```
 
-## 2. 讓 OpenMAIC 對接它
+## 2. 讓 Binah 對接它
 
 請選擇下列其中一種方式。
 
 ### A. 單一使用者（設定 UI，不修改伺服器）
 
-開啟 **設定 → 語音合成 → VoxCPM2**，選擇後端類型並貼上 Base URL。下方的 Request URL 預覽會顯示 OpenMAIC 實際呼叫的位址。
+開啟 **設定 → 語音合成 → VoxCPM2**，選擇後端類型並貼上 Base URL。下方的 Request URL 預覽會顯示 Binah 實際呼叫的位址。
 
 此方式適合個人測試，也能讓每個瀏覽器各自覆寫設定，不會影響其他使用者。
 
@@ -58,7 +58,7 @@ VoxCPM2 有三種聲音模式，全部位於 **設定 → 語音合成 → VoxCP
 
 ### Auto Voice（預設）
 
-OpenMAIC 會在合成時根據每個 Agent 的人設動態生成 voice prompt。無需任何設定；不變更任何項目就是此模式。
+Binah 會在合成時根據每個 Agent 的人設動態生成 voice prompt。無需任何設定；不變更任何項目就是此模式。
 
 ### Prompt voice（提示詞音色）
 

@@ -1,4 +1,4 @@
-import { AgentSessionAccessError } from '@openmaic/storage';
+import { AgentSessionAccessError } from '@binah/storage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 

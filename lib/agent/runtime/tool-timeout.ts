@@ -9,7 +9,7 @@
  * ever runs while the process lives. This module races every tool call
  * against:
  *
- * - a hard time budget (`OPENMAIC_AGENT_TOOL_TIMEOUT_MS`, default 10 min),
+ * - a hard time budget (`BINAH_AGENT_TOOL_TIMEOUT_MS`, default 10 min),
  *   which also fires the AbortSignal delivered to the tool's in-flight work;
  * - the caller's own AbortSignal (session cancel / lease loss / shutdown),
  *   so even a signal-ignoring await cannot keep the session running after a
@@ -45,7 +45,7 @@ export const AGENT_TOOL_TIMEOUT_OVERRIDES: Readonly<Record<string, number>> = {
 };
 
 /** Environment variable that tunes the default tool-call budget. */
-export const AGENT_TOOL_TIMEOUT_ENV = 'OPENMAIC_AGENT_TOOL_TIMEOUT_MS';
+export const AGENT_TOOL_TIMEOUT_ENV = 'BINAH_AGENT_TOOL_TIMEOUT_MS';
 
 /** Resolve the execution budget for one tool call, in milliseconds. */
 export function resolveAgentToolTimeoutMs(

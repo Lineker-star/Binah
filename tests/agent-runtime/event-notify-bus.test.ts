@@ -127,7 +127,7 @@ describe('agent event notify bus', () => {
     const client = fake.FakeClient.instances.at(-1)!;
     // The probe channel is also listened; complete the startup self-check so no
     // 2s probe timer lingers.
-    client.emitNotification(AGENT_EVENT_PROBE_CHANNEL, 'openmaic-agent-notify-selfcheck');
+    client.emitNotification(AGENT_EVENT_PROBE_CHANNEL, 'binah-agent-notify-selfcheck');
 
     client.emitNotification(
       AGENT_EVENT_NOTIFY_CHANNEL,
@@ -160,7 +160,7 @@ describe('agent event notify bus', () => {
     const wake = vi.fn();
     const unsubscribe = subscribeAgentEventWakeup({ kind: 'session', sessionId: 's' }, wake);
     const client = fake.FakeClient.instances.at(-1)!;
-    client.emitNotification(AGENT_EVENT_PROBE_CHANNEL, 'openmaic-agent-notify-selfcheck');
+    client.emitNotification(AGENT_EVENT_PROBE_CHANNEL, 'binah-agent-notify-selfcheck');
     expect(wake).not.toHaveBeenCalled();
 
     client.emitNotification(AGENT_EVENT_NOTIFY_CHANNEL, '{not json');

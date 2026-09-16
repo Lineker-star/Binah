@@ -29,6 +29,6 @@ export const DEFAULT_BRAND: BrandConfig = {
   shortName: 'Binah',
   logoSrc: '/logo-horizontal.png',
   logoHasWordmark: true,
-  markSrc: '/openmaic-mark.png',
+  markSrc: '/binah-mark.png',
   themeColor: '#4F46E5',
 };

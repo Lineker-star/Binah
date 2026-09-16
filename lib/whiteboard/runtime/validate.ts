@@ -1,6 +1,6 @@
-import { normalizeElement, type CodeLine, type PPTElement, type Whiteboard } from '@openmaic/dsl';
-import sceneSchemaJson from '@openmaic/dsl/schema/scene.schema.json';
-import type { RuntimePayloadValidator } from '@openmaic/storage';
+import { normalizeElement, type CodeLine, type PPTElement, type Whiteboard } from '@binah/dsl';
+import sceneSchemaJson from '@binah/dsl/schema/scene.schema.json';
+import type { RuntimePayloadValidator } from '@binah/storage';
 
 import { normalizeWhiteboardViewportRatio } from '@/lib/whiteboard/viewport';
 import {

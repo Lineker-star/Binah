@@ -1,5 +1,5 @@
 services:
-  openmaic:
+  binah:
     build:
       context: .
       args:
@@ -37,7 +37,7 @@ services:
     volumes:
       # Optional: mount server-providers.yml for provider config
       # - ./server-providers.yml:/app/server-providers.yml:ro
-      - openmaic-data:/app/data
+      - binah-data:/app/data
     restart: unless-stopped
 
   # Optional PostgreSQL backing for the app-embedded persistence API.
@@ -48,19 +48,19 @@ services:
     profiles:
       - server-persistence
     environment:
-      - POSTGRES_DB=openmaic
-      - POSTGRES_USER=openmaic
+      - POSTGRES_DB=binah
+      - POSTGRES_USER=binah
       # Development default only. Override this and the matching DATABASE_URL
       # before using the stack outside a local trusted environment.
-      - POSTGRES_PASSWORD=${PERSISTENCE_POSTGRES_PASSWORD:-openmaic-dev}
+      - POSTGRES_PASSWORD=${PERSISTENCE_POSTGRES_PASSWORD:-binah-dev}
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U openmaic -d openmaic']
+      test: ['CMD-SHELL', 'pg_isready -U binah -d binah']
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
     volumes:
-      - openmaic-postgres:/var/lib/postgresql/data
+      - binah-postgres:/var/lib/postgresql/data
     restart: unless-stopped
 
   # Isolated MP4 render service (Node 22 + Chromium + FFmpeg) for classroom video
@@ -70,7 +70,7 @@ services:
   #   docker compose --profile video-export up --build
   #
   # Sits on the `render` network (`internal: true`, no host/internet gateway).
-  # It shares that network with `openmaic` only so the app can reach it; to stop
+  # It shares that network with `binah` only so the app can reach it; to stop
   # the untrusted Chromium from initiating connections *back* to the app over
   # that shared network, the container's entrypoint installs an iptables egress
   # lockdown (needs CAP_NET_ADMIN) that drops all outbound except loopback and
@@ -104,7 +104,7 @@ services:
       - RENDER_MAX_CONCURRENT_EXTRACTIONS=1
       # Long compositions still need CDP headroom even with one explicit worker.
       - PRODUCER_PUPPETEER_PROTOCOL_TIMEOUT_MS=900000
-      # OpenMAIC's long slide exports currently exhaust producer's 15s static
+      # Binah's long slide exports currently exhaust producer's 15s static
       # verification budget and disable dedup anyway. Skip that guaranteed-lost
       # startup cost until the verifier can share/scale its plan across workers.
       - HF_STATIC_DEDUP=false
@@ -117,7 +117,7 @@ services:
       - RENDER_MAX_JOBS_PER_USER=0
       - RENDER_PREVIEW_TIMEOUT_MS=${RENDER_PREVIEW_TIMEOUT_MS:-20000}
       - RENDER_PREVIEW_MAX_IN_FLIGHT=${RENDER_PREVIEW_MAX_IN_FLIGHT:-8}
-      # Preview callers send a durable owner identity in x-openmaic-client, so
+      # Preview callers send a durable owner identity in x-binah-client, so
       # keep this per-owner guard enabled. Set it to 0 only in deployments that
       # call /preview without an owner identity.
       - RENDER_PREVIEW_MAX_PER_USER=${RENDER_PREVIEW_MAX_PER_USER:-2}
@@ -143,5 +143,5 @@ networks:
     internal: true
 
 volumes:
-  openmaic-data:
-  openmaic-postgres:
+  binah-data:
+  binah-postgres:

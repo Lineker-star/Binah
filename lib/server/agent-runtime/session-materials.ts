@@ -12,13 +12,13 @@
 import {
   PgAgentSessionMaterialStore,
   ensureAgentSessionMaterialSchema,
-} from '@openmaic/storage/material/pg';
+} from '@binah/storage/material/pg';
 import {
   createMaterialId,
   type AgentSessionMaterial,
   type AgentSessionMeta,
   type ListAgentSessionMaterialsOptions,
-} from '@openmaic/storage';
+} from '@binah/storage';
 import { getReadyOwnerMaterials } from '@/lib/persistence/owner-materials';
 
 import { getServerPersistenceProvider } from '@/lib/persistence/server-provider';
@@ -33,7 +33,7 @@ interface AgentSessionMaterialStoreState {
   storePromise?: Promise<PgAgentSessionMaterialStore>;
 }
 
-const MATERIAL_STORE_STATE_KEY = Symbol.for('openmaic.agent-session-material.store');
+const MATERIAL_STORE_STATE_KEY = Symbol.for('binah.agent-session-material.store');
 
 export class SessionMaterialBindingError extends Error {
   override readonly name = 'SessionMaterialBindingError';

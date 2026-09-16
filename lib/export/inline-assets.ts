@@ -327,7 +327,7 @@ async function inlineStyleAttributeUrls(
   css: string,
   fetchAsset: FetchAsset,
 ): Promise<{ css: string; failed: { url: string; reason: string }[]; inlined: string[] }> {
-  const root = parseCss(`.openmaic-style{${css}}`, 'style-attribute');
+  const root = parseCss(`.binah-style{${css}}`, 'style-attribute');
   const result = await inlineParsedCssUrls(root, 'about:blank', fetchAsset, new Set());
   const serialized = root.toString();
   return {
@@ -342,7 +342,7 @@ async function inlineSvgPresentationAttributeUrls(
   fetchAsset: FetchAsset,
 ): Promise<{ cssValue: string; failed: { url: string; reason: string }[]; inlined: string[] }> {
   const root = parseCss(
-    `.openmaic-svg{${attributeName}:${cssValue}}`,
+    `.binah-svg{${attributeName}:${cssValue}}`,
     'svg-presentation-attribute',
   );
   let declarationValue = cssValue;

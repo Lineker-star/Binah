@@ -57,7 +57,7 @@ async function submitTask(
 
   const model = requireModel(config.model, 'MiniMax Video');
   const duration = options.duration || 6;
-  // Map OpenMAIC resolution to MiniMax format. MiniMax's mid tier is 768P, not
+  // Map Binah resolution to MiniMax format. MiniMax's mid tier is 768P, not
   // 720P — Hailuo 2.3 rejects 720P with "2013 ... does not support resolution
   // 720P". Our shared resolution enum has no 768p, so the UI's "720p" maps to
   // MiniMax 768P here (and 768P is also the safe fallback for any other value).

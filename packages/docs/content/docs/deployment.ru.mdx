@@ -1,13 +1,13 @@
 ---
 title: Развертывание
-description: Разверните OpenMAIC на Vercel, Docker или собственном хосте.
+description: Разверните Binah на Vercel, Docker или собственном хосте.
 ---
 
-OpenMAIC — это стандартное приложение Next.js, которое можно запускать везде, где поддерживается Next.js.
+Binah — это стандартное приложение Next.js, которое можно запускать везде, где поддерживается Next.js.
 
 ## Vercel (один клик)
 
-Самый быстрый способ. Нажмите кнопку Deploy в [README репозитория](https://github.com/THU-MAIC/OpenMAIC), сделайте fork репозитория и введите минимум один API ключ LLM по инструкции.
+Самый быстрый способ. Нажмите кнопку Deploy в [README репозитория](https://github.com/Lineker-star/binah), сделайте fork репозитория и введите минимум один API ключ LLM по инструкции.
 
 Vercel автоматически пересобирает и разворачивает Next.js приложение при каждом коммите. Для деплоя необходимо в настройках проекта указать хотя бы одного LLM провайдера.
 
@@ -18,9 +18,9 @@ Vercel автоматически пересобирает и разворачи
 В репозитории есть production-ready `Dockerfile`. В образе используется Node.js 22. Соберите и запустите:
 
 ```bash
-docker build -t openmaic .
+docker build -t binah .
 
-docker run --env-file .env.local -p 3000:3000 openmaic
+docker run --env-file .env.local -p 3000:3000 binah
 ```
 
 Рекомендуется использовать Docker Compose из репозитория:
@@ -31,7 +31,7 @@ cp .env.example .env.local
 docker compose up --build
 ```
 
-По умолчанию Compose запускает OpenMAIC и монтирует volume `openmaic-data`. Другие провайдеры и функции настраиваются по необходимости, подробности в [Конфигурации](./configuration.mdx).
+По умолчанию Compose запускает Binah и монтирует volume `binah-data`. Другие провайдеры и функции настраиваются по необходимости, подробности в [Конфигурации](./configuration.mdx).
 
 Флаги `NEXT_PUBLIC_*` внедряются во время сборки Docker, их нельзя просто указать в `.env.local` при запуске. Например, чтобы включить экспорт видео и экспериментальный импорт PPTX:
 
@@ -47,12 +47,12 @@ docker compose --profile video-export up --build
 
 ```yaml
 services:
-  openmaic:
+  binah:
     volumes:
       - ./server-providers.yml:/app/server-providers.yml:ro
 ```
 
-В Docker контейнере `localhost` указывает на сам контейнер. Если Ollama, Lemonade, VoxCPM или ComfyUI запущены на хосте, используйте `host.docker.internal`, например `http://host.docker.internal:11434/v1` или `http://host.docker.internal:8188`. В Linux обычно также нужно добавить `extra_hosts: ["host.docker.internal:host-gateway"]` для сервиса `openmaic`. ComfyUI пока не является серверным провайдером, поэтому в продакшене нужно задать `ALLOW_LOCAL_NETWORKS=true`, иначе SSRF-защита отклонит запросы к этому адресу.
+В Docker контейнере `localhost` указывает на сам контейнер. Если Ollama, Lemonade, VoxCPM или ComfyUI запущены на хосте, используйте `host.docker.internal`, например `http://host.docker.internal:11434/v1` или `http://host.docker.internal:8188`. В Linux обычно также нужно добавить `extra_hosts: ["host.docker.internal:host-gateway"]` для сервиса `binah`. ComfyUI пока не является серверным провайдером, поэтому в продакшене нужно задать `ALLOW_LOCAL_NETWORKS=true`, иначе SSRF-защита отклонит запросы к этому адресу.
 
 ## Самостоятельный хостинг на виртуальной машине
 
@@ -68,26 +68,26 @@ pnpm start      # по умолчанию слушает порт 3000
 
 ## Серверная персистентность (PostgreSQL)
 
-Профиль `server-persistence` запускает OpenMAIC и PostgreSQL в двух контейнерах. HTTP API персистентности встроено в OpenMAIC, отдельный сервис не требуется.
+Профиль `server-persistence` запускает Binah и PostgreSQL в двух контейнерах. HTTP API персистентности встроено в Binah, отдельный сервис не требуется.
 
 Добавьте в `.env.local` параметры подключения к базе и токен для разработки:
 
 ```bash
-DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
-PERSISTENCE_DEV_TOKEN=openmaic-local-dev
+DATABASE_URL=postgres://binah:binah-dev@postgres:5432/binah
+PERSISTENCE_DEV_TOKEN=binah-local-dev
 ```
 
 Запустите профиль:
 
 ```bash
 NEXT_PUBLIC_PERSISTENCE=1 \
-NEXT_PUBLIC_PERSISTENCE_TOKEN=openmaic-local-dev \
+NEXT_PUBLIC_PERSISTENCE_TOKEN=binah-local-dev \
 docker compose --profile server-persistence up --build
 ```
 
 `NEXT_PUBLIC_PERSISTENCE` и `NEXT_PUBLIC_PERSISTENCE_TOKEN` — переменные сборки, должны совпадать с серверной конфигурацией. Схема с `PERSISTENCE_DEV_TOKEN` подходит только для локальной или доверенной сети, не обеспечивает полноценной изоляции пользователей и не предназначена для публичного продакшена.
 
-Данные PostgreSQL хранятся в volume `openmaic-postgres`. Пароль `PERSISTENCE_POSTGRES_PASSWORD` задаётся только при первой инициализации базы, последующие изменения переменной не меняют пароль существующего пользователя.
+Данные PostgreSQL хранятся в volume `binah-postgres`. Пароль `PERSISTENCE_POSTGRES_PASSWORD` задаётся только при первой инициализации базы, последующие изменения переменной не меняют пароль существующего пользователя.
 
 Если не задавать `NEXT_PUBLIC_PERSISTENCE`, сохраняется стандартное браузерное хранение.
 
@@ -101,7 +101,7 @@ docker compose --profile server-persistence up --build
 docker compose --profile video-export up --build
 ```
 
-Compose передаёт OpenMAIC URL рендер-сервиса через `RENDER_SERVICE_URL`. Если профиль не включён или сервис недоступен, экспорт возвращается к скачиванию ZIP проекта для локального рендеринга через CLI. Рендер-сервис работает в изолированной сети и требует capability `NET_ADMIN` при запуске; подробности и отдельные варианты развертывания — в [`render-service/README.md`](https://github.com/THU-MAIC/OpenMAIC/blob/main/render-service/README.md).
+Compose передаёт Binah URL рендер-сервиса через `RENDER_SERVICE_URL`. Если профиль не включён или сервис недоступен, экспорт возвращается к скачиванию ZIP проекта для локального рендеринга через CLI. Рендер-сервис работает в изолированной сети и требует capability `NET_ADMIN` при запуске; подробности и отдельные варианты развертывания — в [`render-service/README.md`](https://github.com/Lineker-star/binah/blob/main/render-service/README.md).
 
 ## Переменные окружения
 

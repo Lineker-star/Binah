@@ -87,7 +87,7 @@ describe('PlaybackScreenCanvas', () => {
     expect(html).not.toContain('class="slide-element"');
   });
 
-  it('uses @openmaic/renderer when the playback renderer flag is enabled', () => {
+  it('uses @binah/renderer when the playback renderer flag is enabled', () => {
     process.env[flag] = 'true';
     const html = renderToStaticMarkup(
       createElement(

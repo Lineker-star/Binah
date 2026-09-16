@@ -1,6 +1,6 @@
 import '@/lib/persistence/bootstrap';
 
-import { BrowserAssetStore, toAssetId } from '@openmaic/storage';
+import { BrowserAssetStore, toAssetId } from '@binah/storage';
 import {
   isAssetPoolServerBacked,
   registerAssetPoolStorageResetHook,

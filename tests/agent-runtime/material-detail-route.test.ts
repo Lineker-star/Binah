@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 
-import type { AgentSessionMaterial } from '@openmaic/storage';
+import type { AgentSessionMaterial } from '@binah/storage';
 
 const mocks = vi.hoisted(() => ({
   runtimeConfigured: true,

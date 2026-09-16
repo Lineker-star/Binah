@@ -1,5 +1,5 @@
 /**
- * @openmaic/render-service — HTTP entrypoint.
+ * @binah/render-service — HTTP entrypoint.
  *
  * Renders exported Hyperframes projects (the ZIP the app builds with
  * `packageVideoZip`) to MP4 using `@hyperframes/producer`, isolated in a
@@ -26,7 +26,7 @@ import { createReadStream } from 'node:fs';
 import { mkdir, stat } from 'node:fs/promises';
 import { Readable } from 'node:stream';
 import { serve } from '@hono/node-server';
-import { validateScene } from '@openmaic/dsl';
+import { validateScene } from '@binah/dsl';
 import { Hono, type Context } from 'hono';
 import { config } from './config.js';
 import { InMemoryJobStore } from './job-store.js';
@@ -269,7 +269,7 @@ export function createApp(deps: AppDeps): Hono {
     // Identity is derived by the trusted proxy (client IP) and passed in a header;
     // a client-supplied multipart `userId` is deliberately ignored so it can't be
     // rotated to bypass the per-identity guard.
-    const identity = c.req.header('x-openmaic-client')?.trim() || 'anonymous';
+    const identity = c.req.header('x-binah-client')?.trim() || 'anonymous';
 
     // Reserve a queue slot BEFORE the buffering permit, so a rejected caller
     // (queue full / per-identity limit) never enters buffering or extraction.
@@ -374,7 +374,7 @@ export function createApp(deps: AppDeps): Hono {
       return c.json({ error: 'Upload too large' }, 413);
     }
 
-    const identity = c.req.header('x-openmaic-client')?.trim() || 'anonymous';
+    const identity = c.req.header('x-binah-client')?.trim() || 'anonymous';
     let release: () => void;
     try {
       release = previewGate.acquire(identity);
@@ -568,7 +568,7 @@ async function main(): Promise<void> {
   });
 
   // Ensure the scratch root exists before accepting work. On the documented
-  // standalone path nothing creates /tmp/openmaic-renders, so without this every
+  // standalone path nothing creates /tmp/binah-renders, so without this every
   // makeProjectDir() would ENOENT. mktemp still creates a fresh subdir per job.
   await mkdir(config.tmpDir, { recursive: true }).catch(() => {});
 

@@ -21,7 +21,7 @@
 import { randomBytes } from 'node:crypto';
 
 import type { AgentTool } from '@earendil-works/pi-agent-core';
-import type { AgentSessionMaterial } from '@openmaic/storage';
+import type { AgentSessionMaterial } from '@binah/storage';
 import { Type, type Static } from 'typebox';
 
 import {

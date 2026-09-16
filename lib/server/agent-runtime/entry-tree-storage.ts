@@ -12,7 +12,7 @@ import {
   type AgentSessionEntry,
   type AgentSessionEntryTreeHandle,
   type AgentSessionMeta,
-} from '@openmaic/storage';
+} from '@binah/storage';
 
 import { getAgentSessionStore } from './store';
 

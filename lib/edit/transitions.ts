@@ -7,7 +7,7 @@
  *
  * Ease curve [0.22, 1, 0.36, 1] is the cubic-bezier ease-out-quart shape —
  * natural deceleration with a slight overshoot at the end, used elsewhere
- * in the OpenMAIC playback chrome.
+ * in the Binah playback chrome.
  */
 export const CHROME_EASE = [0.22, 1, 0.36, 1] as const;
 

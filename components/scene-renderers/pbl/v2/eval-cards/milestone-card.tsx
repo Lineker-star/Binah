@@ -1,7 +1,7 @@
 /**
  * PBL v2 — Milestone reflection + handover (combined) card.
  *
- * Per PR 6 D7-B: we merge what the refactor/openmaic-pbl repo had as
+ * Per PR 6 D7-B: we merge what the refactor/binah-pbl repo had as
  * TWO separate cards (MilestoneNarrativeCard + HandoverCard) into ONE
  * card so the learner doesn't have to scroll past evaluation prose
  * to reach the "继续到下一阶段" button.

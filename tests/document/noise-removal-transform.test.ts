@@ -13,7 +13,7 @@ function pageBlocks(page: number): DocumentBlock[] {
     {
       id: `header_${page}`,
       type: 'layout',
-      text: 'OpenMAIC Training Manual',
+      text: 'Binah Training Manual',
       pageNumber: page,
       metadata: { role: 'header' },
     },

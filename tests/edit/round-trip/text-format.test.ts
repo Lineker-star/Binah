@@ -15,7 +15,7 @@ import {
  * Round-trip gate: formatted text (bold) survives the export pipeline.
  *
  * Discovery (mandatory per task spec): the exported slide1.xml was inspected
- * via a temporary console.log test. The OpenMAIC exporter (pptxgenjs) emits
+ * via a temporary console.log test. The Binah exporter (pptxgenjs) emits
  * bold as the `b="1"` attribute on `<a:rPr>`, e.g.:
  *   <a:rPr lang="en-US" sz="1152" b="1" dirty="0">
  * The assertions below are pinned to this observed real output.

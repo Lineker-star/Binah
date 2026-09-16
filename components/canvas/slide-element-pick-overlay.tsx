@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { PPTElement } from '@openmaic/dsl';
+import type { PPTElement } from '@binah/dsl';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import type { Scene } from '@/lib/types/stage';
 

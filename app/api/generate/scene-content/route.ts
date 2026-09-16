@@ -13,8 +13,8 @@ import {
   generateSceneContent,
   buildVisionUserContent,
   partitionImagesForVision,
-} from '@openmaic/generation';
-import type { AgentInfo } from '@openmaic/generation';
+} from '@binah/generation';
+import type { AgentInfo } from '@binah/generation';
 import type {
   SceneOutline,
   PdfImage,

@@ -5,7 +5,7 @@ import type {
   PPTElementOutline,
   PPTElementShadow,
   Gradient,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 
 export enum ElementOrderCommands {
   UP = 'up',

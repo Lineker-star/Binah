@@ -17,7 +17,7 @@ interface StoredActionResumeState {
   scenes: Record<string, StoredActionResumePosition>;
 }
 
-const STORAGE_PREFIX = 'openmaic:playback-action-resume';
+const STORAGE_PREFIX = 'binah:playback-action-resume';
 
 export function getActionResumeStorageKey(stageId: string | null | undefined): string {
   return `${STORAGE_PREFIX}:${stageId || 'unknown-stage'}`;

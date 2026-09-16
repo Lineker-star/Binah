@@ -1,13 +1,13 @@
 ---
 title: 部署
-description: 部署 OpenMAIC 到 Vercel、Docker，或你自己的主机。
+description: 部署 Binah 到 Vercel、Docker，或你自己的主机。
 ---
 
-OpenMAIC 是一个标准的 Next.js 应用，Next.js 能跑的地方它就能跑。
+Binah 是一个标准的 Next.js 应用，Next.js 能跑的地方它就能跑。
 
 ## Vercel（一键）
 
-最快的路径。点[仓库 README](https://github.com/THU-MAIC/OpenMAIC)里的 Deploy 按钮，fork 仓库，按提示填入至少一个 LLM 的 API key 即可。
+最快的路径。点[仓库 README](https://github.com/Lineker-star/binah)里的 Deploy 按钮，fork 仓库，按提示填入至少一个 LLM 的 API key 即可。
 
 Vercel 会在每次提交后重新构建并部署 Next.js 应用。部署时需要在项目设置中配置至少一个 LLM 提供方。
 
@@ -18,9 +18,9 @@ Vercel 部署默认使用浏览器端持久化。若需要服务端持久化，�
 仓库里有一份适合生产的 `Dockerfile`。镜像内部使用 Node.js 22，构建并运行：
 
 ```bash
-docker build -t openmaic .
+docker build -t binah .
 
-docker run --env-file .env.local -p 3000:3000 openmaic
+docker run --env-file .env.local -p 3000:3000 binah
 ```
 
 推荐使用仓库里的 Docker Compose 配置：
@@ -31,7 +31,7 @@ cp .env.example .env.local
 docker compose up --build
 ```
 
-默认 Compose 部署会启动 OpenMAIC 应用，并挂载 `openmaic-data` 数据卷。其他 provider 和功能按需配置，详见[配置说明](./configuration.mdx)。
+默认 Compose 部署会启动 Binah 应用，并挂载 `binah-data` 数据卷。其他 provider 和功能按需配置，详见[配置说明](./configuration.mdx)。
 
 `NEXT_PUBLIC_*` 功能开关会在 Docker 构建时注入，不能只写在运行时的 `.env.local` 中。例如启用视频导出和实验性 PPTX 导入：
 
@@ -47,12 +47,12 @@ docker compose --profile video-export up --build
 
 ```yaml
 services:
-  openmaic:
+  binah:
     volumes:
       - ./server-providers.yml:/app/server-providers.yml:ro
 ```
 
-Docker 容器中的 `localhost` 指向容器自身。若 Ollama、Lemonade、VoxCPM 或 ComfyUI 运行在宿主机上，请使用 `host.docker.internal`，例如 `http://host.docker.internal:11434/v1` 或 `http://host.docker.internal:8188`。Linux Docker 通常还需要为 `openmaic` 服务添加 `extra_hosts: ["host.docker.internal:host-gateway"]`。其中 ComfyUI 目前不是服务端托管 provider，生产环境还要设置 `ALLOW_LOCAL_NETWORKS=true`，否则 SSRF 防护会拒绝该地址。
+Docker 容器中的 `localhost` 指向容器自身。若 Ollama、Lemonade、VoxCPM 或 ComfyUI 运行在宿主机上，请使用 `host.docker.internal`，例如 `http://host.docker.internal:11434/v1` 或 `http://host.docker.internal:8188`。Linux Docker 通常还需要为 `binah` 服务添加 `extra_hosts: ["host.docker.internal:host-gateway"]`。其中 ComfyUI 目前不是服务端托管 provider，生产环境还要设置 `ALLOW_LOCAL_NETWORKS=true`，否则 SSRF 防护会拒绝该地址。
 
 ## 自建虚拟机
 
@@ -68,26 +68,26 @@ pnpm start      # 默认监听 3000 端口
 
 ## 服务端持久化（PostgreSQL）
 
-仓库的 `server-persistence` profile 会启动 OpenMAIC 和 PostgreSQL 两个容器。持久化 HTTP API 内嵌在 OpenMAIC 中，不需要额外的 persistence 服务。
+仓库的 `server-persistence` profile 会启动 Binah 和 PostgreSQL 两个容器。持久化 HTTP API 内嵌在 Binah 中，不需要额外的 persistence 服务。
 
 先在 `.env.local` 中加入数据库连接和开发令牌：
 
 ```bash
-DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
-PERSISTENCE_DEV_TOKEN=openmaic-local-dev
+DATABASE_URL=postgres://binah:binah-dev@postgres:5432/binah
+PERSISTENCE_DEV_TOKEN=binah-local-dev
 ```
 
 然后启动 profile：
 
 ```bash
 NEXT_PUBLIC_PERSISTENCE=1 \
-NEXT_PUBLIC_PERSISTENCE_TOKEN=openmaic-local-dev \
+NEXT_PUBLIC_PERSISTENCE_TOKEN=binah-local-dev \
 docker compose --profile server-persistence up --build
 ```
 
 `NEXT_PUBLIC_PERSISTENCE` 和 `NEXT_PUBLIC_PERSISTENCE_TOKEN` 是构建时变量，必须与运行时的服务端配置匹配。`PERSISTENCE_DEV_TOKEN` 方案只适合本地或可信内网部署，不提供真正的用户隔离，不应直接作为公开生产环境的认证方案。
 
-PostgreSQL 数据保存在 `openmaic-postgres` volume 中。`PERSISTENCE_POSTGRES_PASSWORD` 只会在数据库目录首次初始化时设置密码，之后修改环境变量不会自动修改已有数据库用户密码。
+PostgreSQL 数据保存在 `binah-postgres` volume 中。`PERSISTENCE_POSTGRES_PASSWORD` 只会在数据库目录首次初始化时设置密码，之后修改环境变量不会自动修改已有数据库用户密码。
 
 不设置 `NEXT_PUBLIC_PERSISTENCE` 即保持原有的浏览器端持久化行为。
 
@@ -101,7 +101,7 @@ PostgreSQL 数据保存在 `openmaic-postgres` volume 中。`PERSISTENCE_POSTGRE
 docker compose --profile video-export up --build
 ```
 
-Compose 会通过 `RENDER_SERVICE_URL` 让 OpenMAIC 连接渲染服务。未启用该 profile，或渲染服务不可用时，导出会退化为下载项目 ZIP，供本地 CLI 渲染。渲染服务使用隔离网络，启动时需要 `NET_ADMIN` capability；更多限制和独立部署方式见仓库的 [`render-service/README.md`](https://github.com/THU-MAIC/OpenMAIC/blob/main/render-service/README.md)。
+Compose 会通过 `RENDER_SERVICE_URL` 让 Binah 连接渲染服务。未启用该 profile，或渲染服务不可用时，导出会退化为下载项目 ZIP，供本地 CLI 渲染。渲染服务使用隔离网络，启动时需要 `NET_ADMIN` capability；更多限制和独立部署方式见仓库的 [`render-service/README.md`](https://github.com/Lineker-star/binah/blob/main/render-service/README.md)。
 
 ## 环境变量
 

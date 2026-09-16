@@ -67,7 +67,7 @@ export function buildScenePreviewTools(deps: ScenePreviewDeps): AgentTool<never,
             method: 'POST',
             headers: {
               'content-type': 'application/json',
-              'x-openmaic-client': deps.ownerId,
+              'x-binah-client': deps.ownerId,
             },
             body: JSON.stringify({
               version: 1,

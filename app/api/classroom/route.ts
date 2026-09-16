@@ -1,6 +1,6 @@
 import { type NextRequest } from 'next/server';
 import { randomUUID } from 'crypto';
-import { validateScene } from '@openmaic/dsl';
+import { validateScene } from '@binah/dsl';
 import { apiSuccess, apiError, API_ERROR_CODES } from '@/lib/server/api-response';
 import {
   buildRequestOrigin,

@@ -1,5 +1,5 @@
-import type { AgentSessionUserMessage } from '@openmaic/storage';
-import type { PgAgentSessionStore } from '@openmaic/storage/agent-session/pg';
+import type { AgentSessionUserMessage } from '@binah/storage';
+import type { PgAgentSessionStore } from '@binah/storage/agent-session/pg';
 import { HOST_AGENT_LIFECYCLE } from '@/lib/agent-runtime/lifecycle';
 
 export interface AgentUserMessageWithElementRefs extends AgentSessionUserMessage {

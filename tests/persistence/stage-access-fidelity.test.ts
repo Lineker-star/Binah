@@ -67,7 +67,7 @@ describe('reference-fidelity stage access', () => {
     vi.stubEnv('DATABASE_URL', `postgres://stage-access-${randomUUID()}`);
     vi.stubEnv('PERSISTENCE_DEV_TOKEN', 'configured');
     vi.stubEnv('ASSET_S3_BUCKET', '');
-    vi.stubEnv('OPENMAIC_AGENT_RUNTIME_ENABLED', 'true');
+    vi.stubEnv('BINAH_AGENT_RUNTIME_ENABLED', 'true');
     const db = new PGlite();
     await db.waitReady;
     pool = new PGlitePool(db);

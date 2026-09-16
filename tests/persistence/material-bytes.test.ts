@@ -13,7 +13,7 @@ afterEach(async () => {
 });
 
 async function storeFixture(): Promise<{ root: string; store: LocalMaterialByteStore }> {
-  const root = await mkdtemp(join(tmpdir(), 'openmaic-material-bytes-'));
+  const root = await mkdtemp(join(tmpdir(), 'binah-material-bytes-'));
   roots.push(root);
   return { root, store: new LocalMaterialByteStore(root) };
 }

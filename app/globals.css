@@ -9,7 +9,7 @@
 @source '../node_modules/streamdown/dist/*.js';
 @source '../node_modules/@streamdown/code/dist/*.js';
 @source '../node_modules/@streamdown/math/dist/*.js';
-@source "../node_modules/@openmaic/renderer/dist/**/*.{js,cjs}";
+@source "../node_modules/@binah/renderer/dist/**/*.{js,cjs}";
 /* slide-renderer-demo is gitignored (local sandbox), which makes Tailwind v4's
    auto source detection skip it. Re-include it explicitly so the demo's
    Tailwind classes (e.g. bg-violet-600) still get generated. */
@@ -287,7 +287,7 @@ body[data-maic-editor='true'] .editable-element-text li,
   scrollbar-width: none;
 }
 
-/* PBL v2 workspace scrollbars: scoped so the rest of OpenMAIC keeps native behavior. */
+/* PBL v2 workspace scrollbars: scoped so the rest of Binah keeps native behavior. */
 [data-pbl-workspace='true'] .pbl-v2-scrollbar,
 [data-pbl-workspace='true'] .pbl-v2-scroll-fade {
   scrollbar-color: rgb(224 231 255 / 0.44) transparent;

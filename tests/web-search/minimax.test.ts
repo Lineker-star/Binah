@@ -19,9 +19,9 @@ describe('searchWithMiniMax', () => {
         JSON.stringify({
           organic: [
             {
-              title: 'OpenMAIC',
-              link: 'https://github.com/THU-MAIC/OpenMAIC',
-              snippet: 'OpenMAIC project repository.',
+              title: 'Binah',
+              link: 'https://github.com/Lineker-star/binah',
+              snippet: 'Binah project repository.',
               date: '2026-05-31',
             },
             {
@@ -54,7 +54,7 @@ describe('searchWithMiniMax', () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer minimax-key',
-          'MM-API-Source': 'OpenMAIC',
+          'MM-API-Source': 'Binah',
         },
         body: JSON.stringify({ q: 'MiniMax Token Plan' }),
       }),
@@ -63,9 +63,9 @@ describe('searchWithMiniMax', () => {
     expect(result.answer).toBe('');
     expect(result.sources).toEqual([
       {
-        title: 'OpenMAIC',
-        url: 'https://github.com/THU-MAIC/OpenMAIC',
-        content: 'OpenMAIC project repository.',
+        title: 'Binah',
+        url: 'https://github.com/Lineker-star/binah',
+        content: 'Binah project repository.',
         score: 0,
       },
       {

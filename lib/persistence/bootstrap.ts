@@ -1,5 +1,5 @@
-import { BrowserKVStore, HttpDocumentStore, type HttpDocumentHeadersHook } from '@openmaic/storage';
-import { HttpRuntimeStore, type HttpRuntimeHeadersHook } from '@openmaic/storage/runtime/http';
+import { BrowserKVStore, HttpDocumentStore, type HttpDocumentHeadersHook } from '@binah/storage';
+import { HttpRuntimeStore, type HttpRuntimeHeadersHook } from '@binah/storage/runtime/http';
 
 import {
   assertDocumentStorageConfigurable,

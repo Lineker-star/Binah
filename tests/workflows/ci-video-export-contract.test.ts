@@ -86,7 +86,7 @@ function assertMainPushVersionGate(workflow: Workflow): void {
   expect(normalizeShell(mainPush.run)).toBe(EXPECTED_MAIN_PUSH_GATE);
 }
 
-const HF_E2E_DIR = '${{ runner.temp }}/openmaic-hyperframes-samples';
+const HF_E2E_DIR = '${{ runner.temp }}/binah-hyperframes-samples';
 
 function assertHyperframesLintContract(workflow: Workflow): void {
   const lint = step(workflow, 'e2e', 'Lint Hyperframes samples');

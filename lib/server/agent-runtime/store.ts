@@ -3,8 +3,8 @@ import {
   ensureAgentSessionSchema,
   type Queryable,
   type WithTransaction,
-} from '@openmaic/storage/agent-session/pg';
-import { extractObservedUrls } from '@openmaic/storage';
+} from '@binah/storage/agent-session/pg';
+import { extractObservedUrls } from '@binah/storage';
 import type { Pool } from 'pg';
 
 import { getServerPersistenceProvider } from '@/lib/persistence/server-provider';
@@ -15,7 +15,7 @@ interface AgentSessionStoreState {
   storePromise?: Promise<PgAgentSessionStore>;
 }
 
-const AGENT_SESSION_STORE_STATE_KEY = Symbol.for('openmaic.agent-session.store');
+const AGENT_SESSION_STORE_STATE_KEY = Symbol.for('binah.agent-session.store');
 const globalState = globalThis as typeof globalThis & {
   [AGENT_SESSION_STORE_STATE_KEY]?: AgentSessionStoreState;
 };

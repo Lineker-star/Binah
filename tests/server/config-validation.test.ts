@@ -54,7 +54,7 @@ const LLM_ENV_PREFIXES = [
 function clearConfigEnv() {
   delete process.env.MODEL_ROUTES;
   delete process.env.DEFAULT_MODEL;
-  delete process.env.OPENMAIC_AGENT_RUNTIME_ENABLED;
+  delete process.env.BINAH_AGENT_RUNTIME_ENABLED;
   delete process.env.DATABASE_URL;
   for (const prefix of LLM_ENV_PREFIXES) {
     delete process.env[`${prefix}_API_KEY`];
@@ -234,17 +234,17 @@ describe('validateServerConfig — warning matrix', () => {
 
   describe('agent runtime configuration', () => {
     it('warns when the runtime flag is set without DATABASE_URL', async () => {
-      vi.stubEnv('OPENMAIC_AGENT_RUNTIME_ENABLED', 'true');
+      vi.stubEnv('BINAH_AGENT_RUNTIME_ENABLED', 'true');
       const { validateServerConfig } = await import('@/lib/server/config-validation');
       validateServerConfig();
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const message = String(warnSpy.mock.calls[0][0]);
-      expect(message).toContain('OPENMAIC_AGENT_RUNTIME_ENABLED');
+      expect(message).toContain('BINAH_AGENT_RUNTIME_ENABLED');
       expect(message).toContain('DATABASE_URL');
     });
 
     it('warns when the runtime flag is set and DATABASE_URL is blank', async () => {
-      vi.stubEnv('OPENMAIC_AGENT_RUNTIME_ENABLED', 'true');
+      vi.stubEnv('BINAH_AGENT_RUNTIME_ENABLED', 'true');
       vi.stubEnv('DATABASE_URL', '   ');
       const { validateServerConfig } = await import('@/lib/server/config-validation');
       validateServerConfig();
@@ -253,7 +253,7 @@ describe('validateServerConfig — warning matrix', () => {
     });
 
     it('does not warn when the runtime flag is set with DATABASE_URL present', async () => {
-      vi.stubEnv('OPENMAIC_AGENT_RUNTIME_ENABLED', 'true');
+      vi.stubEnv('BINAH_AGENT_RUNTIME_ENABLED', 'true');
       vi.stubEnv('DATABASE_URL', 'postgres://runtime');
       const { validateServerConfig } = await import('@/lib/server/config-validation');
       validateServerConfig();

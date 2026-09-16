@@ -91,7 +91,7 @@ describe.skipIf(!REQUIRED)('frozen interactive HTML in Chromium', () => {
         const timelines = (window as typeof window & { __timelines?: Record<string, unknown> })
           .__timelines;
         return (
-          host?.getAttribute('data-interactive-static-state') === 'frozen' && !!timelines?.openmaic
+          host?.getAttribute('data-interactive-static-state') === 'frozen' && !!timelines?.binah
         );
       });
 
@@ -99,14 +99,14 @@ describe.skipIf(!REQUIRED)('frozen interactive HTML in Chromium', () => {
       const before = await child.evaluate(() => ({
         counter: document.querySelector('#counter')?.textContent,
         workerStatus: document.querySelector('#worker-status')?.textContent,
-        state: document.documentElement.getAttribute('data-openmaic-static-state'),
+        state: document.documentElement.getAttribute('data-binah-static-state'),
         animations: document.getAnimations().map((animation) => animation.playState),
       }));
       await page.waitForTimeout(350);
       const after = await child.evaluate(() => ({
         counter: document.querySelector('#counter')?.textContent,
         workerStatus: document.querySelector('#worker-status')?.textContent,
-        state: document.documentElement.getAttribute('data-openmaic-static-state'),
+        state: document.documentElement.getAttribute('data-binah-static-state'),
         animations: document.getAnimations().map((animation) => animation.playState),
       }));
 
@@ -162,7 +162,7 @@ describe.skipIf(!REQUIRED)('frozen interactive HTML in Chromium', () => {
           .__timelines;
         return (
           host?.getAttribute('data-interactive-static-state') === 'fallback' &&
-          !!timelines?.openmaic
+          !!timelines?.binah
         );
       });
 
@@ -171,16 +171,16 @@ describe.skipIf(!REQUIRED)('frozen interactive HTML in Chromium', () => {
         const fallback = host.querySelector<HTMLElement>('[data-interactive-fallback]')!;
         const diagnostics = (
           window as typeof window & {
-            __openmaicVideoDiagnostics?: Array<{ code: string; message: string }>;
+            __binahVideoDiagnostics?: Array<{ code: string; message: string }>;
           }
-        ).__openmaicVideoDiagnostics;
+        ).__binahVideoDiagnostics;
         const manifest = (
           window as typeof window & {
-            __openmaicVideoManifest?: { runtimeDiagnostics?: Array<{ code: string }> };
+            __binahVideoManifest?: { runtimeDiagnostics?: Array<{ code: string }> };
           }
-        ).__openmaicVideoManifest;
+        ).__binahVideoManifest;
         const runtimeReport = document.querySelector<HTMLElement>(
-          '[data-openmaic-runtime-diagnostics]',
+          '[data-binah-runtime-diagnostics]',
         );
         return {
           state: host.getAttribute('data-interactive-static-state'),

@@ -5,7 +5,7 @@ import { hasBillableTokens, type NormalizedUsage } from '@/lib/usage/normalize';
 
 const log = createLogger('UsageStorage');
 
-/** Base directory for usage logs; lands in the openmaic-data volume in Docker. */
+/** Base directory for usage logs; lands in the binah-data volume in Docker. */
 function usageDir(baseDir?: string): string {
   return baseDir ?? path.join(process.cwd(), 'data', 'usage');
 }

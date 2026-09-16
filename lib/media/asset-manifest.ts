@@ -3,7 +3,7 @@ import {
   type AssetKind,
   type AssetManifest,
   type AssetManifestMetadata,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 import type { Scene, Stage } from '@/lib/types/stage';
 import { db, mediaFileKey, type AudioFileRecord, type MediaFileRecord } from '@/lib/utils/database';
 

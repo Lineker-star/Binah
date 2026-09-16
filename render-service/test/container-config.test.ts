@@ -13,7 +13,7 @@ describe('render-service container contract', () => {
     const dockerfile = read('Dockerfile');
     expect(dockerfile).toContain('HOME=/app');
     expect(dockerfile).toContain('XDG_CACHE_HOME=/app/.cache');
-    expect(dockerfile).toMatch(/mkdir -p \/tmp\/openmaic-renders \/app\/\.cache/);
+    expect(dockerfile).toMatch(/mkdir -p \/tmp\/binah-renders \/app\/\.cache/);
   });
 
   it('uses the explicit standard single-job profile in Compose', () => {

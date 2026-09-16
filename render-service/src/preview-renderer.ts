@@ -12,7 +12,7 @@ import type {
   QuizContent,
   Scene,
   SlideContent,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 import puppeteer from 'puppeteer-core';
 import type { Browser, Frame, Page } from 'puppeteer-core';
 
@@ -249,9 +249,9 @@ export function buildSlideClientBundle(builder: SlideBundleBuilder = build): Pro
         import React from 'react';
         import { flushSync } from 'react-dom';
         import { createRoot } from 'react-dom/client';
-        import { SlideCanvas } from '@openmaic/renderer';
+        import { SlideCanvas } from '@binah/renderer';
 
-        const props = window.__OPENMAIC_PREVIEW_PROPS__;
+        const props = window.__BINAH_PREVIEW_PROPS__;
         const root = document.getElementById('preview-slide-root');
         if (!props || !root) throw new Error('Preview slide mount data is missing');
         const canvas = props.slide;
@@ -280,7 +280,7 @@ export function buildSlideClientBundle(builder: SlideBundleBuilder = build): Pro
           style: { width: renderedWidth + 'px', height: renderedHeight + 'px' },
         }, canvasNode));
         flushSync(() => createRoot(root).render(frame));
-        window.__OPENMAIC_PREVIEW_MOUNTED__ = true;
+        window.__BINAH_PREVIEW_MOUNTED__ = true;
       `,
     },
     bundle: true,
@@ -427,7 +427,7 @@ export async function mountSlideClient(page: Page, bundle: string): Promise<void
     await Promise.race([
       (async () => {
         await page.addScriptTag({ content: bundle });
-        await page.waitForFunction(() => '__OPENMAIC_PREVIEW_MOUNTED__' in window);
+        await page.waitForFunction(() => '__BINAH_PREVIEW_MOUNTED__' in window);
       })(),
       pageError,
     ]);
@@ -481,7 +481,7 @@ export class ChromiumPreviewRenderer implements PreviewRenderer {
             await page.evaluate(
               (slide, viewport) => {
                 Object.assign(window, {
-                  __OPENMAIC_PREVIEW_PROPS__: { slide, viewport },
+                  __BINAH_PREVIEW_PROPS__: { slide, viewport },
                 });
               },
               request.scene.content.canvas,

@@ -25,7 +25,7 @@ interface ChatChunkLike {
   choices?: { delta?: Record<string, unknown>; finish_reason?: string | null }[];
 }
 
-const KIMI_REASONING_MARKER = '\u0000openmaic:kimi-reasoning:';
+const KIMI_REASONING_MARKER = '\u0000binah:kimi-reasoning:';
 
 function encodeKimiReasoning(text: string): string {
   return `${KIMI_REASONING_MARKER}${text.length}:${text}`;

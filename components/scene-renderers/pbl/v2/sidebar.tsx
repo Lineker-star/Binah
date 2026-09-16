@@ -9,7 +9,7 @@
  * task remains highlighted.
  *
  * State icons (Lock / Circle / Check / SkipForward) come from
- * lucide-react to match the rest of OpenMAIC's icon set.
+ * lucide-react to match the rest of Binah's icon set.
  *
  * SCENARIO ONLY — the fixed three-act skeleton (prep → roleplay → wrapup)
  * is made legible in the roadmap: each act gets a small section label, and

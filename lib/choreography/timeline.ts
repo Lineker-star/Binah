@@ -16,7 +16,7 @@
  * {@link FIRE_AND_FORGET_ACTIONS} rather than hardcoded here, so the two stay
  * in lockstep. Durations come from the shared {@link timing} spec.
  *
- * Pure, no runtime dependencies beyond `@openmaic/dsl`.
+ * Pure, no runtime dependencies beyond `@binah/dsl`.
  */
 import type {
   Action,
@@ -29,8 +29,8 @@ import type {
   WbEditCodeAction,
   DiscussionAction,
   WbClearAction,
-} from '@openmaic/dsl';
-import { FIRE_AND_FORGET_ACTIONS } from '@openmaic/dsl';
+} from '@binah/dsl';
+import { FIRE_AND_FORGET_ACTIONS } from '@binah/dsl';
 import { EMPTY_SCENE_DWELL } from './cursor';
 import {
   EFFECT_AUTO_CLEAR_MS,

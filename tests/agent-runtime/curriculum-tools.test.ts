@@ -17,7 +17,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PGlite } from '@electric-sql/pglite';
-import { ensureDocumentSchema } from '@openmaic/storage/document/pg';
+import { ensureDocumentSchema } from '@binah/storage/document/pg';
 
 import {
   buildCurriculumTools,

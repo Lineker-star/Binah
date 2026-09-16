@@ -3,7 +3,7 @@ title: 設定說明
 description: LLM 供應商、媒體生成、文件解析、TTS、ASR、存取控制和功能開關。
 ---
 
-OpenMAIC 會在伺服器啟動時讀取環境變數。所有項目都是選填，依需求啟用即可。環境變數範例請見儲存庫中的 [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example)。內建模型 ID 請見[支援模型](./supported-models.mdx)。
+Binah 會在伺服器啟動時讀取環境變數。所有項目都是選填，依需求啟用即可。環境變數範例請見儲存庫中的 [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example)。內建模型 ID 請見[支援模型](./supported-models.mdx)。
 
 除環境變數外，也可以使用專案根目錄下的 `server-providers.yml` 設定程式碼中已註冊的伺服器端 provider。環境變數會逐欄位覆蓋 YAML 中的同名設定；自訂 OpenAI 相容 provider 只能在設定中新增，不能透過任意環境變數字首或未知 YAML provider ID 註冊。
 
@@ -129,7 +129,7 @@ Lemonade 是本機服務，不需要 key：
 IMAGE_LEMONADE_BASE_URL=http://localhost:13305/v1
 ```
 
-ComfyUI Image 不需要 API key，預設連線至 `http://localhost:8188`。在設定中填寫 ComfyUI Base URL，並將以 API 格式匯出的 workflow JSON 放入 OpenMAIC 的 `public/` 目錄；檔名使用 `comfyui-*.json` 或包含 `workflow`，設定頁會自動偵測這些檔案，並將其列為可選的 workflow。使用 Docker 部署時，還需要在建置映像前加入 workflow，或將單一 workflow 檔案掛載至容器的 `/app/public/` 目錄。由於 `comfyui-image` 不是伺服器端託管 provider，正式環境連線至主機上的 ComfyUI 時還需要設定 `ALLOW_LOCAL_NETWORKS=true`。
+ComfyUI Image 不需要 API key，預設連線至 `http://localhost:8188`。在設定中填寫 ComfyUI Base URL，並將以 API 格式匯出的 workflow JSON 放入 Binah 的 `public/` 目錄；檔名使用 `comfyui-*.json` 或包含 `workflow`，設定頁會自動偵測這些檔案，並將其列為可選的 workflow。使用 Docker 部署時，還需要在建置映像前加入 workflow，或將單一 workflow 檔案掛載至容器的 `/app/public/` 目錄。由於 `comfyui-image` 不是伺服器端託管 provider，正式環境連線至主機上的 ComfyUI 時還需要設定 `ALLOW_LOCAL_NETWORKS=true`。
 
 ## 影片生成供應商
 
@@ -158,7 +158,7 @@ ALIDOCMIND_ACCESS_KEY_SECRET=
 ALIDOCMIND_BASE_URL=       # 選填覆寫值
 ```
 
-`unpdf` 內建於 OpenMAIC，可用於基礎 PDF 解析。Office 文件、圖片和需要 OCR、表格、公式或版面分析的材料，應選擇相容的 MinerU 或 AliDocMind provider。
+`unpdf` 內建於 Binah，可用於基礎 PDF 解析。Office 文件、圖片和需要 OCR、表格、公式或版面分析的材料，應選擇相容的 MinerU 或 AliDocMind provider。
 
 AliDocMind 的文件解析支援 PDF、DOCX、PPTX、XLSX，以及 PNG、JPG/JPEG、BMP、GIF。目前音訊與影片材料僅支援透過 AliDocMind 解析：影片格式為 MP4、MOV、AVI、MKV、WMV，音訊格式為 MP3、WAV、AAC；不支援 M4A。
 
@@ -206,7 +206,7 @@ ACCESS_CODE=your-secret-code
 DEFAULT_MODEL=openai:gpt-5.5
 ```
 
-可以使用 `MODEL_ROUTES` 為不同生成階段指定模型；未設定的階段仍依用戶端模型和 `DEFAULT_MODEL` 解析。它是一個 JSON 物件，鍵為生成階段，值可以是模型字串，也可以是包含 `model` 和 `thinking` 的物件。完整的階段清單和範例請見儲存庫中的 [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example)。
+可以使用 `MODEL_ROUTES` 為不同生成階段指定模型；未設定的階段仍依用戶端模型和 `DEFAULT_MODEL` 解析。它是一個 JSON 物件，鍵為生成階段，值可以是模型字串，也可以是包含 `model` 和 `thinking` 的物件。完整的階段清單和範例請見儲存庫中的 [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example)。
 
 ## 功能開關
 
@@ -220,7 +220,7 @@ NEXT_PUBLIC_MAIC_EDITOR_ENABLED=true
 NEXT_PUBLIC_PI_CHAT_ENABLED=true
 
 # 職業教育任務引擎（伺服器端開關）
-OPENMAIC_ENABLE_VOCATIONAL=true
+BINAH_ENABLE_VOCATIONAL=true
 
 # 顯示職業教育實驗開關
 NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=true

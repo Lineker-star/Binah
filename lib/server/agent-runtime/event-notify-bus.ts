@@ -28,7 +28,7 @@ export interface NotifyQueryable {
 }
 type NotifyDb = Pick<NotifyQueryable, 'query'>;
 
-export const AGENT_EVENT_NOTIFY_CHANNEL = 'openmaic_agent_event_wakeup';
+export const AGENT_EVENT_NOTIFY_CHANNEL = 'binah_agent_event_wakeup';
 /**
  * Dedicated self-check channel. The probe notification travels on its own
  * channel so the fanout path (keyed on AGENT_EVENT_NOTIFY_CHANNEL) can never
@@ -36,8 +36,8 @@ export const AGENT_EVENT_NOTIFY_CHANNEL = 'openmaic_agent_event_wakeup';
  * Exported because the PG contract tests fault-inject the delivery path and
  * need the channel name to identify probe notifications.
  */
-export const AGENT_EVENT_PROBE_CHANNEL = 'openmaic_agent_event_selfcheck';
-export const AGENT_EVENT_NOTIFY_APPLICATION_NAME = 'openmaic-agent-notify-bus';
+export const AGENT_EVENT_PROBE_CHANNEL = 'binah_agent_event_selfcheck';
+export const AGENT_EVENT_NOTIFY_APPLICATION_NAME = 'binah-agent-notify-bus';
 
 export type AgentEventWakeupRoute =
   | { kind: 'owner'; ownerId: string }
@@ -79,7 +79,7 @@ export interface AgentEventNotifyBusHandle {
 }
 
 const log = createLogger('AgentEventNotifyBus');
-const GLOBAL_KEY = '__openmaicAgentEventNotifyBus';
+const GLOBAL_KEY = '__binahAgentEventNotifyBus';
 const globalWithBus = globalThis as typeof globalThis & { [GLOBAL_KEY]?: BusState };
 
 function createState(): BusState {
@@ -144,7 +144,7 @@ function fanoutAll() {
 
 /** How long the self-check waits for the probe notification to come back. */
 const AGENT_EVENT_PROBE_TIMEOUT_MS = 2_000;
-const AGENT_EVENT_PROBE_PAYLOAD = 'openmaic-agent-notify-selfcheck';
+const AGENT_EVENT_PROBE_PAYLOAD = 'binah-agent-notify-selfcheck';
 
 /**
  * Self-check that LISTEN/NOTIFY actually round-trips on this connection.

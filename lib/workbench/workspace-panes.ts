@@ -299,10 +299,10 @@ export function legacyWorkspaceHref(stageId: string, sessionId: string | null): 
    mirrored into the URL (above); collapse is a local viewing preference, so it
    lives in `localStorage` and never travels in a shared link. */
 
-export const NAV_COLLAPSED_STORAGE_KEY = 'openmaic:workspace:nav-collapsed';
-export const CHAT_COLLAPSED_STORAGE_KEY = 'openmaic:workspace:chat-collapsed';
-export const CLASSROOM_COLLAPSED_STORAGE_KEY = 'openmaic:workspace:classroom-collapsed';
-export const CHAT_WIDTH_STORAGE_KEY = 'openmaic:workspace:chat-width';
+export const NAV_COLLAPSED_STORAGE_KEY = 'binah:workspace:nav-collapsed';
+export const CHAT_COLLAPSED_STORAGE_KEY = 'binah:workspace:chat-collapsed';
+export const CLASSROOM_COLLAPSED_STORAGE_KEY = 'binah:workspace:classroom-collapsed';
+export const CHAT_WIDTH_STORAGE_KEY = 'binah:workspace:chat-width';
 
 export const CHAT_WIDTH_DEFAULT = 400;
 export const CHAT_WIDTH_MIN = 340;

@@ -1,5 +1,5 @@
-import type { MaicDocument } from '@openmaic/storage';
-import type { Stage } from '@openmaic/dsl';
+import type { MaicDocument } from '@binah/storage';
+import type { Stage } from '@binah/dsl';
 
 import type { SceneOutline } from '@/lib/types/generation';
 import type { AppScene } from '@/lib/types/stage';

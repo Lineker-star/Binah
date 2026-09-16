@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PPTVideoElement, Slide } from '@openmaic/dsl';
+import type { PPTVideoElement, Slide } from '@binah/dsl';
 import type { MediaTask } from '@/lib/store/media-generation';
 import {
   resolveSlideMedia,

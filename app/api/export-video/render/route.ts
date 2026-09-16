@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       duplex: 'half',
       headers: {
         'content-type': contentType,
-        'x-openmaic-client': clientIdentity(req),
+        'x-binah-client': clientIdentity(req),
       },
       signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
     } as RequestInit);

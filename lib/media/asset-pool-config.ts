@@ -1,5 +1,5 @@
-import type { AssetId } from '@openmaic/storage';
-import type { AssetMeta, AssetRef, BinaryBlob } from '@openmaic/dsl';
+import type { AssetId } from '@binah/storage';
+import type { AssetMeta, AssetRef, BinaryBlob } from '@binah/dsl';
 
 /** Common browser-facing surface implemented by local and HTTP asset stores. */
 export interface AssetPoolStore {

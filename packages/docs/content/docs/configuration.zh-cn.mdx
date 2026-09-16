@@ -3,7 +3,7 @@ title: 配置说明
 description: LLM 提供方、媒体生成、文档解析、TTS、ASR、访问控制和功能开关。
 ---
 
-OpenMAIC 在服务器启动时读取环境变量。所有项都是可选的——按需启用。环境变量示例见仓库里的 [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example)。内置模型 ID 请见[支持模型](./supported-models.mdx)。
+Binah 在服务器启动时读取环境变量。所有项都是可选的——按需启用。环境变量示例见仓库里的 [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example)。内置模型 ID 请见[支持模型](./supported-models.mdx)。
 
 除环境变量外，也可以使用项目根目录下的 `server-providers.yml` 配置代码中已注册的服务端 provider。环境变量会逐字段覆盖 YAML 中的同名配置；自定义 OpenAI 兼容 provider 只能在设置中添加，不能通过任意环境变量前缀或未知 YAML provider ID 注册。
 
@@ -129,7 +129,7 @@ Lemonade 是本地服务，不需要 key：
 IMAGE_LEMONADE_BASE_URL=http://localhost:13305/v1
 ```
 
-ComfyUI Image 不需要 API key，默认连接 `http://localhost:8188`。在设置中填写 ComfyUI Base URL，并把以 API 格式导出的 workflow JSON 放入 OpenMAIC 的 `public/` 目录；文件名使用 `comfyui-*.json` 或包含 `workflow`，设置页会自动发现这些文件并将其作为可选 workflow。Docker 部署时还需要在构建镜像前加入 workflow，或把单个 workflow 文件挂载到容器的 `/app/public/` 目录。由于 `comfyui-image` 不是服务端托管 provider，生产环境连接宿主机 ComfyUI 时还需要设置 `ALLOW_LOCAL_NETWORKS=true`。
+ComfyUI Image 不需要 API key，默认连接 `http://localhost:8188`。在设置中填写 ComfyUI Base URL，并把以 API 格式导出的 workflow JSON 放入 Binah 的 `public/` 目录；文件名使用 `comfyui-*.json` 或包含 `workflow`，设置页会自动发现这些文件并将其作为可选 workflow。Docker 部署时还需要在构建镜像前加入 workflow，或把单个 workflow 文件挂载到容器的 `/app/public/` 目录。由于 `comfyui-image` 不是服务端托管 provider，生产环境连接宿主机 ComfyUI 时还需要设置 `ALLOW_LOCAL_NETWORKS=true`。
 
 ## 视频生成提供方
 
@@ -158,7 +158,7 @@ ALIDOCMIND_ACCESS_KEY_SECRET=
 ALIDOCMIND_BASE_URL=       # 可选覆盖
 ```
 
-`unpdf` 内置于 OpenMAIC，可用于基础 PDF 解析。Office 文档、图片和需要 OCR、表格、公式或版面分析的材料，应选择兼容的 MinerU 或 AliDocMind provider。
+`unpdf` 内置于 Binah，可用于基础 PDF 解析。Office 文档、图片和需要 OCR、表格、公式或版面分析的材料，应选择兼容的 MinerU 或 AliDocMind provider。
 
 AliDocMind 的文档解析支持 PDF、DOCX、PPTX、XLSX，以及 PNG、JPG/JPEG、BMP、GIF。当前音视频材料仅支持通过 AliDocMind 解析：视频格式为 MP4、MOV、AVI、MKV、WMV，音频格式为 MP3、WAV、AAC；不支持 M4A。
 
@@ -206,7 +206,7 @@ ACCESS_CODE=your-secret-code
 DEFAULT_MODEL=openai:gpt-5.5
 ```
 
-可以使用 `MODEL_ROUTES` 为不同生成阶段指定模型；未配置的阶段继续按客户端模型和 `DEFAULT_MODEL` 解析。它是一个 JSON 对象，键为生成阶段，值可以是模型字符串，也可以是包含 `model` 和 `thinking` 的对象。完整的阶段列表和示例见仓库里的 [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example)。
+可以使用 `MODEL_ROUTES` 为不同生成阶段指定模型；未配置的阶段继续按客户端模型和 `DEFAULT_MODEL` 解析。它是一个 JSON 对象，键为生成阶段，值可以是模型字符串，也可以是包含 `model` 和 `thinking` 的对象。完整的阶段列表和示例见仓库里的 [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example)。
 
 ## 功能开关
 
@@ -220,7 +220,7 @@ NEXT_PUBLIC_MAIC_EDITOR_ENABLED=true
 NEXT_PUBLIC_PI_CHAT_ENABLED=true
 
 # 职业教育任务引擎（服务端开关）
-OPENMAIC_ENABLE_VOCATIONAL=true
+BINAH_ENABLE_VOCATIONAL=true
 
 # 显示职业教育实验开关
 NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=true

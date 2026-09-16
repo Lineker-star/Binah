@@ -14,8 +14,8 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import type { IncomingMessage } from 'node:http';
 
-import type { AssetPrincipal } from '@openmaic/storage';
-import type { RuntimeHttpPrincipal } from '@openmaic/storage/server';
+import type { AssetPrincipal } from '@binah/storage';
+import type { RuntimeHttpPrincipal } from '@binah/storage/server';
 
 import { createLogger } from '@/lib/logger';
 

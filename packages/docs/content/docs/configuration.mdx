@@ -3,7 +3,7 @@ title: Configuration
 description: LLM providers, media generation, document parsing, TTS, ASR, access control, and feature flags.
 ---
 
-OpenMAIC reads environment variables when the server starts. Every setting is optional—enable only what you need. See [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example) in the repository for environment variable examples. See [Supported models](./supported-models.mdx) for built-in model IDs.
+Binah reads environment variables when the server starts. Every setting is optional—enable only what you need. See [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example) in the repository for environment variable examples. See [Supported models](./supported-models.mdx) for built-in model IDs.
 
 In addition to environment variables, you can configure server-side providers registered in the code through `server-providers.yml` in the project root. Environment variables override matching YAML fields one by one. Custom OpenAI-compatible providers can only be added in Settings; they cannot be registered with arbitrary environment variable prefixes or unknown YAML provider IDs.
 
@@ -129,7 +129,7 @@ Lemonade is a local service and does not require a key:
 IMAGE_LEMONADE_BASE_URL=http://localhost:13305/v1
 ```
 
-ComfyUI Image does not require an API key and connects to `http://localhost:8188` by default. Enter the ComfyUI Base URL in Settings, and place workflow JSON exported in API format in OpenMAIC's `public/` directory. Use filenames matching `comfyui-*.json` or containing `workflow`; the Settings page discovers these files automatically and offers them as workflows. With Docker, add the workflow before building the image or mount an individual workflow file into `/app/public/` in the container. Because `comfyui-image` is not a server-managed provider, production deployments connecting to host-side ComfyUI must also set `ALLOW_LOCAL_NETWORKS=true`.
+ComfyUI Image does not require an API key and connects to `http://localhost:8188` by default. Enter the ComfyUI Base URL in Settings, and place workflow JSON exported in API format in Binah's `public/` directory. Use filenames matching `comfyui-*.json` or containing `workflow`; the Settings page discovers these files automatically and offers them as workflows. With Docker, add the workflow before building the image or mount an individual workflow file into `/app/public/` in the container. Because `comfyui-image` is not a server-managed provider, production deployments connecting to host-side ComfyUI must also set `ALLOW_LOCAL_NETWORKS=true`.
 
 ## Video generation providers
 
@@ -139,7 +139,7 @@ Video generation providers use `VIDEO_<PROVIDER>_API_KEY` and optionally `VIDEO_
 
 ## Document and media parsing
 
-The exact course-material formats depend on the selected parser. OpenMAIC currently supports text, PDF, Office documents, images, and some audio/video formats; supported formats and capabilities vary by provider.
+The exact course-material formats depend on the selected parser. Binah currently supports text, PDF, Office documents, images, and some audio/video formats; supported formats and capabilities vary by provider.
 
 ```bash
 # MinerU self-hosted
@@ -158,7 +158,7 @@ ALIDOCMIND_ACCESS_KEY_SECRET=
 ALIDOCMIND_BASE_URL=       # optional override
 ```
 
-`unpdf` is built into OpenMAIC and supports basic PDF parsing. For Office documents, images, and material requiring OCR, table, formula, or layout analysis, select a compatible MinerU or AliDocMind provider.
+`unpdf` is built into Binah and supports basic PDF parsing. For Office documents, images, and material requiring OCR, table, formula, or layout analysis, select a compatible MinerU or AliDocMind provider.
 
 AliDocMind document parsing supports PDF, DOCX, PPTX, XLSX, and PNG, JPG/JPEG, BMP, and GIF. Audio and video material is currently supported only through AliDocMind: MP4, MOV, AVI, MKV, and WMV for video; MP3, WAV, and AAC for audio. M4A is not supported.
 
@@ -206,7 +206,7 @@ When the server API receives no client model, set the default with `DEFAULT_MODE
 DEFAULT_MODEL=openai:gpt-5.5
 ```
 
-Use `MODEL_ROUTES` to choose models for individual generation stages. Unconfigured stages continue to resolve through the client model and `DEFAULT_MODEL`. Its value is a JSON object whose keys are generation stages and whose values can be model strings or objects containing `model` and `thinking`. See [`.env.example`](https://github.com/THU-MAIC/OpenMAIC/blob/main/.env.example) for the complete stage list and examples.
+Use `MODEL_ROUTES` to choose models for individual generation stages. Unconfigured stages continue to resolve through the client model and `DEFAULT_MODEL`. Its value is a JSON object whose keys are generation stages and whose values can be model strings or objects containing `model` and `thinking`. See [`.env.example`](https://github.com/Lineker-star/binah/blob/main/.env.example) for the complete stage list and examples.
 
 ## Feature flags
 
@@ -220,7 +220,7 @@ NEXT_PUBLIC_MAIC_EDITOR_ENABLED=true
 NEXT_PUBLIC_PI_CHAT_ENABLED=true
 
 # Vocational education task engine (server-side flag)
-OPENMAIC_ENABLE_VOCATIONAL=true
+BINAH_ENABLE_VOCATIONAL=true
 
 # Show the vocational education experimental switch
 NEXT_PUBLIC_SHOW_VOCATIONAL_TEST_UI=true

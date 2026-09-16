@@ -93,7 +93,7 @@ try {
 
 describe.skipIf(!ffmpegAvailable)('local media extractor real pipeline', () => {
   it('probes, chunks, transcribes, and timestamps a tiny fixture', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'openmaic-media-test-'));
+    const directory = await mkdtemp(join(tmpdir(), 'binah-media-test-'));
     const fixturePath = join(directory, 'fixture.mp4');
     try {
       await execFileAsync('ffmpeg', [

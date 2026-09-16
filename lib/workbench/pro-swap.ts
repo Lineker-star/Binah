@@ -7,7 +7,7 @@
  * `/` and `/workspace` are separate routes, so switching modes used to be a
  * cut — the whole page vanished and a different one appeared, and the fact
  * that the two surfaces are the same product was something the user had to
- * reconstruct. The stable identity (the OpenMAIC lockup and Pro badge) moves
+ * reconstruct. The stable identity (the Binah lockup and Pro badge) moves
  * between its two real positions while each working surface hands off with a
  * restrained directional dissolve. The composer turns over: the two faces of
  * the one object both surfaces are about. An earlier round STRETCHED that card

@@ -16,7 +16,7 @@ function readBoolean(envValue: string | undefined): boolean {
  * at process runtime and is never exposed to the browser bundle.
  */
 export function isAgentRuntimeEnabled(): boolean {
-  return readBoolean(process.env.OPENMAIC_AGENT_RUNTIME_ENABLED);
+  return readBoolean(process.env.BINAH_AGENT_RUNTIME_ENABLED);
 }
 
 /** The Node runtime can start the runner only with a non-empty database URL. */
@@ -78,7 +78,7 @@ export function isPiChatEnabled(): boolean {
  * the existing Legacy JSON-action Child runtime.
  */
 export function isPiNativeChildRuntimeEnabled(): boolean {
-  return readBoolean(process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_RUNTIME);
+  return readBoolean(process.env.BINAH_ENABLE_PI_NATIVE_CHILD_RUNTIME);
 }
 
 /**
@@ -86,7 +86,7 @@ export function isPiNativeChildRuntimeEnabled(): boolean {
  * selects the Child runtime and has no effect while the Legacy harness is used.
  */
 export function isPiNativeChildSpotlightEnabled(): boolean {
-  return readBoolean(process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT);
+  return readBoolean(process.env.BINAH_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT);
 }
 
 /**
@@ -95,7 +95,7 @@ export function isPiNativeChildSpotlightEnabled(): boolean {
  * silently fall back to the ordinary standard / interactive generation paths.
  */
 export function isVocationalTaskEngineEnabled(): boolean {
-  return readBoolean(process.env.OPENMAIC_ENABLE_VOCATIONAL);
+  return readBoolean(process.env.BINAH_ENABLE_VOCATIONAL);
 }
 
 export function resolveVocationalActive(

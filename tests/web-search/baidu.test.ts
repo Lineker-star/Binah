@@ -28,8 +28,8 @@ describe('searchWithBaidu', () => {
         JSON.stringify({
           errno: 0,
           result: {
-            lemma_title: 'OpenMAIC',
-            lemma_url: 'https://baike.baidu.com/item/OpenMAIC',
+            lemma_title: 'Binah',
+            lemma_url: 'https://baike.baidu.com/item/Binah',
             abstract_text: 'Baidu Baike abstract',
           },
         }),
@@ -42,7 +42,7 @@ describe('searchWithBaidu', () => {
           code: '0',
           data: [
             {
-              title: 'OpenMAIC paper',
+              title: 'Binah paper',
               abstract: 'Scholar abstract',
               aiAbstract: 'Scholar AI abstract',
               url: 'https://xueshu.baidu.com/usercenter/paper/show?paperid=1',
@@ -56,7 +56,7 @@ describe('searchWithBaidu', () => {
     );
 
     const result = await searchWithBaidu({
-      query: 'OpenMAIC',
+      query: 'Binah',
       apiKey: 'baidu-key',
       subSources: {
         webSearch: false,
@@ -67,12 +67,12 @@ describe('searchWithBaidu', () => {
 
     expect(proxyFetchMock).toHaveBeenCalledTimes(2);
     expect(proxyFetchMock.mock.calls.map((call) => String(call[0]))).toEqual([
-      'https://appbuilder.baidu.com/v2/baike/lemma/get_content?search_type=lemmaTitle&search_key=OpenMAIC',
-      'https://qianfan.baidubce.com/v2/tools/baidu_scholar/search?wd=OpenMAIC&pageNum=0&enable_ai_abstract=true',
+      'https://appbuilder.baidu.com/v2/baike/lemma/get_content?search_type=lemmaTitle&search_key=Binah',
+      'https://qianfan.baidubce.com/v2/tools/baidu_scholar/search?wd=Binah&pageNum=0&enable_ai_abstract=true',
     ]);
     expect(result.sources.map((source) => source.title)).toEqual([
-      'OpenMAIC - Baidu Baike',
-      'OpenMAIC paper',
+      'Binah - Baidu Baike',
+      'Binah paper',
     ]);
     expect(result.sources[1]?.content).toBe(
       'Scholar abstract Scholar AI abstract (2026) AI education',
@@ -105,12 +105,12 @@ describe('searchWithBaidu', () => {
       );
     });
 
-    await searchWithBaidu({ query: 'OpenMAIC', apiKey: 'baidu-key' });
+    await searchWithBaidu({ query: 'Binah', apiKey: 'baidu-key' });
 
     expect(proxyFetchMock.mock.calls.map((call) => String(call[0]))).toEqual([
       'https://qianfan.baidubce.com/v2/ai_search/web_search',
-      'https://appbuilder.baidu.com/v2/baike/lemma/get_content?search_type=lemmaTitle&search_key=OpenMAIC',
-      'https://qianfan.baidubce.com/v2/tools/baidu_scholar/search?wd=OpenMAIC&pageNum=0&enable_ai_abstract=true',
+      'https://appbuilder.baidu.com/v2/baike/lemma/get_content?search_type=lemmaTitle&search_key=Binah',
+      'https://qianfan.baidubce.com/v2/tools/baidu_scholar/search?wd=Binah&pageNum=0&enable_ai_abstract=true',
     ]);
   });
 });

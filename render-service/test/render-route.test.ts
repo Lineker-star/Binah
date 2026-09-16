@@ -55,7 +55,7 @@ function renderRequest(sizeBytes = 4096, identity = 'anon'): Request {
   return new Request('http://test/render', {
     method: 'POST',
     body: form,
-    headers: { 'x-openmaic-client': identity },
+    headers: { 'x-binah-client': identity },
   });
 }
 
@@ -112,7 +112,7 @@ describe('POST /render buffering/extraction bound', () => {
       chromiumPath: '/usr/bin/chromium-headless-shell',
       ffmpeg: 'ffmpeg version 5.1.9-0+deb12u1',
       ffmpegPath: '/usr/bin/ffmpeg',
-      containerImage: 'openmaic/render-service:test',
+      containerImage: 'binah/render-service:test',
     };
     const app = createApp({
       jobs,

@@ -1,6 +1,6 @@
 'use client';
 
-import type { PPTImageElement } from '@openmaic/dsl';
+import type { PPTImageElement } from '@binah/dsl';
 import { useElementShadow } from '../hooks/useElementShadow';
 import { useElementFlip } from '../hooks/useElementFlip';
 import { useClipImage } from './useClipImage';

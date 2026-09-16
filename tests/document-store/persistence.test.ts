@@ -2,8 +2,8 @@ import {
   validateScene,
   type PBLContent as ContractPBLContent,
   type WidgetConfigBase,
-} from '@openmaic/dsl';
-import type { DocumentStore } from '@openmaic/storage';
+} from '@binah/dsl';
+import type { DocumentStore } from '@binah/storage';
 import { describe, expect, test, vi } from 'vitest';
 import { IDBFactory } from 'fake-indexeddb';
 

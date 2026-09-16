@@ -1,9 +1,9 @@
 ---
 title: クイックスタート
-description: 5分でローカルに OpenMAIC を立ち上げます。
+description: 5分でローカルに Binah を立ち上げます。
 ---
 
-OpenMAIC は自分のマシンで動かせる Next.js アプリケーションです。少なくとも 1 つの LLM プロバイダーを設定する必要があります。クラウドのプロバイダーは通常 API key が必要ですが、ローカルの Ollama や Lemonade は API key 不要です。
+Binah は自分のマシンで動かせる Next.js アプリケーションです。少なくとも 1 つの LLM プロバイダーを設定する必要があります。クラウドのプロバイダーは通常 API key が必要ですが、ローカルの Ollama や Lemonade は API key 不要です。
 
 ## 前提条件
 
@@ -16,8 +16,8 @@ OpenMAIC は自分のマシンで動かせる Next.js アプリケーション�
 リポジトリをクローンし、依存関係をインストールします。
 
 ```bash
-git clone https://github.com/THU-MAIC/OpenMAIC.git
-cd OpenMAIC
+git clone https://github.com/Lineker-star/binah.git
+cd Binah
 pnpm install
 ```
 
@@ -51,7 +51,7 @@ OLLAMA_BASE_URL=http://localhost:11434/v1
 pnpm dev
 ```
 
-[http://localhost:3000](http://localhost:3000) を開くと OpenMAIC の授業生成ツールが表示されます。トピックを入力するか学習資料をアップロードし、「生成」をクリックすると、AI 教師が完全なマルチシーン授業を構築します。対応する資料形式は選択したパーサーに依存し、通常は PDF、Office 文書、Markdown／プレーンテキスト、画像、一部の音声・動画を含みます。
+[http://localhost:3000](http://localhost:3000) を開くと Binah の授業生成ツールが表示されます。トピックを入力するか学習資料をアップロードし、「生成」をクリックすると、AI 教師が完全なマルチシーン授業を構築します。対応する資料形式は選択したパーサーに依存し、通常は PDF、Office 文書、Markdown／プレーンテキスト、画像、一部の音声・動画を含みます。
 
 ## 本番ビルド
 
@@ -66,4 +66,4 @@ pnpm start
 
 - [プロバイダー、TTS、ACCESS_CODE の設定 →](./configuration.mdx)
 - [Vercel または Docker へのデプロイ →](./deployment.mdx)
-- アーキテクチャの確認やコントリビュートは [GitHub](https://github.com/THU-MAIC/OpenMAIC#-contributing) をご覧ください
+- アーキテクチャの確認やコントリビュートは [GitHub](https://github.com/Lineker-star/binah#-contributing) をご覧ください

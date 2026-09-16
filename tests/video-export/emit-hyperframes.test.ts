@@ -62,7 +62,7 @@ describe('emitHyperframes', () => {
         'LICENSES/Inter-OFL-1.1.txt',
         'README.md',
         'index.html',
-        'openmaic-video-manifest.json',
+        'binah-video-manifest.json',
         'subtitles.srt',
         'subtitles.vtt',
       ].sort(),
@@ -73,12 +73,12 @@ describe('emitHyperframes', () => {
   });
 
   it('builds one composition driven by one paused GSAP timeline', () => {
-    expect(html).toContain('data-composition-id="openmaic"');
+    expect(html).toContain('data-composition-id="binah"');
     expect(html).toContain('data-width="1920"');
     expect(html).toContain('data-height="1080"');
     expect(html).toContain(`data-duration="${ir.totalDurationMs / 1000}"`);
     expect(html).toContain('gsap.timeline({ paused: true })');
-    expect(html).toContain('window.__timelines["openmaic"] = tl;');
+    expect(html).toContain('window.__timelines["binah"] = tl;');
   });
 
   it('lays out base / narration / video clips with clip attributes', () => {
@@ -226,22 +226,22 @@ describe('emitHyperframes frozen interactive HTML', () => {
 
   it('waits for every iframe to freeze or fall back before registering the timeline', () => {
     const ready = html.indexOf(
-      'window.__openmaicInteractiveReady = initializeOpenMaicInteractiveStaticFrames()',
+      'window.__binahInteractiveReady = initializeBinahInteractiveStaticFrames()',
     );
-    const registration = html.indexOf('window.__timelines["openmaic"] = tl;', ready);
+    const registration = html.indexOf('window.__timelines["binah"] = tl;', ready);
     expect(ready).toBeGreaterThan(0);
     expect(registration).toBeGreaterThan(ready);
     expect(html).toContain("'interactive-runtime-failure'");
     expect(html).toContain("'interactive-ready-timeout'");
-    expect(html).toContain('window.__openmaicVideoDiagnostics');
-    expect(html).toContain('data-openmaic-runtime-diagnostics');
-    expect(html).toContain('window.__openmaicVideoManifest.runtimeDiagnostics');
+    expect(html).toContain('window.__binahVideoDiagnostics');
+    expect(html).toContain('data-binah-runtime-diagnostics');
+    expect(html).toContain('window.__binahVideoManifest.runtimeDiagnostics');
   });
 
   it('keeps runtime diagnostics in the live report instead of an immutable sidecar', () => {
-    expect(html).toContain('data-openmaic-runtime-diagnostics');
-    expect(html).toContain('window.__openmaicVideoManifest.runtimeDiagnostics');
-    expect(html).not.toContain('openmaic-runtime-diagnostics.json');
+    expect(html).toContain('data-binah-runtime-diagnostics');
+    expect(html).toContain('window.__binahVideoManifest.runtimeDiagnostics');
+    expect(html).not.toContain('binah-runtime-diagnostics.json');
   });
 
   it('keeps a later iframe visually inert outside its scene window', () => {

@@ -7,7 +7,7 @@ import { ESLint } from 'eslint';
  * The guard is the thing that keeps `generateText` / `streamText` reachable only
  * through `callLLM` / `streamLLM` in `lib/ai/llm.ts`. Its weak spot is not the
  * rules — it is their SCOPE, and review found three separate holes in it: two
- * `@openmaic` package directories excluded from the dynamic-import ban, and both
+ * `@binah` package directories excluded from the dynamic-import ban, and both
  * blocks matching only `ts,tsx` so a `route.js` or a `scripts/*.mjs` could import
  * the SDK freely.
  *
@@ -46,9 +46,9 @@ const GUARDED_PATHS = [
   'lib/server/probe',
   'app/api/probe/route',
   'components/probe',
-  'packages/@openmaic/renderer/src/probe',
-  'packages/@openmaic/storage/src/probe',
-  'packages/@openmaic/generation/src/probe',
+  'packages/@binah/renderer/src/probe',
+  'packages/@binah/storage/src/probe',
+  'packages/@binah/generation/src/probe',
   'lib/choreography/probe',
   'lib/video-export/probe',
   'scripts/probe',
@@ -103,9 +103,9 @@ describe('LLM entry-point lint guard — coverage matrix', () => {
     // edit to the guard silently deletes those boundaries — assert two of them.
     const hostPathImport = "import x from '@/lib/foo';\nexport default x;\n";
     for (const filePath of [
-      'packages/@openmaic/renderer/src/probe.ts',
-      'packages/@openmaic/storage/src/probe.ts',
-      'packages/@openmaic/generation/src/probe.ts',
+      'packages/@binah/renderer/src/probe.ts',
+      'packages/@binah/storage/src/probe.ts',
+      'packages/@binah/generation/src/probe.ts',
       'lib/choreography/probe.ts',
     ]) {
       const errors = await errorsFor(filePath, hostPathImport);

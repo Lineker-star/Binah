@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
-import { BrowserKVStore } from '@openmaic/storage';
+import { BrowserKVStore } from '@binah/storage';
 import { isProviderUsable } from '@/lib/store/settings-validation';
 
 // ---------------------------------------------------------------------------

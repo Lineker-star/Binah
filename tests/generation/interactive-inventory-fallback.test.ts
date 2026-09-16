@@ -7,7 +7,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { generateSceneActions, type AICallFn } from '@openmaic/generation';
+import { generateSceneActions, type AICallFn } from '@binah/generation';
 import type { GeneratedInteractiveContent, SceneOutline } from '@/lib/types/generation';
 
 function baseOutline(): SceneOutline {

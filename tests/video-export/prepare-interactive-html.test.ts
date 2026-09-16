@@ -27,12 +27,12 @@ describe('prepareInteractiveHtmlScenes', () => {
       present: true,
       contentHash: expect.stringMatching(/^[a-f0-9]{64}$/),
     });
-    expect(html).toContain('data-openmaic-static-csp');
+    expect(html).toContain('data-binah-static-csp');
     expect(html).toContain('data-iframe-storage-shim');
     expect(html).toContain('data-iframe-error-shim');
-    expect(html).toContain('data-openmaic-static-capture');
+    expect(html).toContain('data-binah-static-capture');
     expect(html).toContain(
-      "document.documentElement.setAttribute('data-openmaic-static-state', 'frozen')",
+      "document.documentElement.setAttribute('data-binah-static-state', 'frozen')",
     );
     expect(html).toContain("connect-src 'none'");
     expect(html).toContain("worker-src 'none'");
@@ -46,7 +46,7 @@ describe('prepareInteractiveHtmlScenes', () => {
     const html = prepared.content('interactive:widget')!;
 
     expect(html.toLowerCase().startsWith('<!doctype html><html><head>')).toBe(true);
-    expect(html.indexOf('data-openmaic-static-csp')).toBeGreaterThan(html.indexOf('<head>'));
+    expect(html.indexOf('data-binah-static-csp')).toBeGreaterThan(html.indexOf('<head>'));
     expect(html.indexOf('</head>')).toBeLessThan(html.indexOf('<body>'));
   });
 
@@ -61,7 +61,7 @@ describe('prepareInteractiveHtmlScenes', () => {
 
     expect(prepared.html(scene())?.present).toBe(true);
     expect(html).toContain(`<script>${authoredScript}</script>`);
-    expect(html.indexOf('data-openmaic-static-csp')).toBeLessThan(html.indexOf('<body>'));
+    expect(html.indexOf('data-binah-static-csp')).toBeLessThan(html.indexOf('<body>'));
   });
 
   it('ignores embedded-document markup inside authored script text', async () => {

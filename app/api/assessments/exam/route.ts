@@ -22,7 +22,7 @@
  * recordAssessment), same as every other quiz in this app.
  */
 import { NextRequest } from 'next/server';
-import { generateSceneContent, type GeneratedQuizContent } from '@openmaic/generation';
+import { generateSceneContent, type GeneratedQuizContent } from '@binah/generation';
 import type { SceneOutline } from '@/lib/types/generation';
 import { callLLM } from '@/lib/ai/llm';
 import { createLogger } from '@/lib/logger';

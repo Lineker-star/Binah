@@ -3,8 +3,8 @@ import {
   PgAgentSessionStore,
   ensureAgentSessionSchema,
   type Queryable,
-} from '@openmaic/storage/agent-session/pg';
-import { AGENT_SESSION_LIFECYCLE } from '@openmaic/storage';
+} from '@binah/storage/agent-session/pg';
+import { AGENT_SESSION_LIFECYCLE } from '@binah/storage';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 describe('ask_user claim-boundary interleavings', () => {

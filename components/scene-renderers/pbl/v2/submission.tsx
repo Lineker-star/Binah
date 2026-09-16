@@ -19,7 +19,7 @@
  *   Trade-off: a learner could lose a draft if they close the tab
  *   before publishing. We mitigate by writing to project state on
  *   every "Submit" click — once it's in the Stage store it's
- *   persisted to IndexedDB by the OpenMAIC stage layer. The Modal's
+ *   persisted to IndexedDB by the Binah stage layer. The Modal's
  *   in-progress text remains in component state and is intentionally
  *   ephemeral.
  *
@@ -1006,7 +1006,7 @@ function SubmissionModal({
     abortRef.current?.abort();
     const ac = new AbortController();
     abortRef.current = ac;
-    // Image / screenshot: store via OpenMAIC's existing object storage
+    // Image / screenshot: store via Binah's existing object storage
     // (reused, not modified); fall back to an inline base64 data URL only when
     // storage is unconfigured (capped to avoid bloating the project). The image
     // itself is the submission and is fed to a vision-capable evaluator.
@@ -1039,7 +1039,7 @@ function SubmissionModal({
       }
       return;
     }
-    // PDF: parse to text via OpenMAIC's existing /api/parse-pdf (reused, not
+    // PDF: parse to text via Binah's existing /api/parse-pdf (reused, not
     // modified), so the parsed text flows through the unchanged text-based
     // evaluator. The original PDF is kept at `fileUrl` (object storage,
     // best-effort) for download/view.

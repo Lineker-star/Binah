@@ -58,7 +58,7 @@ function skillMarkdown(body: string): string {
 }
 
 describe('skill export zips', () => {
-  it('packages the shipped OpenMAIC skill verbatim under openmaic/', async () => {
+  it('packages the shipped Binah skill verbatim under binah/', async () => {
     const zip = await buildOpenClawSkillZip();
     expect(zip).not.toBeNull();
     const loaded = await JSZip.loadAsync(zip!);
@@ -66,9 +66,9 @@ describe('skill export zips', () => {
     const entries = Object.values(loaded.files)
       .filter((file) => !file.dir)
       .map((file) => file.name);
-    expect(new Set(entries)).toEqual(new Set(onDisk.map((path) => `openmaic/${path}`)));
+    expect(new Set(entries)).toEqual(new Set(onDisk.map((path) => `binah/${path}`)));
     for (const path of onDisk) {
-      expect(await loaded.file(`openmaic/${path}`)!.async('string')).toBe(
+      expect(await loaded.file(`binah/${path}`)!.async('string')).toBe(
         readFileSync(join(openClawSkillDir, path), 'utf8'),
       );
     }
@@ -85,7 +85,7 @@ describe('skill export zips', () => {
 
   it('rejects traversal ids', () => {
     expect(isSafeSkillId('my-skill.2')).toBe(true);
-    for (const value of ['../openmaic', 'a/b', '..', '']) expect(isSafeSkillId(value)).toBe(false);
+    for (const value of ['../binah', 'a/b', '..', '']) expect(isSafeSkillId(value)).toBe(false);
   });
 
   it('round-trips owner skill fields through valid YAML', async () => {

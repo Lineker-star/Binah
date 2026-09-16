@@ -13,7 +13,7 @@
  *      `PBLProjectConfig` from v2 `PBLProjectV2`.
  */
 import { describe, it, expect } from 'vitest';
-import { isPBLProject, type PBLProject } from '@openmaic/dsl';
+import { isPBLProject, type PBLProject } from '@binah/dsl';
 import {
   hasPBLProjectV2Containers,
   isRunnablePBLProjectV2,

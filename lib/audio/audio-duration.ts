@@ -9,7 +9,7 @@
  *
  * This module parses the container headers directly (no DOM / native audio
  * API), so it's unit-testable in plain Node and stays usable from either the
- * browser or a server context. It covers the two formats OpenMAIC's TTS
+ * browser or a server context. It covers the two formats Binah's TTS
  * providers actually emit — WAV and MP3 — and returns `null` for anything it
  * cannot parse so callers degrade gracefully (store the audio, leave duration
  * undefined) instead of failing.

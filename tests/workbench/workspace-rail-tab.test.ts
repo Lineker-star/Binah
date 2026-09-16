@@ -37,6 +37,6 @@ describe('resolveRailTab', () => {
   });
 
   it('keeps its storage key under the workspace namespace', () => {
-    expect(RAIL_TAB_STORAGE_KEY).toBe('openmaic:workspace:rail-tab');
+    expect(RAIL_TAB_STORAGE_KEY).toBe('binah:workspace:rail-tab');
   });
 });

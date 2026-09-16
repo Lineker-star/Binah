@@ -19,7 +19,7 @@ import { canonicalizeLegacyScene, mutateDocument, type AppDocument } from '@/lib
 import { isConcreteMediaAddress } from '@/lib/media/resolve-media-ref';
 import { isGeneratedMediaPlaceholder } from '@/lib/media/media-ref';
 import type JSZip from 'jszip';
-import type { Slide } from '@openmaic/dsl';
+import type { Slide } from '@binah/dsl';
 import type { Stage } from '@/lib/types/stage';
 
 const log = createLogger('ImportClassroom');

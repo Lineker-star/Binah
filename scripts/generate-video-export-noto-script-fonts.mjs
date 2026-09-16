@@ -10,21 +10,21 @@ const faces = [
     script: 'cyrillic',
     package: 'noto-sans',
     subset: 'cyrillic',
-    family: 'OpenMAIC Noto Sans Cyrillic',
+    family: 'Binah Noto Sans Cyrillic',
     filename: 'noto-sans-cyrillic-400-normal.woff2',
   },
   {
     script: 'cyrillic',
     package: 'noto-sans',
     subset: 'cyrillic-ext',
-    family: 'OpenMAIC Noto Sans Cyrillic',
+    family: 'Binah Noto Sans Cyrillic',
     filename: 'noto-sans-cyrillic-ext-400-normal.woff2',
   },
   {
     script: 'arabic',
     package: 'noto-sans-arabic',
     subset: 'arabic',
-    family: 'OpenMAIC Noto Sans Arabic',
+    family: 'Binah Noto Sans Arabic',
     filename: 'noto-sans-arabic-arabic-400-normal.woff2',
   },
 ];
@@ -133,7 +133,7 @@ const facesWithUnicodeRanges = faces.map((face) => {
   };
 });
 const cssFor = (face) =>
-  `@font-face{font-family:"${face.family}";font-style:normal;font-weight:400;font-display:block;src:url("__OPENMAIC_QUIZ_FONT_BASE__/${face.filename}") format("woff2");unicode-range:${face.unicodeRange}}`;
+  `@font-face{font-family:"${face.family}";font-style:normal;font-weight:400;font-display:block;src:url("__BINAH_QUIZ_FONT_BASE__/${face.filename}") format("woff2");unicode-range:${face.unicodeRange}}`;
 const faceCss = Object.fromEntries(
   facesWithUnicodeRanges.map((face) => [face.filename, cssFor(face)]),
 );
@@ -190,7 +190,7 @@ const output = `/**
  */
 const NOTO_SCRIPT_FONT_CSS_TEMPLATES = ${JSON.stringify(scriptCssTemplates)} as const;
 const materializeCss = (template: string, base: string) =>
-  template.replaceAll('__OPENMAIC_QUIZ_FONT_BASE__', base);
+  template.replaceAll('__BINAH_QUIZ_FONT_BASE__', base);
 export const NOTO_SANS_OFL_LICENSE = ${singleQuoted(notoSansLicense)};
 export const NOTO_SANS_ARABIC_OFL_LICENSE = ${singleQuoted(notoSansArabicLicense)};
 
@@ -200,7 +200,7 @@ export const NOTO_SCRIPT_FONT_PLANS = {
     exportCss: materializeCss(NOTO_SCRIPT_FONT_CSS_TEMPLATES.cyrillic, ${singleQuoted(exportFontBase)}),
     assets: ${JSON.stringify(scriptAssets.cyrillic)} as const,
     licenses: [{ path: 'LICENSES/Noto-Sans-OFL-1.1.txt', content: NOTO_SANS_OFL_LICENSE }] as const,
-    requiredFontLoads: [{ family: 'OpenMAIC Noto Sans Cyrillic', text: 'Привет Ёж Ԁ' }] as const,
+    requiredFontLoads: [{ family: 'Binah Noto Sans Cyrillic', text: 'Привет Ёж Ԁ' }] as const,
     coverage: ${JSON.stringify(scriptCoverage.cyrillic)} as const,
   },
   arabic: {
@@ -208,7 +208,7 @@ export const NOTO_SCRIPT_FONT_PLANS = {
     exportCss: materializeCss(NOTO_SCRIPT_FONT_CSS_TEMPLATES.arabic, ${singleQuoted(exportFontBase)}),
     assets: ${JSON.stringify(scriptAssets.arabic)} as const,
     licenses: [{ path: 'LICENSES/Noto-Sans-Arabic-OFL-1.1.txt', content: NOTO_SANS_ARABIC_OFL_LICENSE }] as const,
-    requiredFontLoads: [{ family: 'OpenMAIC Noto Sans Arabic', text: 'العربية' }] as const,
+    requiredFontLoads: [{ family: 'Binah Noto Sans Arabic', text: 'العربية' }] as const,
     coverage: ${JSON.stringify(scriptCoverage.arabic)} as const,
   },
 } as const;

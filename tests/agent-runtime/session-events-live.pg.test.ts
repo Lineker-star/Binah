@@ -50,7 +50,7 @@ async function readUntil(
 
 describe.skipIf(!contractUrl)('live session SSE tail', () => {
   const url = contractUrl!;
-  const CONTRACT_DB = `openmaic_live_sse_${process.pid}`;
+  const CONTRACT_DB = `binah_live_sse_${process.pid}`;
   const ownerId = `anon:${randomUUID()}`;
   let pool: Pool;
   let stopBus: () => Promise<void>;
@@ -70,7 +70,7 @@ describe.skipIf(!contractUrl)('live session SSE tail', () => {
     // DATABASE_URL and the runtime gate: point the whole stack at this test's
     // database.
     process.env.DATABASE_URL = databaseUrl(url, CONTRACT_DB);
-    process.env.OPENMAIC_AGENT_RUNTIME_ENABLED = 'true';
+    process.env.BINAH_AGENT_RUNTIME_ENABLED = 'true';
 
     const { startAgentEventNotifyBus } =
       await import('@/lib/server/agent-runtime/event-notify-bus');
@@ -92,7 +92,7 @@ describe.skipIf(!contractUrl)('live session SSE tail', () => {
   afterAll(async () => {
     await stopBus?.();
     delete process.env.DATABASE_URL;
-    delete process.env.OPENMAIC_AGENT_RUNTIME_ENABLED;
+    delete process.env.BINAH_AGENT_RUNTIME_ENABLED;
     // Close every connection to the test database BEFORE dropping it: the
     // store adapter pool and the SSE stream both hold live connections, and
     // DROP ... WITH (FORCE) would terminate them mid-flight (unhandled

@@ -336,7 +336,7 @@ describe('admission and preview route events', () => {
   function previewRequest(identity = 'preview-user'): Request {
     return new Request('http://test/preview', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-openmaic-client': identity },
+      headers: { 'content-type': 'application/json', 'x-binah-client': identity },
       body: JSON.stringify(previewPayload()),
     });
   }
@@ -431,7 +431,7 @@ describe('admission and preview route events', () => {
       new Request('http://test/render', {
         method: 'POST',
         body: form,
-        headers: { 'x-openmaic-client': 'someone-else' },
+        headers: { 'x-binah-client': 'someone-else' },
       }),
     );
     expect(response.status).toBe(429);

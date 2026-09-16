@@ -62,7 +62,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: OpenMAIC Version
+      label: Binah Version
       description: Which release, commit SHA, or Docker image tag are you using?
       placeholder: e.g. v0.4.2, 40ff80a, or latest
     validations:
@@ -72,7 +72,7 @@ body:
     id: area
     attributes:
       label: Affected Area
-      description: Which part of OpenMAIC is affected?
+      description: Which part of Binah is affected?
       options:
         - Classroom generation
         - Playback / presentation

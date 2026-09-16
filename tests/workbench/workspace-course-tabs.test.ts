@@ -59,7 +59,7 @@ describe('workspace course tab memory', () => {
     // The legacy key contains Record<sessionId, tabs>; it must never be parsed
     // as the new workspace-wide value.
     values.set(
-      'openmaic:workspace:course-tabs',
+      'binah:workspace:course-tabs',
       JSON.stringify({ chat: { courseIds: ['old'], activeCourseId: 'old' } }),
     );
     expect(readCourseTabsMemory()).toBeNull();
@@ -70,7 +70,7 @@ describe('workspace course tab memory', () => {
     expect(readCourseTabsMemory()).toEqual(memory);
     writeCourseTabsMemory({ courseIds: [], activeCourseId: null });
     expect(values.has(COURSE_TABS_STORAGE_KEY)).toBe(false);
-    expect(values.has('openmaic:workspace:course-tabs')).toBe(true);
+    expect(values.has('binah:workspace:course-tabs')).toBe(true);
     vi.unstubAllGlobals();
   });
 });

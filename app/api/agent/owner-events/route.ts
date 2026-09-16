@@ -7,7 +7,7 @@
  * granted an anonymous cookie identity, and every store read is scoped to
  * that identity.
  */
-import type { PersistedOwnerSessionEvent } from '@openmaic/storage';
+import type { PersistedOwnerSessionEvent } from '@binah/storage';
 import type { NextRequest } from 'next/server';
 
 import { isAgentRuntimeConfigured } from '@/lib/config/feature-flags';

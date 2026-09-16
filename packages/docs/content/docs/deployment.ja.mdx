@@ -1,13 +1,13 @@
 ---
 title: デプロイ
-description: OpenMAIC を Vercel、Docker、または自分のホストにデプロイします。
+description: Binah を Vercel、Docker、または自分のホストにデプロイします。
 ---
 
-OpenMAIC は標準的な Next.js アプリケーションであり、Next.js が動作する環境であればどこでも動作します。
+Binah は標準的な Next.js アプリケーションであり、Next.js が動作する環境であればどこでも動作します。
 
 ## Vercel（一括デプロイ）
 
-最速の方法です。[リポジトリの README](https://github.com/THU-MAIC/OpenMAIC) にある Deploy ボタンをクリックし、リポジトリをフォークして、案内に従い少なくとも 1 つの LLM API キーを入力してください。
+最速の方法です。[リポジトリの README](https://github.com/Lineker-star/binah) にある Deploy ボタンをクリックし、リポジトリをフォークして、案内に従い少なくとも 1 つの LLM API キーを入力してください。
 
 Vercel は各コミットごとに Next.js アプリを再ビルド・再デプロイします。デプロイ時にはプロジェクト設定で少なくとも 1 つの LLM プロバイダーを設定する必要があります。
 
@@ -18,9 +18,9 @@ Vercel のデプロイはデフォルトでブラウザ側の永続化を使用�
 リポジトリには本番向けの `Dockerfile` が含まれています。イメージは Node.js 22 を使用しています。ビルドして実行します：
 
 ```bash
-docker build -t openmaic .
+docker build -t binah .
 
-docker run --env-file .env.local -p 3000:3000 openmaic
+docker run --env-file .env.local -p 3000:3000 binah
 ```
 
 リポジトリにある Docker Compose 設定の利用を推奨します：
@@ -31,7 +31,7 @@ cp .env.example .env.local
 docker compose up --build
 ```
 
-デフォルトの Compose デプロイは OpenMAIC アプリを起動し、`openmaic-data` ボリュームをマウントします。その他のプロバイダーや機能は必要に応じて設定してください。詳細は[設定説明](./configuration.mdx)を参照してください。
+デフォルトの Compose デプロイは Binah アプリを起動し、`binah-data` ボリュームをマウントします。その他のプロバイダーや機能は必要に応じて設定してください。詳細は[設定説明](./configuration.mdx)を参照してください。
 
 `NEXT_PUBLIC_*` の機能フラグは Docker ビルド時に注入されるため、実行時の `.env.local` に書くだけでは反映されません。例えば動画エクスポートと実験的な PPTX インポートを有効にする場合：
 
@@ -47,12 +47,12 @@ docker compose --profile video-export up --build
 
 ```yaml
 services:
-  openmaic:
+  binah:
     volumes:
       - ./server-providers.yml:/app/server-providers.yml:ro
 ```
 
-Docker コンテナ内の `localhost` はコンテナ自身を指します。ホスト上で Ollama、Lemonade、VoxCPM、ComfyUI を動かしている場合は `host.docker.internal` を使ってください。例：`http://host.docker.internal:11434/v1` や `http://host.docker.internal:8188`。Linux の Docker では通常、`openmaic` サービスに対して `extra_hosts: ["host.docker.internal:host-gateway"]` の追加が必要です。ComfyUI は現状サーバー管理型プロバイダーではないため、本番環境では `ALLOW_LOCAL_NETWORKS=true` を設定しないと SSRF 保護によりアクセスが拒否されます。
+Docker コンテナ内の `localhost` はコンテナ自身を指します。ホスト上で Ollama、Lemonade、VoxCPM、ComfyUI を動かしている場合は `host.docker.internal` を使ってください。例：`http://host.docker.internal:11434/v1` や `http://host.docker.internal:8188`。Linux の Docker では通常、`binah` サービスに対して `extra_hosts: ["host.docker.internal:host-gateway"]` の追加が必要です。ComfyUI は現状サーバー管理型プロバイダーではないため、本番環境では `ALLOW_LOCAL_NETWORKS=true` を設定しないと SSRF 保護によりアクセスが拒否されます。
 
 ## 自前の仮想マシンでのセルフホスト
 
@@ -68,26 +68,26 @@ TLS 終端は nginx や Caddy などを前段に置いてください。デフ�
 
 ## サーバー側永続化（PostgreSQL）
 
-リポジトリの `server-persistence` プロファイルは OpenMAIC と PostgreSQL の 2 つのコンテナを起動します。永続化用の HTTP API は OpenMAIC に組み込まれており、追加の永続化サービスは不要です。
+リポジトリの `server-persistence` プロファイルは Binah と PostgreSQL の 2 つのコンテナを起動します。永続化用の HTTP API は Binah に組み込まれており、追加の永続化サービスは不要です。
 
 まず `.env.local` にデータベース接続情報と開発用トークンを追加します：
 
 ```bash
-DATABASE_URL=postgres://openmaic:openmaic-dev@postgres:5432/openmaic
-PERSISTENCE_DEV_TOKEN=openmaic-local-dev
+DATABASE_URL=postgres://binah:binah-dev@postgres:5432/binah
+PERSISTENCE_DEV_TOKEN=binah-local-dev
 ```
 
 次にプロファイルを起動します：
 
 ```bash
 NEXT_PUBLIC_PERSISTENCE=1 \
-NEXT_PUBLIC_PERSISTENCE_TOKEN=openmaic-local-dev \
+NEXT_PUBLIC_PERSISTENCE_TOKEN=binah-local-dev \
 docker compose --profile server-persistence up --build
 ```
 
 `NEXT_PUBLIC_PERSISTENCE` と `NEXT_PUBLIC_PERSISTENCE_TOKEN` はビルド時の変数であり、実行時のサーバー設定と一致させる必要があります。`PERSISTENCE_DEV_TOKEN` 方式はローカルまたは信頼できるネットワーク向けであり、真のユーザー分離は提供しません。公開本番環境の認証方式としては推奨されません。
 
-PostgreSQL のデータは `openmaic-postgres` ボリュームに保存されます。`PERSISTENCE_POSTGRES_PASSWORD` はデータベースディレクトリ初回初期化時にのみパスワードを設定し、その後の環境変数変更では既存ユーザーのパスワードは自動的に変更されません。
+PostgreSQL のデータは `binah-postgres` ボリュームに保存されます。`PERSISTENCE_POSTGRES_PASSWORD` はデータベースディレクトリ初回初期化時にのみパスワードを設定し、その後の環境変数変更では既存ユーザーのパスワードは自動的に変更されません。
 
 `NEXT_PUBLIC_PERSISTENCE` を設定しなければ、従来通りブラウザ側の永続化が維持されます。
 
@@ -101,7 +101,7 @@ PostgreSQL のデータは `openmaic-postgres` ボリュームに保存されま
 docker compose --profile video-export up --build
 ```
 
-Compose は `RENDER_SERVICE_URL` を通じて OpenMAIC とレンダリングサービスを接続します。このプロファイルを有効にしないか、レンダリングサービスが利用できない場合は、エクスポートはプロジェクト ZIP のダウンロードにフォールバックし、ローカル CLI でのレンダリングを想定します。レンダリングサービスは分離されたネットワークで動作し、起動時に `NET_ADMIN` 権限が必要です。詳細や独立デプロイ方法はリポジトリの [`render-service/README.md`](https://github.com/THU-MAIC/OpenMAIC/blob/main/render-service/README.md) を参照してください。
+Compose は `RENDER_SERVICE_URL` を通じて Binah とレンダリングサービスを接続します。このプロファイルを有効にしないか、レンダリングサービスが利用できない場合は、エクスポートはプロジェクト ZIP のダウンロードにフォールバックし、ローカル CLI でのレンダリングを想定します。レンダリングサービスは分離されたネットワークで動作し、起動時に `NET_ADMIN` 権限が必要です。詳細や独立デプロイ方法はリポジトリの [`render-service/README.md`](https://github.com/Lineker-star/binah/blob/main/render-service/README.md) を参照してください。
 
 ## 環境変数
 

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { NextRequest } from 'next/server';
-import type { RuntimeRecord } from '@openmaic/dsl';
-import { BrowserRuntimeStore } from '@openmaic/storage';
+import type { RuntimeRecord } from '@binah/dsl';
+import { BrowserRuntimeStore } from '@binah/storage';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 
 import { APP_RUNTIME_PAYLOAD_VALIDATORS } from '@/lib/runtime/payload-validators';
@@ -36,11 +36,11 @@ const ZERO_USAGE = {
   outputTokens: 0,
   inputTokenDetails: { cacheReadTokens: 0, cacheWriteTokens: 0 },
 };
-const resolvedModel = { provider: 'test.provider', modelId: 'openmaic-resolved-model' };
+const resolvedModel = { provider: 'test.provider', modelId: 'binah-resolved-model' };
 const envNames = [
   'NEXT_PUBLIC_PI_CHAT_ENABLED',
-  'OPENMAIC_ENABLE_PI_NATIVE_CHILD_RUNTIME',
-  'OPENMAIC_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT',
+  'BINAH_ENABLE_PI_NATIVE_CHILD_RUNTIME',
+  'BINAH_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT',
   'TAVILY_API_KEY',
   'TAVILY_BASE_URL',
   'NEXT_PUBLIC_PERSISTENCE',
@@ -157,8 +157,8 @@ describe('PR2 Native Child route production wiring', () => {
     vi.stubGlobal('IDBKeyRange', IDBKeyRange);
     for (const name of envNames) originalEnv.set(name, process.env[name]);
     process.env.NEXT_PUBLIC_PI_CHAT_ENABLED = 'true';
-    process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_RUNTIME = 'true';
-    process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT = 'true';
+    process.env.BINAH_ENABLE_PI_NATIVE_CHILD_RUNTIME = 'true';
+    process.env.BINAH_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT = 'true';
     delete process.env.TAVILY_API_KEY;
     delete process.env.TAVILY_BASE_URL;
     mocks.resolveModel.mockReset();
@@ -679,8 +679,8 @@ describe('PR2 Native Child route production wiring', () => {
   });
 
   it('keeps the production route on Legacy when the Native runtime flag is absent', async () => {
-    delete process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_RUNTIME;
-    delete process.env.OPENMAIC_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT;
+    delete process.env.BINAH_ENABLE_PI_NATIVE_CHILD_RUNTIME;
+    delete process.env.BINAH_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT;
     const directorResponses = [
       [toolCall('read-1', 'read_scene', { sceneId: 'scene-current' }), finish('tool-calls')],
       [

@@ -4,10 +4,10 @@ import { type AddressInfo } from 'node:net';
 import { extname, resolve, sep } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
-const DESCRIPTOR_MEDIA_TYPE = 'application/vnd.openmaic.asset-descriptor+json';
+const DESCRIPTOR_MEDIA_TYPE = 'application/vnd.binah.asset-descriptor+json';
 const DEPLOYMENT_HEADER = 'x-deployment-token';
 const DEPLOYMENT_SECRET = 'deployment-secret';
-const STORAGE_DIST = resolve(process.cwd(), 'packages/@openmaic/storage/dist');
+const STORAGE_DIST = resolve(process.cwd(), 'packages/@binah/storage/dist');
 
 interface RecordedRequest {
   method: string;

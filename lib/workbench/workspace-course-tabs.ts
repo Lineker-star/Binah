@@ -10,9 +10,9 @@
 
 import { type WorkspaceCourseTabs } from '@/lib/workbench/workspace-panes';
 
-// Do not reuse `openmaic:workspace:course-tabs`: that key contains the old,
+// Do not reuse `binah:workspace:course-tabs`: that key contains the old,
 // incompatible Record<sessionId, tabs> payload and is deliberately ignored.
-export const COURSE_TABS_STORAGE_KEY = 'openmaic:workspace:course-tabs:v2';
+export const COURSE_TABS_STORAGE_KEY = 'binah:workspace:course-tabs:v2';
 export const COURSE_TABS_MAX_STORED_CHARS = 1_000_000;
 
 export function parseCourseTabsMemory(stored: string | null): WorkspaceCourseTabs | null {

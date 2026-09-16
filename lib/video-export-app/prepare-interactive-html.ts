@@ -32,8 +32,8 @@ function staticCaptureInjection(): string {
   const settleMs = INTERACTIVE_SETTLE_MS;
   const internalTimeoutMs = Math.max(1_000, INTERACTIVE_READY_TIMEOUT_MS - 1_000);
   return `
-<meta data-openmaic-static-csp http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' data: blob:; style-src 'unsafe-inline' data:; img-src data: blob:; font-src data:; media-src data: blob:; worker-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'">
-<script data-openmaic-static-capture>
+<meta data-binah-static-csp http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' data: blob:; style-src 'unsafe-inline' data:; img-src data: blob:; font-src data:; media-src data: blob:; worker-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'">
+<script data-binah-static-capture>
 (function () {
   var FLAG = ${flag};
   var frozen = false;
@@ -145,13 +145,13 @@ function staticCaptureInjection(): string {
       try { media.pause(); } catch (_) {}
     });
     var style = document.createElement('style');
-    style.setAttribute('data-openmaic-static-frozen', '');
+    style.setAttribute('data-binah-static-frozen', '');
     style.textContent = '*,*::before,*::after{animation-play-state:paused!important;transition:none!important;caret-color:transparent!important}';
     (document.head || document.documentElement).appendChild(style);
-    document.documentElement.setAttribute('data-openmaic-static-state', 'frozen');
+    document.documentElement.setAttribute('data-binah-static-state', 'frozen');
   }
 
-  window.__openmaicFreezeInteractive = freeze;
+  window.__binahFreezeInteractive = freeze;
   window.addEventListener('load', function () {
     var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     var readiness = Promise.all([fonts, waitForImages(), waitForVideos()]);
@@ -290,6 +290,6 @@ export async function prepareInteractiveHtmlScenes(
 
 declare global {
   interface Window {
-    __openmaicFreezeInteractive?: () => void;
+    __binahFreezeInteractive?: () => void;
   }
 }

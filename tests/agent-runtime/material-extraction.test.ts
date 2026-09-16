@@ -5,11 +5,11 @@ import {
   PgAgentSessionStore,
   ensureAgentSessionSchema,
   type Queryable,
-} from '@openmaic/storage/agent-session/pg';
+} from '@binah/storage/agent-session/pg';
 import {
   PgAgentSessionMaterialStore,
   ensureAgentSessionMaterialSchema,
-} from '@openmaic/storage/material/pg';
+} from '@binah/storage/material/pg';
 
 import { buildMaterialTools } from '@/lib/server/agent-runtime/material-tools';
 import { extractClaimedSessionMaterial } from '@/lib/server/material-extraction/extract';

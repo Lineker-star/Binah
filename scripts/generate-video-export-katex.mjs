@@ -26,7 +26,7 @@ for (const [, body] of sourceCss.matchAll(/@font-face\{([^}]*)\}/g)) {
   copyFileSync(path.join(katexDir, 'dist', 'fonts', filename), path.join(publicFontDir, filename));
   const declaration = (pattern) => body.match(pattern)?.[0] ?? '';
   faces.push(
-    `@font-face{${declaration(/font-family:[^;]+/)};${declaration(/font-style:[^;]+/)};${declaration(/font-weight:[^;]+/)};font-display:block;src:url("__OPENMAIC_QUIZ_FONT_BASE__/${filename}") format("woff2")}`,
+    `@font-face{${declaration(/font-family:[^;]+/)};${declaration(/font-style:[^;]+/)};${declaration(/font-weight:[^;]+/)};font-display:block;src:url("__BINAH_QUIZ_FONT_BASE__/${filename}") format("woff2")}`,
   );
   assets.push({
     path: `${exportFontBase}/${filename}`,
@@ -47,11 +47,11 @@ const contents = `/**
  */
 const KATEX_CSS_TEMPLATE = ${JSON.stringify(cssTemplate)};
 export const KATEX_MEASUREMENT_CSS = KATEX_CSS_TEMPLATE.replaceAll(
-  '__OPENMAIC_QUIZ_FONT_BASE__',
+  '__BINAH_QUIZ_FONT_BASE__',
   ${JSON.stringify(publicFontBase)},
 );
 export const KATEX_EXPORT_CSS = KATEX_CSS_TEMPLATE.replaceAll(
-  '__OPENMAIC_QUIZ_FONT_BASE__',
+  '__BINAH_QUIZ_FONT_BASE__',
   ${JSON.stringify(exportFontBase)},
 );
 export const KATEX_FONT_ASSETS = ${JSON.stringify(assets)} as const;

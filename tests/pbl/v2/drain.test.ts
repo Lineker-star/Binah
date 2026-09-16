@@ -5,7 +5,7 @@ import type {
   RuntimeRecord,
   RuntimeRecordInit,
   RuntimeSession,
-} from '@openmaic/dsl';
+} from '@binah/dsl';
 import {
   BrowserKVStore,
   BrowserRuntimeStore,
@@ -13,7 +13,7 @@ import {
   type KVStore,
   type RuntimeSessionInit,
   type RuntimeStore,
-} from '@openmaic/storage';
+} from '@binah/storage';
 
 import { applyInstructorEvent } from '@/components/scene-renderers/pbl/v2/apply-instructor-event';
 import {
@@ -192,7 +192,7 @@ class AlreadyExistsRaceStore extends MemoryRuntimeStore {
 
   async createSession(): Promise<RuntimeSession> {
     throw new Error(
-      `@openmaic/storage: session ${JSON.stringify(this.existing.id)} already exists`,
+      `@binah/storage: session ${JSON.stringify(this.existing.id)} already exists`,
     );
   }
 }

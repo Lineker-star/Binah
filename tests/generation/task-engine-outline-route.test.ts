@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const streamLLMMock = vi.hoisted(() => vi.fn());
 const resolveModelFromRequestMock = vi.hoisted(() => vi.fn());
-const VOCATIONAL_FLAG = 'OPENMAIC_ENABLE_VOCATIONAL';
+const VOCATIONAL_FLAG = 'BINAH_ENABLE_VOCATIONAL';
 let originalVocationalFlag: string | undefined;
 
 vi.mock('@/lib/ai/llm', () => ({

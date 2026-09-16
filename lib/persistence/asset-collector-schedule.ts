@@ -16,12 +16,12 @@
  * the row gone, or still referenced, and skips it. No distributed lock, leader
  * election, or advisory lock is needed here — please do not add one.
  */
-import { AssetCollector } from '@openmaic/storage/asset/collector';
-import { ensureAssetSchema } from '@openmaic/storage/asset/pg';
+import { AssetCollector } from '@binah/storage/asset/collector';
+import { ensureAssetSchema } from '@binah/storage/asset/pg';
 import {
   nodePostgresTransaction,
   type ConnectableQueryable,
-} from '@openmaic/storage/server/reference';
+} from '@binah/storage/server/reference';
 import { Pool } from 'pg';
 
 import { resolveAssetCollectionGraceMs } from '@/lib/persistence/asset-collection-grace';
@@ -72,7 +72,7 @@ function durationEnv(name: string, fallback: number, minimum: number): number {
   return parsed;
 }
 
-const SCHEDULE_KEY = Symbol.for('openmaic.asset-collector.schedule');
+const SCHEDULE_KEY = Symbol.for('binah.asset-collector.schedule');
 const globalState = globalThis as typeof globalThis & {
   [key: symbol]: AssetCollectorSchedule | undefined;
 };

@@ -5,7 +5,7 @@ import {
   createStorageHttpHandler,
   DEFAULT_SIGNED_URL_TTL_SECONDS,
   type AssetIndirectByteEgress,
-} from '@openmaic/storage/server';
+} from '@binah/storage/server';
 
 import { validateAppScene, validateAppStage } from '@/lib/document-store/validators';
 import { resolveAssetCollectionGraceMs } from '@/lib/persistence/asset-collection-grace';
@@ -302,7 +302,7 @@ export async function handlePersistenceRequest(
 
       const response =
         access === 'not-found'
-          ? jsonError(404, 'DOCUMENT_NOT_FOUND', '@openmaic/storage: document not found')
+          ? jsonError(404, 'DOCUMENT_NOT_FOUND', '@binah/storage: document not found')
           : await runNodeHandler(
               await createPersistenceHandler(connectionString, ownerId, access, deps.poolFactory),
               request,

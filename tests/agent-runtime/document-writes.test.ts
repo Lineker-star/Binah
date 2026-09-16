@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { DocumentVersionError, type DocumentStore } from '@openmaic/storage';
+import { DocumentVersionError, type DocumentStore } from '@binah/storage';
 
 import type { Scene, Stage } from '@/lib/types/stage';
 import { putSceneBringingCurrent } from '@/lib/server/agent-runtime/document-writes';

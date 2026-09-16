@@ -5,9 +5,9 @@
  * current panes. Classic mode reads only the remembered conversation so a
  * later Pro entry can resume it without also reopening a classroom.
  */
-export const LAST_WORKSPACE_SESSION_STORAGE_KEY = 'openmaic:workspace:last-session';
+export const LAST_WORKSPACE_SESSION_STORAGE_KEY = 'binah:workspace:last-session';
 
-const WORKSPACE_HOME_SENTINEL = 'openmaic:workspace:home';
+const WORKSPACE_HOME_SENTINEL = 'binah:workspace:home';
 
 interface SessionMemoryStorage {
   getItem(key: string): string | null;

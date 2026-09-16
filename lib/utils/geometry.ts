@@ -1,4 +1,4 @@
-import type { PPTElement } from '@openmaic/dsl';
+import type { PPTElement } from '@binah/dsl';
 import type { PercentageGeometry } from '@/lib/types/action';
 
 /**

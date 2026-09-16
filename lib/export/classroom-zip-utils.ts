@@ -1,7 +1,7 @@
 import type { Action, DiscussionAction, SpeechAction } from '@/lib/types/action';
 import type { ManifestAction, MediaIndexEntry } from './classroom-zip-types';
 import { db, mediaFileKey } from '@/lib/utils/database';
-import type { AssetManifestEntry } from '@openmaic/dsl';
+import type { AssetManifestEntry } from '@binah/dsl';
 import type { AudioFileRecord, MediaFileRecord } from '@/lib/utils/database';
 import type { Scene } from '@/lib/types/stage';
 import { resolveAudioBlob } from '@/lib/media/resolve-audio-bytes';

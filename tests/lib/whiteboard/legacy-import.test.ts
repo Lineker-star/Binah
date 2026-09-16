@@ -2,8 +2,8 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
-import { BrowserRuntimeStore, type MaicDocument, type RuntimeStore } from '@openmaic/storage';
-import type { Whiteboard } from '@openmaic/dsl';
+import { BrowserRuntimeStore, type MaicDocument, type RuntimeStore } from '@binah/storage';
+import type { Whiteboard } from '@binah/dsl';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import type { AppStage } from '@/lib/document-store/persistence-types';

@@ -16,7 +16,7 @@ type PendingVisibilityQuery = {
 
 type PendingVisibilityState = Map<string, PendingVisibilityQuery>;
 
-const PENDING_VISIBILITY_KEY = Symbol.for('openmaic.pi.whiteboard-visibility.pending');
+const PENDING_VISIBILITY_KEY = Symbol.for('binah.pi.whiteboard-visibility.pending');
 const globalState = globalThis as typeof globalThis & {
   [key: symbol]: PendingVisibilityState | undefined;
 };

@@ -3,7 +3,7 @@
 # a NEW outbound connection from the render container is blocked, while loopback
 # (the producer's file server) and inbound-response traffic still work.
 #
-# Run against a built image (default: openmaic-render-service:pr937):
+# Run against a built image (default: binah-render-service:pr937):
 #   render-service/scripts/egress-smoke.sh [image]
 #
 # Requires Docker with CAP_NET_ADMIN available (the compose default). Exits 0
@@ -11,7 +11,7 @@
 # loopback, and a new outbound connection is refused/timed out.
 set -eu
 
-IMAGE="${1:-openmaic-render-service:pr937}"
+IMAGE="${1:-binah-render-service:pr937}"
 NAME="rs-egress-smoke-$$"
 
 cleanup() { docker rm -f "$NAME" >/dev/null 2>&1 || true; }

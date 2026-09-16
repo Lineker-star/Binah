@@ -18,7 +18,7 @@ import {
 const FLAG = 'NEXT_PUBLIC_MAIC_EDITOR_ENABLED';
 
 describe('agent runtime configuration predicate', () => {
-  const ENV_KEYS = ['OPENMAIC_AGENT_RUNTIME_ENABLED', 'DATABASE_URL'] as const;
+  const ENV_KEYS = ['BINAH_AGENT_RUNTIME_ENABLED', 'DATABASE_URL'] as const;
   const originals = new Map<string, string | undefined>();
 
   beforeEach(() => {
@@ -46,7 +46,7 @@ describe('agent runtime configuration predicate', () => {
   ])(
     '%s: enabled = %s, configured = %s',
     (_case, runtimeFlag, databaseUrl, enabled, configured) => {
-      if (runtimeFlag !== undefined) process.env.OPENMAIC_AGENT_RUNTIME_ENABLED = runtimeFlag;
+      if (runtimeFlag !== undefined) process.env.BINAH_AGENT_RUNTIME_ENABLED = runtimeFlag;
       if (databaseUrl !== undefined) process.env.DATABASE_URL = databaseUrl;
 
       expect(isAgentRuntimeEnabled()).toBe(enabled);
@@ -232,8 +232,8 @@ describe('isPiChatEnabled', () => {
 });
 
 describe.each([
-  ['OPENMAIC_ENABLE_PI_NATIVE_CHILD_RUNTIME', isPiNativeChildRuntimeEnabled],
-  ['OPENMAIC_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT', isPiNativeChildSpotlightEnabled],
+  ['BINAH_ENABLE_PI_NATIVE_CHILD_RUNTIME', isPiNativeChildRuntimeEnabled],
+  ['BINAH_ENABLE_PI_NATIVE_CHILD_SPOTLIGHT', isPiNativeChildSpotlightEnabled],
 ])('%s', (flag, readFlag) => {
   let original: string | undefined;
 
@@ -260,7 +260,7 @@ describe.each([
 });
 
 describe('isVocationalTaskEngineEnabled', () => {
-  const flag = 'OPENMAIC_ENABLE_VOCATIONAL';
+  const flag = 'BINAH_ENABLE_VOCATIONAL';
   let original: string | undefined;
 
   beforeEach(() => {

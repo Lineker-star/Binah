@@ -16,7 +16,7 @@ import {
  * existing export pipeline (`buildPptxBlob`), and inspect the resulting
  * PPTX bytes via JSZip to verify the ops survived serialization.
  *
- * Caveat (documented for future PRs): the OpenMAIC codebase has no
+ * Caveat (documented for future PRs): the Binah codebase has no
  * PPTX → Slide reimport path, so this harness is one-way (export side
  * only). The "round-trip" property at the design-principle level is
  * verified end-to-end by opening exports in a desktop tool; CI here

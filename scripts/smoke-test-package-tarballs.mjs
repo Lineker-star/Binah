@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { INTERNAL_DEPENDENTS, OPENMAIC_PACKAGES, readManifest } from './openmaic-packages.mjs';
+import { INTERNAL_DEPENDENTS, BINAH_PACKAGES, readManifest } from './binah-packages.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -16,7 +16,7 @@ assert(
 );
 assert.equal(args.length, 1, 'Unexpected command-line arguments');
 const artifactDirectory = resolve(root, artifactDirectoryArgument);
-const temporaryDirectory = mkdtempSync(join(tmpdir(), 'openmaic-package-smoke-'));
+const temporaryDirectory = mkdtempSync(join(tmpdir(), 'binah-package-smoke-'));
 
 function run(command, args, options = {}) {
   return execFileSync(command, args, {
@@ -36,9 +36,9 @@ function packedManifest(tarball) {
 }
 
 /**
- * The dependents declare `@openmaic/dsl` as `workspace:^`, which pnpm publishes
+ * The dependents declare `@binah/dsl` as `workspace:^`, which pnpm publishes
  * as `^<dsl version>`. That range is what lets a consumer installing several
- * @openmaic packages together resolve ONE copy of the dsl. An exact pin — which
+ * @binah packages together resolve ONE copy of the dsl. An exact pin — which
  * is what the `workspace:*` form publishes — gives each dependent its own copy,
  * and since the dsl carries the schema, the validators and the version
  * constants, two copies mean a document produced against one instance can be
@@ -56,15 +56,15 @@ function packedManifest(tarball) {
  * which changes their public installation contract and is a separate decision.
  */
 function assertDeduplicableDslRange(name, manifest, dslVersion, ownedPackages) {
-  const range = manifest.dependencies?.['@openmaic/dsl'];
+  const range = manifest.dependencies?.['@binah/dsl'];
   assert(
     range !== undefined,
-    `@openmaic/${name} no longer declares @openmaic/dsl; update this check if that is intended`,
+    `@binah/${name} no longer declares @binah/dsl; update this check if that is intended`,
   );
   assert.equal(
     range,
     `^${dslVersion}`,
-    `@openmaic/${name} publishes @openmaic/dsl as ${JSON.stringify(range)} rather than ` +
+    `@binah/${name} publishes @binah/dsl as ${JSON.stringify(range)} rather than ` +
       `"^${dslVersion}". An exact pin (what "workspace:*" publishes) forces consumers to ` +
       'install a second copy of the dsl alongside its siblings.',
   );
@@ -75,21 +75,21 @@ function assertDeduplicableDslRange(name, manifest, dslVersion, ownedPackages) {
     assert.deepEqual(
       declared,
       [],
-      `@openmaic/${name} publishes ${field} entries for owned packages ` +
+      `@binah/${name} publishes ${field} entries for owned packages ` +
         `(${declared.join(', ')}). Those are published constraints as much as ` +
         '`dependencies` is, so an exact one there pins the dsl regardless of the caret above.',
     );
   }
-  console.log(`@openmaic/${name} publishes @openmaic/dsl as ${range}, and nowhere else.`);
+  console.log(`@binah/${name} publishes @binah/dsl as ${range}, and nowhere else.`);
 }
 
 try {
-  const packageNames = OPENMAIC_PACKAGES;
-  const localPackages = new Set(packageNames.map((name) => `@openmaic/${name}`));
+  const packageNames = BINAH_PACKAGES;
+  const localPackages = new Set(packageNames.map((name) => `@binah/${name}`));
   const tarballs = Object.fromEntries(
     packageNames.map((name) => {
       const { version } = readManifest(name);
-      return [name, join(artifactDirectory, `openmaic-${name}-${version}.tgz`)];
+      return [name, join(artifactDirectory, `binah-${name}-${version}.tgz`)];
     }),
   );
   const packedManifests = Object.fromEntries(
@@ -111,7 +111,7 @@ try {
       // synthesize an intersection here is unsafe for ranges containing `||`.
       assert(
         existing === undefined || existing === range,
-        `@openmaic packages declare different ${peer} peer ranges: ${existing} and ${range}`,
+        `@binah packages declare different ${peer} peer ranges: ${existing} and ${range}`,
       );
       peerDependencies[peer] = range;
     }
@@ -133,7 +133,7 @@ try {
         dependencies: {
           ...peerDependencies,
           ...Object.fromEntries(
-            packageNames.map((name) => [`@openmaic/${name}`, `file:${tarballs[name]}`]),
+            packageNames.map((name) => [`@binah/${name}`, `file:${tarballs[name]}`]),
           ),
         },
       },
@@ -152,14 +152,14 @@ try {
 import { stat } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { RUNTIME_DSL_VERSION, validateRuntimeSession } from '@openmaic/dsl';
-import { PROMPT_IDS, buildPrompt } from '@openmaic/generation';
-import { DOCUMENT_PG_SCHEMA } from '@openmaic/storage';
-import { SlideCanvas } from '@openmaic/renderer';
-import { createEditorTransaction as createEditorTransactionFromRoot } from '@openmaic/editor';
-import { createEditorTransaction } from '@openmaic/editor/core';
-import { EMPTY_SELECTION } from '@openmaic/editor/react';
-import { EditableSlideCanvasWithUI } from '@openmaic/editor/ui';
+import { RUNTIME_DSL_VERSION, validateRuntimeSession } from '@binah/dsl';
+import { PROMPT_IDS, buildPrompt } from '@binah/generation';
+import { DOCUMENT_PG_SCHEMA } from '@binah/storage';
+import { SlideCanvas } from '@binah/renderer';
+import { createEditorTransaction as createEditorTransactionFromRoot } from '@binah/editor';
+import { createEditorTransaction } from '@binah/editor/core';
+import { EMPTY_SELECTION } from '@binah/editor/react';
+import { EditableSlideCanvasWithUI } from '@binah/editor/ui';
 
 assert.equal(typeof RUNTIME_DSL_VERSION, 'string');
 assert.equal(typeof validateRuntimeSession, 'function');
@@ -181,9 +181,9 @@ assert.match(generationPrompt.system, /Content Safety Guidelines for Generation 
 assert.doesNotMatch(generationPrompt.system, /\{\{snippet:/);
 assert.doesNotMatch(generationPrompt.user, /\{\{snippet:/);
 
-const importerEntry = fileURLToPath(import.meta.resolve('@openmaic/importer'));
+const importerEntry = fileURLToPath(import.meta.resolve('@binah/importer'));
 assert((await stat(importerEntry)).isFile());
-const importerRequireEntry = createRequire(import.meta.url).resolve('@openmaic/importer');
+const importerRequireEntry = createRequire(import.meta.url).resolve('@binah/importer');
 assert((await stat(importerRequireEntry)).isFile());
 
 for (const subpath of [
@@ -194,13 +194,13 @@ for (const subpath of [
   'server',
   'server/reference',
 ]) {
-  await import(\`@openmaic/storage/\${subpath}\`);
+  await import(\`@binah/storage/\${subpath}\`);
 }
 `,
   );
   run('node', ['smoke.mjs'], { cwd: consumerDirectory });
 
-  console.log('Validated @openmaic package tarball imports passed.');
+  console.log('Validated @binah package tarball imports passed.');
 } finally {
   rmSync(temporaryDirectory, { recursive: true, force: true });
 }
