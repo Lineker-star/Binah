@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "installCommand": "pnpm install",
+  "installCommand": "ONNXRUNTIME_NODE_INSTALL=skip pnpm install",
   "buildCommand": "pnpm build",
   "functions": {
     "app/api/**/*.ts": {
