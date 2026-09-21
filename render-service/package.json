@@ -16,8 +16,8 @@
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "@hyperframes/producer": "^0.7.107",
-    "@binah/dsl": "0.11.0",
-    "@binah/renderer": "0.1.4",
+    "@binah/dsl": "file:../packages/@binah/dsl",
+    "@binah/renderer": "file:../packages/@binah/renderer",
     "echarts": "^6.0.0",
     "esbuild": "0.28.1",
     "fflate": "^0.8.2",
@@ -39,6 +39,9 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.1",
+    "@binah/renderer": {
+      "@binah/dsl": "file:../packages/@binah/dsl"
+    }
   }
 }

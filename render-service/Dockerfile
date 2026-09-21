@@ -5,6 +5,11 @@
 # glibc/Debian than on musl/Alpine. Producer's beginFrame capture requires the
 # old headless shell binary; regular Chromium exposes the resolver path but then
 # rejects HeadlessExperimental.beginFrame and silently falls back to screenshots.
+#
+# Build context is the REPO ROOT, not render-service/ (Railway: Root Directory
+# empty, Dockerfile Path render-service/Dockerfile) -- every COPY below is
+# rooted there, so it can also reach packages/@binah/dsl and
+# packages/@binah/renderer for the pkg-builder stage below.
 FROM node:22.22.2-bookworm-slim@sha256:f3a68cf41a855d227d1b0ab832bed9749469ef38cf4f58182fb8c893bc462383 AS base
 
 ARG CHROMIUM_VERSION=151.0.7922.71-1~deb12u1
@@ -49,10 +54,66 @@ RUN printf '%s\n' \
 
 WORKDIR /app
 
+# ---- Build @binah/dsl and @binah/renderer from source ----
+#
+# Both are private pnpm-workspace packages (packages/@binah/dsl,
+# packages/@binah/renderer) that have never been published to the public npm
+# registry. render-service is deliberately NOT part of that pnpm workspace
+# (its own package.json, its own package-lock.json, npm ci) -- so rather than
+# publish these to get a registry entry for `npm ci` to fetch, this stage
+# builds them from source, exactly like the root workspace's own postinstall
+# does (`pnpm run build` in each package), and the final image never needs
+# network access to any private registry.
+FROM base AS pkg-builder
+
+# @binah/dsl has zero internal (@binah/*) dependencies of its own, so a plain
+# `npm install` here needs nothing special.
+COPY packages/@binah/dsl ./packages/@binah/dsl
+RUN cd packages/@binah/dsl \
+    && npm install --no-audit --no-fund --legacy-peer-deps \
+    && npm run build
+
+COPY packages/@binah/renderer ./packages/@binah/renderer
+# @binah/renderer's own package.json declares its @binah/dsl dependency as
+# "workspace:^" -- pnpm's protocol, resolved to a real version range only at
+# `pnpm publish` time (see its prepublishOnly script). Plain npm has no
+# concept of "workspace:" outside a declared npm workspace, so building
+# renderer standalone here needs that one field patched to a plain file:
+# reference first. This rewrites only the COPY made in this build stage --
+# the real, tracked packages/@binah/renderer/package.json is untouched, so
+# pnpm's normal workspace build and a future real `pnpm publish` both still
+# work exactly as before.
+#
+# motion/echarts/shiki are real peerDependencies of @binah/renderer (a
+# consumer is expected to supply its own copy -- render-service already does,
+# see its own "dependencies" below). Installing them here too is only so
+# renderer's own build (tsc resolving their type declarations) succeeds
+# running in isolation; it does not change renderer's public dependency
+# contract, and none of the three are added to the tracked package.json.
+RUN node -e "\
+      const fs = require('fs'); \
+      const path = './packages/@binah/renderer/package.json'; \
+      const pkg = JSON.parse(fs.readFileSync(path, 'utf8')); \
+      pkg.dependencies['@binah/dsl'] = 'file:../dsl'; \
+      pkg.devDependencies.motion = '^12.27.5'; \
+      pkg.devDependencies.echarts = '^6.0.0'; \
+      pkg.devDependencies.shiki = '^3.21.0'; \
+      fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');" \
+    && cd packages/@binah/renderer \
+    && npm install --no-audit --no-fund --legacy-peer-deps --install-links \
+    && npm run build
+
 # ---- Dependencies (cached layer) ----
 FROM base AS deps
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev --no-audit --no-fund
+# --install-links makes npm copy file: dependencies into node_modules instead
+# of symlinking them -- required here, since a symlink into pkg-builder's
+# filesystem would dangle the moment this stage's node_modules gets copied
+# into the runner stage below.
+COPY --from=pkg-builder /app/packages/@binah/dsl ./packages/@binah/dsl
+COPY --from=pkg-builder /app/packages/@binah/renderer ./packages/@binah/renderer
+COPY render-service/package.json render-service/package-lock.json ./render-service/
+RUN cd render-service \
+    && npm ci --omit=dev --no-audit --no-fund --install-links
 
 # ---- Runner ----
 FROM base AS runner
@@ -63,10 +124,10 @@ RUN groupadd --system --gid 1001 render \
   && mkdir -p /tmp/binah-renders /app/.cache \
   && chown -R render:render /app /tmp/binah-renders
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY --chown=render:render package.json tsconfig.json ./
-COPY --chown=render:render src ./src
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --from=deps /app/render-service/node_modules ./node_modules
+COPY --chown=render:render render-service/package.json render-service/tsconfig.json ./
+COPY --chown=render:render render-service/src ./src
+COPY render-service/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 # Strip CR before chmod. .gitattributes keeps this file LF on fresh checkouts,
 # but clones made before that landed still hold a CRLF copy, and the resulting
 # `#!/bin/sh\r` shebang fails at container start with a message that blames the
