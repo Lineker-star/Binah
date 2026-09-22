@@ -811,6 +811,9 @@ importers:
       '@types/katex':
         specifier: ^0.16.8
         version: 0.16.8
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.19.15
       '@types/react':
         specifier: ^19
         version: 19.2.14
@@ -823,6 +826,9 @@ importers:
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1(@noble/hashes@1.8.0)(canvas@3.2.3)
+      prettier:
+        specifier: 3.8.1
+        version: 3.8.1
       rollup:
         specifier: ^4.35.0
         version: 4.59.0
